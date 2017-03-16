@@ -1,7 +1,7 @@
 # Simulations to Verify GOEA Results
 Simulations in this repository are used to investigate the results of **Gene Ontology Enrichment Analyses** (GOEAs).    
 
-#### For all simulations in the study in this repo:    
+#### For all simulations in this repo:    
   * The **alpha level** is set to **0.05**
   * The **multiple-test correction** used is **Benjamini/Hochberg False Discovery Rate**
 
