@@ -1,7 +1,7 @@
 # Simulations of 
 
-  * [P-value simulations](#p-value-simulations)
-  * [Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
+  1. [P-value simulations](#p-value-simulations)
+  2. [Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
 
 
 ## P-value simulations
