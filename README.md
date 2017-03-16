@@ -6,7 +6,11 @@ Simulations in this repository are used to investigate the results of **Gene Ont
   * The **multiple-test correction** used is **Benjamini/Hochberg False Discovery Rate**
 
 #### There are two-levels of simulations:
-  1. [**Preparatoy**: P-value and multiple-test simulations](#preparatory-p-value-and-multiple-test-simulations)
+  1. [**Preparatory**: P-value and multiple-test simulations](#preparatory-p-value-and-multiple-test-simulations)    
+      * All P-values chosen randomly; None are significant
+      * 95% P-values chosen randomly; 5% are significant 
+      * 90% P-values chosen randomly; 10% are significant 
+      * 50% P-values chosen randomly; 50% are significant 
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
 
 
@@ -23,21 +27,25 @@ Random P-values between 0.0 and 1.0 are generated using a uniform distribution.
 It is expected that 5% of the randomly generated P-values will appear to be significant (<0.05) by chance.
 We generate P-value sets in set sizes ranging from 10 P-values per set to 10,000 P-values per set.
 
-### P-values chosen randomly, with none being significant
+### All P-values chosen randomly (None are significant)
 Five percent of the randomly chosen uncorrected P-values are found to be significant, as expected.
 These are shown in rose.
 Upon doing multiple-test correction, practically no corrected P-values are found to be significant.
 These are shown in green, but are so small that they appear to be a horizontal line around zero.
 ![Random pvals w/no significance](doc/images/pvalues_sig00.png)
 
-### P-values chosen randomly: 5% are significant 
+### All P-values chosen randomly; None are significant
 TBD
 
-### P-values chosen randomly: 10% are significant 
+### 95% P-values chosen randomly; 5% are significant 
 TBD
 
-### P-values chosen randomly: 50% are significant 
+### 90% P-values chosen randomly; 10% are significant 
 TBD
+
+### 50% P-values chosen randomly; 50% are significant 
+TBD
+
 
 ## Consequent: GOEA simulations    
 TBD
