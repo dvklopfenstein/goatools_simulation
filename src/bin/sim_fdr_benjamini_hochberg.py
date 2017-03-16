@@ -9,21 +9,35 @@ __author__ = "DV Klopfenstein"
 
 #pylint: disable=no-member
 
+import os
 import sys
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
-#from pkgsim.report_results import report_results_each
+from pkgsim.report_results import report_results_each
 from pkgsim.report_results import report_results_tot
+from pkgsim.plot_results import wrpng_boxplot_sigs
 
-def main(num_samples=100, prt=sys.stdout):
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
+
+def main(num_samples, prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    params = {'num_pvalues':None, 'alpha':0.05, 'method':'fdr_bh'}
-    num_pvalues_list = [10, 20, 50, 100]
+    perc_sig = 0
+    params = {'alpha':0.05, 'method':'fdr_bh'}
+    num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
+    numpvals_results = []
     for num_pvalues in num_pvalues_list:
         params['num_pvalues'] = num_pvalues
-        results = _run_all_simulations(num_samples, params)
-        #report_results_each(params, results, prt)
-        report_results_tot(params, results, prt)
+        results_sets = _run_all_simulations(num_samples, params)
+        #report_results_each(params, results_sets, prt)
+        report_results_tot(num_pvalues, params, results_sets, prt)
+        numpvals_results.append((num_pvalues, results_sets))
+    # Plot results in boxplots
+    pltargs = {
+      'title':"P-values: None are significant",
+      'xlabel':"# of P-values per set; {N} sets".format(N=num_samples),
+      'fout_img':os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
+    }
+    wrpng_boxplot_sigs(params, numpvals_results, **pltargs)
 
 def _run_all_simulations(num_samples, params):
     """Generate many sets of random pvalues and do multipletest correction for each set."""
@@ -42,6 +56,6 @@ def _run_one_simulation(num_pvalues, alpha, method):
 
 
 if __name__:
-    main(10000)
+    main(100)
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
