@@ -1,13 +1,14 @@
-# Simulations of 
+# Simulations to Verify GOEA Results
 
-  1. [P-value simulations](#p-value-simulations)
+We use simulations to confirm the vericity of the statistical results of Gene Ontology Enrichment Analyses.    
+An alpha level of 0.05 is used for all simulations.    
+
+There are two-levels of simulations:
+  1. [P-value and multiple-test simulations](#p-value-simulations)
   2. [Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
 
 
 ## P-value simulations
-We use simulations to confirm the vericity of the statistical results of Gene Ontology Enrichment Analyses.
-An alpha level of 0.05 is used for all simulations.    
-
 First, we do P-value and multiple-test correction simulations to show how results vary with:
   * The number of P-values in one set    
   * The number of sets of P-values in one sample    
@@ -34,6 +35,7 @@ TBD
 TBD
 
 ### P-values chosen randomly: 50% are significant 
+TBD
 
 ## GOEA simulations    
 TBD
