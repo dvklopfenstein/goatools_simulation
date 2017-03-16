@@ -1,13 +1,14 @@
 # Preparatory: P-value and multiple-test simulations
+The P-value and multiple-test correction simulations show how results vary with:
+  * Number of P-values in a single P-value set; Ex: 10, 20, 50, 100, 500, 1k, or 10k P-values    
+  * Number of sets of P-values in a single sample    
+  * Number of P-values which have been set to be significant     
+
+## Simulation List
  1. [All P-values chosen randomly; None are significant](README_prep.md#all-p-values-chosen-randomly-none-are-significant-1)
  2. [95% P-values chosen randomly; 5% are significant ](README_prep.md#95-p-values-chosen-randomly-5-are-significant)
  3. [90% P-values chosen randomly; 10% are significant ](README_prep.md#90-p-values-chosen-randomly-10-are-significant)
  4. [50% P-values chosen randomly; 50% are significant ](README_prep.md#50-p-values-chosen-randomly-50-are-significant)
-
-The P-value and multiple-test correction simulations show how results vary with:
-  * # P-values in a single set: 10, 20, 50, 100, 500, 1k, or 10k P-values    
-  * # sets of P-values in one sample    
-  * # P-values which have been set to be significant     
 
 **Methods for all 4 simulations:**    
 Random P-values between 0.0 and 1.0 are generated using a uniform distribution.
