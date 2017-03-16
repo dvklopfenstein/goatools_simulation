@@ -13,7 +13,7 @@ def wrpng_boxplot_sigs(params, numpvals_results, **kws):
     """Plot pvalues showing as significant."""
     dfrm = pd.DataFrame(get_percsig_dicts(params, numpvals_results))
     sns.set(style="ticks")
-    sns.boxplot(x="numpvals", y="perc_sig", hue="pval", data=dfrm, palette="PRGn")
+    sns.boxplot(x="numpvals", y="perc_sig", hue="P-values", data=dfrm, palette="PRGn")
     sns.despine(offset=10, trim=True)
     # Set the tick labels font
     # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
@@ -40,8 +40,8 @@ def get_percsig_dicts(params, numpvals_results):
            alpha = params['alpha']
            perc_sig_orig = get_perc_sig(simset['pvals'], alpha)
            perc_sig_corr = get_perc_sig(simset['pvals_corr'], alpha)
-           tbl.append({'numpvals':num_pvals, 'pval':'orig', 'perc_sig':perc_sig_orig})
-           tbl.append({'numpvals':num_pvals, 'pval':'corr', 'perc_sig':perc_sig_corr})
+           tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
+           tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
     return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
