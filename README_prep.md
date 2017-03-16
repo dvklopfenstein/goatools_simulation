@@ -1,10 +1,15 @@
 # Preparatory: P-value and multiple-test simulations
+
+## Contents:
+ * [All P-values chosen randomly; None are significant](README_prep.md#all-p-values-chosen-randomly-none-are-significant-1)
+ * [95% P-values chosen randomly; 5% are significant ](README_prep.md#95-p-values-chosen-randomly-5-are-significant)
+ * [90% P-values chosen randomly; 10% are significant ](README_prep.md#90-p-values-chosen-randomly-10-are-significant)
+ * [50% P-values chosen randomly; 50% are significant ](README_prep.md#50-p-values-chosen-randomly-50-are-significant)
+
 The P-value and multiple-test correction simulations show how results vary with:
   * The number of P-values in one set    
   * The number of sets of P-values in one sample    
   * The number of P-values which have been set to be significant     
-
-Then, we do Gene Ontology Enrichment Analyses simulations    
 
 **Methods:**    
 Random P-values between 0.0 and 1.0 are generated using a uniform distribution.
