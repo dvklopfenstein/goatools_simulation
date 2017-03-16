@@ -6,8 +6,8 @@ Simulations in this repository are used to investigate the results of **Gene Ont
   * The **multiple-test correction** used is **Benjamini/Hochberg False Discovery Rate**
 
 #### There are two-levels of simulations:
-  1. **Preparatoy**: [P-value and multiple-test simulations](#p-value-and-multiple-test-simulations)
-  2. **Consequent**: [Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
+  1. [**Preparatoy**: P-value and multiple-test simulations](#preparatory-p-value-and-multiple-test-simulations)
+  2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](#goea-simulations)
 
 
 ## Preparatory: P-value and multiple-test simulations
