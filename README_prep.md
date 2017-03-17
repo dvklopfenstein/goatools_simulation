@@ -23,7 +23,7 @@ and in fact, are not significant (**shown in rose**).
 
 Upon doing multiple-test correction, almost no corrected P-values are found to be significant.
 These are shown in green, but appear to be a horizontal lines located at or close to zero.
-This shows that multiple-test correction works when
+This shows that multiple-test correction works successfully when
 all P-values are randomly generated resulting in no P-values that are actually significant.
 
 Also notice that as the size of P-values in a single simulation increases,
