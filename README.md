@@ -6,7 +6,7 @@ Simulations in this repository are used to investigate the results of **Gene Ont
   * The **multiple-test correction** used is **Benjamini/Hochberg False Discovery Rate**
 
 ## There are two main levels of simulations: [Preparatory](README_prep.md#preparatory-p-value-and-multiple-test-simulations) and [Consequent](README_main.md#consequent-goea-simulations)
-  1. [**Preparatory**: P-value and multiple-test simulations](README_prep.md#preparatory-p-value-and-multiple-test-simulations)    
+  1. [**Preparatory**: P-value and multiple-test simulations](README_prep.md#preparatory-p-value-and-multiple-test-simulations):    
       * [All P-values chosen randomly; None are significant](README_prep.md#all-p-values-chosen-randomly-none-are-significant-1)
       * [95% P-values chosen randomly; 5% are significant ](README_prep.md#95-p-values-chosen-randomly-5-are-significant)
       * [90% P-values chosen randomly; 10% are significant ](README_prep.md#90-p-values-chosen-randomly-10-are-significant)
