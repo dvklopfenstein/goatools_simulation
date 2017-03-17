@@ -11,7 +11,9 @@
 The alpha-level is set to 0.05    
 
 ### 1. All P-values chosen randomly (None are significant)
-**Conclusion**: Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
+#### Conclusion
+When no P-values are in fact significant,
+multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
 
 #### Details
 All P-values are randomly chosen from values ranging between 0.0 and 1.0 using the uniform distribution.
