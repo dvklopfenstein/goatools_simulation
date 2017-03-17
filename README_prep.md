@@ -8,7 +8,7 @@
 
 
 ## Simulation Results
-The alpha-level is set to 0.05    
+The **alpha-level** is set to **0.05** for all simulations on this page.   
 
 ### 1. All P-values chosen randomly (None are significant)
 #### Conclusion
