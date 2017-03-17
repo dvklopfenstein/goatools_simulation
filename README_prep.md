@@ -24,11 +24,12 @@ and in fact, are not significant (**shown in rose**).
 Upon doing multiple-test correction, almost no corrected P-values are found to be significant.
 These are shown in green, but appear to be a horizontal lines located at or close to zero.
 This shows that multiple-test correction works when
-all P-values are randomly generated no P-values are actually significant.
+all P-values are randomly generated resulting in no P-values that are actually significant.
 
 Also notice that as the size of P-values in a single simulation increases,
 the median value of the uncorrected P-values more closely approaches the 
-0.05 alpha-level and the variation of the random P-values becomes much smaller.
+0.05 alpha-level and the variation of the random P-values becomes much smaller,
+centering around the 0.05 alpha-level.
 
 **Conclusion**: Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
 
