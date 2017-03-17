@@ -16,7 +16,7 @@ When no P-values are in fact significant,
 multiple testing correctly reduces the P-values found to be significant to 0.0 or almost 0.0
 
 #### Details
-All P-values are randomly chosen from values ranging between 0.0 and 1.0 using the uniform distribution.
+All P-values are randomly chosen from Floating-point values ranging between 0.0 and 1.0 using the uniform distribution.
 As expected, this results in five percent of the uncorrected P-values
 to be found as significant (a.k.a < alpha), even though they are randomly generated
 and in fact, are not significant (**shown in rose**).
@@ -29,7 +29,7 @@ all P-values are randomly generated resulting in no P-values that are actually s
 Also notice that as the size of P-values in a single simulation increases,
 the median value of the uncorrected P-values more closely approaches the 
 0.05 alpha-level and the variation of the random P-values becomes much smaller,
-centering around the 0.05 alpha-level.
+centering more closely around the 0.05 alpha-level as the number of P-values per simulation increases.
 
 **Conclusion**: Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
 
