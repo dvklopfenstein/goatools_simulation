@@ -6,25 +6,29 @@
  3. [90% P-values chosen randomly; 10% are significant ](README_prep.md#3-90-p-values-chosen-randomly-10-are-significant)
  4. [50% P-values chosen randomly; 50% are significant ](README_prep.md#4-50-p-values-chosen-randomly-50-are-significant)
 
-## Methods for all simulations
-Random P-values between 0.0 and 1.0 are generated using a uniform distribution.
-Because the alpha-level is set to 0.05, it is expected that 
-5% of the randomly generated P-values will appear to be significant (<0.05) by chance.
-We generate P-value sets in set sizes ranging from 10 P-values per set to 10,000 P-values per set.
 
 ## Simulation Results
+The alpha-level is set to 0.05    
 
 ### 1. All P-values chosen randomly (None are significant)
-All P-values are chosen from random P-values between 0.0 and 1.0 are generated using a uniform distribution.
-This results in five percent of the randomly chosen uncorrected P-values are found to be significant,
-as expected since the alpha-level is set to 0.05 (**shown in rose**).
-Upon doing multiple-test correction, practically no corrected P-values are found to be significant.
-These are shown in green, but appear to be a horizontal line around zero because they are 0.0 or almost 0.0.
+**Conclusion**: Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
 
-Also notice that as the P-value set size increases, the median value more closely approaches the 
+#### Details
+All P-values are randomly chosen from values ranging between 0.0 and 1.0 using the uniform distribution.
+As expected, this results in five percent of the uncorrected P-values
+to be found as significant (a.k.a < alpha), even though they are randomly generated
+and in fact, are not significant (**shown in rose**).
+
+Upon doing multiple-test correction, almost no corrected P-values are found to be significant.
+These are shown in green, but appear to be a horizontal line located at or close to zero.
+This shows that multiple-test correction works in this case:
+all P-values are randomly generated no P-values are significant.
+
+Also notice that as the size of P-values in a single simulation increases,
+the median value more closely approaches the 
 0.05 alpha-level and the variation of the random P-values becomes much smaller.
 
-Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
+**Conclusion**: Multiple testing correctly reduces the P-values found to be significant to be 0.0 or almost 0.0
 
 ![Random pvals w/no significance](doc/images/pvalues_sig00.png)
 
