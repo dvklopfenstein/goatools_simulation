@@ -17,8 +17,8 @@ def wrpng_boxplot_sigs(params, numpvals_results, **kws):
     sns.despine(offset=10, trim=True)
     # Set the tick labels font
     # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
-    ax = plt.subplot() # Defines ax variable by creating an empty plot
-    for label in (ax.get_xticklabels() + ax.get_yticklabels()):
+    axis = plt.subplot() # Defines variable by creating an empty plot
+    for label in axis.get_xticklabels() + axis.get_yticklabels():
         #label.set_fontname('Arial')
         label.set_fontsize(15)
     # Plot text
@@ -37,11 +37,11 @@ def get_percsig_dicts(params, numpvals_results):
     tbl = []
     for num_pvals, simsets in numpvals_results:
         for simset in simsets:
-           alpha = params['alpha']
-           perc_sig_orig = get_perc_sig(simset['pvals'], alpha)
-           perc_sig_corr = get_perc_sig(simset['pvals_corr'], alpha)
-           tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
-           tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
+            alpha = params['alpha']
+            perc_sig_orig = get_perc_sig(simset['pvals'], alpha)
+            perc_sig_corr = get_perc_sig(simset['pvals_corr'], alpha)
+            tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
+            tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
     return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.

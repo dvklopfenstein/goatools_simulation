@@ -13,7 +13,7 @@ import os
 import sys
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
-from pkgsim.report_results import report_results_each
+#from pkgsim.report_results import report_results_each
 from pkgsim.report_results import report_results_tot
 from pkgsim.plot_results import wrpng_boxplot_sigs
 
@@ -33,9 +33,9 @@ def main(num_samples, prt=sys.stdout):
         numpvals_results.append((num_pvalues, results_sets))
     # Plot results in boxplots
     pltargs = {
-      'title':"P-values: None are significant",
-      'xlabel':"# of P-values per set; {N} sets".format(N=num_samples),
-      'fout_img':os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
+        'title':"P-values: None are significant",
+        'xlabel':"# of P-values per set; {N} sets".format(N=num_samples),
+        'fout_img':os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
     }
     wrpng_boxplot_sigs(params, numpvals_results, **pltargs)
 
