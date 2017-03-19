@@ -20,7 +20,7 @@ from pkgsim.plot_results import plot_results_all
 
 def main(prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    perc_sig_list = [0, 5, 10, 20, 35, 50, 75, 95]
+    perc_sig_list = [0, 20, 40, 80]
     num_sims = 100
     global_params = {
         'title':"P-values: {PERC_SIG} Expected Significant (<{MAX_SIG})",
@@ -31,7 +31,8 @@ def main(prt=sys.stdout):
         'dir_img' : "doc/images",
         'alpha' : 0.05,
         'method' : 'fdr_bh'}
-    num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
+    #num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
+    num_pvalues_list = [10, 20]
     results_all = _get_data(perc_sig_list, num_sims, num_pvalues_list, global_params)
     report_results_all(results_all, global_params, prt)
     plot_results_all(results_all, global_params)
@@ -60,16 +61,22 @@ def _run_all_simulations(pars):
 def _run_one_simulation(num_pvalues, perc_sig, params):
     """Generate one set of random pvalues and do multipletest correction."""
     alpha = params['alpha']
+    # 1. Get number of P-values which will be random and which will be set
     num_sig = int(round(float(perc_sig)*num_pvalues/100.0))
     num_rand = num_pvalues - num_sig
     #print "NNNNNNNNN", num_pvalues, "{}%".format(perc_sig), num_sig, num_rand, alpha
+    # 2. Get random P-values and explicitly set P-values
     pvals_rand = np.random.uniform(0, 1, size=num_rand)
     max_sig = 0.05/num_pvalues
     pvals_sig = np.random.uniform(0, max_sig, size=num_sig)
-    #print pvals_rand
-    pvals_all = np.array(list(pvals_rand) + list(pvals_sig))
+    # 3. Add rand/set info to P-values
+    pvals_rand = [(p, True) for p in pvals_rand]
+    pvals_sig = [(p, False) for p in pvals_sig]
+    # 4. Combine random P-values and explictly set P-values
+    pvals_all = list(pvals_rand) + list(pvals_sig)
+    pval_vals = np.array([pval for pval, desc in pvals_all])
     # reject, pvals_corrected, alpha_sidak, alpha_bonf
-    reject, pvals_corrected, _, _ = multipletests(pvals_all, alpha, params['method'])
+    reject, pvals_corrected, _, _ = multipletests(pval_vals, alpha, params['method'])
     return {'pvals':pvals_all, 'reject':reject, 'pvals_corr':pvals_corrected}
 
 if __name__:
