@@ -10,26 +10,30 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from pkgsim.utils import get_perc_sig
 
-def plot_results_all(results_all, global_params):
+def plot_results_all(results_all, params):
     """Plot simulation results for many sets of p-values."""
     for perc_sig, num_sims, results_set in results_all:
         # params: perc_sig num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
-        base_img = "pvalues_sig{SIG:02}_numsims{SIMS:04}.png".format(SIG=perc_sig, SIMS=num_sims)
-        fout_img = os.path.join(global_params['dir_img'], base_img)
+        base_img = params['base_img'].format(SIG=perc_sig, SIMS=num_sims)
+        fout_img = os.path.join(params['dir_img'], base_img)
         #print fout_img
         # Plot results in boxplots
         perc_sig = "None" if perc_sig == 0 else "{N}{P}".format(N=perc_sig, P='%')
+        title = params['title_None']
+        if perc_sig is not None:
+            title = params['title'].format(PERC_SIG=perc_sig, MAX_SIG=params['max_sig'])
         pltargs = {
             'show':False,
-            'title':"P-values: {PERC_SIG}".format(PERC_SIG=perc_sig),
+            'title':title,
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs(global_params['alpha'], results_set, **pltargs)
+        wrpng_boxplot_sigs(params['alpha'], results_set, **pltargs)
 
 def wrpng_boxplot_sigs(alpha, numpvals_results, **kws):
     """Plot pvalues showing as significant."""
+    plt.clf()
     dfrm = pd.DataFrame(get_percsig_dicts(alpha, numpvals_results))
     sns.set(style="ticks")
     sns.boxplot(x="numpvals", y="perc_sig", hue="P-values", data=dfrm, palette="PRGn")

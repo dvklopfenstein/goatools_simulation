@@ -9,7 +9,7 @@ from pkgsim.utils import get_perc_sig, _get_perc_sig
 
 def report_results_all(results_all, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
-    pfmt = "{perc_sig:4} {num_pvalues:6,} {num_sims:5} {alpha:5.2f} {method}\n"
+    pfmt = "{perc_sig:4}=%sig {num_pvalues:6,}=#pvals {num_sims:5}=#sims {alpha:5.2f} {method}\n"
     objrpt = StatsDescribe("percs", "{:6.2f}")
     prt.write("%sig #pvals #sims alpha method\n")
     prt.write("---- ------ ----- ----- ------\n")

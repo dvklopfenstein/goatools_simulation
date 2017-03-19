@@ -20,9 +20,13 @@ from pkgsim.plot_results import plot_results_all
 
 def main(prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    perc_sig_list = [0, 5, 10, 50]
+    perc_sig_list = [0, 5, 10, 20, 35, 50, 75, 95]
     num_sims = 100
     global_params = {
+        'title':"P-values: {PERC_SIG} Expected Significant (<{MAX_SIG})",
+        'title_None':"P-values: No Significance Expected",
+        'base_img' : "pvalues_sig{SIG:03}_numsims{SIMS:04}.png",
+        'max_sig': 0.05,
         'repo' : os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
         'dir_img' : "doc/images",
         'alpha' : 0.05,
@@ -41,30 +45,9 @@ def _get_data(perc_sig_list, num_sims, num_pvalues_list, global_params):
         for num_pvalues in num_pvalues_list:
             params = ntobj._make([perc_sig, num_pvalues, num_sims, global_params])
             results = _run_all_simulations(params)
-
-            #params['perc_sig'] = perc_sig
-            #params['num_pvalues'] = num_pvalues
-            ##results_sets = _run_all_simulations(num_sims, params)
-            ##report_results_each(params, results_sets, prt)
-
-            #results_sets = []
-            #for _ in range(num_sims):
-            #    results_one = _run_one_simulation(**params)
-            #    results_sets.append(results_one)
-
-            # report_results_tot(params, results_sets, prt)
             results_set.append((num_pvalues, results))
         results_all.append((perc_sig, num_sims, results_set))
     return results_all
-    ## Plot results in boxplots
-    #fout_img =os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
-    #pltargs = {
-    #    'title':"P-values: None are significant",
-    #    'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
-    #    'fout_img':os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
-    #}
-    #wrpng_boxplot_sigs(params, keys_results, **pltargs)
-
 
 def _run_all_simulations(pars):
     """Generate many sets of random pvalues and do multipletest correction for each set."""
@@ -81,7 +64,8 @@ def _run_one_simulation(num_pvalues, perc_sig, params):
     num_rand = num_pvalues - num_sig
     #print "NNNNNNNNN", num_pvalues, "{}%".format(perc_sig), num_sig, num_rand, alpha
     pvals_rand = np.random.uniform(0, 1, size=num_rand)
-    pvals_sig = np.random.uniform(0, alpha, size=num_sig)
+    max_sig = 0.05/num_pvalues
+    pvals_sig = np.random.uniform(0, max_sig, size=num_sig)
     #print pvals_rand
     pvals_all = np.array(list(pvals_rand) + list(pvals_sig))
     # reject, pvals_corrected, alpha_sidak, alpha_bonf
