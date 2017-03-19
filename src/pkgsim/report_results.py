@@ -7,25 +7,27 @@ import sys
 from goatools.statsdescribe import StatsDescribe
 from pkgsim.utils import get_perc_sig, _get_perc_sig
 
-def report_results_all(params_results, prt=sys.stdout):
+def report_results_all(results_all, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
-    pfmt= "{perc_sig:4} {num_pvalues:6,} {num_sims:5} {alpha:5.2f} {method}\n"
+    pfmt = "{perc_sig:4} {num_pvalues:6,} {num_sims:5} {alpha:5.2f} {method}\n"
     objrpt = StatsDescribe("percs", "{:6.2f}")
     prt.write("%sig #pvals #sims alpha method\n")
     prt.write("---- ------ ----- ----- ------\n")
     #objrpt.prt_hdr(prt)
-    for params, results in params_results:
-      aph = params.params['alpha']
-      prt.write(pfmt.format(
-        perc_sig=params.perc_sig,
-        num_pvalues=params.num_pvalues,
-        num_sims=params.num_sims,
-        alpha=params.params['alpha'],
-        method=params.params['method']))
-      sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in results]
-      sig_cnt_orig, sig_cnt_corr = zip(*sigs)
-      objrpt.prt_data("orig sig", sig_cnt_orig)
-      objrpt.prt_data("corr sig", sig_cnt_corr)
+    aph = global_params['alpha']
+    method = global_params['method']
+    for perc_sig, num_sims, results_set in results_all:
+        for num_pvalues, results in results_set:
+            prt.write(pfmt.format(
+                perc_sig=perc_sig,
+                num_pvalues=num_pvalues,
+                num_sims=num_sims,
+                alpha=aph,
+                method=method))
+            sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in results]
+            sig_cnt_orig, sig_cnt_corr = zip(*sigs)
+            objrpt.prt_data("orig sig", sig_cnt_orig)
+            objrpt.prt_data("corr sig", sig_cnt_corr)
 
 def report_results_each(params, results_allsets, prt):
     """Report one line for each set of p-values."""

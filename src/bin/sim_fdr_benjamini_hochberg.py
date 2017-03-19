@@ -18,24 +18,26 @@ from statsmodels.sandbox.stats.multicomp import multipletests
 from pkgsim.report_results import report_results_all
 from pkgsim.plot_results import plot_results_all
 
-def main(num_sims, prt=sys.stdout):
+def main(prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
+    perc_sig_list = [0, 5, 10, 50]
+    num_sims = 100
     global_params = {
         'repo' : os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
         'dir_img' : "doc/images",
         'alpha' : 0.05,
         'method' : 'fdr_bh'}
-    perc_sig_list = [0, 5, 10, 50]
     num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
-    params_results = _get_data(perc_sig_list, num_pvalues_list, num_sims, global_params)
-    report_results_all(params_results, prt)
-    plot_results_all(params_results, prt)
+    results_all = _get_data(perc_sig_list, num_sims, num_pvalues_list, global_params)
+    report_results_all(results_all, global_params, prt)
+    plot_results_all(results_all, global_params)
 
-def _get_data(perc_sig_list, num_pvalues_list, num_sims, global_params):
+def _get_data(perc_sig_list, num_sims, num_pvalues_list, global_params):
     """Do P-value and multiple test simulations. Return results."""
-    params_results = []
+    results_all = []
     ntobj = cx.namedtuple("Nt", "perc_sig num_pvalues num_sims params")
     for perc_sig in perc_sig_list:
+        results_set = []
         for num_pvalues in num_pvalues_list:
             params = ntobj._make([perc_sig, num_pvalues, num_sims, global_params])
             results = _run_all_simulations(params)
@@ -51,8 +53,9 @@ def _get_data(perc_sig_list, num_pvalues_list, num_sims, global_params):
             #    results_sets.append(results_one)
 
             # report_results_tot(params, results_sets, prt)
-            params_results.append((params, results))
-    return params_results
+            results_set.append((num_pvalues, results))
+        results_all.append((perc_sig, num_sims, results_set))
+    return results_all
     ## Plot results in boxplots
     #fout_img =os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
     #pltargs = {
@@ -60,7 +63,7 @@ def _get_data(perc_sig_list, num_pvalues_list, num_sims, global_params):
     #    'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
     #    'fout_img':os.path.join(REPO, "doc/images/pvalues_sig{EXP:02}.png".format(EXP=perc_sig))
     #}
-    #wrpng_boxplot_sigs(params, params_results, **pltargs)
+    #wrpng_boxplot_sigs(params, keys_results, **pltargs)
 
 
 def _run_all_simulations(pars):
@@ -86,6 +89,6 @@ def _run_one_simulation(num_pvalues, perc_sig, params):
     return {'pvals':pvals_all, 'reject':reject, 'pvals_corr':pvals_corrected}
 
 if __name__:
-    main(100)
+    main()
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
