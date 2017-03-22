@@ -17,8 +17,7 @@ def main(prt=sys.stdout):
     #num_pvalues_list = [10, 20]
     # Used for all simulations
     num_sims = 100
-    alpha = 0.05
-    method = 'fdr_bh'
+    multi_params = {'alpha' : 0.05, 'method' : 'fdr_bh'}
     global_params = {
         'title':"P-values: {PERC_SIG} Expected Significant (<{MAX_SIG})",
         'title_None':"P-values: No Significance Expected",
@@ -27,10 +26,9 @@ def main(prt=sys.stdout):
         'repo' : os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
         'dir_img' : "doc/images",
         'num_sims' : num_sims, # 100
-        'alpha' : alpha, # 0.05
-        'method' : method} # 'fdr_bh'
+        'multi_params' : multi_params} # alpha=0.05, method='fdr_bh'
     objsim = PvalMtCorrSimsMany(num_pvalues_list, num_sims, perc_sig_list)
-    percsigs_simsets = objsim.get_percsigs_simsets(alpha, method)
+    percsigs_simsets = objsim.get_percsigs_simsets(multi_params) # PvalMtCorrSimsMany obj
     report_results_all(percsigs_simsets, global_params, prt)
     plot_results_all(percsigs_simsets, global_params)
 

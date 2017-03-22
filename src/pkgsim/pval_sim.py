@@ -21,10 +21,9 @@ class PvalSim(object):
     ntobj_mult = cx.namedtuple("NtMult", "reject pvals_corr alpha_sidak alpha_bonf")
     ntobj_info = cx.namedtuple("Nt", "pval pval_corr reject expsig")
 
-    def __init__(self, num_pvalues, num_sig, alpha, method): #, **kws):
+    def __init__(self, num_pvalues, num_sig, multi_params): #, **kws):
         #self.fnc_maxsig = kws.get('fnc_maxsig', lambda pvals: self.alpha/len(pvals))
-        self.alpha = alpha
-        self.method = method
+        self.multi_params = multi_params
         # Data members: P-value
         self.expsig = None # One for each P-value. True if P-value is intended to be significant.
         self.pvals = None  # List of randomly-generated uncorrected P-value
@@ -40,7 +39,7 @@ class PvalSim(object):
 
     def _get_perc_sig(self, pvals):
         """Calculate the percentage of p-values which are significant."""
-        num_pvals_sig = sum(pvals < self.alpha)
+        num_pvals_sig = sum(pvals < self.multi_params['alpha'])
         num_pvals_tot = len(pvals)
         return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
 
@@ -82,6 +81,6 @@ class PvalSim(object):
     def _init_ntmult(self):
         """Generate one set of random pvalues and do multipletest correction."""
         #pylint: disable=undefined-variable
-        return self.ntobj_mult._make(multipletests(self.pvals, self.alpha, self.method))
+        return self.ntobj_mult._make(multipletests(self.pvals, **self.multi_params))
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

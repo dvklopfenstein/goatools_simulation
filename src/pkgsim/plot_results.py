@@ -12,6 +12,7 @@ import pandas as pd
 def plot_results_all(percsigs_simsets, params):
     """Plot simulation results for many sets of p-values."""
     num_sims = params['num_sims']
+    alpha = params['multi_params']['alpha']
     for perc_sig, numpvals_sims in percsigs_simsets:
         # params: perc_sig num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
@@ -29,12 +30,12 @@ def plot_results_all(percsigs_simsets, params):
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs(params['alpha'], numpvals_sims, **pltargs)
+        wrpng_boxplot_sigs(alpha, numpvals_sims, **pltargs)
 
 def wrpng_boxplot_sigs(alpha, numpvals_sims, **kws):
     """Plot pvalues showing as significant."""
     plt.clf()
-    dfrm = pd.DataFrame(get_percsig_dicts(alpha, numpvals_sims))
+    dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     sns.set(style="ticks")
     sns.boxplot(x="numpvals", y="perc_sig", hue="P-values", data=dfrm, palette="PRGn")
     sns.despine(offset=10, trim=True)
@@ -57,7 +58,7 @@ def wrpng_boxplot_sigs(alpha, numpvals_sims, **kws):
     if show:
         plt.show()
 
-def get_percsig_dicts(alpha, numpvals_sims):
+def get_percsig_dicts(numpvals_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
     tbl = []
     for num_pvals, objsims in numpvals_sims: # objsims is an PvalSimMany obj
