@@ -5,43 +5,46 @@ __author__ = "DV Klopfenstein"
 
 import sys
 from goatools.statsdescribe import StatsDescribe
-from pkgsim.utils import get_perc_sig, _get_perc_sig
+#from pkgsim.utils import get_perc_sig, _get_perc_sig
 
-def report_results_all(results_all, global_params, prt=sys.stdout):
+def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
-    pfmt = "{perc_sig:4}=%sig {num_pvalues:6,}=#pvals {num_sims:5}=#sims " \
-           "{alpha:5.2f} {method} {EXP_SIG:5}=#expsig {EXP_RND:5}=#exprnd\n"
+    pfmt = "[({perc_sig:4}=%sig {num_pvalues:6,}=#pvals) -> " \
+           "(EXP:{EXP_SIG:5}=#sig {EXP_RND:5}=#rnd)]\n"
+    dfmt = "{PVAL:8.6f} {PCORR:8.6f} ({ERRTYPE:1}=errtype: {EXPSIG}=expsig {REJECT:1}=rej) {MSG}"
     objrpt = StatsDescribe("percs", "{:6.2f}")
-    prt.write("%sig #pvals #sims alpha method\n")
-    prt.write("---- ------ ----- ----- ------\n")
+    prt.write("num_sims={N} alpha={A:4.2f} method={M}\n".format(
+      N=global_params['num_sims'], A=global_params['alpha'], M=global_params['method']))
+    #prt.write("%sig #pvals #sims alpha method\n")
+    #prt.write("---- ------ ----- ----- ------\n")
     #objrpt.prt_hdr(prt)
     aph = global_params['alpha']
     method = global_params['method']
-    for perc_sig, num_sims, results_set in results_all:
+    for perc_sig, numpvals_objsims in percsigs_simsets: 
         print
-        for num_pvalues, results in results_set:
-            # results: list of {'pvals':[(pval0, desc0), (pval1, desc1), ..., 'pvals_corr':..., 'reject':...}
-            num_pvals_sig = int(round(float(num_pvalues)*perc_sig/100))
-            num_pvals_rnd = num_pvalues - num_pvals_sig
-            #exp_num_pass = 
+        for num_pvalues, objsims in numpvals_objsims:
+            # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
+            num_pvals_sig = objsims.get_num_mksig()
+            num_pvals_rnd = objsims.get_num_mkrnd()
             msg = pfmt.format(
                 perc_sig=perc_sig,
                 num_pvalues=num_pvalues,
-                num_sims=num_sims,
+                num_sims=global_params['num_sims'],
                 EXP_SIG=num_pvals_sig,
                 EXP_RND=num_pvals_rnd,
                 alpha=aph,
                 method=method)
             prt.write(msg)
-            for k2v in results:
-                for (pval, isrand), pval_corr, reject in zip(k2v['pvals'], k2v['pvals_corr'], k2v['reject']):
-                    err_type = get_err_type(reject, isrand)
-                    if err_type[0:1] == "T": # Type I or II error
-                    #if desc == "set" and not reject:
-                        prt.write("{ERRTYPE:7} {PVAL:8.6f} {ISRAND}=is_Rand {PCORR:8.6f} {REJECT:5} {MSG}".format(
-                            ERRTYPE=err_type, PVAL=pval, ISRAND=int(isrand), PCORR=pval_corr, REJECT=reject, MSG=msg))
-            #sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in results]
-            #sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in results]
+            for obj1sim in objsims.obj1sim_list:
+                # Report one simulation
+                for nt1sim in obj1sim.get_zipped_data(): # nt1sim: pval pval_corr reject expsig
+                    err_type = obj1sim.get_err_type(nt1sim)
+                    #if err_type != 0: # Type I or II error
+                    #    prt.write(dfmt.format(
+                    #        PVAL=nt1sim.pval, PCORR=nt1sim.pval_corr,
+                    #        ERRTYPE=err_type, EXPSIG=int(nt1sim.expsig), REJECT=nt1sim.reject, MSG=msg))
+            #sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in objsims]
+            #sigs = [(get_perc_sig(r['pvals'], aph), get_perc_sig(r['pvals_corr'], aph)) for r in objsims]
             #sig_cnt_orig, sig_cnt_corr = zip(*sigs)
             #objrpt.prt_data("orig sig", sig_cnt_orig)
             #objrpt.prt_data("corr sig", sig_cnt_corr)
@@ -61,14 +64,14 @@ def report_results_one(params, data, prt):
         msg.format(N=num_corr_sig, M=num_corr_tot, P=perc_corr_sig, DESC="corrected")]
     prt.write("{MSG}\n".format(MSG=" ".join(prtmsg)))
 
-def get_err_type(reject, isrand):
-    if not isrand and reject:
-        return ""
-    if isrand and not reject:
-        return ""
-    if isrand and reject:
-        return "Type I"
-    if not isrand and not reject:
-        return "Type II"
+#def get_err_type(reject, isrand):
+#    if not isrand and reject:
+#        return ""
+#    if isrand and not reject:
+#        return ""
+#    if isrand and reject:
+#        return "Type I"
+#    if not isrand and not reject:
+#        return "Type II"
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.

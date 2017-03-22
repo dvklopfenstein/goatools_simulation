@@ -8,11 +8,11 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from pkgsim.utils import get_perc_sig
 
-def plot_results_all(results_all, params):
+def plot_results_all(percsigs_simsets, params):
     """Plot simulation results for many sets of p-values."""
-    for perc_sig, num_sims, results_set in results_all:
+    num_sims = params['num_sims']
+    for perc_sig, numpvals_sims in percsigs_simsets:
         # params: perc_sig num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
         base_img = params['base_img'].format(SIG=perc_sig, SIMS=num_sims)
@@ -29,12 +29,12 @@ def plot_results_all(results_all, params):
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs(params['alpha'], results_set, **pltargs)
+        wrpng_boxplot_sigs(params['alpha'], numpvals_sims, **pltargs)
 
-def wrpng_boxplot_sigs(alpha, numpvals_results, **kws):
+def wrpng_boxplot_sigs(alpha, numpvals_sims, **kws):
     """Plot pvalues showing as significant."""
     plt.clf()
-    dfrm = pd.DataFrame(get_percsig_dicts(alpha, numpvals_results))
+    dfrm = pd.DataFrame(get_percsig_dicts(alpha, numpvals_sims))
     sns.set(style="ticks")
     sns.boxplot(x="numpvals", y="perc_sig", hue="P-values", data=dfrm, palette="PRGn")
     sns.despine(offset=10, trim=True)
@@ -57,13 +57,14 @@ def wrpng_boxplot_sigs(alpha, numpvals_results, **kws):
     if show:
         plt.show()
 
-def get_percsig_dicts(alpha, numpvals_results):
+def get_percsig_dicts(alpha, numpvals_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
     tbl = []
-    for num_pvals, results_lst in numpvals_results:
-        for results in results_lst:
-            perc_sig_orig = get_perc_sig(results['pvals'], alpha)
-            perc_sig_corr = get_perc_sig(results['pvals_corr'], alpha)
+    for num_pvals, objsims in numpvals_sims: # objsims is an PvalSimMany obj
+        # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
+        for obj1sim in objsims.obj1sim_list:
+            perc_sig_orig = obj1sim.get_perc_sig("pvals")
+            perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
             tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
             tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
     #for e in tbl: print "EEEE", e

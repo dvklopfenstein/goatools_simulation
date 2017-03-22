@@ -6,8 +6,7 @@ vim_sim_fdr_benjamini_hochberg:
 	src/pkgsim/pval_sim.py \
 	src/pkgsim/pval_mtcorr_sims.py \
 	src/pkgsim/report_results.py \
-	src/pkgsim/plot_results.py \
-	src/pkgsim/utils.py
+	src/pkgsim/plot_results.py
 
 run:
 	echo run

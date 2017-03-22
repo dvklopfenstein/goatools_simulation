@@ -18,34 +18,47 @@ from statsmodels.sandbox.stats.multicomp import multipletests
 class PvalSim(object):
     """Simulate ONE multiple-test correction of P-values."""
 
+    ntobj_mult = cx.namedtuple("NtMult", "reject pvals_corr alpha_sidak alpha_bonf")
+    ntobj_info = cx.namedtuple("Nt", "pval pval_corr reject expsig")
+
     def __init__(self, num_pvalues, num_sig, alpha, method): #, **kws):
         #self.fnc_maxsig = kws.get('fnc_maxsig', lambda pvals: self.alpha/len(pvals))
+        self.alpha = alpha
+        self.method = method
         # Data members: P-value
-        self.markers = None # One for each P-value. True if P-value is intended to be significant.
-        self.pvals = None   # List of randomly-generated uncorrected P-value
+        self.expsig = None # One for each P-value. True if P-value is intended to be significant.
+        self.pvals = None  # List of randomly-generated uncorrected P-value
         self._init_pvals(num_pvalues, num_sig)
         # Data members: Multipletest correction
-        self.pvals_corr = None
-        self.reject = None
-        self.alpha_sidak = None
-        self.alpha_bonf = None
-        self._init_multisim(alpha, method)
+        self.ntmult = self._init_ntmult()
+        self.pvals_corr = self.ntmult.pvals_corr
+
+    def get_perc_sig(self, attrname="pvals"): # "pvals" or "pvals_corr"
+        """Calculate the percentage of p-values which are significant."""
+        pvals = getattr(self, attrname)
+        return self._get_perc_sig(pvals)[2]
+
+    def _get_perc_sig(self, pvals):
+        """Calculate the percentage of p-values which are significant."""
+        num_pvals_sig = sum(pvals < self.alpha)
+        num_pvals_tot = len(pvals)
+        return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
 
     def get_zipped_data(self):
-        """combine data to return: pvals, pvals_corr, reject, markers"""
-        nto = cx.namedtuple("Nt", "pval pval_corr reject marker")
-        return [nto._make(vs) for vs in zip(self.pvals, self.pvals_corr, self.reject, self.markers)]
+        """Combine data to return: pvals, pvals_corr, reject, expsig"""
+        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig)
+        return [self.ntobj_info._make(vs) for vs in items]
 
     @staticmethod
     def get_err_type(ntdata):
-        """Return one of: Good Result=0; Type I error=1; Type II error=2"""
+        """Return description of the result of one simulation."""
         reject = ntdata.reject
-        marker = ntdata.marker
+        expsig = ntdata.expsig
         # pylint: disable=multiple-statements, bad-whitespace
-        if     marker and     reject: return 0 # Correct:     Significant
-        if not marker and not reject: return 0 # Correct: Not Significant
-        if not marker and     reject: return 1 # Type  I Error
-        if     marker and not reject: return 2 # Type II Error
+        if     expsig and     reject: return 0 # Correct:     Significant
+        if not expsig and not reject: return 0 # Correct: Not Significant
+        if not expsig and     reject: return 1 # Type  I Error (False Positive)
+        if     expsig and not reject: return 2 # Type II Error (False Negative)
         assert True, "UNEXPECTED ERROR TYPE"
 
     def _init_pvals(self, num_pvalues, num_sig):
@@ -59,17 +72,16 @@ class PvalSim(object):
         pvals_sig = [(p, True) for p in np.random.uniform(0, max_sig, size=num_sig)]
         pvals_rnd = [(p, False) for p in np.random.uniform(0, 1, size=num_rand)]
         # 2. Combine random P-values and explictly set P-value
-        pvals_markers = list(pvals_sig) + list(pvals_rnd)
-        pvals_all, markers = zip(*pvals_markers)
+        pvals_expsig = list(pvals_sig) + list(pvals_rnd)
+        pvals_all, expsig = zip(*pvals_expsig)
         # 3. Set internal data members and do check
-        self.markers = markers
+        self.expsig = expsig
         self.pvals = np.array(pvals_all)
         assert num_pvalues == len(self.pvals)
 
-    def _init_multisim(self, alpha, method):
+    def _init_ntmult(self):
         """Generate one set of random pvalues and do multipletest correction."""
         #pylint: disable=undefined-variable
-        self.reject, self.pvals_corr, self.alpha_sidak, self.alpha_bonf = multipletests(
-            self.pvals, alpha, method)
+        return self.ntobj_mult._make(multipletests(self.pvals, self.alpha, self.method))
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
