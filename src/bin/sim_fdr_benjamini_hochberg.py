@@ -12,7 +12,7 @@ from pkgsim.pval_mtcorr_sims import PvalMtCorrSimsMany
 
 def main(prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    perc_sig_list = [0, 20, 40, 80]
+    perc_sig_list = [0, 10, 20, 40, 80]
     num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
     #num_pvalues_list = [10, 20]
     # Used for all simulations
@@ -21,7 +21,7 @@ def main(prt=sys.stdout):
     global_params = {
         'title':"P-values: {PERC_SIG} Expected Significant (<{MAX_SIG})",
         'title_None':"P-values: No Significance Expected",
-        'base_img' : "pvalues_sig{SIG:03}_numsims{SIMS:04}.png",
+        'base_img' : "pvalues_sig{SIG:03}_numsims{SIMS:05}.png",
         'max_sig': 0.05,
         'repo' : os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
         'dir_img' : "doc/images",
