@@ -11,10 +11,15 @@
 The **alpha-level** is set to **0.05** for all simulations on this page.   
 
 ### 1. All P-values chosen randomly (None are significant)
-#### Conclusion
-When no P-values are in fact significant,
-multiple testing correctly reduces the P-values found to be significant to 0.0 or almost 0.0
+#### Conclusions
 
+A **simulation** is one multiple-test correction on a set of P-values.
+
+1. When no P-values are in fact significant,
+   Most simulations report no significant results.
+   Of the few simulations which report significant results when there are none,
+   the errors are Type I errors (false positives).
+   
 #### Details
 All P-values are randomly chosen from Floating-point values ranging between 0.0 and 1.0 using the uniform distribution.
 As expected, this results in five percent of the uncorrected P-values
