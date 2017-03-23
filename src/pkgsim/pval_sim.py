@@ -35,6 +35,7 @@ class PvalSim(object):
         # Data members: Multipletest correction
         self.ntmult = self._init_ntmult()
         self.pvals_corr = self.ntmult.pvals_corr
+        self._chk(num_sig)
 
     def get_perc_err(self):
         """Calculate % of corrected p-values with errors: Type I or Type II, Type I, or Type II."""
@@ -81,6 +82,31 @@ class PvalSim(object):
         if not expsig and     reject: return 1 # Type  I Error (False Positive)
         if     expsig and not reject: return 2 # Type II Error (False Negative)
         assert True, "UNEXPECTED ERROR TYPE"
+
+    def _chk(self, num_sig):
+        self._chk_reject()
+        self._chk_conclusions(num_sig)
+
+    def _chk_reject(self):
+        """Check that all values marked with reject==True, have pval_corr < alpha."""
+        # ntmult fields: reject pvals_corr alpha_sidak alpha_bonf
+        alpha = self.multi_params['alpha']
+        for reject, pval in zip(self.ntmult.reject, self.ntmult.pvals_corr):
+            if reject:
+                assert pval < alpha
+  
+
+    def _chk_conclusions(self, num_sig):
+        """Check conclusions of a single simulation."""
+        # 1. If no P-values are expected to be significant, all corrected P-values are zero or are close to 0
+        if num_sig == 0:
+            is_sig = sum(self.pvals_corr < self.multi_params['alpha'])
+            #assert is_sig == 0, "{} {}".format(is_sig, self.pvals_corr)
+            if is_sig != 0:
+                for ntd in self.get_zipped_data():
+                    if ntd.pval_corr < self.multi_params['alpha']:
+                        print ntd
+                print self.get_perc_err()
 
     def _init_pvals(self, num_pvalues, num_sig):
         """Create P-values randomly according to user-specified parameters."""
