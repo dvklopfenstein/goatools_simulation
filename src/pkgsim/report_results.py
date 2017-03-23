@@ -4,7 +4,6 @@ __copyright__ = "Copyright (C) 2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-import numpy as np
 #from goatools.statsdescribe import StatsDescribe
 #from pkgsim.utils import get_perc_sig, _get_perc_sig
 from PyBiocode.Utils.stats import prt_percentiles
@@ -20,14 +19,15 @@ def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
     #prt.write("%sig #pvals #sims alpha method\n")
     #prt.write("---- ------ ----- ----- ------\n")
     #objrpt.prt_hdr(prt)
-    percs = [25.0, 50.0, 75.0]
+    percentiles = [16.0, 25.0, 50.0, 75.0, 84.0]
     attrs = [
       "perc_correct",
-      "act_sig",
-      "num_Type_II",
-      "num_Type_I",
-      "num_correct",
-      "perc_Type_I"
+      #"act_sig",
+      #"num_Type_II",
+      #"num_Type_I",
+      #"num_correct",
+      #"perc_Type_I",
+      "perc_Type_I_II"
     ]
     prt.write("num_sims={N} alpha={A:4.2f} method={M} {ATTRS}\n".format(
         N=global_params['num_sims'], A=alpha, M=method, ATTRS=attrs))
@@ -35,8 +35,6 @@ def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
         prt.write("\n")
         # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
         for num_pvalues, objsims in numpvals_objsims:
-            # nterrs: cnts perc_Type_I perc_Type_II perc_TypesI_II
-            nterrs = objsims.get_nterrs()
             msg = pfmt.format(
                 perc_sig=perc_sig,
                 num_pvalues=num_pvalues,
@@ -46,7 +44,7 @@ def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
             #prt_percentiles("Type I", vals_t1, "{:8.6f}", prt)
             #vals_t1 = [nt.cnts[1] for nt in nterrs]
             for attr in attrs:
-                prt.write("{}".format(get_percentile_vals(attr, nterrs, percs)))
+                prt.write("{}".format(objsims.get_percentile_vals(attr, percentiles)))
             prt.write("\n")
             #prt_percentiles("Type I", vals_t1, "{:5}", prt)
             #for obj1sim in objsims.obj1sim_list:
@@ -62,10 +60,6 @@ def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
             #sig_cnt_orig, sig_cnt_corr = zip(*sigs)
             #objrpt.prt_data("orig sig", sig_cnt_orig)
             #objrpt.prt_data("corr sig", sig_cnt_corr)
-
-def get_percentile_vals(attr, nterrs, percs):
-    """Return percentile values for 'attr' list."""
-    return [np.percentile([getattr(nt, attr) for nt in nterrs], p) for p in percs] 
 
 # def report_results_each(params, results_allsets, prt):
 #     """Report one line for each set of p-values."""

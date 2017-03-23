@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import numpy as np
 from pkgsim.pval_sim import PvalSim
 
 class PvalMtCorrSimsMany(object):
@@ -37,6 +38,11 @@ class PvalSimMany(object):
         # Data members
         self.num_sig = int(round(float(self.perc_sig)*self.num_pvals/100.0))
         self.obj1sim_list = self._init_obj1sim_list(num_sims, num_pvals, multi_params)
+
+    def get_percentile_vals(self, attr, percentiles):
+        """Return percentile values for 'attr' list."""
+        nterrs = self.get_nterrs()
+        return [np.percentile([getattr(nt, attr) for nt in nterrs], p) for p in percentiles] 
 
     def get_nterrs(self):
         """Get # and % Type I/II/Both for each sim."""
