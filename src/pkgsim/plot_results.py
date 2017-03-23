@@ -68,19 +68,6 @@ def get_percsig_dicts(numpvals_sims):
             perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
             tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
             tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
-    #for e in tbl: print "EEEE", e
-#EEEE {
-#'perc_sig': 0.0,
-#'numpvals': Nt(
-#   perc_sig=50,
-#   num_pvalues=10000,
-#   num_sims=100,
-#   params={
-#     'repo': '/cygdrive/c/Users/note2/Data/git/goatools_simulation/src/bin/../..',
-#     'alpha': 0.05,
-#     'dir_img': 'doc/images',
-#     'method': 'fdr_bh'}),
-#'P-values': 'Corrected'}
     return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
