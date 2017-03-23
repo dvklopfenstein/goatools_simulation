@@ -8,7 +8,7 @@ import sys
 #from pkgsim.utils import get_perc_sig, _get_perc_sig
 from PyBiocode.Utils.stats import prt_percentiles
 
-def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
+def report_results_all(objsim, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
     pfmt = "[({perc_sig:4}=%sig {num_pvalues:6,}=#pvals) -> " \
            "(EXP:{EXP_SIG:5}=#sig {EXP_RND:5}=#rnd)]"
@@ -31,7 +31,7 @@ def report_results_all(percsigs_simsets, global_params, prt=sys.stdout):
     ]
     prt.write("num_sims={N} alpha={A:4.2f} method={M} {ATTRS}\n".format(
         N=global_params['num_sims'], A=alpha, M=method, ATTRS=attrs))
-    for perc_sig, numpvals_objsims in percsigs_simsets:
+    for perc_sig, numpvals_objsims in objsim.percsig_simsets:
         prt.write("\n")
         # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
         for num_pvalues, objsims in numpvals_objsims:

@@ -9,11 +9,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def plot_results_all(percsigs_simsets, params):
+def plot_results_all(objsim, params):
     """Plot simulation results for many sets of p-values."""
     num_sims = params['num_sims']
     alpha = params['multi_params']['alpha']
-    for perc_sig, numpvals_sims in percsigs_simsets:
+    for perc_sig, numpvals_sims in objsim.percsig_simsets:
         # params: perc_sig num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
         base_img = params['base_img'].format(SIG=perc_sig, SIMS=num_sims)

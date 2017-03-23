@@ -6,6 +6,8 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
+import timeit
+import datetime
 from pkgsim.report_results import report_results_all
 from pkgsim.plot_results import plot_results_all
 from pkgsim.pval_mtcorr_sims import PvalMtCorrSimsMany
@@ -27,10 +29,14 @@ def main(prt=sys.stdout):
         'dir_img' : "doc/images",
         'num_sims' : num_sims, # 100
         'multi_params' : multi_params} # alpha=0.05, method='fdr_bh'
-    objsim = PvalMtCorrSimsMany(num_pvalues_list, num_sims, perc_sig_list)
-    percsigs_simsets = objsim.get_percsigs_simsets(multi_params) # PvalMtCorrSimsMany obj
-    report_results_all(percsigs_simsets, global_params, prt)
-    plot_results_all(percsigs_simsets, global_params)
+    # objsim: PvalMtCorrSimsMany
+    tic = timeit.
+    objsim = PvalMtCorrSimsMany(num_pvalues_list, num_sims, perc_sig_list, multi_params)
+    report_results_all(objsim, global_params, prt)
+    lst = sorted(objsim.get_attr_percentile_vals(attrname="perc_Type_I_II", percentile=78.0))
+    print lst
+    print max(lst)
+    plot_results_all(objsim, global_params)
 
 if __name__:
     main()
