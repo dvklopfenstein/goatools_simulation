@@ -21,13 +21,13 @@ def report_results_all(objsim, global_params, prt=sys.stdout):
     #objrpt.prt_hdr(prt)
     percentiles = [16.0, 25.0, 50.0, 75.0, 84.0]
     attrs = [
-        "perc_correct",
+        #"perc_correct",
         #"act_sig",
         #"num_Type_II",
         #"num_Type_I",
         #"num_correct",
-        #"perc_Type_I",
-        "perc_Type_I_II"
+        "perc_Type_I_II",
+        "perc_Type_I",
     ]
     prt.write("num_sims={N} alpha={A:4.2f} method={M} {ATTRS}\n".format(
         N=global_params['num_sims'], A=alpha, M=method, ATTRS=attrs))
