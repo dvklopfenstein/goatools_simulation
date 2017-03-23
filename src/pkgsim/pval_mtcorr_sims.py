@@ -62,6 +62,9 @@ class PvalSimMany(object):
         self.num_sig = int(round(float(self.perc_sig)*self.num_pvals/100.0))
         self.obj1sim_list = self._init_obj1sim_list(num_sims, num_pvals, multi_params, fnc_maxsig)
         self.nterrs = self._init_nterrs()
+        print
+        print "{SIMS} sims, {PVALS} pvals/sim, {PERC:4.2f}%".format(
+            SIMS=num_sims, PVALS=num_pvals, PERC=perc_sig)
 
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
