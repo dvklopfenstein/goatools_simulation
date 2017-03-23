@@ -8,6 +8,12 @@ vim_sim_fdr_benjamini_hochberg:
 	src/pkgsim/report_results.py \
 	src/pkgsim/plot_results.py
 
+vim_md:
+	vim -p \
+	README.md \
+	doc/md/README_prep.md \
+	doc/md/README_main.md
+
 run:
 	echo run
 
