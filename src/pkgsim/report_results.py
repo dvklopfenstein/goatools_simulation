@@ -6,7 +6,7 @@ __author__ = "DV Klopfenstein"
 import sys
 #from goatools.statsdescribe import StatsDescribe
 #from pkgsim.utils import get_perc_sig, _get_perc_sig
-from PyBiocode.Utils.stats import prt_percentiles
+#from PyBiocode.Utils.stats import prt_percentiles
 
 def report_results_all(objsim, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
@@ -21,13 +21,13 @@ def report_results_all(objsim, global_params, prt=sys.stdout):
     #objrpt.prt_hdr(prt)
     percentiles = [16.0, 25.0, 50.0, 75.0, 84.0]
     attrs = [
-      "perc_correct",
-      #"act_sig",
-      #"num_Type_II",
-      #"num_Type_I",
-      #"num_correct",
-      #"perc_Type_I",
-      "perc_Type_I_II"
+        "perc_correct",
+        #"act_sig",
+        #"num_Type_II",
+        #"num_Type_I",
+        #"num_correct",
+        #"perc_Type_I",
+        "perc_Type_I_II"
     ]
     prt.write("num_sims={N} alpha={A:4.2f} method={M} {ATTRS}\n".format(
         N=global_params['num_sims'], A=alpha, M=method, ATTRS=attrs))
@@ -44,7 +44,7 @@ def report_results_all(objsim, global_params, prt=sys.stdout):
             #prt_percentiles("Type I", vals_t1, "{:8.6f}", prt)
             #vals_t1 = [nt.cnts[1] for nt in nterrs]
             for attr in attrs:
-                prt.write("{}".format(objsims.get_percentile_vals(attr, percentiles)))
+                prt.write("| {}".format(" ".join(objsims.get_percentile_strs(attr, percentiles))))
             prt.write("\n")
             #prt_percentiles("Type I", vals_t1, "{:5}", prt)
             #for obj1sim in objsims.obj1sim_list:

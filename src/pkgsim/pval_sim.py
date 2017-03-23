@@ -20,19 +20,17 @@ class PvalSim(object):
 
     ntobj_mult = cx.namedtuple("NtMult", "reject pvals_corr alpha_sidak alpha_bonf")
     ntobj_info = cx.namedtuple("NtResults", "pval pval_corr reject expsig")
-    ntobj_pvaltype = cx.namedtuple("NtResCnts", "act_sig "
+    ntobj_pvaltype = cx.namedtuple(
+        "NtResCnts", "act_sig "
         "num_correct, num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
-    def __init__(self, num_pvalues, num_sig, multi_params): #, **kws):
-        #self.fnc_maxsig = kws.get('fnc_maxsig', lambda pvals: self.alpha/len(pvals))
-        #self.max_sig = 0.05/num_pvalues
-        self.max_sig = 0.05/num_pvalues
-        #self.max_sig = 0.05/2
+    def __init__(self, num_pvalues, num_sig, multi_params, fnc_maxsig): #, **kws):
         self.multi_params = multi_params
         # Data members: P-value
         self.expsig = None # One for each P-value. True if P-value is intended to be significant.
         self.pvals = None  # List of randomly-generated uncorrected P-value
+        self.max_sig = fnc_maxsig(num_pvalues, multi_params)
         self._init_pvals(num_pvalues, num_sig)
         # Data members: Multipletest correction
         self.ntmult = self._init_ntmult()
@@ -44,12 +42,13 @@ class PvalSim(object):
         res_cnt = cx.Counter([self.get_type(nt) for nt in nts])
         res_cnt[3] = res_cnt[1] + res_cnt[2] # COunt of both error types
         num_pvals = len(self.pvals)
+        #pylint: disable=bad-whitespace
         return self.ntobj_pvaltype(
             act_sig=sum(self.pvals_corr < self.multi_params['alpha']),
-            num_correct=res_cnt[0], 
-            num_Type_I=res_cnt[1], 
-            num_Type_II=res_cnt[2], 
-            num_Type_I_II=res_cnt[3], 
+            num_correct=res_cnt[0],
+            num_Type_I=res_cnt[1],
+            num_Type_II=res_cnt[2],
+            num_Type_I_II=res_cnt[3],
             perc_correct   = 100.0*res_cnt[0]/num_pvals,
             perc_Type_I    = 100.0*res_cnt[1]/num_pvals,
             perc_Type_II   = 100.0*res_cnt[2]/num_pvals,
@@ -86,7 +85,6 @@ class PvalSim(object):
     def _init_pvals(self, num_pvalues, num_sig):
         """Create P-values randomly according to user-specified parameters."""
         num_rand = num_pvalues - num_sig
-        #print "NNNNNNNNN", num_pvalues, "{}%".format(perc_sig), num_sig, num_rand, alpha
         # 1. Get random P-values and explicitly set P-value
         #   False -> If P-value is significant, it is by chance
         #   True  -> P-value is intended to be significant
