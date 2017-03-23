@@ -28,6 +28,13 @@ class PvalMtCorrSimsMany(object):
                 vals.extend(objsims.get_percentile_vals(attrname, [percentile]))
         return vals
 
+    def prt_num_sims_w_errs(self, prt=sys.stdout):
+        """Return the number of simulations that have errors."""
+        for _, numpvals_objsims in self.percsig_simsets:
+            for _, objsims in numpvals_objsims:
+                objsims.prt_num_sims_w_errs(prt)
+            prt.write("\n")
+
     def _init_percsig_simset_lst(self, multi_params, fnc_maxsig, prt=sys.stdout):
         """Do P-value and multiple test simulations. Return results."""
         tic = timeit.default_timer()
@@ -70,6 +77,17 @@ class PvalSimMany(object):
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
         return [np.percentile([getattr(nt, attr) for nt in self.nterrs], p) for p in percentiles]
+
+    def get_num_sims_w_errs(self):
+        """Return the number of simulations that have errors."""
+        num_sims = len(self.nterrs)
+        return sum([1 for nterr in self.nterrs if nterr.num_Type_I_II != 0])
+        print "Of {} sims, {} had errors".format(num_sims, num_sims_err)
+
+    def prt_num_sims_w_errs(self, prt=sys.stdout):
+        """Return the number of simulations that have errors."""
+        prt.write("Of {} sims of {:3} pvals with {:3.0f}% set significance, {} had errors\n".format(
+            len(self.nterrs), self.num_pvals, self.perc_sig, self.get_num_sims_w_errs()))
 
     def get_percentile_strs(self, attr, percentiles):
         """Return percentile strings suitable for printing for 'attr' list."""

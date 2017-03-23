@@ -13,8 +13,9 @@ from pkgsim.pval_mtcorr_sims import PvalMtCorrSimsMany
 def main(prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     perc_sig_list = [0, 15, 20, 40, 80]
-    perc_sig_list = range(0, 40, 2)
-    perc_sig_list = range(10, 11)
+    #perc_sig_list = range(0, 40, 2)
+    #perc_sig_list = range(10, 11) # Simulations of P-vals with 10% significance
+    #perc_sig_list = range(0, 1) # Simulations of P-vals with NO SIGNIFICANCE only
     num_pvalues_list = [10, 20, 50, 100, 500, 1000, 10000]
     num_pvalues_list = [10, 20, 50, 100, 500]
     # Used for all simulations
@@ -31,6 +32,7 @@ def main(prt=sys.stdout):
         'multi_params' : multi_params} # alpha=0.05, method='fdr_bh'
     # objsim: PvalMtCorrSimsMany
     objsim = PvalMtCorrSimsMany(num_pvalues_list, num_sims, perc_sig_list, multi_params, fnc_maxsig)
+    objsim.prt_num_sims_w_errs(prt)
     report_results_all(objsim, global_params, prt)
     lst = sorted(objsim.get_attr_percentile_vals(attrname="perc_Type_I_II", percentile=78.0))
     print len(lst), lst
