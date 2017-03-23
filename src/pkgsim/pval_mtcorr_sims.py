@@ -4,6 +4,8 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
+import timeit
+import datetime
 import numpy as np
 from pkgsim.pval_sim import PvalSim
 
@@ -26,6 +28,7 @@ class PvalMtCorrSimsMany(object):
 
     def _init_percsig_simset_lst(self, multi_params, prt=sys.stdout):
         """Do P-value and multiple test simulations. Return results."""
+        tic = timeit.default_timer()
         percsig_simsets = []
         msg = "  Running {N} Pval Sims with {SIG:3.0f}% significance\n"
         for perc_sig in self.perc_sig_list:
@@ -36,6 +39,8 @@ class PvalMtCorrSimsMany(object):
                 # Save sets of simulations, stored according to num_pvals
                 numpvals_sims.append((num_pvals, objsims))
             percsig_simsets.append((perc_sig, numpvals_sims))
+        hms = str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
+        prt.write("  ELAPSED TIME: {HMS}\n".format(HMS=hms))
         return percsig_simsets
 
 
