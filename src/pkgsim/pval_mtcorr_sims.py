@@ -38,6 +38,10 @@ class PvalSimMany(object):
         self.num_sig = int(round(float(self.perc_sig)*self.num_pvals/100.0))
         self.obj1sim_list = self._init_obj1sim_list(num_sims, num_pvals, multi_params)
 
+    def get_nterrs(self):
+        """Get # and % Type I/II/Both for each sim."""
+        return [obj1sim.get_perc_err() for obj1sim in self.obj1sim_list]
+
     def get_num_mksig(self):
         """Return the number of P-values intended to be significant."""
         return self.num_sig
