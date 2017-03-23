@@ -21,7 +21,7 @@ class PvalSim(object):
     ntobj_mult = cx.namedtuple("NtMult", "reject pvals_corr alpha_sidak alpha_bonf")
     ntobj_info = cx.namedtuple("NtResults", "pval pval_corr reject expsig")
     ntobj_pvaltype = cx.namedtuple(
-        "NtResCnts", "act_sig "
+        "NtResCnts", "act_sig_seen "
         "num_correct, num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
@@ -45,7 +45,7 @@ class PvalSim(object):
         num_pvals = len(self.pvals)
         #pylint: disable=bad-whitespace
         return self.ntobj_pvaltype(
-            act_sig=sum(self.pvals_corr < self.multi_params['alpha']),
+            act_sig_seen=sum(self.pvals_corr < self.multi_params['alpha']),
             num_correct=res_cnt[0],
             num_Type_I=res_cnt[1],
             num_Type_II=res_cnt[2],
