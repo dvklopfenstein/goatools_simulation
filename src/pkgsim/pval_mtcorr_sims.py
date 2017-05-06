@@ -14,10 +14,10 @@ from pkgsim.pval_sim import PvalSim
 class PvalMtCorrSimsMany(object):
     """Simulate multiple-test correction of P-values."""
 
-    def __init__(self, num_pvalues_list, num_sims, perc_sig_list, multi_params, fnc_maxsig):
-        self.num_pvalues_list = num_pvalues_list
+    def __init__(self, pval_qtys, num_sims, perc_sigs, multi_params, fnc_maxsig):
+        self.pval_qtys = pval_qtys
         self.num_sims = num_sims
-        self.perc_sig_list = perc_sig_list
+        self.perc_sigs = perc_sigs
         self.percsig_simsets = self._init_percsig_simset_lst(multi_params, fnc_maxsig)
 
     def get_attr_percentile_vals(self, attrname="perc_Type_I_II", percentile=84.0):
@@ -39,11 +39,11 @@ class PvalMtCorrSimsMany(object):
         """Do P-value and multiple test simulations. Return results."""
         tic = timeit.default_timer()
         percsig_simsets = []
-        msg = "  Running {N} Pval Sims with {SIG:3.0f}% significance {HMS}\n"
-        for perc_sig in self.perc_sig_list:
+        msg = "  PvalMtCorrSimsMany: Running {N} Pval Sims with {SIG:3.0f}% significance {HMS}\n"
+        for perc_sig in self.perc_sigs:
             prt.write(msg.format(N=self.num_sims, SIG=perc_sig, HMS=self.get_hms(tic)))
             numpvals_sims = []
-            for num_pvals in self.num_pvalues_list:
+            for num_pvals in self.pval_qtys:
                 objsims = PvalSimMany(self.num_sims, num_pvals, perc_sig, multi_params, fnc_maxsig)
                 # Save sets of simulations, stored according to num_pvals
                 numpvals_sims.append((num_pvals, objsims))
@@ -70,9 +70,8 @@ class PvalSimMany(object):
         self.obj1sim_list = self._init_obj1sim_list(num_sims, num_pvals, multi_params, fnc_maxsig)
         self.nterrs = self._init_nterrs()
         # Print header for each set of simulations
-        print
-        print "{SIMS} sims, {PVALS} pvals/sim, {PERC:4.2f}%".format(
-            SIMS=num_sims, PVALS=num_pvals, PERC=perc_sig)
+        sys.stdout.write("    PvalSimMany: {SIMS} sims, {PVALS:3} pvals/sim, {PERC:4.0f}%\n".format(
+            SIMS=num_sims, PVALS=num_pvals, PERC=perc_sig))
 
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
