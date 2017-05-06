@@ -41,16 +41,17 @@ class PvalSim(object):
         assert sum(self.expsig) == num_sig
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
         # Run a multipletest correction on this set of pvals
-        self.ntmult = self.ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
-        self.pvals_corr = self.ntmult.pvals_corr
-        self._chk_reject() # Chk pvals marked with reject==True, have pval_corr < alpha
+        ntmult = self.ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
+        self._chk_reject(ntmult.reject, ntmult.pvals_corr)
+        self.pvals_corr = ntmult.pvals_corr
+        # nt flds for each pval: pval pval_corr reject expsig
+        self.ntsmt = self._init_ntspvals(ntmult.reject, ntmult.pvals_corr)
         self._chk_conclusions(num_pvalues, num_sig)
         #print self.get_perc_err()
 
     def get_perc_err(self):
         """Calculate % of corrected p-values with errors: Type I or Type II, Type I, or Type II."""
-        nts = self.get_ntspvals() # nt flds for each pval: pval pval_corr reject expsig
-        res_cnt = cx.Counter([self.get_errtype(nt) for nt in nts])
+        res_cnt = cx.Counter([self.get_errtype(nt) for nt in self.ntsmt])
         res_cnt[3] = res_cnt[1] + res_cnt[2] # COunt of both error types
         num_pvals = len(self.pvals)
         #pylint: disable=bad-whitespace
@@ -76,9 +77,9 @@ class PvalSim(object):
         num_pvals_tot = len(pvals)
         return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
 
-    def get_ntspvals(self):
+    def _init_ntspvals(self, reject, pvals_corr):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig"""
-        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig)
+        items = zip(self.pvals, pvals_corr, reject, self.expsig)
         return [self.ntobj_mt._make(vs) for vs in items]
 
     @staticmethod
@@ -145,10 +146,10 @@ class PvalSim(object):
         self.pvals = np.array(pvals_all)
         assert num_pvalues == len(self.pvals)
 
-    def _chk_reject(self):
+    def _chk_reject(self, reject, pvals_corr):
         """Check that all values marked with reject==True, have pval_corr < alpha."""
         alpha = self.multi_params['alpha']
-        for reject, pval in zip(self.ntmult.reject, self.ntmult.pvals_corr):
+        for reject, pval in zip(reject, pvals_corr):
             if reject:
                 assert pval < alpha
 
