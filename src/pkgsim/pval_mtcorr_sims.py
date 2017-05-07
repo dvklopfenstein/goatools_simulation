@@ -6,8 +6,10 @@ __author__ = "DV Klopfenstein"
 import sys
 import timeit
 import datetime
+import collections as cx
 import numpy as np
 from pkgsim.pval_sim import PvalSim
+from goatools.statsdescribe import StatsDescribe
 
 #pylint: disable=too-many-arguments
 
@@ -66,12 +68,34 @@ class PvalSimMany(object):
         self.perc_sig = perc_sig # perc_sig -> num_sig
         self.multi_params = multi_params
         # Data members
+        self.max_sigval = fnc_maxsig(num_pvalues=num_pvals, alpha=multi_params['alpha'])
         self.num_sig = int(round(float(self.perc_sig)*self.num_pvals/100.0))
-        self.obj1sim_list = self._init_obj1sim_list(num_sims, num_pvals, multi_params, fnc_maxsig)
+        self.pvalsimobjs = self._init_pvalsimobjs(num_sims)
         self.nterrs = self._init_nterrs()
         # Print header for each set of simulations
-        sys.stdout.write("    PvalSimMany: {SIMS} sims, {PVALS:3} pvals/sim, {PERC:4.0f}%\n".format(
-            SIMS=num_sims, PVALS=num_pvals, PERC=perc_sig))
+        self.prt_summary(prt=sys.stdout)
+
+    def prt_summary(self, prt=sys.stdout):
+        """Print summary of all num_sims simulations."""
+        msg = "\n    PvalSimMany: {SIMS} sims, {PVALS:3} pvals/sim, {PERC:4.0f}% sig, {MAXS:5.2f} max sig\n"
+        prt.write(msg.format(SIMS=self.num_sims, PVALS=self.num_pvals, PERC=self.perc_sig,
+            MAXS=self.max_sigval))
+        self.prt_err_stats(prt)
+
+    def get_errtype2simvals(self):
+        """Get counts for each P-value simuation: Type I Error, Type II Error, and Correct."""
+        ctrs = [o.get_err_cnts() for o in self.pvalsimobjs]
+        return cx.OrderedDict((errtyp, [ctr[errtyp] for ctr in ctrs]) for errtyp in [0, 1, 2])
+
+    def prt_err_stats(self, prt):
+        """Print stats for error types in set of simulation runs."""
+        errtype2simvals = self.get_errtype2simvals()
+        #for errtype, simvals in errtype2simvals.items():
+        #    print len(simvals), errtype, simvals
+        objstat = StatsDescribe("sims", "{:9.2f}")
+        objstat.prt_hdr(prt)
+        for errtype, simvals in errtype2simvals.items():
+            objstat.prt_data(errtype, simvals, prt)
 
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
@@ -79,9 +103,9 @@ class PvalSimMany(object):
 
     def get_num_sims_w_errs(self):
         """Return the number of simulations that have errors."""
-        num_sims = len(self.nterrs)
         return sum([1 for nterr in self.nterrs if nterr.num_Type_I_II != 0])
-        print "Of {} sims, {} had errors".format(num_sims, num_sims_err)
+        # num_sims = len(self.nterrs)
+        # print "Of {} sims, {} had errors".format(num_sims, num_sims_err)
 
     def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Return the number of simulations that have errors."""
@@ -104,14 +128,14 @@ class PvalSimMany(object):
 
     def _init_nterrs(self):
         """Get # and % Type I/II/Both for each sim."""
-        return [obj1sim.get_perc_err() for obj1sim in self.obj1sim_list]
+        return [obj1sim.get_perc_err() for obj1sim in self.pvalsimobjs]
 
-    def _init_obj1sim_list(self, num_sims, num_pvals, multi_params, fnc_maxsig):
+    def _init_pvalsimobjs(self, num_sims):
         """Simulate MANY multiple-test correction of P-values."""
-        obj1sim_list = []
+        pvalsimobjs = []
         for _ in range(num_sims):
-            obj1sim = PvalSim(num_pvals, self.num_sig, multi_params, fnc_maxsig)
-            obj1sim_list.append(obj1sim)
-        return obj1sim_list
+            obj1sim = PvalSim(self.num_pvals, self.num_sig, self.multi_params, self.max_sigval)
+            pvalsimobjs.append(obj1sim)
+        return pvalsimobjs
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

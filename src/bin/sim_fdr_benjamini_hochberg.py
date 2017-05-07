@@ -16,7 +16,7 @@ def main(prt=sys.stdout):
     #   1. "Not significant" vals are randomly chosen between 0.0 to 1.0
     #       Some "not significant" results will be show as "significant"
     #   2. "Significant" vals are randomly chosen between 0.0 and fnc_maxsig
-    fnc_maxsig_pNNN.max_sig_pval = 0.05
+    fnc_maxsig_pNNN.max_sig_pval = 0.01
     fnc_maxsig = fnc_maxsig_pNNN
 
     # The percentage of "Significant" results in a single simulation is set by perc_sigs.
@@ -27,7 +27,7 @@ def main(prt=sys.stdout):
     #perc_sigs = range(0, 1) # Simulations of P-vals with NO SIGNIFICANCE only
     pval_qtys = [20, 100, 500]
     # Used for all simulations
-    num_sims = 1000
+    num_sims = 100
     multi_params = {'alpha' : 0.05, 'method' : 'fdr_bh'}
     global_params = {
         'title':"P-values: {PERC_SIG} Expected Significant (<{MAX_SIG})",

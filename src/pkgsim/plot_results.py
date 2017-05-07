@@ -63,7 +63,7 @@ def get_percsig_dicts(numpvals_sims):
     tbl = []
     for num_pvals, objsims in numpvals_sims: # objsims is an PvalSimMany obj
         # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
-        for obj1sim in objsims.obj1sim_list:
+        for obj1sim in objsims.pvalsimobjs:
             perc_sig_orig = obj1sim.get_perc_sig("pvals")
             perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
             tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
