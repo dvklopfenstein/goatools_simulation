@@ -10,6 +10,7 @@ import sys
 
 def report_results_all(objsim, global_params, prt=sys.stdout):
     """Report simulation results for many sets of p-values."""
+    # objsim => PvalMtCorrSimsMany instance
     pfmt = "[({perc_sig:4}=%sig {num_pvalues:6,}=#pvals) -> " \
            "(EXP:{EXP_SIG:5}=#sig {EXP_RND:5}=#rnd)]"
     #dfmt = "{PVAL:8.6f} {PCORR:8.6f} ({ERRTYPE:1}=errtype: {EXPSIG}=expsig {REJECT:1}=rej) {MSG}"
@@ -22,7 +23,7 @@ def report_results_all(objsim, global_params, prt=sys.stdout):
     percentiles = [16.0, 25.0, 50.0, 75.0, 84.0]
     attrs = [
         #"perc_correct",
-        #"act_sig_seen", # Shown as significant: Actually significant OR Type I error
+        #"num_sig_actual", # Shown as significant: Actually significant OR Type I error
         #"num_Type_II",
         #"num_Type_I",
         #"num_correct",
