@@ -15,12 +15,13 @@ from goatools.statsdescribe import StatsDescribe
 class PvalMtCorrSimsMany(object):
     """Simulate multiple-test correction of P-values."""
 
-    def __init__(self, perc_sigs, pval_qtys, num_sims, multi_params, fnc_maxsig):
-        self.perc_sigs = perc_sigs # Ex: [0, 15, 20, 40, 80]
-        self.pval_qtys = pval_qtys # Ex: [20, 100, 500]
-        self.num_sims = num_sims   # Ex: 100
+    def __init__(self, **kws):
+        self.perc_sigs = kws['perc_sigs'] # Ex: [0, 15, 20, 40, 80]
+        self.pval_qtys = kws['pval_qtys'] # Ex: [20, 100, 500]
+        self.num_sims = kws['num_sims']   # Ex: 100
+        self.multi_params = kws['multi_params']
         # [(persig, (numpvals, objsims)), (persig, (numpvals, objsims)), ...
-        self.percsig_simsets = self._init_percsig_simset_lst(multi_params, fnc_maxsig)
+        self.percsig_simsets = self._init_percsig_simset_lst(self.multi_params, kws['fnc_maxsig'])
 
     def get_attr_percentile_vals(self, attrname="perc_Type_I_II", percentile=84.0):
         """Get values for 'attrname' at 'percentile' value."""
@@ -35,15 +36,14 @@ class PvalMtCorrSimsMany(object):
         for _, numpvals_objsims in self.percsig_simsets:
             for _, objsims in numpvals_objsims:
                 objsims.prt_num_sims_w_errs(prt)
-            prt.write("\n")
 
     def _init_percsig_simset_lst(self, multi_params, fnc_maxsig, prt=sys.stdout):
         """Do P-value and multiple test simulations. Return results."""
         tic = timeit.default_timer()
         percsig_simsets = []
-        msg = "  PvalMtCorrSimsMany: Running {N}-Pval SimSets with {SIG:3.0f}% significance {HMS}\n"
+        # msg = "  PvalMtCorrSimsMany: Running {N}-Pval SimSets with {SIG:3.0f}% significance {HMS}\n"
         for perc_sig in self.perc_sigs: # Ex: [0, 15, 20, 40, 80]
-            prt.write(msg.format(N=self.num_sims, SIG=perc_sig, HMS=self.get_hms(tic)))
+            # prt.write(msg.format(N=self.num_sims, SIG=perc_sig, HMS=self.get_hms(tic)))
             numpvals_sims = []
             for num_pvals in self.pval_qtys: # Ex: [20, 100, 500]
                 objsims = PvalSimMany(self.num_sims, num_pvals, perc_sig, multi_params, fnc_maxsig)
@@ -58,13 +58,13 @@ class PvalMtCorrSimsMany(object):
         """Print elapsed time as simulations run."""
         return str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
 
-    def prt_summary(self, prt=sys.stdout):
+    def prt_summary(self, prt=sys.stdout, attrs=None):
         """Print summary of all num_sims simulations."""
-        attrs = ["fdr_actual", "frr_actual"]
-        pat0 = "Set ({PSIG:2}% sig, {NPVALS:5} pvals/sim):\n"
+        if attrs is None:
+            attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
         pat0 = "{PSIG:2}% {NPVALS:5}"
-        objstat = StatsDescribe("sims", "{:6.4f}")
         for attrname in attrs:
+            objstat = StatsDescribe("sims", "{:9.2f}" if attrname[:3] == "num" else "{:6.4f}")
             prt.write("\n{ATTR}:".format(ATTR=attrname))
             objstat.prt_hdr(prt)
             for percsig, numpvals_objsims in self.percsig_simsets:
@@ -107,11 +107,14 @@ class PvalSimMany(object):
 
     def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Return the number of simulations that have errors."""
-        num_errsims = sum([1 for nterr in self.nts_tfpn if nterr.num_Type_I_II != 0])
-        num_t1errsims = sum([1 for nt in self.nts_tfpn if nt.num_Type_I != 0])
-        num_t2errsims = sum([1 for nt in self.nts_tfpn if nt.num_Type_II != 0])
-        prt.write("Of {} sims ({:3} pvals, {:3.0f}% set significance), {} had errors ({} I, {} II)\n".format(
-            len(self.pvalsimobjs), self.num_pvals, self.perc_sig, num_errsims, num_t1errsims, num_t2errsims))
+        pat = "{N} sims ({P:3} pvals/sim, {PSIG:3.0f}% set sig.), {E:5} had errors ({I:5} I, {II:5} II)\n"
+        t1s, t2s, t12s = zip(*[(nt.num_Type_I, nt.num_Type_II, nt.num_Type_I_II) for nt in self.nts_tfpn])
+        num_errsims = sum([n != 0 for n in t12s])
+        num_errsimst1 = sum([n != 0 for n in t1s])
+        num_errsimst2 = sum([n != 0 for n in t2s])
+        prt.write(pat.format(
+            N=len(self.pvalsimobjs), P=self.num_pvals, PSIG=self.perc_sig,
+            E=num_errsims, I=num_errsimst1, II=num_errsimst2))
 
     def get_percentile_strs(self, attr, percentiles):
         """Return percentile strings suitable for printing for 'attr' list."""

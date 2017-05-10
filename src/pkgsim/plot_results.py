@@ -11,8 +11,9 @@ import pandas as pd
 
 def plot_results_all(objsim, params):
     """Plot simulation results for many sets of p-values."""
-    num_sims = params['num_sims']
-    alpha = params['multi_params']['alpha']
+    num_sims = objsim.num_sims
+    alpha = objsim.multi_params['alpha']
+    # repo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
     for perc_sig, numpvals_sims in objsim.percsig_simsets:
         # params: perc_sig num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
@@ -23,7 +24,7 @@ def plot_results_all(objsim, params):
         perc_sig = "None" if perc_sig == 0 else "{N}{P}".format(N=perc_sig, P='%')
         title = params['title_None']
         if perc_sig is not None:
-            title = params['title'].format(PERC_SIG=perc_sig, MAX_SIG=params['max_sig'])
+            title = params['title'].format(PERC_SIG=perc_sig, ALPHA=alpha)
         pltargs = {
             'show':False,
             'title':title,

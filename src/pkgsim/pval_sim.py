@@ -23,7 +23,7 @@ class PvalSim(object):
     """Simulate ONE multiple-test correction of P-values."""
 
     ntobj_pvaltype = cx.namedtuple(
-        "NtMtAll", "num_sig_actual ctr fdr_actual frr_actual "
+        "NtMtAll", "num_pvals num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val "
         "num_correct num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
@@ -89,8 +89,10 @@ class PvalSim(object):
         assert tot_sig_y + tot_sig_n == num_pvals
         #pylint: disable=bad-whitespace
         return self.ntobj_pvaltype(
+            num_pvals      = len(self.nts_pvalmt),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
+            # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
             fdr_actual     = self._calc_ratio(FP, (TP, FP)), # typI/sig_y
             frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII/sig_n
             # Not affected by prevalence
