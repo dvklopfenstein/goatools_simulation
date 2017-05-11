@@ -50,7 +50,7 @@ def main_stepped_sigset(prt=sys.stdout):
         'perc_sigs' : [0, 15, 20, 40, 80],
         'pval_qtys' : [20, 100, 500],
         'fnc_maxsig' : None}
-    attrs = ["fdr_actual"]
+    attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
     for sig_max in [0.005, 0.01, 0.02, 0.03, 0.04, 0.05]:
         prt.write("{SPVAL:5.3f} Maximum P-Value for actual significant results.\n".format(SPVAL=sig_max))
         fnc_maxsig_pnnn.max_sig_pval = sig_max

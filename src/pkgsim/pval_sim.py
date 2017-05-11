@@ -93,8 +93,8 @@ class PvalSim(object):
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
-            fdr_actual     = self._calc_ratio(FP, (TP, FP)), # typI/sig_y
-            frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII/sig_n
+            fdr_actual     = self._calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
+            frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
             # Not affected by prevalence
             sensitivity    = self._calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             specificity    = self._calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
@@ -145,12 +145,20 @@ class _Init(object):
     def get_result_desc(reject, expsig):
         """Return description of the result of one simulation."""
         # pylint: disable=multiple-statements, bad-whitespace
+        #                          |Declared       | Declared      |
+        #                          |non-significant| significant   | Total
+        # -------------------------+---------------+-------------+--------
+        # True null hypotheses     | U TN          | V FP (Type I) |   m(0)
+        # Non-true null hypotheses | T FN (Type II)| S TP          | m - m(0)
+        #                          |      m - R    |       R       |   m
         if     expsig and     reject: return "TP" # Correct:     Significant
         if not expsig and not reject: return "TN" # Correct: Not Significant
         if not expsig and     reject: return "FP" # Type  I Error (False Positive)
         if     expsig and not reject: return "FN" # Type II Error (False Negative)
         assert True, "UNEXPECTED ERROR TYPE"
         # Power = 1 - beta; Beta < 20% good
+        # average power: the proportion of the false hypotheses which are correctly rejected
+        #   TP/(FN + TP)
 
     def get_nts_pvals(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig"""
