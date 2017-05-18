@@ -1,4 +1,4 @@
-"""Simulate multiple-test correction of P-values with randomly generated P-values."""
+"""Simulate a multiple-test correction on one set of randomly generated P-values."""
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
@@ -12,7 +12,7 @@ __author__ = "DV Klopfenstein"
 # Ignore these:
 #   Module 'numpy.random' has no 'uniform' member
 #   No name 'multipletest' in module 'statsmodels.sandbox.stats.multicomp'
-#pylint: disable=no-member, no-name-in-module
+#pylint: disable=no-member, bad-whitespace
 
 import sys
 import collections as cx
@@ -20,7 +20,7 @@ import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
 
 class PvalSim(object):
-    """Simulate ONE multiple-test correction of P-values."""
+    """Simulate a multiple-test correction on one set of randomly generated P-values."""
 
     ntobj_pvaltype = cx.namedtuple(
         "NtMtAll", "num_pvals num_sig_actual ctr fdr_actual frr_actual "
@@ -31,9 +31,11 @@ class PvalSim(object):
     def __init__(self, num_pvalues, num_sig, multi_params, max_sigval):
         self.alpha = multi_params['alpha']
         iniobj = _Init(num_pvalues, num_sig, multi_params, max_sigval)
+        # List of info for each pval: pval pval_corr reject expsig tfpn
         self.nts_pvalmt = iniobj.get_nts_pvals()
         self.pvals = np.array(iniobj.pvals)
-        self.pvals_corr = np.array(iniobj.pvals_corr)
+        self.pvals_corr = np.array(iniobj.ntmult.pvals_corr)
+        # One namedtuple summarizing results of this P-Value simulation
         self.nt_tfpn = self.get_nt_tfpn()
         #if self.nt_tfpn.fdr_actual != 0:
         #    self.prt_pvals()
@@ -48,15 +50,6 @@ class PvalSim(object):
                 R=ntpval.reject, S=ntpval.expsig, TF=ntpval.tfpn))
         prt.write("\n")
 
-    @staticmethod
-    def _calc_ratio(top, bot_ab):
-        """Calculate ratios like sensitivity, specificicty, positive/negative predictive value."""
-        bottom = sum(bot_ab)
-        if bottom == 0:
-            assert top == 0
-            return 0.0
-        return float(top)/bottom
-
     def get_perc_sig(self, attrname="pvals"): # "pvals" or "pvals_corr"
         """Calculate the percentage of p-values which are significant."""
         pvals = getattr(self, attrname)
@@ -68,13 +61,44 @@ class PvalSim(object):
         num_pvals_tot = len(pvals)
         return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
 
-    def get_err_cnts(self):
-        """Return counts of Type I Error, Type II Error, and  correct."""
-        return cx.Counter([nt.tfpn for nt in self.nts_pvalmt])
+    @staticmethod
+    def _calc_ratio(top, bot_ab):
+        """Calc ratios: FDR, sensitivity, specificity, positive/negative predictive value."""
+        bottom = sum(bot_ab)
+        if bottom == 0:
+            # BH: "Return Q=0 if V+S=0 because no error of false rejection can be commited."
+            # True for other ratios as well
+            assert top == 0
+            return 0.0
+        return float(top)/bottom
 
     def get_nt_tfpn(self):
-        """Calculate % of corrected p-values with errors: Type I or Type II, Type I, or Type II."""
-        ctr = self.get_err_cnts()
+        """Calculate % of corrected p-values with errors: Type I or Type II, Type I, or Type II.
+
+        From: "Controlling the False Discovery Rate:
+               a Practical and Powerful Approach to Multiple Testing"
+              1995; Yoav Benjamini and Yosef Hochberg
+
+            The proportion of errors committed by falsely rejecting null hypothesis can
+            be viewed through the random variable Q = V/(V+S) or Q = V/R where:
+              V is the number of "True null hypotheses" which were "Declared significant"
+                or the number of "False Positives" (FP)
+              S is the number of "Non-true null hypotheses" which were "Declared significant"
+                or the number of "True Positives" (TP)
+              R is the number of hypotheses which were "Declared significant"
+                or the number of all Positives (FP+TP)
+ 
+            Note: A single simulation of a multipletest correction run on one set of P-Values
+            will return a variable Q where Q is (Q=V/(V+S) or Q=V/R or Q=FP/(FP+TP)).
+
+            The random variable Q cannot be controlled to be below a user-specified alpha at
+            this level of simulation because if m(0)=m (all tests are "true null hypotheses")
+            and even a single null hypotheses is rejected v/r=1 and Q cannot be controlled.
+
+        To obtain an actual FDR which can be compared to the expected FDR, multiple sets
+        of P-Values must be generated with each set of P-Values corrected for multiple testing.
+        """
+        ctr = cx.Counter([nt.tfpn for nt in self.nts_pvalmt]) # Counts of TP TN FP FN
         #pylint: disable=invalid-name
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         tot_errors = FP + FN # Count of Type I errors and Type II errors
@@ -87,7 +111,6 @@ class PvalSim(object):
         assert tot_sig_n == TN + FN
         num_pvals = len(self.nts_pvalmt)
         assert tot_sig_y + tot_sig_n == num_pvals
-        #pylint: disable=bad-whitespace
         return self.ntobj_pvaltype(
             num_pvals      = len(self.nts_pvalmt),
             num_sig_actual = tot_sig_y,
@@ -113,18 +136,52 @@ class PvalSim(object):
 
 
 class _Init(object):
-    """Init PvalSim object: Create random P-Values, run multipletest correction"""
+    """Init PvalSim object: Create random P-Values, run multipletest correction."""
 
     # Multiple test correction results:
     #   1. statsmodels multiple test results for each P-value
-    ntobj_mtsm = cx.namedtuple("NtMtStatmod", "reject pvals_corr alpha_sidak alpha_bonf")
+    _ntobj_mtsm = cx.namedtuple("NtMtStatmod", "reject pvals_corr alpha_sidak alpha_bonf")
     #   2. summarized results for each P-value
     ntobj_mt = cx.namedtuple("NtMtPvals", "pval pval_corr reject expsig tfpn")
+
+    @staticmethod
+    def get_result_desc(reject, expsig):
+        """Return description of the result of one simulation."""
+        # pylint: disable=multiple-statements
+        #                          |Declared       | Declared      |
+        #                          |non-significant| significant   | Total
+        # -------------------------+---------------+---------------+--------
+        # True null hypotheses     | U TN          | V FP (Type I) |   m(0)
+        # Non-true null hypotheses | T FN (Type II)| S TP          | m - m(0)
+        #                          |      m - R    |       R       |   m
+        if     expsig and     reject: return "TP" # Correct:     Significant
+        if not expsig and not reject: return "TN" # Correct: Not Significant
+        if not expsig and     reject: return "FP" # Type  I Error (False Positive)
+        if     expsig and not reject: return "FN" # Type II Error (False Negative)
+        assert True, "UNEXPECTED ERROR TYPE"
+        # Random variable, Q = V/(V+S); Q = 0 when V+S = 0, is the proportion of errors committed by
+        # falsely rejecting null hypotheses.
+        # Power = 1 - beta; Beta < 20% good
+        # average power: the proportion of the false hypotheses which are correctly rejected
+        # TP/(FN + TP)
+
+    def get_nts_pvals(self):
+        """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
+        pvalsim_results = []
+        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig)
+        for pval_orig, pval_corr, reject, expsig in items:
+            pvalsim_results.append(self.ntobj_mt(
+                pval      = pval_orig,
+                pval_corr = pval_corr,
+                reject    = reject,
+                expsig    = expsig,
+                tfpn      = self.get_result_desc(reject, expsig)))
+        return pvalsim_results
 
     def __init__(self, num_pvalues, num_sig, multi_params, max_sigval):
         self.multi_params = multi_params
         # I. UNCORRECTED P-VALUES:
-        self.max_sigval = max_sigval
+        self.max_sigval = max_sigval # Max P-Value for non-true null hypotheses. Ex: 0.05
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
@@ -134,81 +191,8 @@ class _Init(object):
         assert sum(self.expsig) == num_sig
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
         # Run a multipletest correction on this set of pvals
-        self.ntmult = self.ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
+        self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
         self._chk_reject()
-        self.pvals_corr = self.ntmult.pvals_corr
-        # nt flds for each pval: pval pval_corr reject expsig
-        self._chk_conclusions(num_pvalues, num_sig)
-        #print self.get_nt_tfpn()
-
-    @staticmethod
-    def get_result_desc(reject, expsig):
-        """Return description of the result of one simulation."""
-        # pylint: disable=multiple-statements, bad-whitespace
-        #                          |Declared       | Declared      |
-        #                          |non-significant| significant   | Total
-        # -------------------------+---------------+-------------+--------
-        # True null hypotheses     | U TN          | V FP (Type I) |   m(0)
-        # Non-true null hypotheses | T FN (Type II)| S TP          | m - m(0)
-        #                          |      m - R    |       R       |   m
-        if     expsig and     reject: return "TP" # Correct:     Significant
-        if not expsig and not reject: return "TN" # Correct: Not Significant
-        if not expsig and     reject: return "FP" # Type  I Error (False Positive)
-        if     expsig and not reject: return "FN" # Type II Error (False Negative)
-        assert True, "UNEXPECTED ERROR TYPE"
-        # Power = 1 - beta; Beta < 20% good
-        # average power: the proportion of the false hypotheses which are correctly rejected
-        #   TP/(FN + TP)
-
-    def get_nts_pvals(self):
-        """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig"""
-        pvalsim_results = []
-        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig)
-        for pval_orig, pval_corr, reject, expsig in items:
-            #pylint: disable=bad-whitespace
-            pvalsim_results.append(self.ntobj_mt(
-                pval      = pval_orig,
-                pval_corr = pval_corr,
-                reject    = reject,
-                expsig    = expsig,
-                tfpn      = self.get_result_desc(reject, expsig)))
-        return pvalsim_results
-
-    def _chk_conclusions(self, num_pvalues, num_sig):
-        """Check conclusions of a single simulation."""
-        alpha = self.multi_params['alpha']
-        num_sig_by_chance = 0
-        for idx, (pval, expsig) in enumerate(zip(self.pvals, self.expsig)):
-            # 1. Check that pvals expected to be significant are significant
-            if expsig:
-                if pval >= alpha:
-                    # print pval, expsig
-                    # print self.pvals_corr
-                    assert pval < alpha, "PVAL({P}) COR({C}) ALPHA({A:4.2})".format(
-                        P=pval, C=self.pvals_corr[idx], A=alpha)
-            # 2. Check that pvals not expected to be significant
-            #    have expected numbers of pvals which are significant by chance.
-            else:
-                if pval < alpha: # pval shows as significant by random chance
-                    num_sig_by_chance += 1
-        # Report
-        if num_sig_by_chance > alpha*(num_pvalues - num_sig):
-            pass
-            # sys.stdout.write("{ACT} <= {EXP}(alpha({ALPH})*({P}-{S})\n".format(
-            #     ACT=num_sig_by_chance,
-            #     EXP=alpha*(num_pvalues - num_sig),
-            #     ALPH=alpha, P=num_pvalues, S=num_sig))
-
-        ## If no P-values are explicitly set to be significant,
-        ## Report the % found to be significant by rrandom chance.
-        #if num_sig_set == 0:
-        #    num_sig_act = sum(self.pvals_corr < self.multi_params['alpha'])
-        #    #assert num_sig_act == 0, "{} {}".format(num_sig_act, self.pvals_corr)
-        #    if num_sig_act != 0:
-        #        for ntd in self.get_ntspvals():
-        #            if ntd.pval_corr < self.multi_params['alpha']:
-        #                print "PVALSIMCONCL", ntd
-        #        # print "PVALSIMCONCL", self.get_nt_tfpn()
 
     def _init_pvals(self, num_pvalues, num_sig):
         """Generate 2 sets of P-values: Not intended significant & intended to be significant."""

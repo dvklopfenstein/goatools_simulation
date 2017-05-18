@@ -8,10 +8,12 @@ import os
 import sys
 #### from pkgsim.report_results import report_results_all
 from pkgsim.plot_results import plot_results_all
-from pkgsim.pval_mtcorr_sims import PvalMtCorrSimsMany
+from pkgsim.pval_mtcorr_sims import PvalExperiment
+from pkgsim.randseed import RandomSeed32
 
-def main(prt=sys.stdout):
+def main(seed, prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
+    seed = RandomSeed32(seed)
     # Both "Not Significant"/"Significant" P-values are randomly generated w/uniform distribution.
     #   1. "Not significant" vals are randomly chosen between 0.0 to 1.0
     #       Some "not significant" results will be show as "significant"
@@ -28,10 +30,10 @@ def main(prt=sys.stdout):
     sim_params = {
         'num_sims' : 1000,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
-        'perc_sigs' : [0, 15, 20, 40, 80],
+        'perc_sigs' : [0, 20, 40, 80, 100],
         'pval_qtys' : [20, 100, 500],
         'fnc_maxsig' : fnc_maxsig}
-    objsim = PvalMtCorrSimsMany(**sim_params)
+    objsim = PvalExperiment(**sim_params)
     objsim.prt_num_sims_w_errs(prt)
     # attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
     # objsim.prt_summary(prt, attrs)
@@ -43,21 +45,29 @@ def main(prt=sys.stdout):
     #### report_results_all(objsim, global_params, prt)
     plot_results_all(objsim, plt_params)
 
-def main_stepped_sigset(prt=sys.stdout):
+def main_stepped_sigset(seed, prt=sys.stdout):
+    seed = RandomSeed32(seed)
     sim_params = {
-        'num_sims' : 1000,
+        'num_pvalsims' : 100,
+        'num_experiments' : 100,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
-        'perc_sigs' : [0, 15, 20, 40, 80],
-        'pval_qtys' : [20, 100, 500],
+        'perc_sigs' : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
+        #'pval_qtys' : [20, 100, 500],
+        'pval_qtys' : [100],
         'fnc_maxsig' : None}
-    attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
+    # attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
+    # attrs = ["fdr_actual"]
+    attrs = ["fdr_actual", "frr_actual"]
+    # attrs = ["num_Type_II"]
+    # attrs = ["frr_actual"]
     for sig_max in [0.005, 0.01, 0.02, 0.03, 0.04, 0.05]:
         prt.write("{SPVAL:5.3f} Maximum P-Value for actual significant results.\n".format(SPVAL=sig_max))
         fnc_maxsig_pnnn.max_sig_pval = sig_max
         sim_params['fnc_maxsig'] = fnc_maxsig_pnnn
-        objsim = PvalMtCorrSimsMany(**sim_params)
+        objsim = PvalExperiment(**sim_params)
         objsim.prt_num_sims_w_errs(prt)
-        objsim.prt_summary(prt, attrs)
+        #objsim.prt_summary(prt, attrs)
+    seed.prt(prt)
 
 # ----------------------------------------------------------------------------
 # Functions for creating randomly-generated "Significant" P-values
@@ -75,7 +85,8 @@ def fnc_maxsig_pnnn(**kws):
     return fnc_maxsig_pnnn.max_sig_pval
 
 if __name__:
-    #main()
-    main_stepped_sigset()
+    SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
+    #main(SEED)
+    main_stepped_sigset(SEED)
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
