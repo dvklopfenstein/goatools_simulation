@@ -1,4 +1,4 @@
-"""Holds parameters used to create one set of experiments."""
+"""Runs a set of experiments to obtain a set of simulated FDR values."""
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"

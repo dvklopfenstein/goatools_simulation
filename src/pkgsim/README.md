@@ -9,7 +9,7 @@
 
   * [**run_all_experiments.py**](run_all_experiments.py)    
     * [**experiments.py**](experiments.py)    
-      This contains one set of experiments that all have common parameters, like
+      This contains one set of experiments that all have common parameters, like:
         1) _maximum significant value for a randomly generated P-Value_,
         2) _percent of pvalues in one P-Value simulation which are significant_, and
         3) _the number of randomly generated P-Values in a single P-Value simulation_.
