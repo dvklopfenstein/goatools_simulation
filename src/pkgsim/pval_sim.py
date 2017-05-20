@@ -118,14 +118,14 @@ class PvalSim(object):
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
             fdr_actual     = self._calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
             frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
-            # Not affected by prevalence
+            # SENSITIVITY & SPECIFICITY are not affected by prevalence
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
             # Measures the proportion of discoveries that are correctly declared significant
             sensitivity    = self._calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             # SPECIFICITY: "true negative rate", recall, "probability of detection"
             # Measures the proportion of true null hypotheses that are correctly declared non-sig.
             specificity    = self._calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
-            # Affected by prevalence
+            # "Positive predictive value" and "Negative predictive value" are affected by prevalence
             pos_pred_val   = self._calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
             neg_pred_val   = self._calc_ratio(TN, (TN, FN)), # TN/(TN+FN)
 
