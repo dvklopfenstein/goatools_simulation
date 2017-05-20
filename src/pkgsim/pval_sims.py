@@ -12,7 +12,7 @@ class PvalSimMany(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
     expected_params = set(['num_pvalsims', 'pval_qty', 'perc_sig',
-                           'multi_params', 'num_sig', 'max_sigval'])
+                           'multi_params', 'num_sig', 'max_sigpval'])
 
     def __init__(self, params):
         self.params = params
@@ -38,7 +38,7 @@ class PvalSimMany(object):
             "{SIMS} sims,".format(SIMS=self.params['num_pvalsims']),
             "{PVALS:3} pvals/sim".format(PVALS=self.params['pval_qty']),
             "SET({P:3.0f}% sig,)\n".format(P=self.params['perc_sig']),
-            "{M:5.2f} max sig)\n".format(M=self.params['max_sigval']),
+            "{M:5.2f} max sig)\n".format(M=self.params['max_sigpval']),
         ]
         prt.write(" ".join(msg))
 
@@ -79,7 +79,7 @@ class PvalSimMany(object):
         pval_qty = self.params['pval_qty']
         num_sig = self.params['num_sig']
         multi_params = self.params['multi_params']
-        max_sigval = self.params['max_sigval']
-        return [PvalSim(pval_qty, num_sig, multi_params, max_sigval) for _ in range(num_pvalsims)]
+        max_sigpval = self.params['max_sigpval']
+        return [PvalSim(pval_qty, num_sig, multi_params, max_sigpval) for _ in range(num_pvalsims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

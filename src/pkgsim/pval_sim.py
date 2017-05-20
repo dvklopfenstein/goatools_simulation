@@ -185,7 +185,7 @@ class _Init(object):
     def __init__(self, pval_qty, num_sig, multi_params, max_sigval):
         self.multi_params = multi_params
         # I. UNCORRECTED P-VALUES:
-        self.max_sigval = max_sigval # Max P-Value for non-true null hypotheses. Ex: 0.05
+        self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 alpha/#pvals
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values

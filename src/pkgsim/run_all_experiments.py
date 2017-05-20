@@ -23,11 +23,10 @@ class ExperimentsAll(object):
     #         'perc_sigs'       : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
     #         'pval_qtys'       : [20, 100, 500],
     #         'num_experiments' : 100,
-    #         'fnc_maxsig'      : None,
     #         'num_pvalsims'    : 100}
 
     expected_params = set(['seed', 'multi_params', 'perc_sigs', 'max_sigpvals', 'pval_qtys',
-                           'num_experiments', 'num_pvalsims', 'fnc_maxsig'])
+                           'num_experiments', 'num_pvalsims'])
 
     def __init__(self, params):
         self.seed = RandomSeed32(params.get('seed', None))
@@ -48,16 +47,13 @@ class ExperimentsAll(object):
         for perc_sig in self.params['perc_sigs']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
             for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
                 for pval_qty in self.params['pval_qtys']:   # Ex: [20, 100, 500]
-                    fnc_maxsig = self.params['fnc_maxsig']
-                    fnc_maxsig.max_sig_pval = max_sigpval
                     exp_parms = {
                         'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
                         'perc_sig' : perc_sig,
                         'pval_qty' : pval_qty,
                         'num_experiments' : self.params['num_experiments'],
-                        'num_pvalsims' : self.params['num_pvalsims'],
-                        'fnc_maxsig' : fnc_maxsig}
+                        'num_pvalsims' : self.params['num_pvalsims']}
                     expsets.append(ExperimentSet(exp_parms))
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=self.get_hms(tic)))
         return expsets
