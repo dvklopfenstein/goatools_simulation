@@ -126,13 +126,10 @@ class ExperimentSet(object):
             N=self.params['num_experiments'], M=self.max_sigval, EXP=self.get_desc_str()))
         pval_qty = self.params['pval_qty']
         for _ in range(self.params['num_experiments']):
-            expset.append(PvalSimMany(
-                num_pvalsims = self.params['num_pvalsims'],
-                pval_qty = pval_qty,
-                perc_sig = self.params['perc_sig'],
-                num_sig = self.num_sig,
-                multi_params = self.params['multi_params'],
-                max_sigval = self.max_sigval))
+            params = {k:self.params[k] for k in ['num_pvalsims', 'pval_qty', 'perc_sig', 'multi_params']}
+            params['num_sig'] = self.num_sig
+            params['max_sigval'] = self.max_sigval
+            expset.append(PvalSimMany(params))
         return expset 
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
