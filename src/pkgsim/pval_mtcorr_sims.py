@@ -30,13 +30,13 @@ class PvalExperiment(object):
         # [(persig, (numpvals, objsims)), (persig, (numpvals, objsims)), ...
         self.percsig_simsets = self._init_percsig_simset_lst(self.multi_params, sim_params['fnc_maxsig'])
 
-    def get_attr_percentile_vals(self, attrname="perc_Type_I_II", percentile=84.0):
-        """Get values for 'attrname' at 'percentile' value."""
-        vals = []
-        for _, numpvals_objsims in self.percsig_simsets:
-            for _, objsims in numpvals_objsims:
-                vals.extend(objsims.get_percentile_vals(attrname, [percentile]))
-        return vals
+    #### def get_attr_percentile_vals(self, attrname="perc_Type_I_II", percentile=84.0):
+    ####     """Get values for 'attrname' at 'percentile' value."""
+    ####     vals = []
+    ####     for _, numpvals_objsims in self.percsig_simsets:
+    ####         for _, objsims in numpvals_objsims:
+    ####             vals.extend(objsims.get_percentile_vals(attrname, [percentile]))
+    ####     return vals
 
     def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Return the number of simulations that have errors."""

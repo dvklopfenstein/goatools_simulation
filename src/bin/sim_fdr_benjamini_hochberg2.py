@@ -7,15 +7,14 @@ __author__ = "DV Klopfenstein"
 import os
 import sys
 #### from pkgsim.report_results import report_results_all
-from pkgsim.plot_results import plot_results_all
+#### from pkgsim.plot_results import plot_results_all
 from pkgsim.pval_mtcorr_sims import PvalExperiment
-from pkgsim.randseed import RandomSeed32
 from pkgsim.experiments_params import ExperimentsAll
 
-def main(seed, prt=sys.stdout):
+def main(randomseed, prt=sys.stdout):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    seed = RandomSeed32(seed)
     exp_params = {
+        'seed' : randomseed,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_sigs' : [0, 20, 60, 100],
@@ -24,8 +23,7 @@ def main(seed, prt=sys.stdout):
         'fnc_maxsig' : fnc_maxsig_pnnn,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
-    obj.run()
-    seed.prt(prt)
+    obj.seed.prt(prt)
 
 # ----------------------------------------------------------------------------
 # Functions for creating randomly-generated "Significant" P-values

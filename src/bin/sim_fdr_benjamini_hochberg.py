@@ -48,13 +48,13 @@ def main(seed, prt=sys.stdout):
 def main_stepped_sigset(seed, prt=sys.stdout):
     seed = RandomSeed32(seed)
     sim_params = {
-        'num_pvalsims' : 100,
-        'num_experiments' : 100,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
+        'max_sigpvals' : [0.005, 0.01, 0.02, 0.03, 0.04, 0.05],
         'perc_sigs' : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
-        #'pval_qtys' : [20, 100, 500],
-        'pval_qtys' : [100],
-        'fnc_maxsig' : None}
+        'pval_qtys' : [20, 100, 500],
+        'num_experiments' : 100,
+        'fnc_maxsig' : None,
+        'num_pvalsims' : 100,
     # attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
     # attrs = ["fdr_actual"]
     attrs = ["fdr_actual", "frr_actual"]
