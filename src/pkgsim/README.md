@@ -10,9 +10,9 @@
   * [**run_all_experiments.py**](run_all_experiments.py)    
     * [**experiments.py**](experiments.py)    
       This contains one set of experiments that all have common parameters, like:
-        1) _maximum significant value for a randomly generated P-Value_,
-        2) _percent of pvalues in one P-Value simulation which are significant_, and
-        3) _the number of randomly generated P-Values in a single P-Value simulation_.
+        1) _Maximum significant value for a randomly generated P-Value which has a non-true hypothesis_,
+        2) _Percent of P-Values in one P-Value simulation which are significant_, and
+        3) _The number of randomly generated P-Values in a single P-Value simulation_.
       * [**pval_sims.py**](pval_sims.py)    
         This is one experiment, which produces one randomly generated FDR ratio.    
         One experiment is N (pval_qty) P-Value simulations.    
