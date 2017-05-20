@@ -11,8 +11,12 @@ from pkgsim.pval_sim import PvalSim
 class PvalSimMany(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
+    expected_params = set(['num_pvalsims', 'pval_qty', 'perc_sig',
+                           'multi_params', 'num_sig', 'max_sigval'])
+
     def __init__(self, params):
         self.params = params
+        assert set(params.keys()) == self.expected_params
         # Data members
         pvalsimobjs = self._init_pvalsimobjs() # List of N=num_pvalsims PvalSim objects
         self.nts_tfpn = [o.nt_tfpn for o in pvalsimobjs]
@@ -21,9 +25,9 @@ class PvalSimMany(object):
 
     def get_fdr_actual(self):
         """Returns get the actual FDR value for the set of P-Value simulations run in this class."""
-        return self.get_mean_actual("fdr_actual")
+        return self.get_mean("fdr_actual")
 
-    def get_mean_actual(self, key):
+    def get_mean(self, key):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
         return np.mean([getattr(nt, key) for nt in self.nts_tfpn])
 

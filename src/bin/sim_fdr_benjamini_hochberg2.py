@@ -4,11 +4,9 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-import os
 import sys
 #### from pkgsim.report_results import report_results_all
 #### from pkgsim.plot_results import plot_results_all
-from pkgsim.pval_mtcorr_sims import PvalExperiment
 from pkgsim.experiments_params import ExperimentsAll
 
 def main(randomseed, prt=sys.stdout):
@@ -23,6 +21,11 @@ def main(randomseed, prt=sys.stdout):
         'fnc_maxsig' : fnc_maxsig_pnnn,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
+    attrs = ['fdr_actual']
+    attrs = ["fdr_actual", "frr_actual"]
+    attrs = ["fdr_actual", "frr_actual", "sensitivity"]
+    #attrs = ["fdr_actual", "frr_actual", "num_Type_II"]
+    obj.prt_summary(prt, attrs)
     obj.seed.prt(prt)
 
 # ----------------------------------------------------------------------------
