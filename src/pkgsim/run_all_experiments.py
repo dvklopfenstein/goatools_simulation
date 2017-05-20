@@ -5,9 +5,9 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import timeit
-import datetime
 from pkgsim.randseed import RandomSeed32
 from pkgsim.experiments import ExperimentSet
+from pkgsim.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 
@@ -54,14 +54,9 @@ class ExperimentsAll(object):
                         'pval_qty' : pval_qty,
                         'num_experiments' : self.params['num_experiments'],
                         'num_pvalsims' : self.params['num_pvalsims']}
-                    expsets.append(ExperimentSet(exp_parms))
-        sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=self.get_hms(tic)))
+                    expsets.append(ExperimentSet(exp_parms, tic))
+        sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
-
-    @staticmethod
-    def get_hms(tic):
-        """Print elapsed time as simulations run."""
-        return str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
 
     def prt_summary(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
@@ -75,5 +70,11 @@ class ExperimentsAll(object):
             objstat.prt_hdr(prt, name)
             for exp in self.expsets:
                 exp.prt_summary(attrname, objstat, prt)
+
+    def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
+        """Print if errors were seen in sims."""
+        for experiment_set in self.expsets:
+            experiment_set.prt_num_pvalsims_w_errs(prt)
+
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

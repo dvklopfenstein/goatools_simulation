@@ -46,9 +46,10 @@ class PvalSimMany(object):
         """Return percentile values for 'attr' list."""
         return [np.percentile([getattr(nt, attr) for nt in self.nts_tfpn], p) for p in percentiles]
 
-    def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
+    def prt_num_pvalsims_w_errs(self, prt=sys.stdout, desc=""):
         """Return the number of simulations that have errors."""
-        msgpat = "{N} sims ({P:3} pvals/sim, {PSIG:3.0f}% set sig.) {E:5} had errs ({ERR_CNTS})\n"
+        msgpat = "{N} sims ({P:3} pvals/sim, {PSIG:3.0f}% set sig.) " \
+                 "{E:5} had errs ({ERR_CNTS}) {DESC}\n"
         errpat = "{I:5} I, {II:5} II"
         err_cnts = [(nt.num_Type_I, nt.num_Type_II, nt.num_Type_I_II) for nt in self.nts_tfpn]
         t1s, t2s, t12s = zip(*err_cnts)
@@ -57,7 +58,7 @@ class PvalSimMany(object):
         num_errsimst2 = sum([n != 0 for n in t2s])
         prt.write(msgpat.format(
             N=len(self.nts_tfpn), P=self.params['pval_qty'], PSIG=self.params['perc_sig'],
-            E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2)))
+            E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2), DESC=desc))
 
     def get_percentile_strs(self, attr, percentiles):
         """Return percentile strings suitable for printing for 'attr' list."""

@@ -38,6 +38,7 @@ class PvalExperiment(object):
     ####             vals.extend(objsims.get_percentile_vals(attrname, [percentile]))
     ####     return vals
 
+    prt_num_pvalsims_w_errs
     def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Return the number of simulations that have errors."""
         for _, numpvals_objsims in self.percsig_simsets:

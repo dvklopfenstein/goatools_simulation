@@ -26,6 +26,7 @@ def main(randomseed, prt=sys.stdout):
     attrs = ["fdr_actual", "frr_actual", "sensitivity"]
     #attrs = ["fdr_actual", "frr_actual", "num_Type_II"]
     obj.prt_summary(prt, attrs)
+    obj.prt_num_pvalsims_w_errs(prt)
     obj.seed.prt(prt)
 
 
