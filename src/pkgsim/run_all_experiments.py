@@ -58,18 +58,21 @@ class ExperimentsAll(object):
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
 
-    def prt_summary(self, prt=sys.stdout, attrs=None):
+    def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
         #      "
         name = "Sig(% max) #pval" # Header for col0, the description of the statistic
+        namefmt = "{SIGPERC:3}% {SIGMAX:5.3f} {EXP_ALPHA:5.3f} {PVALQTY:5}"
         for attrname in attrs:
             prt.write("\n{ATTR} statistics:\n".format(ATTR=attrname))
             objstat = StatsDescribe("exps", "{:10.2f}" if attrname[:3] == "num" else "{:6.4f}")
             objstat.prt_hdr(prt, name)
-            for exp in self.expsets:
-                exp.prt_summary(attrname, objstat, prt)
+            for experiment in self.expsets:
+                name = experiment.get_desc(namefmt)
+                means = experiment.get_means(attrname)
+                objstat.prt_data(name, means, prt)
 
     def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""

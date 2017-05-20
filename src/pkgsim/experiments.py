@@ -40,12 +40,6 @@ class ExperimentSet(object):
             SIGTOT=self.num_sig,
             PVALQTY=self.params['pval_qty'])
 
-    def prt_summary(self, attrname, objstat, prt=sys.stdout):
-        """Print summary of all num_pvalsims simulations."""
-        name = self.get_desc("{SIGPERC:3}% {SIGMAX:5.3f} {EXP_ALPHA:5.3f} {PVALQTY:5}")
-        means = self.get_means(attrname)
-        objstat.prt_data(name, means, prt)
-
     def get_strhdr(self):
         """Return a short 1-line summary of this experiment set."""
         # Example: "ExperimentSet(10) 0.01=MaxSigPval   0% sig (N VALS),   20"

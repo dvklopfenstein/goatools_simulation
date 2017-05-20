@@ -25,7 +25,7 @@ def main(randomseed, prt=sys.stdout):
     attrs = ["fdr_actual", "frr_actual"]
     attrs = ["fdr_actual", "frr_actual", "sensitivity"]
     #attrs = ["fdr_actual", "frr_actual", "num_Type_II"]
-    obj.prt_summary(prt, attrs)
+    obj.prt_experiments_stats(prt, attrs)
     obj.seed.prt(prt)
 
 
