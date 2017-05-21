@@ -1,4 +1,19 @@
 # Actual FDR values from simulations
+All simulations use **Benjamini/Hochberg** multiple test correction with **alpha=0.05**.
+
+The **FDR** (False Discovery Rate) is 'the proportion of false discoveries'.
+
+With the FDR set to **alpha=0.05**, we see the actual false discovery rate
+found in simulations is kept to below 0.05 except for some simulations
+where the percentage of significant P-Values is set to 0%.
+
+As the percentage of significant P-Values is set higher, like 25% or 50%, the actual FDR falls
+to well below alpha=0.05.
+
+  * [**No P-Values are significant**](#no-p-values-are-significant)
+  * [**25% of P-Values are significant**](#25-of-p-values-are-significant)
+  * [**50% of P-Values are significant**](#50-of-p-values-are-significant)
+  * [**75% of P-Values are significant**](#75-of-p-values-are-significant)
 
 ## No P-Values are significant
 
