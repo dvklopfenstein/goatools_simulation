@@ -1,4 +1,4 @@
-"""Objtain one simulated FDR value by running many P-Value sims w/multiple-test correction."""
+"""Objain one simulated FDR value by running many P-Value sims w/multiple-test correction."""
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"

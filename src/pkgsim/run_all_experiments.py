@@ -4,11 +4,13 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-import numpy as np
+import collections as cx
 import timeit
+import numpy as np
 from pkgsim.randseed import RandomSeed32
 from pkgsim.experiments import ExperimentSet
 from pkgsim.utils import get_hms
+from pkgsim.plot_results import get_dataframe, wrpng_boxplot_sigs
 from goatools.statsdescribe import StatsDescribe
 
 
@@ -65,6 +67,22 @@ class ExperimentsAll(object):
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
 
+    def plt_box_all(self, attrname='fdr_actual', grpname='FDR'):
+        """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+        fout_pat = "sim_{A}_{P:03}_{M:02}.png"
+        title_pat = "FDRs with {P:}% significant P-Values, max={M:4.2f}"
+        key2exps = self._get_key2expsets('perc_sig', 'max_sigpval')
+        kws = {
+            'fout_img': None,
+            'title': None,
+            'xlabel': '# P-values per set',
+            'ylim_a':0, 'ylim_b':0.10}
+        for (perc_sig, max_sigpval), expsets in key2exps.items():
+            kws['fout_img'] = fout_pat.format(A=attrname, P=perc_sig, M=int(100*max_sigpval))
+            kws['title'] = title_pat.format(P=perc_sig, M=max_sigpval)
+            dfrm = get_dataframe(expsets, attrname, grpname)
+            wrpng_boxplot_sigs(dfrm, **kws)
+
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
         if attrs is None:
@@ -95,11 +113,17 @@ class ExperimentsAll(object):
             mean_strs = ["{:10.4f}".format(m) for m in means]
             prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
 
-
     def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""
         for experiment_set in self.expsets:
             experiment_set.prt_num_pvalsims_w_errs(prt)
 
+    def _get_key2expsets(self, key1='perc_sig', key2='max_sigpval'):
+        """Separate experiment sets into sub-lists for plotting."""
+        # Get experimentset data
+        key2exps = cx.defaultdict(list)
+        for expset in self.expsets:
+            key2exps[(expset.params[key1], expset.params[key2])].append(expset)
+        return key2exps
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

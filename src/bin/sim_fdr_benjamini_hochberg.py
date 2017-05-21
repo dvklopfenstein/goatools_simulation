@@ -15,17 +15,14 @@ def main(randomseed, prt=sys.stdout):
         'seed' : randomseed,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
         'max_sigpvals' : [0.01, 0.03, 0.05],
-        'perc_sigs' : [0, 20, 60, 100],
+        'perc_sigs' : [0, 25, 50, 75],
         'pval_qtys' : [20, 100, 500],
         'num_experiments' : 10,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
-    attrs1 = ['fdr_actual']
-    attrs = ["fdr_actual", "frr_actual"]
-    attrs = ["fdr_actual", "frr_actual", "sensitivity"]
-    #attrs = ["fdr_actual", "frr_actual", "num_Type_II"]
-    obj.prt_experiments_stats(prt, attrs1)
-    obj.prt_experiments_means(prt)
+    obj.prt_experiments_stats(prt, ['fdr_actual'])
+    obj.prt_experiments_means(prt, ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity'])
+    obj.plt_box_all()
     obj.seed.prt(prt)
 
 

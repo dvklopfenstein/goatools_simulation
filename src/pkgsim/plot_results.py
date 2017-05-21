@@ -31,14 +31,14 @@ def plot_results_all(objsim, params):
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs(alpha, numpvals_sims, **pltargs)
+        wrpng_boxplot_sigs(numpvals_sims, **pltargs)
 
-def wrpng_boxplot_sigs(alpha, numpvals_sims, **kws):
+def wrpng_boxplot_sigs(dfrm, **kws):
     """Plot pvalues showing as significant."""
+    # dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     plt.clf()
-    dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     sns.set(style="ticks")
-    sns.boxplot(x="numpvals", y="perc_sig", hue="P-values", data=dfrm, palette="PRGn")
+    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn")
     sns.despine(offset=10, trim=True)
     # Set the tick labels font
     # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
@@ -51,11 +51,12 @@ def wrpng_boxplot_sigs(alpha, numpvals_sims, **kws):
     plt.title(kws.get('title', 'P-values'), size=25)
     plt.xlabel(kws.get('xlabel', '# P-values per set'), size=20)
     plt.ylabel("% of P-values found significant", size=20)
-    #plt.ylim(0, 300.0*params.params['alpha'])
+    if 'ylim_a' in kws and 'ylim_b' in kws:
+        plt.ylim(kws['ylim_a'], kws['ylim_b'])
     plt.tight_layout()
     plt.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
-    show = kws.get('show', 'False')
+    show = kws.get('show', False)
     if show:
         plt.show()
 
@@ -67,8 +68,23 @@ def get_percsig_dicts(numpvals_sims):
         for obj1sim in objsims.pvalsimobjs:
             perc_sig_orig = obj1sim.get_perc_sig("pvals")
             perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
-            tbl.append({'numpvals':num_pvals, 'P-values':'Uncorrected', 'perc_sig':perc_sig_orig})
-            tbl.append({'numpvals':num_pvals, 'P-values':'Corrected', 'perc_sig':perc_sig_corr})
+            tbl.append({'xval':num_pvals, 'group':'Uncorrected', 'yval':perc_sig_orig})
+            tbl.append({'xval':num_pvals, 'group':'Corrected', 'yval':perc_sig_corr})
+    return tbl
+
+def get_dataframe(expsets, attrname='fdr_actual', grpname='FDR'):
+    """Get plotting data in the form of a pandas dataframe."""
+    tbl = get_dftbl(expsets, attrname, grpname)
+    return pd.DataFrame(tbl)
+
+def get_dftbl(expsets, attrname='fdr_actual', grpname='FDR'):
+    """Get plotting data suitable for a pandas dataframe."""
+    tbl = []
+    for experimentset in expsets:
+        pval_qty = experimentset.params['pval_qty']
+        yvals = experimentset.get_means(attrname)
+        for yval in yvals:
+            tbl.append({'xval':pval_qty, 'yval':yval, 'group':grpname})
     return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
