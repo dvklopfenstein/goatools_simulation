@@ -5,7 +5,6 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-#### from pkgsim.report_results import report_results_all
 #### from pkgsim.plot_results import plot_results_all
 from pkgsim.run_all_experiments import ExperimentsAll
 
@@ -21,11 +20,12 @@ def main(randomseed, prt=sys.stdout):
         'num_experiments' : 10,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
-    attrs = ['fdr_actual']
+    attrs1 = ['fdr_actual']
     attrs = ["fdr_actual", "frr_actual"]
     attrs = ["fdr_actual", "frr_actual", "sensitivity"]
     #attrs = ["fdr_actual", "frr_actual", "num_Type_II"]
-    obj.prt_experiments_stats(prt, attrs)
+    obj.prt_experiments_stats(prt, attrs1)
+    obj.prt_experiments_means(prt)
     obj.seed.prt(prt)
 
 

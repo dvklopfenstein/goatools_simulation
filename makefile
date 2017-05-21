@@ -7,7 +7,6 @@ vim_sim_fdr_benjamini_hochberg:
 	src/pkgsim/pval_sims.py \
 	src/pkgsim/experiments.py \
 	src/pkgsim/run_all_experiments.py \
-	src/pkgsim/report_results.py \
 	src/pkgsim/plot_results.py \
 	src/pkgsim/randseed.py \
 	src/pkgsim/utils.py

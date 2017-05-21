@@ -4,6 +4,7 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
+import numpy as np
 import timeit
 from pkgsim.randseed import RandomSeed32
 from pkgsim.experiments import ExperimentSet
@@ -34,15 +35,21 @@ class ExperimentsAll(object):
         assert set(params.keys()) == self.expected_params
         self.expsets = self._init_experiment_sets()
 
+    def get_desc(self):
+        """Return str describing params used in all simulations."""
+        # Ex: Alpha(0.05) Method(fdr_bh) 10=Experiments/Set 100=P-Value simulations/Experiment
+        prms = self.params['multi_params']
+        return " ".join([
+            "Alpha({A}) Method({M})".format(A=prms['alpha'], M=prms['method']),
+            "{E}=Experiments/Set".format(E=self.params['num_experiments']),
+            "{P}=P-Value simulations/Experiment".format(P=self.params['num_pvalsims'])])
+
     def _init_experiment_sets(self):
         """Run all variations of Experiments."""
         expsets = []
         tic = timeit.default_timer()
-        prms = self.params['multi_params']
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
-        sys.stdout.write("Alpha({A}) Method({M}) ".format(A=prms['alpha'], M=prms['method']))
-        sys.stdout.write("{E}=Experiments/Set {P}=P-Value simulations/Experiment\n".format(
-            E=self.params['num_experiments'], P=self.params['num_pvalsims']))
+        sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
         for perc_sig in self.params['perc_sigs']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
             for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
@@ -62,17 +69,32 @@ class ExperimentsAll(object):
         """Print stats for user-specified data in experiment sets."""
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
-        #      "
-        name = "Sig(% max) #pval" # Header for col0, the description of the statistic
+        hdrexps = "Sig(% max) #pval" # Header for col0, the description of the statistic
         namefmt = "{SIGPERC:3}% {SIGMAX:5.3f} {EXP_ALPHA:5.3f} {PVALQTY:5}"
         for attrname in attrs:
             prt.write("\n{ATTR} statistics:\n".format(ATTR=attrname))
             objstat = StatsDescribe("exps", "{:10.2f}" if attrname[:3] == "num" else "{:6.4f}")
-            objstat.prt_hdr(prt, name)
+            objstat.prt_hdr(prt, hdrexps)
             for experiment in self.expsets:
-                name = experiment.get_desc(namefmt)
+                expname = experiment.get_desc(namefmt)
                 means = experiment.get_means(attrname)
-                objstat.prt_data(name, means, prt)
+                objstat.prt_data(expname, means, prt)
+
+    def prt_experiments_means(self, prt=sys.stdout, attrs=None):
+        """Print stats for user-specified data in experiment sets."""
+        if attrs is None:
+            attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
+        sys.stdout.write("\n{TITLE}\n".format(TITLE=self.get_desc()))
+        num_attrs = len(attrs)
+        prt.write("sig% maxSig #pvals {ATTRS}\n".format(ATTRS=" ".join(attrs)))
+        prt.write("---- ------ ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*10]*num_attrs)))
+        namefmt = "{SIGPERC:3}%  {SIGMAX:5.3f}  {PVALQTY:5}"
+        for experiment in self.expsets:
+            expname = experiment.get_desc(namefmt)
+            means = [np.mean(experiment.get_means(a)) for a in attrs]
+            mean_strs = ["{:10.4f}".format(m) for m in means]
+            prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
+
 
     def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""
