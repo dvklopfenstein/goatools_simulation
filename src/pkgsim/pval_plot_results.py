@@ -38,7 +38,15 @@ def wrpng_boxplot_sigs(dfrm, **kws):
     # dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     plt.clf()
     sns.set(style="ticks")
-    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn")
+    sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=5)
+    ax_boxplot = sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn")
+    ax_boxplot.legend_.remove()
+    for i, line in enumerate(ax_boxplot.lines):
+        is_median = i%6 == 4
+        #color = 'red' if i%6 == 4 else 'black'
+        line.set_color('red' if is_median else 'black')
+        if is_median:
+            line.set_linestyle('--')
     sns.despine(offset=10, trim=True)
     # Set the tick labels font
     # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
@@ -49,8 +57,9 @@ def wrpng_boxplot_sigs(dfrm, **kws):
     # Plot text
     fout_img = kws.get("fout_img", "sim_pvals.png")
     plt.title(kws.get('title', 'P-values'), size=25)
-    plt.xlabel(kws.get('xlabel', '# P-values per set'), size=20)
-    plt.ylabel("% of P-values found significant", size=20)
+    plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
+    plt.xlabel(kws.get('xlabel', '# P-values/multitest correction'), size=20)
+    plt.ylabel("Simulated FDR Ratios", size=20)
     if 'ylim_a' in kws and 'ylim_b' in kws:
         plt.ylim(kws['ylim_a'], kws['ylim_b'])
     plt.tight_layout()
