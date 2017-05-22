@@ -5,8 +5,8 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-#### from pkgsim.plot_results import plot_results_all
-from pkgsim.run_all_experiments import ExperimentsAll
+#### from pkgsim.pval_plot_results import plot_results_all
+from pkgsim.pval_run_all import ExperimentsAll
 
 
 def main(randomseed, prt=sys.stdout):

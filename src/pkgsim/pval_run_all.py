@@ -8,9 +8,9 @@ import collections as cx
 import timeit
 import numpy as np
 from pkgsim.randseed import RandomSeed32
-from pkgsim.experiments import ExperimentSet
+from pkgsim.pval_experiments import ExperimentSet
 from pkgsim.utils import get_hms
-from pkgsim.plot_results import get_dataframe, wrpng_boxplot_sigs
+from pkgsim.pval_plot_results import get_dataframe, wrpng_boxplot_sigs
 from goatools.statsdescribe import StatsDescribe
 
 
