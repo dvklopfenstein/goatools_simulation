@@ -81,7 +81,7 @@ def get_percsig_dicts(numpvals_sims):
             tbl.append({'xval':num_pvals, 'group':'Corrected', 'yval':perc_sig_corr})
     return tbl
 
-def get_dataframe(expsets, attrname='fdr_actual', grpname='FDR'):
+def get_dataframe_expsets(expsets, attrname='fdr_actual', grpname='FDR'):
     """Get plotting data in the form of a pandas dataframe."""
     tbl = get_dftbl_expone(expsets, attrname, grpname)
     return pd.DataFrame(tbl)
@@ -93,12 +93,6 @@ def get_dftbl_expall(key2exps, attrname='fdr_actual', grpname='FDR'):
         perc_true_null = 100 - perc_sig
         k2v = {'max_sigpval':max_sigpval, 'perc_null':perc_true_null}
         tbl.extend(get_dftbl_expone(expsets, attrname, grpname, k2v))
-        # for experimentset in expsets:
-        #     pval_qty = experimentset.params['pval_qty']
-        #     yvals = experimentset.get_means(attrname)
-        #     for yval in yvals:
-        #         tbl.append({'xval':pval_qty, 'yval':yval, 'group':grpname,
-        #                     'max_sigpval':max_sigpval, 'perc_null':perc_true_null})
     return tbl
 
 def get_dftbl_expone(expsets, attrname='fdr_actual', grpname='FDR', k2v=None):
@@ -114,5 +108,23 @@ def get_dftbl_expone(expsets, attrname='fdr_actual', grpname='FDR', k2v=None):
                     dctcur[key] = val
             tbl.append(dctcur)
     return tbl
+
+def plt_box_all(key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    fout_pat = "sim_{A}_{P:03}_{M:02}.png"
+    title_pat100 = "{P:}% True Null"
+    title_patpnul = "{P:}% True Null. MaxSig={M:4.2f}"
+    kws = {
+        'fout_img': None,
+        'title': None,
+        'xlabel': '# P-values per set',
+        'ylim_a':0, 'ylim_b':0.10}
+    for (perc_sig, max_sigpval), expsets in key2exps.items():
+        kws['fout_img'] = fout_pat.format(A=attrname, P=perc_sig, M=int(100*max_sigpval))
+        perc_true_null = 100-perc_sig
+        title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
+        kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
+        dfrm = get_dataframe_expsets(expsets, attrname, grpname) # expsets 'fdr_actual' 'FDR'
+        wrpng_boxplot_sigs(dfrm, **kws)
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
