@@ -71,7 +71,7 @@ class ExperimentsAll(object):
         """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
         fout_pat = "sim_{A}_{P:03}_{M:02}.png"
         title_pat100 = "{P:}% True Null"
-        title_patN = "{P:}% True Null. MaxSig={M:4.2f}"
+        title_patpnul = "{P:}% True Null. MaxSig={M:4.2f}"
         key2exps = self._get_key2expsets('perc_sig', 'max_sigpval')
         kws = {
             'fout_img': None,
@@ -81,9 +81,9 @@ class ExperimentsAll(object):
         for (perc_sig, max_sigpval), expsets in key2exps.items():
             kws['fout_img'] = fout_pat.format(A=attrname, P=perc_sig, M=int(100*max_sigpval))
             perc_true_null = 100-perc_sig
-            title_pat = title_pat100 if perc_true_null == 100 else title_patN
+            title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
             kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
-            dfrm = get_dataframe(expsets, attrname, grpname)
+            dfrm = get_dataframe(expsets, attrname, grpname) # expsets 'fdr_actual' 'FDR'
             wrpng_boxplot_sigs(dfrm, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):

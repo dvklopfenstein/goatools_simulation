@@ -83,17 +83,36 @@ def get_percsig_dicts(numpvals_sims):
 
 def get_dataframe(expsets, attrname='fdr_actual', grpname='FDR'):
     """Get plotting data in the form of a pandas dataframe."""
-    tbl = get_dftbl(expsets, attrname, grpname)
+    tbl = get_dftbl_expone(expsets, attrname, grpname)
     return pd.DataFrame(tbl)
 
-def get_dftbl(expsets, attrname='fdr_actual', grpname='FDR'):
+def get_dftbl_expall(key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Get data for dataframe for multiple boxplot tiles."""
+    tbl = []
+    for (perc_sig, max_sigpval), expsets in key2exps.items():
+        perc_true_null = 100 - perc_sig
+        k2v = {'max_sigpval':max_sigpval, 'perc_null':perc_true_null}
+        tbl.extend(get_dftbl_expone(expsets, attrname, grpname, k2v))
+        # for experimentset in expsets:
+        #     pval_qty = experimentset.params['pval_qty']
+        #     yvals = experimentset.get_means(attrname)
+        #     for yval in yvals:
+        #         tbl.append({'xval':pval_qty, 'yval':yval, 'group':grpname,
+        #                     'max_sigpval':max_sigpval, 'perc_null':perc_true_null})
+    return tbl
+
+def get_dftbl_expone(expsets, attrname='fdr_actual', grpname='FDR', k2v=None):
     """Get plotting data suitable for a pandas dataframe."""
     tbl = []
     for experimentset in expsets:
         pval_qty = experimentset.params['pval_qty']
         yvals = experimentset.get_means(attrname)
         for yval in yvals:
-            tbl.append({'xval':pval_qty, 'yval':yval, 'group':grpname})
+            dctcur = {'xval':pval_qty, 'yval':yval, 'group':grpname}
+            if k2v is not None:
+                for key, val in k2v.items():
+                    dctcur[key] = val
+            tbl.append(dctcur)
     return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.
