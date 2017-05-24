@@ -2,6 +2,8 @@
 gene_association.mgi
 go-basic.obo
 /*.txt
+/*.png
+py*.st*p
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

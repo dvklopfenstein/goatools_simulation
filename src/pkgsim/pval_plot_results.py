@@ -31,10 +31,10 @@ def plot_results_all(objsim, params):
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs(numpvals_sims, **pltargs)
+        wrpng_boxplot_sigs_each(numpvals_sims, **pltargs)
 
-def wrpng_boxplot_sigs(dfrm, **kws):
-    """Plot pvalues showing as significant."""
+def wrpng_boxplot_sigs_each(dfrm, **kws):
+    """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
     # dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     plt.clf()
     sns.set(style="ticks")
@@ -81,50 +81,56 @@ def get_percsig_dicts(numpvals_sims):
             tbl.append({'xval':num_pvals, 'group':'Corrected', 'yval':perc_sig_corr})
     return tbl
 
-def get_dataframe_expsets(expsets, attrname='fdr_actual', grpname='FDR'):
-    """Get plotting data in the form of a pandas dataframe."""
-    tbl = get_dftbl_expone(expsets, attrname, grpname)
-    return pd.DataFrame(tbl)
-
-def get_dftbl_expall(key2exps, attrname='fdr_actual', grpname='FDR'):
-    """Get data for dataframe for multiple boxplot tiles."""
-    tbl = []
-    for (perc_sig, max_sigpval), expsets in key2exps.items():
-        perc_true_null = 100 - perc_sig
-        k2v = {'max_sigpval':max_sigpval, 'perc_null':perc_true_null}
-        tbl.extend(get_dftbl_expone(expsets, attrname, grpname, k2v))
-    return tbl
-
-def get_dftbl_expone(expsets, attrname='fdr_actual', grpname='FDR', k2v=None):
-    """Get plotting data suitable for a pandas dataframe."""
-    tbl = []
-    for experimentset in expsets:
-        pval_qty = experimentset.params['pval_qty']
-        yvals = experimentset.get_means(attrname)
-        for yval in yvals:
-            dctcur = {'xval':pval_qty, 'yval':yval, 'group':grpname}
-            if k2v is not None:
-                for key, val in k2v.items():
-                    dctcur[key] = val
-            tbl.append(dctcur)
-    return tbl
-
-def plt_box_all(key2exps, attrname='fdr_actual', grpname='FDR'):
+def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    fout_pat = "sim_{A}_{P:03}_{M:02}.png"
     title_pat100 = "{P:}% True Null"
     title_patpnul = "{P:}% True Null. MaxSig={M:4.2f}"
     kws = {
         'fout_img': None,
         'title': None,
-        'xlabel': '# P-values per set',
+        'xlabel': 'Number of Tested Hypotheses',
         'ylim_a':0, 'ylim_b':0.10}
     for (perc_sig, max_sigpval), expsets in key2exps.items():
-        kws['fout_img'] = fout_pat.format(A=attrname, P=perc_sig, M=int(100*max_sigpval))
+        kws['fout_img'] = fimg_pat.format(
+          PSIMATTR=attrname, SIGPERC=perc_sig, SIGMAX=int(100*max_sigpval))
         perc_true_null = 100-perc_sig
         title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
         kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
-        dfrm = get_dataframe_expsets(expsets, attrname, grpname) # expsets 'fdr_actual' 'FDR'
-        wrpng_boxplot_sigs(dfrm, **kws)
+        dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
+        wrpng_boxplot_sigs_each(dfrm, **kws)
+
+def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    dpi = 200
+    dfrm = pd.DataFrame(_get_dftbl_boxplots(key2exps, attrname, grpname))
+    grd = sns.FacetGrid(dfrm, col='max_sigpval', row='perc_true_null')
+    grd = grd.map(sns.boxplot, "xval", "yval")
+    plt.title('{GRP} Simulations'.format(GRP=grpname))
+    plt.xlabel('Number of Tested Hypotheses')
+    plt.ylabel('Simulated {GRP}s'.format(GRP=grpname))
+    #plt.show()
+    plt.savefig(fout_img, dpi=dpi)
+    sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
+
+def _get_dftbl_boxplots(key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Get data for dataframe for multiple boxplot tiles."""
+    tbl_full = []
+    for (perc_sig, max_sigpval), expsets in key2exps.items():
+        perc_true_null = 100 - perc_sig
+        for dct in _get_dftbl_boxplot(expsets, attrname, grpname):
+            dct['max_sigpval'] = max_sigpval
+            dct['perc_true_null'] = perc_true_null
+            tbl_full.append(dct)
+    return tbl_full
+
+def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
+    """Get plotting data suitable for a single plot of boxplots."""
+    tbl = []
+    for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_sig
+        tot_h = exps.params['pval_qty'] # Number of hypotheses
+        # Make one dictionary line for each value of fdr_actual
+        dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]
+        tbl.extend(dcts)
+    return tbl
 
 # Copyright (C) 2017, DV Klopfenstein. All rights reserved.

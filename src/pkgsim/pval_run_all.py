@@ -10,7 +10,7 @@ import numpy as np
 from pkgsim.randseed import RandomSeed32
 from pkgsim.pval_experiments import ExperimentSet
 from pkgsim.utils import get_hms
-from pkgsim.pval_plot_results import plt_box_all
+from pkgsim.pval_plot_results import plt_box_all, plt_box_tiled
 from goatools.statsdescribe import StatsDescribe
 
 
@@ -67,10 +67,15 @@ class ExperimentsAll(object):
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
 
-    def plt_box_all(self, attrname='fdr_actual', grpname='FDR'):
+    def plt_box_all(self, fimg_pat, attrname='fdr_actual', grpname='FDR'):
         """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
         key2exps = self._get_key2expsets('perc_sig', 'max_sigpval')
-        plt_box_all(key2exps, attrname, grpname)
+        plt_box_all(fimg_pat, key2exps, attrname, grpname)
+
+    def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR'):
+        """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+        key2exps = self._get_key2expsets('perc_sig', 'max_sigpval')
+        plt_box_tiled(fout_img, key2exps, attrname, grpname)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
