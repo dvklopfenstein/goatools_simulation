@@ -11,7 +11,7 @@ from pkgsim.pval_sim import PvalSim
 class PvalSimMany(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set(['num_pvalsims', 'pval_qty', 'perc_sig',
+    expected_params = set(['num_pvalsims', 'hypoth_qty', 'perc_sig',
                            'multi_params', 'num_sig', 'max_sigpval'])
 
     def __init__(self, params):
@@ -36,7 +36,7 @@ class PvalSimMany(object):
         msg = [
             "    PvalSimMany:",
             "{SIMS} sims,".format(SIMS=self.params['num_pvalsims']),
-            "{PVALS:3} pvals/sim".format(PVALS=self.params['pval_qty']),
+            "{PVALS:3} pvals/sim".format(PVALS=self.params['hypoth_qty']),
             "SET({P:3.0f}% sig,)\n".format(P=self.params['perc_sig']),
             "{M:5.2f} max sig)\n".format(M=self.params['max_sigpval']),
         ]
@@ -57,7 +57,7 @@ class PvalSimMany(object):
         num_errsimst1 = sum([n != 0 for n in t1s])
         num_errsimst2 = sum([n != 0 for n in t2s])
         prt.write(msgpat.format(
-            N=len(self.nts_tfpn), P=self.params['pval_qty'], PSIG=self.params['perc_sig'],
+            N=len(self.nts_tfpn), P=self.params['hypoth_qty'], PSIG=self.params['perc_sig'],
             E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2), DESC=desc))
 
     def get_percentile_strs(self, attr, percentiles):
@@ -72,15 +72,15 @@ class PvalSimMany(object):
 
     def get_num_mkrnd(self):
         """The number of randomly generated P-values, if any is significant, it is by chance."""
-        return self.params['pval_qty'] - self.params['num_sig']
+        return self.params['hypoth_qty'] - self.params['num_sig']
 
     def _init_pvalsimobjs(self):
         """Simulate MANY multiple-test correction of P-values."""
         num_pvalsims = self.params['num_pvalsims']
-        pval_qty = self.params['pval_qty']
+        hypoth_qty = self.params['hypoth_qty']
         num_sig = self.params['num_sig']
         multi_params = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
-        return [PvalSim(pval_qty, num_sig, multi_params, max_sigpval) for _ in range(num_pvalsims)]
+        return [PvalSim(hypoth_qty, num_sig, multi_params, max_sigpval) for _ in range(num_pvalsims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

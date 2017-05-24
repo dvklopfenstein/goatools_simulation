@@ -16,7 +16,7 @@ def main(randomseed, prt=sys.stdout):
         'max_sigpvals' : [0.01, 0.03, 0.05],
         #perc_sigs' : [75, 50, 25, 0], # [25, 50, 75, 100]
         'perc_sigs' : [ 0, 25, 50, 75], # [25, 50, 75, 100]
-        'pval_qtys' : [20, 100, 500],
+        'num_hypoths_list' : [20, 100, 500],
         'num_experiments' : 20,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
@@ -26,7 +26,7 @@ def main(randomseed, prt=sys.stdout):
     fout_img = get_fout_img('sim_fdr_LgHypoth_', exp_params)
     obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR')
     # Re-run with a smaller number of hypotheses
-    exp_params['pval_qtys'] = [4, 8, 16]
+    exp_params['num_hypoths_list'] = [4, 8, 16]
     obj = ExperimentsAll(exp_params)
     fout_img = get_fout_img('sim_fdr_SmHypoth', exp_params)
     obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR')

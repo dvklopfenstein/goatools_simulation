@@ -11,7 +11,7 @@ from pkgsim.utils import get_hms
 class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
-    expected_params = set(['multi_params', 'perc_sig', 'pval_qty', 'num_experiments',
+    expected_params = set(['multi_params', 'perc_sig', 'hypoth_qty', 'num_experiments',
                            'num_pvalsims', 'max_sigpval'])
 
     def __init__(self, params, tic):
@@ -19,7 +19,7 @@ class ExperimentSet(object):
         self.alpha = params['multi_params']['alpha']
         assert set(params.keys()) == self.expected_params
         self.max_sigpval = params['max_sigpval']
-        self.num_sig = int(round(float(params['perc_sig'])*params['pval_qty']/100.0))
+        self.num_sig = int(round(float(params['perc_sig'])*params['hypoth_qty']/100.0))
         self.expset = self._init_experiments(tic) # returns list of PvalSimMany objects
 
     def get_fdr_actuals(self):
@@ -38,7 +38,7 @@ class ExperimentSet(object):
             SIGPERC=self.params['perc_sig'],
             EXP_ALPHA=float(100-self.params['perc_sig'])/100.0*self.alpha,
             SIGTOT=self.num_sig,
-            PVALQTY=self.params['pval_qty'])
+            PVALQTY=self.params['hypoth_qty'])
 
     def get_strhdr(self):
         """Return a short 1-line summary of this experiment set."""
@@ -58,7 +58,7 @@ class ExperimentSet(object):
         expset = []
         sys.stdout.write("{EXPSET_DESC} HMS={HMS}\n".format(
             EXPSET_DESC=self.get_strhdr(), HMS=get_hms(tic)))
-        shared_param_keys = ['num_pvalsims', 'pval_qty', 'perc_sig', 'multi_params']
+        shared_param_keys = ['num_pvalsims', 'hypoth_qty', 'perc_sig', 'multi_params']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_sig'] = self.num_sig

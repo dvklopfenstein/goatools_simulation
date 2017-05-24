@@ -15,7 +15,7 @@ from goatools.statsdescribe import StatsDescribe
 
 
 class ExperimentsAll(object):
-    """Run all experiments having various: max_sigvals, perc_sigs, pval_qtys."""
+    """Run all experiments having various: max_sigvals, perc_sigs, num_hypoths_list."""
 
     # Parameters Example:
     #
@@ -24,11 +24,11 @@ class ExperimentsAll(object):
     #         'multi_params'    : {'alpha' : 0.05, 'method' : 'fdr_bh'},
     #         'max_sigpvals'    : [0.005, 0.01, 0.02, 0.03, 0.04, 0.05],
     #         'perc_sigs'       : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
-    #         'pval_qtys'       : [20, 100, 500],
+    #         'num_hypoths_list'       : [20, 100, 500],
     #         'num_experiments' : 100,
     #         'num_pvalsims'    : 100}
 
-    expected_params = set(['seed', 'multi_params', 'perc_sigs', 'max_sigpvals', 'pval_qtys',
+    expected_params = set(['seed', 'multi_params', 'perc_sigs', 'max_sigpvals', 'num_hypoths_list',
                            'num_experiments', 'num_pvalsims'])
 
     def __init__(self, params):
@@ -55,12 +55,12 @@ class ExperimentsAll(object):
         # Run all experiment sets
         for perc_sig in self.params['perc_sigs']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
             for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
-                for pval_qty in self.params['pval_qtys']:   # Ex: [20, 100, 500]
+                for hypoth_qty in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
                     exp_parms = {
                         'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
                         'perc_sig' : perc_sig,
-                        'pval_qty' : pval_qty,
+                        'hypoth_qty' : hypoth_qty,
                         'num_experiments' : self.params['num_experiments'],
                         'num_pvalsims' : self.params['num_pvalsims']}
                     expsets.append(ExperimentSet(exp_parms, tic))

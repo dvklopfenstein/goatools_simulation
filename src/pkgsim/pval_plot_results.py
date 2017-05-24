@@ -127,7 +127,7 @@ def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
     """Get plotting data suitable for a single plot of boxplots."""
     tbl = []
     for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_sig
-        tot_h = exps.params['pval_qty'] # Number of hypotheses
+        tot_h = exps.params['hypoth_qty'] # Number of hypotheses
         # Make one dictionary line for each value of fdr_actual
         dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]
         tbl.extend(dcts)
