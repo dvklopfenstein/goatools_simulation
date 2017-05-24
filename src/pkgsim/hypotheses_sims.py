@@ -5,10 +5,10 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import numpy as np
-from pkgsim.pval_sim import PvalSim
+from pkgsim.hypotheses_sim import HypothesesSim
 
 
-class PvalSimMany(object):
+class ManyHypothesesSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
     expected_params = set(['num_pvalsims', 'hypoth_qty', 'perc_sig',
@@ -18,7 +18,7 @@ class PvalSimMany(object):
         self.params = params
         assert set(params.keys()) == self.expected_params
         # Data members
-        pvalsimobjs = self._init_pvalsimobjs() # List of N=num_pvalsims PvalSim objects
+        pvalsimobjs = self._init_pvalsimobjs() # List of N=num_pvalsims HypothesesSim objects
         self.nts_tfpn = [o.nt_tfpn for o in pvalsimobjs]
         # Print header for each set of simulations
         #self.prt_summary(prt=sys.stdout)
@@ -34,7 +34,7 @@ class PvalSimMany(object):
     def prt_summary(self, prt=sys.stdout):
         """Print summary of all num_pvalsims simulations."""
         msg = [
-            "    PvalSimMany:",
+            "    ManyHypothesesSims:",
             "{SIMS} sims,".format(SIMS=self.params['num_pvalsims']),
             "{PVALS:3} pvals/sim".format(PVALS=self.params['hypoth_qty']),
             "SET({P:3.0f}% sig,)\n".format(P=self.params['perc_sig']),
@@ -81,6 +81,6 @@ class PvalSimMany(object):
         num_sig = self.params['num_sig']
         multi_params = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
-        return [PvalSim(hypoth_qty, num_sig, multi_params, max_sigpval) for _ in range(num_pvalsims)]
+        return [HypothesesSim(hypoth_qty, num_sig, multi_params, max_sigpval) for _ in range(num_pvalsims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

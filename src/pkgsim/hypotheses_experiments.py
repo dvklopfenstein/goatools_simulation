@@ -4,7 +4,7 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-from pkgsim.pval_sims import PvalSimMany
+from pkgsim.hypotheses_sims import ManyHypothesesSims
 from pkgsim.utils import get_hms
 
 
@@ -20,7 +20,7 @@ class ExperimentSet(object):
         assert set(params.keys()) == self.expected_params
         self.max_sigpval = params['max_sigpval']
         self.num_sig = int(round(float(params['perc_sig'])*params['hypoth_qty']/100.0))
-        self.expset = self._init_experiments(tic) # returns list of PvalSimMany objects
+        self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
     def get_fdr_actuals(self):
         """Return list of actaul FDR values for simulation."""
@@ -63,8 +63,8 @@ class ExperimentSet(object):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_sig'] = self.num_sig
             experiment_params['max_sigpval'] = self.max_sigpval
-            # One PvalSimMany is one experiment which can return one simulated FDR value
-            expset.append(PvalSimMany(experiment_params))
+            # One ManyHypothesesSims is one experiment which can return one simulated FDR value
+            expset.append(ManyHypothesesSims(experiment_params))
         return expset
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

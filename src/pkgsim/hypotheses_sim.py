@@ -19,7 +19,7 @@ import collections as cx
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
 
-class PvalSim(object):
+class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""
 
     ntobj_pvaltype = cx.namedtuple(
@@ -140,7 +140,7 @@ class PvalSim(object):
 
 
 class _Init(object):
-    """Init PvalSim object: Create random P-Values, run multipletest correction."""
+    """Init HypothesesSim object: Create rnd pvals, run multipletest correction."""
 
     # Multiple test correction results:
     #   1. statsmodels multiple test results for each P-value

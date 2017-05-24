@@ -72,8 +72,8 @@ def wrpng_boxplot_sigs_each(dfrm, **kws):
 def get_percsig_dicts(numpvals_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
     tbl = []
-    for num_pvals, objsims in numpvals_sims: # objsims is an PvalSimMany obj
-        # objsims: pkgsim.pval_mtcorr_sims.PvalSimMany
+    for num_pvals, objsims in numpvals_sims: # objsims is an ManyHypothesesSims obj
+        # objsims: pkgsim.pval_mtcorr_sims.ManyHypothesesSims
         for obj1sim in objsims.pvalsimobjs:
             perc_sig_orig = obj1sim.get_perc_sig("pvals")
             perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
