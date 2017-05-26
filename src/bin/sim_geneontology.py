@@ -46,7 +46,8 @@ __author__ = "DV Klopfenstein"
 import sys
 import datetime
 
-from pkgsim.data_geneids_rich_immune import geneids as geneids_immune
+#from pkgsim.data_geneids_rich_immune import geneids as genes_immune
+from pkgsim.genes_rich_immune import genes as genes_immune
 from pkgsim.utils import shuffle_associations
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
@@ -82,33 +83,24 @@ def main(prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     obj = GoeaSimObj(alpha=0.05, method='fdr_bh')
-    geneids_mus = set(ensm2sym.keys()) # Population genes
-    tot_genes_immune = len(geneids_immune) # Study genes (genes rich in immune functions)
-    assoc_ens2gos = GoatoolsDataMaker.get_assoc("gene_association.mgi", geneids_mus)
-    # 2. SIMULATE SIGNIFICANCE TO IMMUNE:
-    #   Run gene-ontology simulation with a set of genes rich in immune function:
-    #     Population genes: All mouse genes
-    #     Study genes:      Mouse genes rich in various immune GOs
-    goeaobj_sig = obj.get_goeaobj(geneids_mus, assoc_ens2gos)
-    goea_results_sig = goeaobj_sig.run_study(geneids_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
-    goeaobj_sig.wr_txt("goea_immune_sig.txt", goea_results_sig)
-    geneids_sig = get_study_items(goea_results_sig)
-    assert geneids_immune == geneids_sig, \
-        "EXPECTED ALL {S} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}".format(
-            S=tot_genes_immune, M=len(geneids_immune.difference(geneids_sig)))
+    genes_mus = set(ensm2sym.keys()) # Population genes
+    tot_genes_immune = len(genes_immune) # Study genes (genes rich in immune functions)
+    assoc_ens2gos = GoatoolsDataMaker.get_assoc("gene_association.mgi", genes_mus)
+    # 2. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
+    goea_results_sig, geneids_sig = run_actual_assc(obj, assoc_ens2gos, genes_mus, genes_immune)
     # 3. SIMULATE NO SIGNIFICANCE:
     #   Run gene-ontology simulation with associations randomly shuffled
     #   to simulate no significant.
     # Randomize associations
     rand_assoc = shuffle_associations(assoc_ens2gos)
     # 4. Run Gene Ontology Enrichment Analysis with ranldy shuffled associations
-    goeaobj_rnd = obj.get_goeaobj(geneids_mus, rand_assoc)
-    goea_results_rnd = goeaobj_rnd.run_study(geneids_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
+    goeaobj_rnd = obj.get_goeaobj(genes_mus, rand_assoc)
+    goea_results_rnd = goeaobj_rnd.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
     goeaobj_rnd.wr_txt("goea_immune_rnd.txt", goea_results_rnd)
     assert len(goea_results_rnd) == 0, \
         "EXPECTED NO SIGNIFICANT GO TERMS IN RANDOM SIMULATION. FOUND {N}".format(
             N=len(goea_results_rnd))
-    # 5. REPORT RESULTS:
+    # 6. REPORT RESULTS:
     prt.write("\nSIMULATION RESULTS ON {DATE}:\n".format(DATE=datetime.date.today()))
     prt.write("\n  SETTINGS AND GO-DAG VERSION:\n")
     prt.write("    Multitest Params: {INFO}\n".format(INFO=obj.get_str_mcorr()))
@@ -118,6 +110,19 @@ def main(prt=sys.stdout):
     prt.write(txt.format(N=len(goea_results_sig), M=tot_genes_immune, DESC="actual"))
     prt.write(txt.format(N=len(goea_results_rnd), M=tot_genes_immune, DESC="random"))
 
+def run_actual_assc(obj, assoc_ens2gos, genes_mus, genes_immune):
+    """SIMULATE SIGNIFICANCE TO IMMUNE."""
+    #   Run gene-ontology simulation with a set of genes rich in immune function:
+    #     Population genes: All mouse genes
+    #     Study genes:      Mouse genes rich in various immune GOs
+    goeaobj_sig = obj.get_goeaobj(genes_mus, assoc_ens2gos)
+    goea_results_sig = goeaobj_sig.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
+    goeaobj_sig.wr_txt("goea_immune_sig.txt", goea_results_sig)
+    geneids_sig = get_study_items(goea_results_sig)
+    assert genes_immune == geneids_sig, \
+        "EXPECTED ALL {S} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}".format(
+            S=tot_genes_immune, M=len(genes_immune.difference(geneids_sig)))
+    return goea_results_sig, geneids_sig
 
 if __name__ == '__main__':
     main()

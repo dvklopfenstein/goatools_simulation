@@ -20,6 +20,9 @@ vim_md:
 run:
 	echo run
 
+getdata:
+	../goatools_suppl/src/bin/get_goids_by_section.py ../goatools_simulation/src/pkgsim
+
 clean:
 	find src -name \*.pyc | xargs rm -f
 	rm -f python*.st*
