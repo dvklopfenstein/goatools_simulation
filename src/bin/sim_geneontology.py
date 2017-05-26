@@ -89,18 +89,8 @@ def main(prt=sys.stdout):
     # 2. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
     goea_results_sig, geneids_sig = run_actual_assc(obj, assoc_ens2gos, genes_mus, genes_immune)
     # 3. SIMULATE NO SIGNIFICANCE:
-    #   Run gene-ontology simulation with associations randomly shuffled
-    #   to simulate no significant.
-    # Randomize associations
-    rand_assoc = shuffle_associations(assoc_ens2gos)
-    # 4. Run Gene Ontology Enrichment Analysis with ranldy shuffled associations
-    goeaobj_rnd = obj.get_goeaobj(genes_mus, rand_assoc)
-    goea_results_rnd = goeaobj_rnd.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
-    goeaobj_rnd.wr_txt("goea_immune_rnd.txt", goea_results_rnd)
-    assert len(goea_results_rnd) == 0, \
-        "EXPECTED NO SIGNIFICANT GO TERMS IN RANDOM SIMULATION. FOUND {N}".format(
-            N=len(goea_results_rnd))
-    # 6. REPORT RESULTS:
+    goea_results_rnd, geneids_rnd = run_random_assc(obj, assoc_ens2gos, genes_mus, genes_immune)
+    # 4. REPORT RESULTS:
     prt.write("\nSIMULATION RESULTS ON {DATE}:\n".format(DATE=datetime.date.today()))
     prt.write("\n  SETTINGS AND GO-DAG VERSION:\n")
     prt.write("    Multitest Params: {INFO}\n".format(INFO=obj.get_str_mcorr()))
@@ -112,17 +102,27 @@ def main(prt=sys.stdout):
 
 def run_actual_assc(obj, assoc_ens2gos, genes_mus, genes_immune):
     """SIMULATE SIGNIFICANCE TO IMMUNE."""
-    #   Run gene-ontology simulation with a set of genes rich in immune function:
-    #     Population genes: All mouse genes
-    #     Study genes:      Mouse genes rich in various immune GOs
-    goeaobj_sig = obj.get_goeaobj(genes_mus, assoc_ens2gos)
-    goea_results_sig = goeaobj_sig.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
-    goeaobj_sig.wr_txt("goea_immune_sig.txt", goea_results_sig)
-    geneids_sig = get_study_items(goea_results_sig)
-    assert genes_immune == geneids_sig, \
+    goeaobj = obj.get_goeaobj(genes_mus, assoc_ens2gos)
+    goea_results = goeaobj.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
+    goeaobj.wr_txt("goea_immune.txt", goea_results)
+    geneids = get_study_items(goea_results)
+    assert genes_immune == geneids, \
         "EXPECTED ALL {S} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}".format(
-            S=tot_genes_immune, M=len(genes_immune.difference(geneids_sig)))
-    return goea_results_sig, geneids_sig
+            S=tot_genes_immune, M=len(genes_immune.difference(geneids)))
+    return goea_results, geneids
+
+def run_random_assc(obj, assoc_ens2gos, genes_mus, genes_immune):
+    """SIMULATE NO SIGNIFICANCE."""
+    # Randomize associations
+    rand_assoc = shuffle_associations(assoc_ens2gos)
+    goeaobj = obj.get_goeaobj(genes_mus, rand_assoc)
+    goea_results = goeaobj.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
+    goeaobj.wr_txt("goea_immune.txt", goea_results)
+    geneids = get_study_items(goea_results)
+    assert len(goea_results) == 0, \
+        "EXPECTED NO SIGNIFICANT GO TERMS IN RANDOM SIMULATION. FOUND {N}".format(
+            N=len(goea_results))
+    return goea_results, geneids
 
 if __name__ == '__main__':
     main()
