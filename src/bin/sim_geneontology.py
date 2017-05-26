@@ -8,7 +8,7 @@ GENE ONTOLOGY SIMULATION
 Two GOEA simulations are run with a set of study genes that are rich in immune functions:
 
   1) Input: Current GO-geneid associations.
-     Expected result: All study genes are enriched 
+     Expected result: All study genes are enriched
 
   2) Input: Randomly shuffled GO-geneid associations
      Expected result:  No study genes are enriched
@@ -31,7 +31,7 @@ SIMULATION RESULTS ON 2017-05-22:
 *****************************************************************
 Discussion
 *****************************************************************
-Both gene ontology simulations produced the expected results: 
+Both gene ontology simulations produced the expected results:
 
 The first simulation indicated that all study genes were enriched, as expected.
 
@@ -47,7 +47,7 @@ import sys
 import datetime
 
 #from pkgsim.data_geneids_rich_immune import geneids as genes_immune
-from pkgsim.genes_rich_immune import genes as genes_immune
+from pkgsim.genes_rich_immune import genes as GENES
 from pkgsim.utils import shuffle_associations
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
@@ -84,6 +84,7 @@ def main(prt=sys.stdout):
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     obj = GoeaSimObj(alpha=0.05, method='fdr_bh')
     genes_mus = set(ensm2sym.keys()) # Population genes
+    genes_immune = GENES
     tot_genes_immune = len(genes_immune) # Study genes (genes rich in immune functions)
     assoc_ens2gos = GoatoolsDataMaker.get_assoc("gene_association.mgi", genes_mus)
     # 2. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
@@ -108,12 +109,11 @@ def run_actual_assc(obj, assoc_ens2gos, genes_mus, genes_immune):
     geneids = get_study_items(goea_results)
     assert genes_immune == geneids, \
         "EXPECTED ALL {S} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}".format(
-            S=tot_genes_immune, M=len(genes_immune.difference(geneids)))
+            S=len(genes_immune), M=len(genes_immune.difference(geneids)))
     return goea_results, geneids
 
 def run_random_assc(obj, assoc_ens2gos, genes_mus, genes_immune):
     """SIMULATE NO SIGNIFICANCE."""
-    # Randomize associations
     rand_assoc = shuffle_associations(assoc_ens2gos)
     goeaobj = obj.get_goeaobj(genes_mus, rand_assoc)
     goea_results = goeaobj.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
