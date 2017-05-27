@@ -25,6 +25,7 @@ def main(randomseed, prt=sys.stdout):
     obj.plt_box_all("sim_{PSIMATTR}_{SIGPERC:03}_{SIGMAX:02}.png", 'fdr_actual', 'FDR')
     fout_img = get_fout_img('sim_fdr_LgHypoth_', exp_params)
     obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR')
+    return # TBD remove
     # Re-run with a smaller number of hypotheses: [20, 100, 500] -> [4, 8, 16]
     exp_params['num_hypoths_list'] = [4, 8, 16]
     obj = ExperimentsAll(exp_params)

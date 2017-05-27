@@ -8,6 +8,7 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 
 def plot_results_all(objsim, params):
     """Plot simulation results for many sets of p-values."""
@@ -31,9 +32,9 @@ def plot_results_all(objsim, params):
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs_each(numpvals_sims, **pltargs)
+        wrpng_boxplot_sigs_each(numpvals_sims, alpha, **pltargs)
 
-def wrpng_boxplot_sigs_each(dfrm, **kws):
+def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
     # dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     plt.clf()
@@ -47,6 +48,7 @@ def wrpng_boxplot_sigs_each(dfrm, **kws):
         line.set_color('red' if is_median else 'black')
         if is_median:
             line.set_linestyle('--')
+    ax_boxplot.plot([0, 1000], [alpha, alpha], 'b.-')
     sns.despine(offset=10, trim=True)
     # Set the tick labels font
     # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
@@ -91,16 +93,31 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         'xlabel': 'Number of Tested Hypotheses',
         'ylim_a':0, 'ylim_b':0.10}
     for (perc_sig, max_sigpval), expsets in key2exps.items():
+        assert expsets
         kws['fout_img'] = fimg_pat.format(
           PSIMATTR=attrname, SIGPERC=perc_sig, SIGMAX=int(100*max_sigpval))
         perc_true_null = 100-perc_sig
         title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
         kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
-        wrpng_boxplot_sigs_each(dfrm, **kws)
+        wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
 def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
-    """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    # Simple data to display in various forms
+    x = np.linspace(0, 2 * np.pi, 400)
+    y = np.sin(x ** 2)
+    plt.close('all')
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+    ax1.plot(x, y)
+    ax1.set_title('Sharing x per column, y per row')
+    ax2.scatter(x, y)
+    ax3.scatter(x, 2 * y ** 2 - 1, color='r')
+    ax4.plot(x, 2 * y ** 2 - 1, color='r')
+    plt.show()
+
+def plt_box_tiled_plain(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Plot all plain boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     dpi = 200
     dfrm = pd.DataFrame(_get_dftbl_boxplots(key2exps, attrname, grpname))
     grd = sns.FacetGrid(dfrm, col='max_sigpval', row='perc_true_null')
