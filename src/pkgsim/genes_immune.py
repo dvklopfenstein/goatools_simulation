@@ -1,4 +1,4 @@
-"""2220 genes rich in immune.
+"""2,220 genes in immune.
 
     GO-DAG version:   go-basic.obo: fmt(1.2) rel(2017-05-20) 48,661 GO Terms
 
@@ -12,9 +12,12 @@
         Funding: NHGRI of US National Institutes of Health
         software version: $Revision$
         date: 05/18/2017 $
+
 """
 
-genes = set([
+#pylint: disable=too-many-lines
+
+GENES = set([
     'ENSMUSG00000000120',
     'ENSMUSG00000000127',
     'ENSMUSG00000000134',

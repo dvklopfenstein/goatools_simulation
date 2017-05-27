@@ -48,7 +48,7 @@ import datetime
 from random import shuffle
 
 #from pkgsim.data_geneids_rich_immune import geneids as genes_immune
-from pkgsim.genes_rich_immune import genes as GENES
+from pkgsim.genes_immune import GENES
 from pkgsim.utils import shuffle_associations
 from pkgsim.randseed import RandomSeed32
 
@@ -88,7 +88,7 @@ def main(seed, prt=sys.stdout):
     obj = GoeaSimObj(alpha=0.05, method='fdr_bh')
     genes_mus = ensm2sym.keys()  # Population genes
     genes_immune = list(GENES)   # Study genes
-    assoc_ens2gos = GoatoolsDataMaker.get_assoc("gene_association.mgi", genes_mus)
+    assoc_ens2gos = GoatoolsDataMaker.get_assoc_data("gene_association.mgi", genes_mus)
     # 2. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
     results_sig = run_assc(run_actual_assc, obj, assoc_ens2gos, genes_mus, genes_immune)
     # 3. SIMULATE NO SIGNIFICANCE:
