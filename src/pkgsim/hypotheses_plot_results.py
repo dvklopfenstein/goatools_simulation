@@ -34,7 +34,7 @@ def plot_results_all(objsim, params):
         }
         wrpng_boxplot_sigs_each(numpvals_sims, alpha, **pltargs)
 
-def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
+def wrpng_boxplot_sigs_each2(dfrm, alpha, **kws):
     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
     # dfrm = pd.DataFrame(get_percsig_dicts(numpvals_sims))
     plt.clf()
@@ -66,6 +66,43 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
         plt.ylim(kws['ylim_a'], kws['ylim_b'])
     plt.tight_layout()
     plt.savefig(fout_img, dpi=kws.get('dpi', 200))
+    sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
+    show = kws.get('show', False)
+    if show:
+        plt.show()
+
+def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
+    """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
+    # https://stackoverflow.com/questions/23969619/plotting-with-seaborn-using-the-matplotlib-object-oriented-interface
+    plt.clf()
+    sns.despine(offset=10, trim=True)
+    sns.set(style="ticks")
+    fig, ax_boxplot = plt.subplots()
+    sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=kws.get('dotsize', 5), ax=ax_boxplot)
+    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn", ax=ax_boxplot)
+    ax_boxplot.legend_.remove()
+    for i, line in enumerate(ax_boxplot.lines):
+        is_median = i%6 == 4
+        line.set_color('red' if is_median else 'black')
+        if is_median:
+            line.set_linestyle('--')
+    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b.-')
+    # # Set the tick labels font
+    # # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
+    # axis = plt.subplot() # Defines variable by creating an empty plot
+    # for label in axis.get_xticklabels() + axis.get_yticklabels():
+    #     #label.set_fontname('Arial')
+    #     label.set_fontsize(15)
+    # # Plot text
+    fout_img = kws.get("fout_img", "sim_hypotheses.png")
+    # #plt.title(kws.get('title', 'P-values'), size=25)
+    # #plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
+    # #plt.xlabel(kws.get('xlabel', '# P-values/multitest correction'), size=20)
+    # #plt.ylabel("Simulated FDR Ratios", size=20)
+    # #if 'ylim_a' in kws and 'ylim_b' in kws:
+    # #    plt.ylim(kws['ylim_a'], kws['ylim_b'])
+    # #plt.tight_layout()
+    fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     show = kws.get('show', False)
     if show:
