@@ -91,8 +91,6 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     # #plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
     # #plt.xlabel(kws.get('xlabel', '# P-values/multitest correction'), size=20)
     # #plt.ylabel("Simulated FDR Ratios", size=20)
-    # #if 'ylim_a' in kws and 'ylim_b' in kws:
-    # #    plt.ylim(kws['ylim_a'], kws['ylim_b'])
     # #plt.tight_layout()
     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
@@ -112,6 +110,8 @@ def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
         if is_median:
             line.set_linestyle('--')
     ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b.-')
+    if 'ylim_a' in kws and 'ylim_b' in kws:
+        ax_boxplot.set_ylim(kws['ylim_a'], kws['ylim_b'])
     return ax_boxplot
 
 def get_percsig_dicts(numpvals_sims):
