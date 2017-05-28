@@ -78,15 +78,7 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     sns.despine(offset=10, trim=True)
     sns.set(style="ticks")
     fig, ax_boxplot = plt.subplots()
-    sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=kws.get('dotsize', 5), ax=ax_boxplot)
-    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn", ax=ax_boxplot)
-    ax_boxplot.legend_.remove()
-    for i, line in enumerate(ax_boxplot.lines):
-        is_median = i%6 == 4
-        line.set_color('red' if is_median else 'black')
-        if is_median:
-            line.set_linestyle('--')
-    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b.-')
+    set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws)
     # # Set the tick labels font
     # # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
     # axis = plt.subplot() # Defines variable by creating an empty plot
@@ -107,6 +99,20 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     show = kws.get('show', False)
     if show:
         plt.show()
+
+def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
+    """Return axis for one boxplot of simulated FDRs."""
+    dotsz = kws.get('dotsize', 5)
+    sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=dotsz, ax=ax_boxplot)
+    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn", ax=ax_boxplot)
+    ax_boxplot.legend_.remove()
+    for i, line in enumerate(ax_boxplot.lines):
+        is_median = i%6 == 4
+        line.set_color('red' if is_median else 'black')
+        if is_median:
+            line.set_linestyle('--')
+    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b.-')
+    return ax_boxplot
 
 def get_percsig_dicts(numpvals_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
@@ -132,7 +138,7 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
     for (perc_sig, max_sigpval), expsets in key2exps.items():
         assert expsets
         kws['fout_img'] = fimg_pat.format(
-          PSIMATTR=attrname, SIGPERC=perc_sig, SIGMAX=int(100*max_sigpval))
+            PSIMATTR=attrname, SIGPERC=perc_sig, SIGMAX=int(100*max_sigpval))
         perc_true_null = 100-perc_sig
         title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
         kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
