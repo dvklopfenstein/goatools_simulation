@@ -30,6 +30,7 @@ def plot_results_all(objsim, params):
             'show':False,
             'title':title,
             'xlabel':"# of P-values per set; {N} sets".format(N=num_sims),
+            'ylabel':'Simulated FDR Ratios',
             'fout_img':fout_img,
         }
         wrpng_boxplot_sigs_each(numpvals_sims, alpha, **pltargs)
@@ -87,10 +88,7 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     #     label.set_fontsize(15)
     # # Plot text
     fout_img = kws.get("fout_img", "sim_hypotheses.png")
-    # #plt.title(kws.get('title', 'P-values'), size=25)
     # #plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
-    # #plt.xlabel(kws.get('xlabel', '# P-values/multitest correction'), size=20)
-    # #plt.ylabel("Simulated FDR Ratios", size=20)
     # #plt.tight_layout()
     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
@@ -112,6 +110,13 @@ def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
     ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b.-')
     if 'ylim_a' in kws and 'ylim_b' in kws:
         ax_boxplot.set_ylim(kws['ylim_a'], kws['ylim_b'])
+    if 'title' in kws:
+        ax_boxplot.set_title(kws['title'], size=25)
+    if 'xlabel' in kws:
+        ax_boxplot.set_xlabel(kws['xlabel'], size=20)
+    if 'ylabel' in kws:
+        #ax_boxplot.set_ylabel("Simulated FDR Ratios", size=20)
+        ax_boxplot.set_ylabel(kws['ylabel'], size=20)
     return ax_boxplot
 
 def get_percsig_dicts(numpvals_sims):
@@ -134,6 +139,7 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         'fout_img': None,
         'title': None,
         'xlabel': 'Number of Tested Hypotheses',
+        'ylabel': 'Simulated FDR Ratios',
         'ylim_a':0, 'ylim_b':0.10}
     for (perc_sig, max_sigpval), expsets in key2exps.items():
         assert expsets
@@ -147,17 +153,38 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
 
 def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    # Simple data to display in various forms
-    x = np.linspace(0, 2 * np.pi, 400)
-    y = np.sin(x ** 2)
+    kws = {
+        'fout_img': None,
+        'xlabel': 'Number of Tested Hypotheses',
+        'ylabel': 'Simulated FDR Ratios',
+        'ylim_a':0, 'ylim_b':0.10}
+    perc_sigs, max_sigpvals = _get_num_rows_cols(key2exps)
+    num_rows = len(perc_sigs)
+    num_cols = len(max_sigpvals)
     plt.close('all')
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
-    ax1.plot(x, y)
-    ax1.set_title('Sharing x per column, y per row')
-    ax2.scatter(x, y)
-    ax3.scatter(x, 2 * y ** 2 - 1, color='r')
-    ax4.plot(x, 2 * y ** 2 - 1, color='r')
+    fig, axes_2d = plt.subplots(num_rows, num_cols, sharex='col', sharey='row')
+    for row, perc_sig in enumerate(perc_sigs):
+        for col, max_sigpval in enumerate(max_sigpvals):
+            expsets = key2exps[(perc_sig, max_sigpval)]
+            dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
+            set_axis_boxplot(axes_2d[row][col], dfrm, expsets[0].alpha, **kws)
+    # Simple data to display in various forms
+    #x = np.linspace(0, 2 * np.pi, 400)
+    #y = np.sin(x ** 2)
+    #fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+    ## First row
+    #ax1.plot(x, y)
+    #ax1.set_title('Sharing x per column, y per row')
+    #ax2.scatter(x, y)
+    ## Second row
+    #ax3.scatter(x, 2 * y ** 2 - 1, color='r')
+    #ax4.plot(x, 2 * y ** 2 - 1, color='r')
     plt.show()
+
+def _get_num_rows_cols(key2exps):
+    """Given the list of experiment sets, return the number of rows and columns for plotting."""
+    perc_sigs, max_sigpval = zip(*key2exps.keys())
+    return sorted(set(perc_sigs)), sorted(set(max_sigpval))
 
 def plt_box_tiled_plain(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all plain boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
