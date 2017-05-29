@@ -98,16 +98,16 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
 
 def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
     """Fills axis ax_boxplot with one set of boxplots of simulated FDRs."""
+    lwd = kws.get('linewidth', 0.7)
     dotsz = kws.get('dotsize', 5)
     sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=dotsz, ax=ax_boxplot)
-    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, palette="PRGn", ax=ax_boxplot)
+    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, # palette="PRGn",
+                ax=ax_boxplot, linewidth=lwd, color='black', saturation=1)
     ax_boxplot.legend_.remove()
-    for i, line in enumerate(ax_boxplot.lines):
-        is_median = i%6 == 4
-        line.set_color('red' if is_median else 'black')
-        if is_median:
-            line.set_linestyle('--')
-    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'b--')
+    _set_color_whiskers(ax_boxplot, lwd, 'black', 'red')
+    _set_color_boxes(ax_boxplot, 'black')
+    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
+                    linewidth=lwd, solid_capstyle="butt")
     if 'ylim_a' in kws and 'ylim_b' in kws:
         ax_boxplot.set_ylim(kws['ylim_a'], kws['ylim_b'])
     if 'title' in kws:
@@ -115,6 +115,20 @@ def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
     ax_boxplot.set_xlabel(kws.get('xlabel', ""), size=20)
     ax_boxplot.set_ylabel(kws.get('ylabel', ""), size=20)
     return ax_boxplot
+
+def _set_color_whiskers(axes, lwd, col_end, col_mid):
+    """Set boxplot whisker line color and thinkness."""
+    for i, line in enumerate(axes.lines):
+        line.set_linewidth(lwd)
+        is_median = i%6 == 4
+        line.set_color(col_mid if is_median else col_end)
+        if is_median:
+            line.set_linestyle('--')
+
+def _set_color_boxes(axes, color):
+    """Set boxplot box line color."""
+    for artist in axes.artists:
+        artist.set_edgecolor(color)
 
 def get_percsig_dicts(numpvals_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
@@ -150,15 +164,19 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
 
 def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    fig_kws = {
+    kws = {
+        'dpi':400,
         'xlabel':'Number of Tested Hypotheses',
-        'ylabel':'Simulated {GRP} Ratios'.format(GRP=grpname)
+        'ylabel':'Simulated {GRP} Ratios'.format(GRP=grpname),
+        'txtsz_ticks':None,
+        'txtsz_tile' :None,
+        'txtsz_xy'   :None,
     }
-    ax_kws = {
-        'fout_img': None,
-        #'xlabel': 'Number of Tested Hypotheses',
-        #'ylabel': 'Simulated FDR Ratios',
-        'ylim_a':0, 'ylim_b':0.09}
+    #ax_kws = {
+    #    'fout_img': None,
+    #    #'xlabel': 'Number of Tested Hypotheses',
+    #    #'ylabel': 'Simulated FDR Ratios',
+    #    'ylim_a':0, 'ylim_b':0.09}
     num_rows, num_cols = _get_num_rows_cols(key2exps)
     plt.close('all')
     # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
@@ -166,23 +184,37 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     #axall = fig.add_subplot(1, 1, 1)
     axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
     # http://matplotlib.org/users/recipes.html
-    sorted_keys = sorted(key2exps.items(), key=lambda t: [t[0][0], t[0][1]])
-    for axes_tile, ((perc_sig, max_sigpval), expsets) in zip(axes_2d, sorted_keys):
-        dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
-        set_axis_boxplot(axes_tile, dfrm, expsets[0].alpha, **ax_kws)
-        axes_tile.set_xticklabels([e.params['hypoth_qty'] for e in expsets])
-        axes_tile.set_yticks([0.00, 0.01, 0.03, 0.05, 0.07, 0.09])
-        axes_tile.set_yticklabels(["", 0.01, 0.03, 0.05, 0.07, 0.09])
-    _tiled_xylabels_off(axes_2d, num_cols)
+    sorted_dat = sorted(key2exps.items(), key=lambda t: [t[0][0], t[0][1]])
+    bottom_row = num_cols*(num_rows-1)
+    for idx, (axes, ((perc_sig, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
+        plt.subplots_adjust(hspace=.1, wspace=.1, left=.2, bottom=.2)
+        dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, attrname, grpname))
+        set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=2)
+        axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
+        axes.set_yticks([0.00, 0.025, 0.05, 0.075])
+        axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
+        if idx >= bottom_row:
+            axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
+        if idx%num_cols == 0:
+            axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_sig), size=kws['txtsz_tile'])
+        axes.set_ylim(0.0, 0.09)
+        axes.tick_params('both', length=3, width=1)
+
+    _tiled_xyticklabels_off(axes_2d, num_cols)
     # https://stackoverflow.com/questions/3584805/in-matplotlib-what-does-the-argument-mean-in-fig-add-subplot111
     # https://matplotlib.org/examples/pylab_examples/shared_axis_demo.html
     # https://stackoverflow.com/questions/1358977/how-to-make-several-plots-on-a-single-page-using-matplotlib
     # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
     #axall.set_xticks([])
     #axall.set_yticks([])
-    #axall.set_xlabel(fig_kws['xlabel'], size=30)
-    #axall.set_ylabel(fig_kws['ylabel'], size=30)
-    plt.subplots_adjust(bottom=.25, left=.25)
+    #axall.set_xlabel(kws['xlabel'], size=30)
+    #axall.set_ylabel(kws['ylabel'], size=30)
+    #plt.subplots_adjust(bottom=.25, left=.25)
+    fig.text(0.5, 0.06, kws['xlabel'], size=kws['txtsz_xy'], ha='center', va='center')
+    fig.text(0.06, 0.5, kws['ylabel'], size=kws['txtsz_xy'], ha='center', va='center', rotation='vertical')
+    #plt.tight_layout()
+    plt.savefig(fout_img, dpi=kws.get('dpi', 200))
+    sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     plt.show()
 
 def _get_tiled_axes(fig, n_rows, n_cols):
@@ -191,7 +223,7 @@ def _get_tiled_axes(fig, n_rows, n_cols):
     rng = range(2, n_rows*n_cols+1)
     return [ax1] + [fig.add_subplot(n_rows, n_cols, i, sharex=ax1, sharey=ax1) for i in rng]
 
-def _tiled_xylabels_off(axes, num_cols):
+def _tiled_xyticklabels_off(axes, num_cols):
     """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
     for xaxis in axes[:-1*num_cols]:
         for label in xaxis.get_xticklabels():
