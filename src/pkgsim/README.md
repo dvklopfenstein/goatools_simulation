@@ -7,10 +7,10 @@
 ## Hypotheses Simulations w/Multipletest Correction
 
   * [**hypotheses_run_all.py**](hypotheses_run_all.py)    
-    Runs the complete set of all hypotheses experiments.
+    Runs all hypotheses experiments in the user-created set.
     * [**hypotheses_experiments.py**](hypotheses_experiments.py)    
-      This produces **many randomly generated FDR ratios**.    
-      This contains one set of experiments that all have common parameters, like:
+      This runs many experiments, producing **many randomly generated FDR ratios**.    
+      Experimental results plotted together in a single boxplot have common parameters, like:
         1) _Maximum significant value_ for a randomly generated test result having a non-true hypothesis,
         2) _Percent of True Null Hypotheses_ in a single simulation, and
         3) _The number of tested hypotheses_
