@@ -1,13 +1,13 @@
 # Simulation modules
 
-  * [**Simulations of P-Value w/Multipletest Correction**](#simulations-of-p-value-wmultipletest-correction)    
+  * [**Simulations of P-Value w/Multipletest Correction**](#hypotheses-simulations-wmultipletest-correction)
   * [**Utilities & Plotting**](#utilities--plotting)    
 
 
 ## Hypotheses Simulations w/Multipletest Correction
 
   * [**hypotheses_run_all.py**](hypotheses_run_all.py)    
-    Runs all hypotheses experiments in a user-specfied set.
+    Runs all hypotheses experiments in a user-specified set.
     * [**hypotheses_experiments.py**](hypotheses_experiments.py)    
       Runs numerous experiments, producing **a slew of simulated FDR ratios** on sets of randomly generated hypotheses.    
       Experimental results grouped together in a single boxplot tile have common parameters, like:
