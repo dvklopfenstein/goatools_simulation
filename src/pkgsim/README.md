@@ -1,14 +1,15 @@
 # Simulation modules
 
   * [**Simulations of P-Value w/Multipletest Correction**](#simulations-of-p-value-wmultipletest-correction)    
-  * [**Utilities & Plotting**](#utilities_plotting)    
+  * [**Utilities & Plotting**](#utilities--plotting)    
 
 
-## Simulations of P-Value w/Multipletest Correction
+## Hypotheses Simulations w/Multipletest Correction
 
   * [**hypotheses_run_all.py**](hypotheses_run_all.py)    
-    Runs all sets of hypotheses experiments.
+    Runs the complete set of all hypotheses experiments.
     * [**hypotheses_experiments.py**](hypotheses_experiments.py)    
+      This produces **many randomly generated FDR ratios**.    
       This contains one set of experiments that all have common parameters, like:
         1) _Maximum significant value_ for a randomly generated test result having a non-true hypothesis,
         2) _Percent of True Null Hypotheses_ in a single simulation, and
