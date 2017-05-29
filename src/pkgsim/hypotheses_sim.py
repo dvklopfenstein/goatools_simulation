@@ -140,7 +140,7 @@ class HypothesesSim(object):
 
 
 class _Init(object):
-    """Init HypothesesSim object: Create rnd pvals, run multipletest correction."""
+    """Init HypothesesSim object: Create random hypotheses test results(pvals), run multipletest correction."""
 
     # Multiple test correction results:
     #   1. statsmodels multiple test results for each P-value
