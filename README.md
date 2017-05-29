@@ -1,8 +1,10 @@
 # Simulations to Verify GOEA Results
 Simulations in this repository are used to investigate the results of
-**Gene Ontology Enrichment Analyses** (**GOEAs**). For all simulations in this repository:    
-  * The **alpha level** is set to **0.05**
-  * The **multiple-test correction** used is [**Benjamini/Hochberg False Discovery Rate**](http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
+**Gene Ontology Enrichment Analyses** (**GOEAs**).
+
+All simulations use [**Benjamini/Hochberg multiple test correction**](
+http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
+with **alpha=0.05**.
 
 **There are two levels of simulations**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](
