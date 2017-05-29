@@ -166,11 +166,13 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     kws = {
         'dpi':400,
+        'title':'Hypotheses Simulations',
         'xlabel':'Number of Tested Hypotheses',
         'ylabel':'Simulated {GRP} Ratios'.format(GRP=grpname),
-        'txtsz_ticks':None,
+        'txtsz_title':20,
+        'txtsz_xy'   :15,
         'txtsz_tile' :None,
-        'txtsz_xy'   :None,
+        'txtsz_ticks':None,
     }
     #ax_kws = {
     #    'fout_img': None,
@@ -187,7 +189,7 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     sorted_dat = sorted(key2exps.items(), key=lambda t: [t[0][0], t[0][1]])
     bottom_row = num_cols*(num_rows-1)
     for idx, (axes, ((perc_sig, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
-        plt.subplots_adjust(hspace=.1, wspace=.1, left=.2, bottom=.2)
+        plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
         dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, attrname, grpname))
         set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=2)
         axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
@@ -198,7 +200,7 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
         if idx%num_cols == 0:
             axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_sig), size=kws['txtsz_tile'])
         axes.set_ylim(0.0, 0.09)
-        axes.tick_params('both', length=3, width=1)
+        axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
 
     _tiled_xyticklabels_off(axes_2d, num_cols)
     # https://stackoverflow.com/questions/3584805/in-matplotlib-what-does-the-argument-mean-in-fig-add-subplot111
@@ -210,6 +212,7 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     #axall.set_xlabel(kws['xlabel'], size=30)
     #axall.set_ylabel(kws['ylabel'], size=30)
     #plt.subplots_adjust(bottom=.25, left=.25)
+    fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
     fig.text(0.5, 0.06, kws['xlabel'], size=kws['txtsz_xy'], ha='center', va='center')
     fig.text(0.06, 0.5, kws['ylabel'], size=kws['txtsz_xy'], ha='center', va='center', rotation='vertical')
     #plt.tight_layout()
