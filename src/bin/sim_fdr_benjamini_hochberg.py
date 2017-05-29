@@ -15,7 +15,7 @@ def main(randomseed, prt=sys.stdout):
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
         'max_sigpvals' : [0.01, 0.03, 0.05],
         #perc_sigs' : [75, 50, 25, 0], # [25, 50, 75, 100]
-        'perc_sigs' : [0, 25, 50, 75], # [25, 50, 75, 100]
+        'perc_sigs' : [0, 25, 50, 75, ], # [25, 50, 75, 100]
         'num_hypoths_list' : [4, 16, 128],
         'num_experiments' : 20,
         'num_pvalsims' : 100}
