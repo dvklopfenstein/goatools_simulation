@@ -1,6 +1,6 @@
 """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
 
-__copyright__ = "Copyright (C) 2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -150,30 +150,39 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
 
 def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    kws = {
+    fig_kws = {
+        'xlabel':'Number of Tested Hypotheses',
+        'ylabel':'Simulated {GRP} Ratios'.format(GRP=grpname)
+    }
+    ax_kws = {
         'fout_img': None,
         #'xlabel': 'Number of Tested Hypotheses',
         #'ylabel': 'Simulated FDR Ratios',
         'ylim_a':0, 'ylim_b':0.09}
-    perc_sigs, max_sigpvals = _get_num_rows_cols(key2exps)
-    num_rows = len(perc_sigs)
-    num_cols = len(max_sigpvals)
+    num_rows, num_cols = _get_num_rows_cols(key2exps)
     plt.close('all')
     # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
     fig = plt.figure()
-    axall = fig.add_subplot(1, 1, 1)
+    #axall = fig.add_subplot(1, 1, 1)
     axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
+    # http://matplotlib.org/users/recipes.html
     sorted_keys = sorted(key2exps.items(), key=lambda t: [t[0][0], t[0][1]])
     for axes_tile, ((perc_sig, max_sigpval), expsets) in zip(axes_2d, sorted_keys):
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
-        set_axis_boxplot(axes_tile, dfrm, expsets[0].alpha, **kws)
+        set_axis_boxplot(axes_tile, dfrm, expsets[0].alpha, **ax_kws)
+        axes_tile.set_xticklabels([e.params['hypoth_qty'] for e in expsets])
+        axes_tile.set_yticks([0.00, 0.01, 0.03, 0.05, 0.07, 0.09])
+        axes_tile.set_yticklabels(["", 0.01, 0.03, 0.05, 0.07, 0.09])
     _tiled_xylabels_off(axes_2d, num_cols)
     # https://stackoverflow.com/questions/3584805/in-matplotlib-what-does-the-argument-mean-in-fig-add-subplot111
     # https://matplotlib.org/examples/pylab_examples/shared_axis_demo.html
     # https://stackoverflow.com/questions/1358977/how-to-make-several-plots-on-a-single-page-using-matplotlib
     # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
-    axall.set_xlabel('Number of Tested Hypotheses', size=30)
-    axall.set_ylabel('Simulated {GRP} Ratios'.format(GRP=grpname), size=30)
+    #axall.set_xticks([])
+    #axall.set_yticks([])
+    #axall.set_xlabel(fig_kws['xlabel'], size=30)
+    #axall.set_ylabel(fig_kws['ylabel'], size=30)
+    plt.subplots_adjust(bottom=.25, left=.25)
     plt.show()
 
 def _get_tiled_axes(fig, n_rows, n_cols):
@@ -185,15 +194,17 @@ def _get_tiled_axes(fig, n_rows, n_cols):
 def _tiled_xylabels_off(axes, num_cols):
     """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
     for xaxis in axes[:-1*num_cols]:
-        xaxis.set_xticklabels([])
+        for label in xaxis.get_xticklabels():
+            label.set_visible(False)
     for idx, yaxis in enumerate(axes):
         if idx%num_cols != 0:
-            yaxis.set_yticklabels([])
+            for label in yaxis.get_yticklabels():
+                label.set_visible(False)
 
 def _get_num_rows_cols(key2exps):
-    """Given the list of experiment sets, return the number of rows and columns for plotting."""
+    """Return the number of rows and columns for a matrix of tiled boxplots."""
     perc_sigs, max_sigpval = zip(*key2exps.keys())
-    return sorted(set(perc_sigs)), sorted(set(max_sigpval))
+    return len(set(perc_sigs)), len(set(max_sigpval))
 
 def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
     """Get plotting data suitable for a single plot of boxplots."""
@@ -205,4 +216,4 @@ def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
         tbl.extend(dcts)
     return tbl
 
-# Copyright (C) 2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.

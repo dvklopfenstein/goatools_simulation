@@ -16,7 +16,7 @@ def main(randomseed, prt=sys.stdout):
         'max_sigpvals' : [0.01, 0.03, 0.05],
         #perc_sigs' : [75, 50, 25, 0], # [25, 50, 75, 100]
         'perc_sigs' : [0, 25, 50, 75], # [25, 50, 75, 100]
-        'num_hypoths_list' : [20, 100, 500],
+        'num_hypoths_list' : [4, 16, 64],
         'num_experiments' : 20,
         'num_pvalsims' : 100}
     obj = ExperimentsAll(exp_params)
