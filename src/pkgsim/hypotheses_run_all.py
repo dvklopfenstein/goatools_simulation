@@ -9,7 +9,7 @@ import timeit
 import numpy as np
 from pkgsim.randseed import RandomSeed32
 from pkgsim.hypotheses_experiments import ExperimentSet
-from pkgsim.hypotheses_plot_results import plt_box_all, plt_box_tiled
+from pkgsim.hypotheses_plot_results import plt_box_all, plt_box_tiled, plt_box_tiled1
 from pkgsim.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 

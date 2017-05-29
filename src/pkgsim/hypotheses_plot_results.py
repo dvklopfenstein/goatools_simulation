@@ -151,7 +151,8 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
         wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
-def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
+# TBD: rm
+def plt_box_tiled1(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     kws = {
         'fout_img': None,
@@ -168,17 +169,41 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
             expsets = key2exps[(perc_sig, max_sigpval)]
             dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
             set_axis_boxplot(axes_2d[row][col], dfrm, expsets[0].alpha, **kws)
-    # Simple data to display in various forms
-    #x = np.linspace(0, 2 * np.pi, 400)
-    #y = np.sin(x ** 2)
-    #fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
-    ## First row
-    #ax1.plot(x, y)
-    #ax1.set_title('Sharing x per column, y per row')
-    #ax2.scatter(x, y)
-    ## Second row
-    #ax3.scatter(x, 2 * y ** 2 - 1, color='r')
-    #ax4.plot(x, 2 * y ** 2 - 1, color='r')
+    plt.show()
+
+def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
+    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    kws = {
+        'fout_img': None,
+        #'xlabel': 'Number of Tested Hypotheses',
+        #'ylabel': 'Simulated FDR Ratios',
+        'ylim_a':0, 'ylim_b':0.09}
+    perc_sigs, max_sigpvals = _get_num_rows_cols(key2exps)
+    num_plts = len(key2exps)
+    rows = len(perc_sigs)
+    cols = len(max_sigpvals)
+    plt.close('all')
+    # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
+    fig = plt.figure()
+    axall = fig.add_subplot(1, 1, 1)
+    ax1 = fig.add_subplot(rows, cols, 1)
+    #fig, axes_2d = plt.add_subplots(num_rows, num_cols, sharex='col', sharey='row')
+    axes_2d = [ax1] + [fig.add_subplot(rows, cols, i, sharex=ax1, sharey=ax1) for i in range(2, num_plts+1)]
+    #axes_2d = fig.add_subplot(rows, cols, 1, sharex='col', sharey='row')
+    idx = 0
+    for row, perc_sig in enumerate(perc_sigs):
+        for col, max_sigpval in enumerate(max_sigpvals):
+            expsets = key2exps[(perc_sig, max_sigpval)]
+            dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
+            #set_axis_boxplot(axes_2d[row][col], dfrm, expsets[0].alpha, **kws)
+            set_axis_boxplot(axes_2d[idx], dfrm, expsets[0].alpha, **kws)
+            idx += 1
+    # https://stackoverflow.com/questions/3584805/in-matplotlib-what-does-the-argument-mean-in-fig-add-subplot111
+    # https://matplotlib.org/examples/pylab_examples/shared_axis_demo.html
+    # https://stackoverflow.com/questions/1358977/how-to-make-several-plots-on-a-single-page-using-matplotlib
+    # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
+    axall.set_xlabel('Number of Tested Hypotheses')
+    axall.set_ylabel('Simulated {GRP} Ratios'.format(GRP=grpname))
     plt.show()
 
 def _get_num_rows_cols(key2exps):
@@ -186,6 +211,7 @@ def _get_num_rows_cols(key2exps):
     perc_sigs, max_sigpval = zip(*key2exps.keys())
     return sorted(set(perc_sigs)), sorted(set(max_sigpval))
 
+# TBD: rm
 def plt_box_tiled_plain(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     """Plot all plain boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     dpi = 200
@@ -199,6 +225,7 @@ def plt_box_tiled_plain(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'
     plt.savefig(fout_img, dpi=dpi)
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
 
+# TBD: rm
 def _get_dftbl_boxplots(key2exps, attrname='fdr_actual', grpname='FDR'):
     """Get data for dataframe for multiple boxplot tiles."""
     tbl_full = []
