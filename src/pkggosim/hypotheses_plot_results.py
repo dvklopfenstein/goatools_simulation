@@ -181,6 +181,7 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     #    'ylim_a':0, 'ylim_b':0.09}
     num_rows, num_cols = _get_num_rows_cols(key2exps)
     plt.close('all')
+    sns.set(style="ticks")
     # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
     fig = plt.figure()
     #axall = fig.add_subplot(1, 1, 1)
