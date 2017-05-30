@@ -2,6 +2,7 @@
 
 vim_sim_fdr_benjamini_hochberg:
 	vim -p \
+	src/bin/plt_fdr_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \
 	src/pkgsim/hypotheses_sim.py \
 	src/pkgsim/hypotheses_sims.py \
