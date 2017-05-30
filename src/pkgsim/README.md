@@ -21,8 +21,8 @@
         This is one simulation for testing one set of hypotheses.    
         A multiple-test correction is run on the set of newly generated hypotheses results (P-Values).    
         Multiple hypotheses results (P-Values) are randomly generated to be either:    
-          * True Null: There is no difference between the study group and population group    
-          * Non-true Null: There is a difference between the study group and population group    
+          * **True Null**: There is no difference between the study group and population group    
+          * **Non-true Null**: There is a difference between the study group and population group    
 
 ## Utilities & Plotting
   * [**randseed.py**](randseed.py)    
