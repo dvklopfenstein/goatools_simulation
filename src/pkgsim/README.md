@@ -1,6 +1,6 @@
 # Simulation modules
 
-  * [**Simulations of P-Value w/Multipletest Correction**](#hypotheses-simulations-wmultipletest-correction)
+  * [**Simulations of Hypotheses w/Multipletest Correction**](#hypotheses-simulations-wmultipletest-correction)
   * [**Utilities & Plotting**](#utilities--plotting)    
 
 
