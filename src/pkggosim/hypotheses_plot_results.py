@@ -15,17 +15,17 @@ def plot_results_all(objsim, params):
     num_sims = objsim.num_sims
     alpha = objsim.multi_params['alpha']
     # repo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../.."),
-    for perc_sig, numpvals_sims in objsim.percsig_simsets:
-        # params: perc_sig num_pvalues num_sims params
+    for perc_null, numpvals_sims in objsim.percsig_simsets:
+        # params: perc_null num_pvalues num_sims params
         #### pars = params.params  # repo dir_img alpha method
-        base_img = params['base_img'].format(SIG=perc_sig, SIMS=num_sims)
+        base_img = params['base_img'].format(PERCNULL=perc_null, SIMS=num_sims)
         fout_img = os.path.join(params['dir_img'], base_img)
         #print fout_img
         # Plot results in boxplots
-        perc_sig = "None" if perc_sig == 0 else "{N}{P}".format(N=perc_sig, P='%')
+        perc_null = None if perc_null == 0 else "{N}{P}".format(N=perc_null, P='%')
         title = params['title_None']
-        if perc_sig is not None:
-            title = params['title'].format(PERC_SIG=perc_sig, ALPHA=alpha)
+        if perc_null is not None:
+            title = params['title'].format(PERCNULL=perc_null, ALPHA=alpha)
         pltargs = {
             'show':False,
             'title':title,
@@ -130,16 +130,16 @@ def _set_color_boxes(axes, color):
     for artist in axes.artists:
         artist.set_edgecolor(color)
 
-def get_percsig_dicts(numpvals_sims):
+def get_percsig_dicts(numtests_sims):
     """Get pvalue dictionary suitable for a pandas dataframe."""
     tbl = []
-    for num_pvals, objsims in numpvals_sims: # objsims is an ManyHypothesesSims obj
+    for num_tests, objsims in numtests_sims: # objsims is an ManyHypothesesSims obj
         # objsims: pkggosim.pval_mtcorr_sims.ManyHypothesesSims
         for obj1sim in objsims.pvalsimobjs:
-            perc_sig_orig = obj1sim.get_perc_sig("pvals")
-            perc_sig_corr = obj1sim.get_perc_sig("pvals_corr")
-            tbl.append({'xval':num_pvals, 'group':'Uncorrected', 'yval':perc_sig_orig})
-            tbl.append({'xval':num_pvals, 'group':'Corrected', 'yval':perc_sig_corr})
+            perc_null_orig = obj1sim.get_perc_null("pvals")
+            perc_null_corr = obj1sim.get_perc_null("pvals_corr")
+            tbl.append({'xval':num_tests, 'group':'Uncorrected', 'yval':perc_null_orig})
+            tbl.append({'xval':num_tests, 'group':'Corrected', 'yval':perc_null_corr})
     return tbl
 
 def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
@@ -152,11 +152,11 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         'xlabel': 'Number of Tested Hypotheses',
         'ylabel': 'Simulated FDR Ratios',
         'ylim_a':0, 'ylim_b':0.10}
-    for (perc_sig, max_sigpval), expsets in key2exps.items():
+    for (perc_null, max_sigpval), expsets in key2exps.items():
         assert expsets
         kws['fout_img'] = fimg_pat.format(
-            PSIMATTR=attrname, SIGPERC=perc_sig, SIGMAX=int(100*max_sigpval))
-        perc_true_null = 100-perc_sig
+            PSIMATTR=attrname, PERCNULL=perc_null, SIGMAX=int(100*max_sigpval))
+        perc_true_null = 100-perc_null
         title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
         kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
@@ -186,9 +186,9 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     #axall = fig.add_subplot(1, 1, 1)
     axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
     # http://matplotlib.org/users/recipes.html
-    sorted_dat = sorted(key2exps.items(), key=lambda t: [t[0][0], t[0][1]])
+    sorted_dat = sorted(key2exps.items(), key=lambda t: [-1*t[0][0], t[0][1]]) # perc_null, max_sig
     bottom_row = num_cols*(num_rows-1)
-    for idx, (axes, ((perc_sig, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
+    for idx, (axes, ((perc_null, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
         plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
         dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, attrname, grpname))
         set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=2)
@@ -198,7 +198,7 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
         if idx >= bottom_row:
             axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
         if idx%num_cols == 0:
-            axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_sig), size=kws['txtsz_tile'])
+            axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
         axes.set_ylim(0.0, 0.09)
         axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
 
@@ -218,7 +218,8 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     #plt.tight_layout()
     plt.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
-    plt.show()
+    if kws.get('show', False):
+        plt.show()
 
 def _get_tiled_axes(fig, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
@@ -238,13 +239,13 @@ def _tiled_xyticklabels_off(axes, num_cols):
 
 def _get_num_rows_cols(key2exps):
     """Return the number of rows and columns for a matrix of tiled boxplots."""
-    perc_sigs, max_sigpval = zip(*key2exps.keys())
-    return len(set(perc_sigs)), len(set(max_sigpval))
+    perc_nulls, max_sigpval = zip(*key2exps.keys())
+    return len(set(perc_nulls)), len(set(max_sigpval))
 
 def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
     """Get plotting data suitable for a single plot of boxplots."""
     tbl = []
-    for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_sig
+    for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_null
         tot_h = exps.params['hypoth_qty'] # Number of hypotheses
         # Make one dictionary line for each value of fdr_actual
         dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]

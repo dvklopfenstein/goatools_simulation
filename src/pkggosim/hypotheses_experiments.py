@@ -11,7 +11,7 @@ from pkggosim.utils import get_hms
 class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
-    expected_params = set(['multi_params', 'perc_sig', 'hypoth_qty', 'num_experiments',
+    expected_params = set(['multi_params', 'perc_null', 'hypoth_qty', 'num_experiments',
                            'num_pvalsims', 'max_sigpval'])
 
     def __init__(self, params, tic):
@@ -19,7 +19,7 @@ class ExperimentSet(object):
         self.alpha = params['multi_params']['alpha']
         assert set(params.keys()) == self.expected_params
         self.max_sigpval = params['max_sigpval']
-        self.num_sig = int(round(float(params['perc_sig'])*params['hypoth_qty']/100.0))
+        self.num_null = int(round(float(params['perc_null'])*params['hypoth_qty']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
     def get_fdr_actuals(self):
@@ -30,14 +30,14 @@ class ExperimentSet(object):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
 
-    def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval {SIGPERC:>3.0f}% "
-                           "sig({SIGTOT:3} of {PVALQTY:4} P-Values)"):
+    def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval " 
+                           "{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {PVALQTY:4} P-Values)"):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
             SIGMAX=self.params['max_sigpval'],
-            SIGPERC=self.params['perc_sig'],
-            EXP_ALPHA=float(100-self.params['perc_sig'])/100.0*self.alpha,
-            SIGTOT=self.num_sig,
+            PERCNULL=self.params['perc_null'],
+            EXP_ALPHA=float(self.params['perc_null'])/100.0*self.alpha,
+            TOTNULL=self.num_null,
             PVALQTY=self.params['hypoth_qty'])
 
     def get_strhdr(self):
@@ -58,10 +58,10 @@ class ExperimentSet(object):
         expset = []
         sys.stdout.write("{EXPSET_DESC} HMS={HMS}\n".format(
             EXPSET_DESC=self.get_strhdr(), HMS=get_hms(tic)))
-        shared_param_keys = ['num_pvalsims', 'hypoth_qty', 'perc_sig', 'multi_params']
+        shared_param_keys = ['num_pvalsims', 'hypoth_qty', 'perc_null', 'multi_params']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
-            experiment_params['num_sig'] = self.num_sig
+            experiment_params['num_null'] = self.num_null
             experiment_params['max_sigpval'] = self.max_sigpval
             # One ManyHypothesesSims is one experiment which can return one simulated FDR value
             expset.append(ManyHypothesesSims(experiment_params))

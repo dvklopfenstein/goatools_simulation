@@ -29,11 +29,11 @@ class RandomSeed32(object):
 
   def prt(self, prt=sys.stdout):
     """Print object's random seed."""
-    self.prt_seed(self.seed)
+    self.prt_seed(self.seed, prt)
 
   def prt_seed(self, seed, prt=sys.stdout):
     """Print given random seed."""
-    sys.stdout.write("  RANDOM SEED = {SEED}\n".format(SEED=self.get_seed_str(seed)))
+    prt.write("  RANDOM SEED = {SEED}\n".format(SEED=self.get_seed_str(seed)))
  
   @staticmethod
   def get_seed_str(seed, prt=sys.stdout):

@@ -28,9 +28,9 @@ class HypothesesSim(object):
         "num_correct num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
-    def __init__(self, hypoth_qty, num_sig, multi_params, max_sigval):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):
         self.alpha = multi_params['alpha']
-        iniobj = _Init(hypoth_qty, num_sig, multi_params, max_sigval)
+        iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval)
         # List of info for each pval: pval pval_corr reject expsig tfpn
         self.nts_pvalmt = iniobj.get_nts_pvals()
         self.pvals = np.array(iniobj.pvals)
@@ -152,6 +152,7 @@ class _Init(object):
     def get_result_desc(reject, expsig):
         """Return description of the result of one simulation."""
         # pylint: disable=multiple-statements
+        # TABLE 1) 1995; Yoav Benjamini and Yosef Hochberg:
         #                          |Declared       | Declared      |
         #                          |non-significant| significant   | Total
         # -------------------------+---------------+---------------+--------
@@ -178,36 +179,36 @@ class _Init(object):
                 pval      = pval_orig,
                 pval_corr = pval_corr,
                 reject    = reject,
-                expsig    = expsig,
-                tfpn      = self.get_result_desc(reject, expsig)))
+                expsig    = expsig, # False->True Null; True->Non-true null
+                tfpn      = self.get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
-    def __init__(self, hypoth_qty, num_sig, multi_params, max_sigval):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):
         self.multi_params = multi_params
         # I. UNCORRECTED P-VALUES:
-        self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 alpha/#pvals
+        self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05, 0.03, or 0.01
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
-        self.expsig = None # One bool per P-value. True -> P-value is intended to be significant
-        self._init_pvals(hypoth_qty, num_sig)
+        self.expsig = None # List of bool/P-value. True -> P-value is intended to be significant (Non-true null)
+        self._init_pvals(hypoth_qty, num_null)
         assert len(self.pvals) == hypoth_qty
-        assert sum(self.expsig) == num_sig
+        assert hypoth_qty - sum(self.expsig) == num_null
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
         # Run a multipletest correction on this set of pvals
         self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
-        self._chk_reject()
+        #self._chk_reject()
 
-    def _init_pvals(self, hypoth_qty, num_sig):
+    def _init_pvals(self, hypoth_qty, num_null):
         """Generate 2 sets of P-values: Not intended significant & intended to be significant."""
-        num_rand = hypoth_qty - num_sig
+        num_ntnull = hypoth_qty - num_null # Calculate the number of "Non-true null hypotheses"
         # 1. Generate random P-values: Significant and Random
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance
-        pvals_sig = [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_sig)]
-        pvals_rnd = [(p, False) for p in np.random.uniform(0, 1, size=num_rand)]
+        pvals_expsig = \
+            [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)] + \
+            [(p, False) for p in np.random.uniform(0, 1, size=num_null)]
         # 2. Extract "P-values" and "intended significance" by transposing data
-        pvals_expsig = list(pvals_sig) + list(pvals_rnd)
         self.pvals, self.expsig = zip(*pvals_expsig)
 
     def _chk_reject(self):
