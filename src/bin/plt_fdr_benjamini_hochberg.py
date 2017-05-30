@@ -6,8 +6,8 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
-from pkgsim.hypotheses_run_all import ExperimentsAll
-from pkgsim.utils import get_fout_img
+from pkggosim.hypotheses_run_all import ExperimentsAll
+from pkggosim.utils import get_fout_img
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 

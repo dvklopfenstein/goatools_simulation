@@ -47,10 +47,10 @@ import sys
 import datetime
 from random import shuffle
 
-#from pkgsim.data_geneids_rich_immune import geneids as genes_immune
-from pkgsim.genes_immune import GENES
-from pkgsim.utils import shuffle_associations
-from pkgsim.randseed import RandomSeed32
+#from pkggosim.data_geneids_rich_immune import geneids as genes_immune
+from pkggosim.genes_immune import GENES
+from pkggosim.utils import shuffle_associations
+from pkggosim.randseed import RandomSeed32
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 from goatools_suppl.proj_data import GoatoolsDataMaker

@@ -4,13 +4,13 @@ vim_sim_fdr_benjamini_hochberg:
 	vim -p \
 	src/bin/plt_fdr_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \
-	src/pkgsim/hypotheses_sim.py \
-	src/pkgsim/hypotheses_sims.py \
-	src/pkgsim/hypotheses_experiments.py \
-	src/pkgsim/hypotheses_run_all.py \
-	src/pkgsim/hypotheses_plot_results.py \
-	src/pkgsim/randseed.py \
-	src/pkgsim/utils.py
+	src/pkggosim/hypotheses_sim.py \
+	src/pkggosim/hypotheses_sims.py \
+	src/pkggosim/hypotheses_experiments.py \
+	src/pkggosim/hypotheses_run_all.py \
+	src/pkggosim/hypotheses_plot_results.py \
+	src/pkggosim/randseed.py \
+	src/pkggosim/utils.py
 
 vim_md:
 	vim -p \
@@ -22,7 +22,7 @@ run:
 	echo run
 
 getdata:
-	../goatools_suppl/src/bin/get_goids_by_section.py ../goatools_simulation/src/pkgsim
+	../goatools_suppl/src/bin/get_goids_by_section.py ../goatools_simulation/src/pkggosim
 
 clean:
 	find src -name \*.pyc | xargs rm -f

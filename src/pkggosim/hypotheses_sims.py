@@ -5,7 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import numpy as np
-from pkgsim.hypotheses_sim import HypothesesSim
+from pkggosim.hypotheses_sim import HypothesesSim
 
 
 class ManyHypothesesSims(object):

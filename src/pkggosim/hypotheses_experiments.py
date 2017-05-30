@@ -4,8 +4,8 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
-from pkgsim.hypotheses_sims import ManyHypothesesSims
-from pkgsim.utils import get_hms
+from pkggosim.hypotheses_sims import ManyHypothesesSims
+from pkggosim.utils import get_hms
 
 
 class ExperimentSet(object):
