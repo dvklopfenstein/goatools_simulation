@@ -120,10 +120,8 @@ class HypothesesSim(object):
             frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
             # SENSITIVITY & SPECIFICITY are not affected by prevalence
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
-            # Measures the proportion of discoveries that are correctly declared significant
             sensitivity    = self._calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
-            # SPECIFICITY: "true negative rate", recall, "probability of detection"
-            # Measures the proportion of true null hypotheses that are correctly declared non-sig.
+            # SPECIFICITY: "true negative rate"
             specificity    = self._calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
             pos_pred_val   = self._calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
@@ -152,6 +150,7 @@ class _Init(object):
     def get_result_desc(reject, expsig):
         """Return description of the result of one simulation."""
         # pylint: disable=multiple-statements
+        #
         # TABLE 1) 1995; Yoav Benjamini and Yosef Hochberg:
         #                          |Declared       | Declared      |
         #                          |non-significant| significant   | Total
