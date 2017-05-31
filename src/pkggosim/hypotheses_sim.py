@@ -151,7 +151,11 @@ class _Init(object):
         """Return description of the result of one simulation."""
         # pylint: disable=multiple-statements
         #
-        # TABLE 1) 1995; Yoav Benjamini and Yosef Hochberg:
+        # TABLE 1) Number of errors committed when testing m null hypotheses
+        # 1995; Yoav Benjamini and Yosef Hochberg:
+        #
+        #                 reject ->| False         | True
+        #
         #                          |Declared       | Declared      |
         #                          |non-significant| significant   | Total
         # -------------------------+---------------+---------------+--------
