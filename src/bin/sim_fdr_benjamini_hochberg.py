@@ -14,7 +14,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(randomseed):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
-    fout_log = "sim_fdr_benjamini_hochberg.log"
+    log_pat = "sim_fdr_benjamini_hochberg_{EXP}.log"
     num_reps = 100
     exp_params = {
         'seed' : randomseed,
@@ -26,12 +26,13 @@ def main(randomseed):
         'num_pvalsims' : num_reps} # 100}   # Number of sims used to create one FDR ratio
     rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     img_pat = 'suppl_hypoth_fdr_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}.png'
+    fout_log = log_pat.format(EXP=exp_params['num_experiments'])
     with open(fout_log, 'w') as prt:
         tic = timeit.default_timer()
-        obj.seed.prt(prt)
         for num_hypoths_list in [[32, 128, 512], [4, 8, 16]]:
             exp_params['num_hypoths_list'] = num_hypoths_list
             obj = ExperimentsAll(exp_params)
+            obj.seed.prt(prt)
             obj.prt_params(prt)
             obj.prt_experiments_stats(prt, ['fdr_actual'])
             obj.prt_experiments_means(prt, rpt_items)
