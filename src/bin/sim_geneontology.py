@@ -47,7 +47,8 @@ import sys
 from random import shuffle
 
 #from pkggosim.data_geneids_rich_immune import geneids as genes_immune
-from pkggosim.genes_immune import GENES
+from pkggosim.genes_immune import GENES as GENES_IMMUNE
+from pkggosim.genes_viral_bacteria import GENES as GENES_VIRAL
 from pkggosim.randseed import RandomSeed32
 from pkggosim.goeasim_obj import GoeaSimObj
 
@@ -61,22 +62,27 @@ def main(seed, prt=sys.stdout):
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     obj = GoeaSimObj(alpha=0.05, method='fdr_bh')
     genes_mus = ensm2sym.keys()  # Population genes
-    genes_immune = list(GENES)   # Study genes
     assoc_ens2gos = GoatoolsDataMaker.get_assoc_data("gene_association.mgi", genes_mus)
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ..., 256, 512, 1024, 2048, 4096
-    # 2. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
-    results_sig = []
-    for study_len in study_lens:
-        shuffle(genes_immune)
-        results_sig.append(obj.run_actual_assc(assoc_ens2gos, genes_mus, genes_immune[:study_len]))
-    # 3. SIMULATE NO SIGNIFICANCE:
-    results_rnd = []
-    for study_len in study_lens:
-        shuffle(genes_immune)
-        results_rnd.append(obj.run_random_assc(assoc_ens2gos, genes_mus, genes_immune[:study_len]))
-    # 4. REPORT RESULTS:
-    obj.rpt_results(prt, results_sig, results_rnd)
+    results = []
+    for desc, study_genes in [('immune', list(GENES_IMMUNE)), ('viral/bacteria', list(GENES_VIRAL))]:
+        # 3. SIMULATE SIGNIFICANCE TO IMMUNE: Population is all mouse genes
+        results_sig = []
+        for study_len in study_lens:
+            shuffle(study_genes)
+            results_sig.append(obj.run_actual_assc(assoc_ens2gos, genes_mus, study_genes[:study_len]))
+        results.append(("{} actual".format(desc)), results_sig))
+        # 4. SIMULATE NO SIGNIFICANCE:
+        results_rnd = []
+        for study_len in study_lens:
+            shuffle(study_genes)
+            results_rnd.append(obj.run_random_assc(assoc_ens2gos, genes_mus, study_genes[:study_len]))
+        results.append(("{} random".format(desc), results_rnd))
+    # 5. REPORT RESULTS:
+    obj.prt_versions(prt)
+    for res in results:
+        obj.rpt_results(prt, results)
     seed.prt(prt)
 
 
