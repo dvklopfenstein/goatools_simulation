@@ -79,38 +79,43 @@ class GoeaSimObj(object):
         prt.write("    Multitest Params: {INFO}\n".format(INFO=self.get_str_mcorr()))
         prt.write("    GO-DAG version:   {INFO}\n".format(INFO=self.go_dag.version))
         prt.write("\n  SIMULATION RESULTS:\n")
-        txt = "      {N:5,} significant GO terms found for {M} immune genes in {DESC} association\n"
+        txt = "      {G:5,} significant GO terms found for {s:4}/{S:4} study genes in {DESC} association\n"
         for sig in results_sig:
-            prt.write(txt.format(N=len(sig['goea_results']), M=len(sig['genes']), DESC="actual"))
+            prt.write(txt.format(
+                G=len(sig['goea_results']), s=len(sig['genes_sig']),
+                S=len(sig['genes_study']), DESC="actual"))
         prt.write("\n")
         for rnd in results_rnd:
-            prt.write(txt.format(N=len(rnd['goea_results']), M=len(rnd['genes']), DESC="random"))
+            prt.write(txt.format(
+                G=len(rnd['goea_results']), s=len(rnd['genes_sig']),
+                S=len(rnd['genes_study']), DESC="random"))
 
-    def run_actual_assc(self, assoc_ens2gos, genes_mus, genes_immune):
+    def run_actual_assc(self, assoc_ens2gos, genes_pop, genes_study_arg):
         """Simulate the significance of the user-provided study vs. the population gene sets."""
-        genes_immune = set(genes_immune)
-        goeaobj = self.get_goeaobj(genes_mus, assoc_ens2gos)
-        goea_results = goeaobj.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
-        fout_txt = "goea_immune_sig_{N:04}.txt".format(N=len(genes_immune))
+        genes_study = set(genes_study_arg)
+        goeaobj = self.get_goeaobj(genes_pop, assoc_ens2gos)
+        goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < self.alpha)
+        fout_txt = "goea_immune_sig_{N:04}.txt".format(N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)
         genes_sig = get_study_items(goea_results)
-        if genes_immune != genes_sig:
+        if genes_study != genes_sig:
             msg = "EXPECTED ALL {S} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}\n"
             sys.stdout.write(msg.format(
-                S=len(genes_immune), M=len(genes_immune.difference(genes_sig))))
-        return {'goea_results':goea_results, 'genes':genes_sig}
+                S=len(genes_study), M=len(genes_study.difference(genes_sig))))
+        return {'goea_results':goea_results, 'genes_sig':genes_sig, 'genes_study':genes_study}
 
-    def run_random_assc(self, assoc_ens2gos, genes_mus, genes_immune):
+    def run_random_assc(self, assoc_ens2gos, genes_pop, genes_study_arg):
         """Simulate no significance"""
+        genes_study = set(genes_study_arg)
         rand_assoc = shuffle_associations(assoc_ens2gos)
-        goeaobj = self.get_goeaobj(genes_mus, rand_assoc)
-        goea_results = goeaobj.run_study(genes_immune, keep_if=lambda nt: nt.p_fdr_bh < 0.05)
-        fout_txt = "goea_immune_rnd_{N:04}.txt".format(N=len(genes_immune))
+        goeaobj = self.get_goeaobj(genes_pop, rand_assoc)
+        goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < self.alpha)
+        fout_txt = "goea_immune_rnd_{N:04}.txt".format(N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)
         genes_rnd = get_study_items(goea_results)
         assert len(goea_results) == 0, \
             "EXPECTED NO SIGNIFICANT GO TERMS IN RANDOM SIMULATION. FOUND {N}".format(
                 N=len(goea_results))
-        return {'goea_results':goea_results, 'genes':genes_rnd}
+        return {'goea_results':goea_results, 'genes_sig':genes_rnd, 'genes_study':genes_study}
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
