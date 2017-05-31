@@ -72,7 +72,7 @@ class GoeaSimObj(object):
         """Print parameters and versions of GO-DAG used in this simulation."""
         return "alpha({A}) method({M})".format(A=self.alpha, M=self.method)
 
-    def rpt_versions(self, prt, results_sig, results_rnd):
+    def prt_versions(self, prt):
         """Report results GOEAs on actual associations and randon associations."""
         prt.write("\nSIMULATION RESULTS ON {DATE}:\n".format(DATE=datetime.date.today()))
         prt.write("\n  SETTINGS AND GO-DAG VERSION:\n")
@@ -80,12 +80,13 @@ class GoeaSimObj(object):
         prt.write("    GO-DAG version:   {INFO}\n".format(INFO=self.go_dag.version))
         prt.write("\n  SIMULATION RESULTS:\n")
 
-    def rpt_results(self, prt, results_dct):
+    def prt_results(self, prt, results_dct):
         txt = "      {G:5,} significant GO terms found for {s:4}/{S:4} study genes in {DESC} association\n"
-        for dct in results_dct:
-            prt.write(txt.format(
-                G=len(dct['goea_results']), s=len(dct['genes_dct']),
-                S=len(dct['genes_study']), DESC="actual"))
+        prt.write(txt.format(
+            G=len(results_dct['goea_results']),
+            s=len(results_dct['genes_sig']),
+            S=len(results_dct['genes_study']),
+            DESC="actual"))
         prt.write("\n")
 
     def run_actual_assc(self, assoc_ens2gos, genes_pop, genes_study_arg):

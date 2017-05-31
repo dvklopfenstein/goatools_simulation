@@ -1,6 +1,11 @@
 # Gene Ontology Enrichment Analyses Simulations
 
-vim_sim_fdr_benjamini_hochberg:
+vim_sim_geneontology:
+	vim -p \
+	src/bin/sim_geneontology.py \
+	./src/pkggosim/goeasim_obj.py	
+
+vim_sim_benjamini_hochberg:
 	vim -p \
 	src/bin/plt_fdr_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \
