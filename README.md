@@ -23,4 +23,15 @@ Configurable Simulation paramaters include:
 
 ### [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
+### Prerequisites
+* numpy
+* statsmodels
+* datetime
+* seaborn
+* pandas
+
+* goatools
+* goatools_suppl
+
+
 Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
