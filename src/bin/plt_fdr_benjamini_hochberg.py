@@ -20,8 +20,8 @@ def main(randomseed, log_pat="plt_fdr_benjamini_hochberg_{EXP}.log"):
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
         'num_hypoths_list' : [4, 16, 128],
-        'num_experiments' : 100, # aka Number of simulated FDR ratios in an experiment set
-        'num_pvalsims' : 100}   # Number of sims used to create one FDR ratio
+        'num_experiments' : 500, # aka Number of simulated FDR ratios in an experiment set
+        'num_pvalsims' : 500}   # Number of sims used to create one FDR ratio
     rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     fout_log = log_pat.format(EXP=exp_params['num_experiments'])
     # Run Hypotheses Simulation
