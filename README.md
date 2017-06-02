@@ -25,18 +25,19 @@ the simulated FDR drops dramatically below alpha(0.05).
 
 ![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_100.png)
 The x-axis shows two simulation parameters.
-The first parameter is the number of tested hypotheses in each simulation, which is 4, 16, and 128.
-The second parameter is the maximum P-value of a randomly generated hypothesis test result.
-The y-axis shows the percentage of "True nulls".
-As the percentage of "True nulls" drops and the number of "Nontrue nulls" rises,
+The first parameter is the _number of tested hypotheses_ in each simulation, which is 4, 16, and 128.
+The second parameter, labeled on the figure as **Sig.<=**, is the _maximum P-value_,
+of randomly generated non-true null hypotheses test results.
+The y-axis shows the _percentage of "True nulls"_.
+As the percentage of "True nulls" drops and the number of "non-true nulls" rises,
 the simulated FDR drops dramatically.
 
 The maximum P-value for "non-true null hypotheses" is seen here with values 0.05, 0.03, & 0.01.
 This value has no affect on the simulated FDR values.
 But it has a large affect on the sensitivity of the test.
-If all "non-true null hypotheses" have a randomly generated P-value between 0 and 0.01,
+If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.01,
 all hypotheses will be discovered.
-If all "non-true null hypotheses" have a randomly generated P-value between 0 and 0.05,
+If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.05,
 only 10% of the hypotheses will be discovered.
 
 
