@@ -8,6 +8,7 @@ vim_sim_geneontology:
 	src/tests/test_goea_sims.py \
 	src/pkggosim/goea_sim.py \
 	src/pkggosim/goea_sims.py \
+	src/pkggosim/goea_experiments.py \
 	src/pkggosim/goea_utils.py \
 	src/pkggosim/goea_objrun_all.py \
 	src/pkggosim/goea_objbg.py \
