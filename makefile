@@ -5,8 +5,9 @@ pylint:
 
 vim_sim_geneontology:
 	vim -p \
-	src/bin/test_goea_sim.py \
+	src/tests/test_goea_sims.py \
 	src/pkggosim/goea_sim.py \
+	src/pkggosim/goea_sims.py \
 	src/pkggosim/goea_utils.py \
 	src/pkggosim/goea_objrun_all.py \
 	src/pkggosim/goea_objbg.py \
