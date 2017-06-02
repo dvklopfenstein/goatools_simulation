@@ -20,7 +20,7 @@ def main(randomseed, log_pat="plt_fdr_benjamini_hochberg_{EXP}.log"):
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
         'num_hypoths_list' : [4, 16, 128],
-        'num_experiments' : 20, # aka Number of simulated FDR ratios in an experiment set
+        'num_experiments' : 100, # aka Number of simulated FDR ratios in an experiment set
         'num_pvalsims' : 100}   # Number of sims used to create one FDR ratio
     rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     fout_log = log_pat.format(EXP=exp_params['num_experiments'])
@@ -34,7 +34,7 @@ def main(randomseed, log_pat="plt_fdr_benjamini_hochberg_{EXP}.log"):
         obj.prt_experiments_stats(prt, rpt_items)
         obj.prt_experiments_means(prt, rpt_items)
         fout_img = os.path.join(REPO, "doc/md/images", get_fout_img(exp_params, img_pat))
-        obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR')
+        obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR', dotsize=1)
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:

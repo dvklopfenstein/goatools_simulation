@@ -162,7 +162,7 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
         wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
-def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
+def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR', **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     kws = {
         'dpi':400,
@@ -189,10 +189,11 @@ def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR'):
     # http://matplotlib.org/users/recipes.html
     sorted_dat = sorted(key2exps.items(), key=lambda t: [-1*t[0][0], t[0][1]]) # perc_null, max_sig
     bottom_row = num_cols*(num_rows-1)
+    dotsize = args_kws.get('dotsize', 2)
     for idx, (axes, ((perc_null, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
         plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
         dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, attrname, grpname))
-        set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=2)
+        set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=dotsize)
         axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
         axes.set_yticks([0.00, 0.025, 0.05, 0.075])
         axes.set_yticklabels(["", "0.025", "0.050", "0.075"])

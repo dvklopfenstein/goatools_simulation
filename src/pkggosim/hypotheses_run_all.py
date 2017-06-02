@@ -77,10 +77,10 @@ class ExperimentsAll(object):
         key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
         plt_box_all(fimg_pat, key2exps, attrname, grpname)
 
-    def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR'):
+    def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR', **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
-        plt_box_tiled(fout_img, key2exps, attrname, grpname)
+        plt_box_tiled(fout_img, key2exps, attrname, grpname, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""

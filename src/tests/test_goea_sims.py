@@ -15,12 +15,6 @@ def main(prt=sys.stdout):
     alpha = 0.05
     method = 'fdr_bh'
 
-    study2genes = get_study2genes()
-
-    genes_mus = ensm2sym.keys()  # Population genes
-    assc_geneid2gos = get_assoc_data("gene_association.mgi", genes_mus)
-
-    objbg = RunGoeas(alpha, method, genes_mus, assc_geneid2gos)
 
     study_genes_lens = [4, 8, 16, 32, 64]
     num_study_genes = study_genes_lens[2]
@@ -38,6 +32,13 @@ def main(prt=sys.stdout):
     objsim.prt_summary(prt)
     for nt_tfpn in objsim.nts_tfpn:
         print nt_tfpn
+
+def get_objbg():
+    """Return object holding all params/data structures used in all sims (eg GO-DAG)."""
+    study2genes = get_study2genes()
+    genes_mus = ensm2sym.keys()  # Population genes
+    assc_geneid2gos = get_assoc_data("gene_association.mgi", genes_mus)
+    objbg = RunGoeas(alpha, method, genes_mus, assc_geneid2gos)
 
 if __name__ == '__main__':
     main()
