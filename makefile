@@ -5,14 +5,13 @@ vim_sim_geneontology:
 	src/bin/test_goea_sim.py \
 	src/pkggosim/goea_sim.py \
 	src/pkggosim/goea_utils.py \
-	src/pkggosim/goea_objrun.py \
+	src/pkggosim/goea_objrun_all.py \
 	src/pkggosim/goea_objbg.py
 
 vim_presim_geneontology:
 	vim -p \
 	src/bin/sim_geneontology.py \
-	./src/pkggosim/goeasim_obj.py	\
-	src/pkggosim/goea_objrun.py \
+	src/pkggosim/goea_objrun_prelim.py \
 	src/pkggosim/goea_objbg.py
 
 vim_sim_benjamini_hochberg:

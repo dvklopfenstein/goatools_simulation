@@ -13,9 +13,9 @@ class GoeaSim(object):
         "NtMtAll", "num_pvals num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
-    def __init__(self, hypoth_qty, num_null, multi_params):
-        self.alpha = multi_params['alpha']
-        iniobj = _Init(hypoth_qty, num_null, multi_params)
+    def __init__(self, num_study_genes, num_null, study_genes_bg, objbg):
+        #self.alpha = objbg['alpha']
+        iniobj = _Init(num_study_genes, num_null, study_genes_bg, objbg)
 #        # List of info for each pval: pval pval_corr reject expsig tfpn
 #        self.nts_pvalmt = iniobj.get_nts_pvals()
 #        self.pvals = np.array(iniobj.pvals)
@@ -159,21 +159,21 @@ class _Init(object):
 #                tfpn      = self.get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
 #        return pvalsim_results
 
-    def __init__(self, hypoth_qty, num_null, multi_params):
-        self.multi_params = multi_params
+    def __init__(self, num_study_genes, num_null, study_genes_bg, objbg):
+        self.objbg = objbg
         # I. UNCORRECTED P-VALUES:
         self.pvals = None  # List of randomly-generated uncorrected P-values
         self.expsig = None # List of bool/P-value. True -> P-value is intended to be significant (Non-true null)
-#        self._init_pvals(hypoth_qty, num_null)
-#        assert len(self.pvals) == hypoth_qty
-#        assert hypoth_qty - sum(self.expsig) == num_null
+#        self._init_pvals(num_study_genes, num_null)
+#        assert len(self.pvals) == num_study_genes
+#        assert num_study_genes - sum(self.expsig) == num_null
 #        # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
 #        # Run a multipletest correction on this set of pvals
-#        self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
+#        self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.objbg))
 
-#    def _init_pvals(self, hypoth_qty, num_null):
+#    def _init_pvals(self, num_study_genes, num_null):
 #        """Generate 2 sets of P-values: Not intended significant & intended to be significant."""
-#        num_ntnull = hypoth_qty - num_null # Calculate the number of "Non-true null hypotheses"
+#        num_ntnull = num_study_genes - num_null # Calculate the number of "Non-true null hypotheses"
 #        # 1. Generate random P-values: Significant and Random
 #        #   True  -> P-value is intended to be significant
 #        #   False -> If P-value is significant, it occured by chance
