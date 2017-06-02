@@ -15,7 +15,8 @@ with **alpha=0.05**.
 ## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
 Demonstrates that the mean False Discovery Rates (FDRs) resulting from simulations using randomly generated 
-hypotheses test results centers around the alpha-level set by the user (0.05).
+hypotheses test results centers around the alpha-level set by the user (0.05) when all hypotheses are true,
+but is smaller otherwise.
 
 In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
 (i.e. Null should be rejected; there is a difference between the study items and the population items),
