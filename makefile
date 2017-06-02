@@ -9,7 +9,8 @@ vim_sim_geneontology:
 	src/pkggosim/goea_sim.py \
 	src/pkggosim/goea_utils.py \
 	src/pkggosim/goea_objrun_all.py \
-	src/pkggosim/goea_objbg.py
+	src/pkggosim/goea_objbg.py \
+	src/pkggosim/utils.py
 
 vim_presim_geneontology:
 	vim -p \
