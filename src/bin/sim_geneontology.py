@@ -136,10 +136,9 @@ import sys
 
 from pkggosim.randseed import RandomSeed32
 from pkggosim.goea_objrun import RunGoeas
-from pkggosim.goea_utils import import_var
+from pkggosim.goea_utils import import_var, get_assoc_data
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
-from goatools_suppl.proj_data import GoatoolsDataMaker
 
 
 def main(seed, prt=sys.stdout):
@@ -150,7 +149,7 @@ def main(seed, prt=sys.stdout):
     objrun = RunGoeas(
         {'alpha':0.05, 'method':'fdr_bh'},
         genes_mus,  # Population genes
-        GoatoolsDataMaker.get_assoc_data("gene_association.mgi", genes_mus)) # Associations: ens2gos
+        get_assoc_data("gene_association.mgi", genes_mus)) # Associations: ens2gos
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ... 1024, 2048, 4096
     results_list = []
