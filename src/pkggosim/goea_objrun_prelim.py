@@ -8,13 +8,13 @@ import collections as cx
 from random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.goea_objbg import GoeaSimObj
-from pkggosim.utils import shuffle_associations
+from pkggosim.goea_utils import shuffle_associations
 
 
 class RunGoeas(object):
     """Holds GOEA information. Runs sets of GOEAs."""
 
-    objntdesc = cx.namedtuple("results", "name perc_null tot_study")
+    ntobj = cx.namedtuple("results", "name perc_null tot_study")
 
     def __init__(self, multiparams, pop_genes, assc):
         self.objbg = GoeaSimObj(multiparams['alpha'], multiparams['method'])
@@ -29,7 +29,7 @@ class RunGoeas(object):
         runfnc = self.run_random_assc if perc_null == 100 else self.run_actual_assc
         for study_len in sorted(study_lens):
             shuffle(study_genes)
-            ntdesc = self.objntdesc(name=study_desc, perc_null=perc_null, tot_study=len(study_genes))
+            ntdesc = self.ntobj(name=study_desc, perc_null=perc_null, tot_study=len(study_genes))
             results_list.append((
                 ntdesc,
                 runfnc(self.assc, self.pop_genes, study_genes[:study_len], ntdesc)))
