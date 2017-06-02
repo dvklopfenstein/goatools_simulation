@@ -18,7 +18,7 @@ import sys
 import collections as cx
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
-from pkggosim.utils import get_result_desc
+from pkggosim.utils import get_result_desc, calc_ratio
 
 class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""
@@ -61,17 +61,6 @@ class HypothesesSim(object):
         num_pvals_sig = sum(pvals < self.alpha)
         num_pvals_tot = len(pvals)
         return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
-
-    @staticmethod
-    def _calc_ratio(top, bot_ab):
-        """Calc ratios: FDR, sensitivity, specificity, positive/negative predictive value."""
-        bottom = sum(bot_ab)
-        if bottom == 0:
-            # BH: "Return Q=0 if V+S=0 because no error of false rejection can be commited."
-            # True for other ratios as well
-            assert top == 0
-            return 0.0
-        return float(top)/bottom
 
     def get_nt_tfpn(self):
         """Calculate % of corrected p-values with errors: Type I or Type II, Type I, or Type II.
@@ -117,16 +106,16 @@ class HypothesesSim(object):
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
-            fdr_actual     = self._calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
-            frr_actual     = self._calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
+            fdr_actual     = calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
+            frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
             # SENSITIVITY & SPECIFICITY are not affected by prevalence
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
-            sensitivity    = self._calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
+            sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             # SPECIFICITY: "true negative rate"
-            specificity    = self._calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
+            specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
-            pos_pred_val   = self._calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
-            neg_pred_val   = self._calc_ratio(TN, (TN, FN)), # TN/(TN+FN)
+            pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
+            neg_pred_val   = calc_ratio(TN, (TN, FN)), # TN/(TN+FN)
 
             num_correct    = TP + TN,
             num_Type_I     = FP,

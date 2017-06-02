@@ -25,8 +25,8 @@ def main():
     study_genes_lens = [4, 8, 16, 32, 64]
     num_study_genes = study_genes_lens[2]
     num_null = num_study_genes/2 # 50% Null
-    # Use study genes seen in population 
-    study_genes_bg = [for g in study2genes['humoral_rsp'] if g in objbg.pop_genes]
+    # Use study genes seen in population
+    study_genes_bg = [g for g in study2genes['humoral_rsp'] if g in objbg.pop_genes]
     objsim = GoeaSim(num_study_genes, num_null, study_genes_bg, objbg)
 
 if __name__ == '__main__':
