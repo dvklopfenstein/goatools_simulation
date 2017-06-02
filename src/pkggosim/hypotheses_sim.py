@@ -18,6 +18,7 @@ import sys
 import collections as cx
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
+from pkggosim.utils import get_result_desc
 
 class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""
@@ -138,40 +139,13 @@ class HypothesesSim(object):
 
 
 class _Init(object):
-    """Init HypothesesSim object: Create random hypotheses test results(pvals), run multipletest correction."""
+    """Create random hypotheses test results(pvals), run multipletest correction."""
 
     # Multiple test correction results:
     #   1. statsmodels multiple test results for each P-value
     _ntobj_mtsm = cx.namedtuple("NtMtStatmod", "reject pvals_corr alpha_sidak alpha_bonf")
     #   2. summarized results for each P-value
     ntobj_mt = cx.namedtuple("NtMtPvals", "pval pval_corr reject expsig tfpn")
-
-    @staticmethod
-    def get_result_desc(reject, expsig):
-        """Return description of the result of one simulation."""
-        # pylint: disable=multiple-statements
-        #
-        # TABLE 1) Number of errors committed when testing m null hypotheses
-        # 1995; Yoav Benjamini and Yosef Hochberg:
-        #
-        #                 reject ->| False         | True
-        #
-        #                          |Declared       | Declared      |
-        #                          |non-significant| significant   | Total
-        # -------------------------+---------------+---------------+--------
-        # True null hypotheses     | U TN          | V FP (Type I) |   m(0)
-        # Non-true null hypotheses | T FN (Type II)| S TP          | m - m(0)
-        #                          |      m - R    |       R       |   m
-        if     expsig and     reject: return "TP" # Correct:     Significant
-        if not expsig and not reject: return "TN" # Correct: Not Significant
-        if not expsig and     reject: return "FP" # Type  I Error (False Positive)
-        if     expsig and not reject: return "FN" # Type II Error (False Negative)
-        assert True, "UNEXPECTED ERROR TYPE"
-        # Random variable, Q = V/(V+S); Q = 0 when V+S = 0, is the proportion of errors committed by
-        # falsely rejecting null hypotheses.
-        # Power = 1 - beta; Beta < 20% good
-        # average power: the proportion of the false hypotheses which are correctly rejected
-        # TP/(FN + TP)
 
     def get_nts_pvals(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
@@ -183,17 +157,17 @@ class _Init(object):
                 pval_corr = pval_corr,
                 reject    = reject,
                 expsig    = expsig, # False->True Null; True->Non-true null
-                tfpn      = self.get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
+                tfpn      = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
     def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):
         self.multi_params = multi_params
         # I. UNCORRECTED P-VALUES:
-        self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05, 0.03, or 0.01
+        self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 0.03 or 0.01
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
-        self.expsig = None # List of bool/P-value. True -> P-value is intended to be significant (Non-true null)
+        self.expsig = None # List of bool/P-value. True->Pval intended to be signif. (Non-true null)
         self._init_pvals(hypoth_qty, num_null)
         assert len(self.pvals) == hypoth_qty
         assert hypoth_qty - sum(self.expsig) == num_null

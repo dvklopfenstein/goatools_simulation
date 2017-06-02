@@ -5,13 +5,38 @@ __author__ = "DV Klopfenstein"
 
 import timeit
 import datetime
-from random import shuffle
+
+def get_result_desc(reject, expsig):
+    """Return description of the result of one simulation."""
+    # pylint: disable=multiple-statements
+    #
+    # TABLE 1) Number of errors committed when testing m null hypotheses
+    # 1995; Yoav Benjamini and Yosef Hochberg:
+    #
+    #                 reject ->| False         | True
+    #
+    #                          |Declared       | Declared      |
+    #                          |non-significant| significant   | Total
+    # -------------------------+---------------+---------------+--------
+    # True null hypotheses     | U TN          | V FP (Type I) |   m(0)
+    # Non-true null hypotheses | T FN (Type II)| S TP          | m - m(0)
+    #                          |      m - R    |       R       |   m
+    if     expsig and     reject: return "TP" # Correct:     Significant
+    if not expsig and not reject: return "TN" # Correct: Not Significant
+    if not expsig and     reject: return "FP" # Type  I Error (False Positive)
+    if     expsig and not reject: return "FN" # Type II Error (False Negative)
+    assert True, "UNEXPECTED ERROR TYPE"
+    # Random variable, Q = V/(V+S); Q = 0 when V+S = 0, is the proportion of errors committed by
+    # falsely rejecting null hypotheses.
+    # Power = 1 - beta; Beta < 20% good
+    # average power: the proportion of the false hypotheses which are correctly rejected
+    # TP/(FN + TP)
 
 def get_hms(tic):
     """Print elapsed time as simulations run."""
     return str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
 
-
+# TBD: Put in hypotheses_utils
 def get_fout_img(exp_params, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
     """Get the name of the png file for the tiled plot."""
     return img_pat.format(
@@ -22,28 +47,6 @@ def get_fout_img(exp_params, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.
         Q0=exp_params['num_hypoths_list'][0],
         QN=exp_params['num_hypoths_list'][-1],
         NEXP=exp_params['num_experiments'])
-
-
-def shuffle_associations(assoc_ens2gos):
-    """Randomly shuffle associations to mimic a list of genes having no significance."""
-    # Get a list of GO-list length of all genes
-    goset_lens = [len(gos) for gos in assoc_ens2gos.values()]
-    gos_all = set()
-    for gos_gene in assoc_ens2gos.values():
-        gos_all |= gos_gene
-    gos_all = list(gos_all)
-    # Randomly shuffle GOs
-    shuffle(goset_lens)
-    shuffle(gos_all)
-    # Build new randomly shuffled association
-    assc_rand = {}
-    idx_start = 0
-    for geneid, golen in zip(assoc_ens2gos.keys(), goset_lens):
-        idx_stop = idx_start + golen
-        assc_rand[geneid] = gos_all[idx_start:idx_stop]
-        idx_start = idx_stop
-    return assc_rand
-        
 
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
