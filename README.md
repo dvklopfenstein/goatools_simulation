@@ -14,20 +14,30 @@ with **alpha=0.05**.
 
 ## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
-Demonstrates that the mean False Discovery Rates (FDRs) resulting from simulations using randomly generated 
-hypotheses test results centers around the alpha-level set by the user (0.05) when all hypotheses are true,
+Demonstrates that the mean False Discovery Rates (FDRs) determined by simulations
+that generate random hypotheses test results
+centers around the alpha-level set by the user (0.05) when all hypotheses are true,
 but is smaller otherwise.
 
 In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
 (i.e. Null should be rejected; there is a difference between the study items and the population items),
-the simulated FDR drops dramatically below the alpha(0.05).
+the simulated FDR drops dramatically below alpha(0.05).
 
 ![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_100.png)
-The x-axis shows both the number of tested hypotheses, which is 4, 16, and 128 and
-the maximum significance value of a randomly generated hypothesis test result.
+The x-axis shows two simulation parameters.
+The first parameter is the number of tested hypotheses in each simulation, which is 4, 16, and 128.
+The second parameter is the maximum P-value of a randomly generated hypothesis test result.
 The y-axis shows the percentage of "True nulls".
 As the percentage of "True nulls" drops and the number of "Nontrue nulls" rises,
 the simulated FDR drops dramatically.
+
+The maximum P-value for "non-true null hypotheses" is seen here with values 0.05, 0.03, & 0.01.
+This value has no affect on the simulated FDR values.
+But it has a large affect on the sensitivity of the test.
+If all "non-true null hypotheses" have a randomly generated P-value between 0 and 0.01,
+all hypotheses will be discovered.
+If all "non-true null hypotheses" have a randomly generated P-value between 0 and 0.05,
+only 10% of the hypotheses will be discovered.
 
 
 ### [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
