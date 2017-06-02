@@ -49,4 +49,4 @@ TBD
 ### 4. 50% P-values chosen randomly; 50% are significant 
 TBD
 
-Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

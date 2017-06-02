@@ -129,7 +129,7 @@ Sig. GOs Study genes % True Null   assc Max Genes Study Name
 
 """
 
-__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -171,4 +171,4 @@ if __name__ == '__main__':
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
     main(SEED)
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

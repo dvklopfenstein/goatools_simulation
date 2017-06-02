@@ -1,6 +1,6 @@
 """Holds parameters used to create one set of experiments."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import timeit
@@ -46,4 +46,4 @@ def shuffle_associations(assoc_ens2gos):
         
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

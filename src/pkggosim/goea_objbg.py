@@ -1,6 +1,6 @@
 """Runs GOEA Simulations. Holds background data/params, like GO-DAG & alpha."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import datetime
@@ -37,4 +37,4 @@ class GoeaSimObj(object):
         prt.write("    GO-DAG version:   {INFO}\n".format(INFO=self.go_dag.version))
         prt.write("\n  SIMULATION RESULTS:\n")
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

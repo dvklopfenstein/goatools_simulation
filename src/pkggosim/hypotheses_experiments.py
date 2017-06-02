@@ -1,6 +1,6 @@
 """Runs a set of experiments to obtain a set of simulated FDR values."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -67,4 +67,4 @@ class ExperimentSet(object):
             expset.append(ManyHypothesesSims(experiment_params))
         return expset
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

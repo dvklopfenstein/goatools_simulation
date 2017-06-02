@@ -1,6 +1,6 @@
 """Objain one simulated FDR value by running many P-Value sims w/multiple-test correction."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -75,4 +75,4 @@ class ManyHypothesesSims(object):
         max_sigpval = self.params['max_sigpval']
         return [HypothesesSim(hypoth_qty, num_null, multi_params, max_sigpval) for _ in range(num_pvalsims)]
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

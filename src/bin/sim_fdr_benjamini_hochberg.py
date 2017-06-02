@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Explore False discovery rate multiple test correction with Benjamini and Hochberg."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -47,4 +47,4 @@ if __name__:
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
     main(SEED)
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

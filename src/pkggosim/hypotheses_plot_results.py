@@ -1,6 +1,6 @@
 """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -253,4 +253,4 @@ def _get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
         tbl.extend(dcts)
     return tbl
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

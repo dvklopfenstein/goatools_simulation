@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Simulate a Gene Ontology Enrichment Analysis (GOEA) on one set of study genes."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 from pkggosim.goea_sim import GoeaSim
@@ -32,4 +32,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

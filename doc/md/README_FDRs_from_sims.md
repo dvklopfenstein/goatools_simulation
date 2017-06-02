@@ -62,4 +62,4 @@ to well below alpha=0.05.
 ### 11)   12.   1 of   1 ./sim_fdr_actual_075_05.png    
 ![sim_fdr_actual_075_05.png](./images/sim_fdr_actual_075_05.png)    
 
-Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

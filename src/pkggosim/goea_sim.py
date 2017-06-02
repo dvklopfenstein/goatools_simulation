@@ -1,6 +1,6 @@
 """Simulate a Gene Ontology Enrichment Analysis (GOEA) on one set of randomly generated study genes."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -183,4 +183,4 @@ class _Init(object):
 #        # 2. Extract "P-values" and "intended significance" by transposing data
 #        self.pvals, self.expsig = zip(*pvals_expsig)
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

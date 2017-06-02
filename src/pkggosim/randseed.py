@@ -1,6 +1,6 @@
 """Set a random seed."""
 
-__copyright__ = "Copyright (C) 2015-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2015-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -40,4 +40,4 @@ class RandomSeed32(object):
     """Print given random seed."""
     return "0x{S:08x} = {S:,}".format(S=seed)
  
-# Copyright (C) 2015-2017, DV Klopfenstein. All rights reserved."
+# Copyright (C) 2015-2017, DV Klopfenstein, Haibao Tang. All rights reserved."

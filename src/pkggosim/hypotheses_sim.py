@@ -1,6 +1,6 @@
 """Simulate a multiple-test correction on one set of randomly generated P-values."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 # Controlling the False Discovery Rate: a Practical and Powerful Approach to Multiple Testing
@@ -221,4 +221,4 @@ class _Init(object):
             if reject:
                 assert pval < alpha
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -1,6 +1,6 @@
 """Holds population genes and associations."""
 
-__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved."
+__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import collections as cx
@@ -19,4 +19,4 @@ class RunGoeas(object):
         self.objgoea = self.objbg.get_goeaobj(pop_genes, assc_geneid2gos) # GOEnrichmentStudy obj
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

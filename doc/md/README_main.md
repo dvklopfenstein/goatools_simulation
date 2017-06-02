@@ -1,4 +1,4 @@
 # Consequent: GOEA simulations    
 TBD
 
-Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
+Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
