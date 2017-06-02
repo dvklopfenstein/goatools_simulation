@@ -11,8 +11,6 @@ from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 def main():
     """Test GoeaSim in ./src/pkggosim/goea_sim.py"""
-    hypoth_qty = 8
-    num_null = 4
     alpha = 0.05
     method = 'fdr_bh'
 
@@ -25,8 +23,10 @@ def main():
 
     #objsim = GoeaSim(hypoth_qty, num_null, multi_params)
     study_genes_lens = [4, 8, 16, 32, 64]
-    num_study_genes = study_genes_lens[1]
-    study_genes_bg = study2genes['humoral_rsp']
+    num_study_genes = study_genes_lens[2]
+    num_null = num_study_genes/2 # 50% Null
+    # Use study genes seen in population 
+    study_genes_bg = [for g in study2genes['humoral_rsp'] if g in objbg.pop_genes]
     objsim = GoeaSim(num_study_genes, num_null, study_genes_bg, objbg)
 
 if __name__ == '__main__':

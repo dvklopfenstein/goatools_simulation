@@ -14,9 +14,11 @@ class RunGoeas(object):
 
     def __init__(self, alpha, method, pop_genes, assc_geneid2gos):
         self.objbg = GoeaSimObj(alpha, method)
-        self.pop_genes = pop_genes
-        self.assc = assc_geneid2gos
-        self.objgoea = self.objbg.get_goeaobj(pop_genes, assc_geneid2gos) # GOEnrichmentStudy obj
+        # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
+        self.pop_genes = set(pop_genes).intersection(set(assc_geneid2gos.keys()))
+        # Speed sims: Use the association subset actually in the population
+        self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
+        self.objgoea = self.objbg.get_goeaobj(self.pop_genes, self.assc) # GOEnrichmentStudy obj
 
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
