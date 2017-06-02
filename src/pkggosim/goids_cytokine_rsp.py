@@ -20,6 +20,8 @@ Parent Level-01 GOs:
 
 """
 
+#pylint: disable=line-too-long
+
 GOIDS = set([ # 18 items
     'GO:0071345', # BP     28 L05 D05 BF    cellular response to cytokine stimulus(32 genes)
     'GO:1990830', # BP      0 L06 D06 BF    cellular response to leukemia inhibitory factor(1 genes)

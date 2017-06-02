@@ -25,6 +25,8 @@ Parent Level-01 GOs:
 
 """
 
+#pylint: disable=line-too-long
+
 GOIDS = set([ # 86 items
     'GO:0016032', # BP    297 L04 D04 I     viral process(26 genes)
     'GO:0019048', # BP    173 L05 D05 I     modulation by virus of host morphology or physiology(4 genes)

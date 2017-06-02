@@ -23,6 +23,8 @@ Parent Level-01 GOs:
 
 """
 
+#pylint: disable=line-too-long
+
 GOIDS = set([ # 9 items
     'GO:0006959', # BP     13 L03 D03 FL    humoral immune response(51 genes)
     'GO:0019730', # BP      5 L03 D05 FIL   antimicrobial humoral response(2 genes)

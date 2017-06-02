@@ -22,6 +22,7 @@ class RunGoeas(object):
     def run_goeas(self, study_lens, study_genes, study_desc, perc_null):
         """Run GOEAs."""
         results_list = []
+        study_genes = list(study_genes)
         num_genes = len(study_genes)
         runfnc = self.objgoea.run_random_assc if perc_null == 100 else self.objgoea.run_actual_assc
         for study_len in sorted(study_lens):

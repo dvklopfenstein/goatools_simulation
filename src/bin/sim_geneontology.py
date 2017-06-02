@@ -135,11 +135,8 @@ __author__ = "DV Klopfenstein"
 import sys
 
 from pkggosim.randseed import RandomSeed32
-from pkggosim.genes_immune import GENES as GENES_IMMUNE
-from pkggosim.genes_cytokine_rsp import GENES as GENES_CYTOKINE
-from pkggosim.genes_humoral_rsp import GENES as GENES_HUMORAL
-from pkggosim.genes_viral_bacteria import GENES as GENES_VIRAL
 from pkggosim.goea_objrun import RunGoeas
+from pkggosim.goea_utils import import_var
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 from goatools_suppl.proj_data import GoatoolsDataMaker
@@ -157,11 +154,9 @@ def main(seed, prt=sys.stdout):
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ... 1024, 2048, 4096
     results_list = []
-    study_list = [
-        ('immune', list(GENES_IMMUNE)),
-        ('viral/bacteria', list(GENES_VIRAL)),
-        ('cytokine_rsp', list(GENES_CYTOKINE)),
-        ('humoral_rsp', list(GENES_HUMORAL))]
+    # Gene quantities:  2,092        592             227             124              15
+    studies = ['immune', 'viral_bacteria', 'cytokine_rsp', 'humoral_rsp', 'gamma_delta_t']
+    study_list = [(s, import_var('pkggosim.genes_{S}'.format(S=s), 'GENES')) for s in studies]
     # 3. SIMULATE 100% SIGNIFICANCE
     for study_desc, study_genes in study_list:
         results_list.extend(objrun.run_goeas(study_lens, study_genes, study_desc, perc_null=0))
