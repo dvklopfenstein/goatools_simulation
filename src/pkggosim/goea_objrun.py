@@ -50,7 +50,6 @@ class RunGoeas(object):
                 TOT_STUDY=ntdesc.tot_study,
                 ASSC=res['assc_desc']))
         prt.write("\n")
-            #self.objgoea.prt_results(prt, results)
 
 
 # Copyright (C) 2016-2017, DV Klopfenstein. All rights reserved.
