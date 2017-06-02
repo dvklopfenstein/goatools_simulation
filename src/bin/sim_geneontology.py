@@ -136,7 +136,7 @@ import sys
 
 from pkggosim.randseed import RandomSeed32
 from pkggosim.goea_objrun_prelim import RunGoeas
-from pkggosim.goea_utils import import_var, get_assoc_data
+from pkggosim.goea_utils import get_study2genes, get_assoc_data
 
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
@@ -154,13 +154,13 @@ def main(seed, prt=sys.stdout):
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ... 1024, 2048, 4096
     results_list = []
     # Gene quantities:  2,092        592             227             124              15
-    studies = ['immune', 'viral_bacteria', 'cytokine_rsp', 'humoral_rsp', 'gamma_delta_t']
-    study_list = [(s, import_var('pkggosim.genes_{S}'.format(S=s), 'GENES')) for s in studies]
+    # Studies include: immune viral_bacteria cytokine_rsp humoral_rsp gamma_delta_t
+    study2genes = get_study2genes()
     # 3. SIMULATE 100% SIGNIFICANCE
-    for study_desc, study_genes in study_list:
+    for study_desc, study_genes in study2genes.items():
         results_list.extend(objrun.run_goeas(study_lens, study_genes, study_desc, perc_null=0))
     # 4. SIMULATE NO SIGNIFICANCE (Associations are random)
-    for study_desc, study_genes in study_list:
+    for study_desc, study_genes in study2genes.items():
         results_list.extend(objrun.run_goeas(study_lens, study_genes, study_desc, perc_null=100))
     # 5. REPORT RESULTS:
     objrun.prt_results(results_list)

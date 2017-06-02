@@ -1,5 +1,8 @@
 # Gene Ontology Enrichment Analyses Simulations
 
+pylint:
+	find src -name \*.py | xargs pylint -r no
+
 vim_sim_geneontology:
 	vim -p \
 	src/bin/test_goea_sim.py \
