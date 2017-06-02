@@ -12,38 +12,16 @@ from pkggosim.utils import get_result_desc, calc_ratio
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
 
-    ntobj_pvaltype = cx.namedtuple(
-        "NtMtAll", "num_pvals num_sig_actual ctr fdr_actual frr_actual "
+    ntobj = cx.namedtuple(
+        "NtMtAll", "num_genes num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
     def __init__(self, num_study_genes, num_null, study_genes_bg, objbg):
-        #self.alpha = objbg['alpha']
         iniobj = _Init(num_study_genes, num_null, study_genes_bg, objbg)
-        # List of info for each pval: pval pval_corr reject expsig tfpn
+        # List of info for each study gene: geneid reject expected_significance tfpn
         self.nts_goea_res = iniobj.get_nts_stugenes()
-        # One namedtuple summarizing results of this P-Value simulation
+        # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
-
-#    def prt_pvals(self, prt=sys.stdout):
-#        """Print P-Values."""
-#        pat = "{I:3} {PVAL:6.4f}=pval {PVAL_CORR:6.4f}=corr {R:5}=reject {S:5}=sig {TF}\n"
-#        prt.write("{}\n".format(self.nt_tfpn))
-#        for idx, ntpval in enumerate(self.nts_goea_res):
-#            prt.write(pat.format(
-#                I=idx, PVAL=ntpval.pval, PVAL_CORR=ntpval.pval_corr,
-#                R=ntpval.reject, S=ntpval.expsig, TF=ntpval.tfpn))
-#        prt.write("\n")
-#
-#    def get_perc_sig(self, attrname="pvals"): # "pvals" or "pvals_corr"
-#        """Calculate the percentage of p-values which are significant."""
-#        pvals = getattr(self, attrname)
-#        return self._get_perc_sig(pvals)[2]
-#
-#    def _get_perc_sig(self, pvals):
-#        """Calculate the percentage of p-values which are significant."""
-#        num_pvals_sig = sum(pvals < self.alpha)
-#        num_pvals_tot = len(pvals)
-#        return num_pvals_sig, num_pvals_tot, 100.0*num_pvals_sig/num_pvals_tot
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
@@ -56,10 +34,10 @@ class GoeaSim(object):
         # Not Significant(Correct) or Type II Error (significant)
         tot_sig_n = sum(not nt.reject for nt in self.nts_goea_res)
         assert tot_sig_n == TN + FN
-        num_pvals = len(self.nts_goea_res)
-        assert tot_sig_y + tot_sig_n == num_pvals
-        return self.ntobj_pvaltype(
-            num_pvals      = len(self.nts_goea_res),
+        num_genes = len(self.nts_goea_res)
+        assert tot_sig_y + tot_sig_n == num_genes
+        return self.ntobj(
+            num_genes      = len(self.nts_goea_res),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
@@ -73,6 +51,7 @@ class GoeaSim(object):
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
             neg_pred_val   = calc_ratio(TN, (TN, FN))) # TN/(TN+FN)
+
 
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
