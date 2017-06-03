@@ -11,35 +11,37 @@ from pkggosim.utils import get_fout_img
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def main(randomseed):
+def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.9):
+#def main(randomseed, num_experiments=10, num_sims=10, dotsize=2):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     # User-configurable parameters
-    params = {
+    sim_params = {
         'seed' : randomseed,
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
         'num_hypoths_list' : [4, 16, 128],
-        'num_experiments' : 500, # Number of simulated FDR ratios in an experiment set
-        'num_sims' : 500}   # Number of sims per experiment; used to create one FDR ratio
+        'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
+        'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
-    run_sim(params, rpt_items)
+    run_sim(sim_params, rpt_items, dotsize)
 
-def run_sim(params, rpt_items):
+def run_sim(sim_params, rpt_items, dotsize):
     """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-    obj = ExperimentsAll(params)
-    img_pat = 'suppl_hypoth_fdr_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}.png'
-    img_base = get_fout_img(params, img_pat)
-    fout_log = img_base.replace('png', 'log')
+    obj = ExperimentsAll(sim_params)
+    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
+    desc_str = get_fout_img(sim_params, desc_pat)
+    fout_log = os.path.join('doc/logs', 'suppl_hypoth_fdr_{DESC}.log'.format(DESC=desc_str))
+    fout_png = os.path.join('doc/logs', 'suppl_hypoth_fdr_{DESC}.png'.format(DESC=desc_str))
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
         obj.prt_params(prt)
         obj.seed.prt(prt)
         obj.prt_experiments_stats(prt, rpt_items)
         obj.prt_experiments_means(prt, rpt_items)
-        fout_img = os.path.join(REPO, "doc/md/images", img_base)
         title = "Benjamini/Hochberg FDR Hypotheses Simulations"
-        obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR', dotsize=1, title=title)
+        fout_img = os.path.join(REPO, fout_png)
+        obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR', dotsize=dotsize, title=title)
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:
