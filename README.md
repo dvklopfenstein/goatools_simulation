@@ -40,10 +40,11 @@ But it has a large affect on the sensitivity of the test.
 #### Simulated Sensitivity Ratios
 Sensitivity is also known as the _true positive rate_, _recall_, or _probability of detection_.
 ![Sensitivity results](doc/logs/suppl_hypoth_sensitivity_100to025_01to05_004to128_N00500_1000.png)
-**All "non-true null hypotheses"**, which in gene ontology analyses are genes which
-are extremely likely to be different from the general population of genes,
-**are detected** in simulations where the P-values of "non-true null hypotheses"
-are randomly chosen from values equal to or less than **0.01** when **alpha=0.05**.
+**All "non-true null hypotheses" are detected when their P-Values are <= 0.01 and alpha=0.05.**
+as seen in the leftmost "Sig.<=0.01" column.
+
+A "non-true null hypotheses"** in gene ontology analyses are genes which
+are extremely likely to be different from the general population of genes.
 
 If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.05,
 only 10% of the hypotheses will be discovered.
