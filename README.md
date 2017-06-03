@@ -43,7 +43,7 @@ Sensitivity is also known as the _true positive rate_, _recall_, or _probability
 **All "non-true null hypotheses"**, which in gene ontology analyses are genes which
 are extremely likely to be different from the general population of genes,
 **are detected** in simulations where the P-values of "non-true null hypotheses"
-are randomly chosen from values equal to or less than 0.01.
+are randomly chosen from values equal to or less than **0.01** when **alpha=0.05**.
 
 If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.05,
 only 10% of the hypotheses will be discovered.
