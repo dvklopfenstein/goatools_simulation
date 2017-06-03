@@ -57,14 +57,13 @@ TBD
 
 ## Links
 
-  * 1995 Benjamini & Hochberg
-    [**Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing](
+  * 1995 Benjamini & Hochberg's [**Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing**](
     http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
   * [SciPy](https://docs.scipy.org/doc/scipy/reference/)'s
     [stats](https://docs.scipy.org/doc/scipy/reference/tutorial/stats.html) package:    
     * [Fishers exact test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.htm)
     * [multipletests](http://www.statsmodels.org/stable/generated/statsmodels.sandbox.stats.multicomp.multipletests.html)
-  * [Stomp on Step One](http://www.stomponstep1.com/) Sensitivity, Specificity, and more    
+  * [Stomp on Step One](http://www.stomponstep1.com/) for Sensitivity, Specificity, and more    
 
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
