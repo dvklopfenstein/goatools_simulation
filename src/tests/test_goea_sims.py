@@ -23,7 +23,7 @@ def main(prt=sys.stdout):
     study_genes_bg = [g for g in study2genes['humoral_rsp'] if g in objbg.pop_genes]
 
     params = {
-        'num_goeasims':10,
+        'num_sims':10,
         'num_study_genes':16,
         'perc_null':50,
         'num_null':8,

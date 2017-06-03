@@ -1,5 +1,5 @@
 # Simulations to Verify GOEA Results
-Stochastic simulations in this repository are used to investigate the results of
+Stochastic simulations are used to investigate the results of
 **Gene Ontology Enrichment Analyses** (**GOEAs**).
 
 All simulations use [**Benjamini/Hochberg multiple test correction**](
@@ -14,9 +14,9 @@ with **alpha=0.05**.
 
 ## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
-Demonstrates that the mean False Discovery Rates (FDRs) determined by simulations
-that generate random hypotheses test results
-centers around the alpha-level set by the user (0.05) when all hypotheses are true,
+Demonstrates that the mean False Discovery Rates (FDRs),
+determined by simulations that generate random hypotheses test results,
+center around the alpha-level set by the user (0.05) when all hypotheses are true,
 but is smaller otherwise.
 
 In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
@@ -26,11 +26,11 @@ the simulated FDR drops dramatically below alpha(0.05).
 ![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_100.png)
 The x-axis shows two simulation parameters.
 The first parameter is the _number of tested hypotheses_ in each simulation, which is 4, 16, and 128.
-The second parameter, labeled on the figure as **Sig.<=**, is the _maximum P-value_,
+The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-value_,
 of randomly generated non-true null hypotheses test results.
 The y-axis shows the _percentage of "True nulls"_.
-As the percentage of "True nulls" drops and the number of "non-true nulls" rises,
-the simulated FDR drops dramatically.
+The simulated FDR drops dramatically
+As the percentage of "True nulls" drops and the number of "non-true nulls" rises.
 
 The maximum P-value for "non-true null hypotheses" is seen here with values 0.05, 0.03, & 0.01.
 This value has no affect on the simulated FDR values.

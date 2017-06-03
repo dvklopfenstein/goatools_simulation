@@ -12,7 +12,7 @@ class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
     expected_params = set(['multi_params', 'perc_null', 'hypoth_qty', 'num_experiments',
-                           'num_pvalsims', 'max_sigpval'])
+                           'num_sims', 'max_sigpval'])
 
     def __init__(self, params, tic):
         self.params = params
@@ -30,7 +30,7 @@ class ExperimentSet(object):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
 
-    def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval " 
+    def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval "
                            "{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {PVALQTY:4} P-Values)"):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
@@ -46,19 +46,19 @@ class ExperimentSet(object):
         return "ExperimentSet({N}) {EXP}".format(
             N=self.params['num_experiments'], EXP=self.get_desc())
 
-    def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
+    def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""
         desc = self.get_desc()
         prt.write("\n") # Separate sets of experiments
         for experiment in self.expset:
-            experiment.prt_num_pvalsims_w_errs(prt, desc)
+            experiment.prt_num_sims_w_errs(prt, desc)
 
     def _init_experiments(self, tic):
         """Run a set of experiments."""
         expset = []
         sys.stdout.write("{EXPSET_DESC} HMS={HMS}\n".format(
             EXPSET_DESC=self.get_strhdr(), HMS=get_hms(tic)))
-        shared_param_keys = ['num_pvalsims', 'hypoth_qty', 'perc_null', 'multi_params']
+        shared_param_keys = ['num_sims', 'hypoth_qty', 'perc_null', 'multi_params']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null

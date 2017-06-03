@@ -11,14 +11,14 @@ from pkggosim.hypotheses_sim import HypothesesSim
 class ManyHypothesesSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set(['num_pvalsims', 'hypoth_qty', 'perc_null',
+    expected_params = set(['num_sims', 'hypoth_qty', 'perc_null',
                            'multi_params', 'num_null', 'max_sigpval'])
 
     def __init__(self, params):
         self.params = params
         assert set(params.keys()) == self.expected_params
         # Data members
-        hypothsimobjs = self._init_hypothsimobjs() # List of N=num_pvalsims HypothesesSim objects
+        hypothsimobjs = self._init_hypothsimobjs() # List of N=num_sims HypothesesSim objects
         self.nts_tfpn = [o.nt_tfpn for o in hypothsimobjs]
         # Print header for each set of simulations
         #self.prt_summary(prt=sys.stdout)
@@ -32,10 +32,10 @@ class ManyHypothesesSims(object):
         return np.mean([getattr(nt, key) for nt in self.nts_tfpn])
 
     def prt_summary(self, prt=sys.stdout):
-        """Print summary of all num_pvalsims simulations."""
+        """Print summary of all num_sims simulations."""
         msg = [
             "    ManyHypothesesSims:",
-            "{SIMS} sims,".format(SIMS=self.params['num_pvalsims']),
+            "{SIMS} sims,".format(SIMS=self.params['num_sims']),
             "{HYPOTHS:3} pvals/sim".format(HYPOTHS=self.params['hypoth_qty']),
             "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
             "{M:5.2f} max sig)\n".format(M=self.params['max_sigpval']),
@@ -46,7 +46,7 @@ class ManyHypothesesSims(object):
         """Return percentile values for 'attr' list."""
         return [np.percentile([getattr(nt, attr) for nt in self.nts_tfpn], p) for p in percentiles]
 
-    def prt_num_pvalsims_w_errs(self, prt=sys.stdout, desc=""):
+    def prt_num_sims_w_errs(self, prt=sys.stdout, desc=""):
         """Return the number of simulations that have errors."""
         msgpat = "{N} sims ({P:3} pvals/sim, {PERCNULL:3.0f}% True Null.) " \
                  "{E:5} had errs ({ERR_CNTS}) {DESC}\n"
@@ -68,11 +68,11 @@ class ManyHypothesesSims(object):
 
     def _init_hypothsimobjs(self):
         """Simulate MANY multiple-test correction of P-values."""
-        num_pvalsims = self.params['num_pvalsims']
+        num_sims = self.params['num_sims']
         hypoth_qty = self.params['hypoth_qty']
         num_null = self.params['num_null']
-        multi_params = self.params['multi_params']
+        multi = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
-        return [HypothesesSim(hypoth_qty, num_null, multi_params, max_sigpval) for _ in range(num_pvalsims)]
+        return [HypothesesSim(hypoth_qty, num_null, multi, max_sigpval) for _ in range(num_sims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -22,8 +22,8 @@ def main(randomseed):
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
         'num_hypoths_list' : None,
-        'num_experiments' : num_reps, # 20, # aka Number of simulated FDR ratios in an experiment set
-        'num_pvalsims' : num_reps} # 100}   # Number of sims used to create one FDR ratio
+        'num_experiments' : num_reps, # 20, # Number of simulated FDR ratios in an experiment set
+        'num_sims' : num_reps} # 100}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     img_pat = 'suppl_hypoth_fdr_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}.png'
     fout_log = log_pat.format(EXP=exp_params['num_experiments'])

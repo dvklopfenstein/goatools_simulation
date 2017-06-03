@@ -26,10 +26,10 @@ class ExperimentsAll(object):
     #         'perc_nulls'       : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
     #         'num_hypoths_list'       : [20, 100, 500],
     #         'num_experiments' : 100,
-    #         'num_pvalsims'    : 100}
+    #         'num_sims'    : 100}
 
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
-                           'num_experiments', 'num_pvalsims'])
+                           'num_experiments', 'num_sims'])
 
     def __init__(self, params):
         self.seed = RandomSeed32(params.get('seed', None))
@@ -44,7 +44,7 @@ class ExperimentsAll(object):
         return " ".join([
             "Alpha({A}) Method({M})".format(A=prms['alpha'], M=prms['method']),
             "{E}=Experiments/Set".format(E=self.params['num_experiments']),
-            "{P}=P-Value simulations/Experiment".format(P=self.params['num_pvalsims'])])
+            "{P}=P-Value simulations/Experiment".format(P=self.params['num_sims'])])
 
     def prt_params(self, prt=sys.stdout):
         """Print user-specified input parameters."""
@@ -67,7 +67,7 @@ class ExperimentsAll(object):
                         'perc_null' : perc_null,
                         'hypoth_qty' : hypoth_qty,
                         'num_experiments' : self.params['num_experiments'],
-                        'num_pvalsims' : self.params['num_pvalsims']}
+                        'num_sims' : self.params['num_sims']}
                     expsets.append(ExperimentSet(exp_parms, tic))
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
@@ -80,7 +80,7 @@ class ExperimentsAll(object):
     def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR', **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
-        plt_box_tiled(fout_img, key2exps, attrname, grpname, **kws)
+        plt_box_tiled(fout_img, key2exps, attrname=attrname, grpname=grpname, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
@@ -112,10 +112,10 @@ class ExperimentsAll(object):
             mean_strs = ["{:10.4f}".format(m) for m in means]
             prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
 
-    def prt_num_pvalsims_w_errs(self, prt=sys.stdout):
+    def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""
         for experiment_set in self.expsets:
-            experiment_set.prt_num_pvalsims_w_errs(prt)
+            experiment_set.prt_num_sims_w_errs(prt)
 
     def _get_key2expsets(self, key1='perc_null', key2='max_sigpval'):
         """Separate experiment sets into sub-lists for plotting."""

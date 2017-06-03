@@ -11,7 +11,8 @@ from pkggosim.goea_sim import GoeaSim
 class ManyGoeaSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set(['num_goeasims', 'num_study_genes', 'perc_null', 'num_null', 'study_genes_bg'])
+    expected_params = set([
+        'num_sims', 'num_study_genes', 'perc_null', 'num_null', 'study_genes_bg'])
 
     def __init__(self, params, study_genes_bg, objbg):
         self.params = params
@@ -19,7 +20,7 @@ class ManyGoeaSims(object):
         self.objbg = objbg
         assert set(params.keys()) == self.expected_params
         # Data members
-        simobjs = self._init_simobjs() # List of N=num_goeasims GoeaSim objects
+        simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
         self.nts_tfpn = [o.nt_tfpn for o in simobjs]
         # Print header for each set of simulations
         #self.prt_summary(prt=sys.stdout)
@@ -36,7 +37,7 @@ class ManyGoeaSims(object):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
         msg = [
             "    ManyGoeaSims:",
-            "{SIMS} sims,".format(SIMS=self.params['num_goeasims']),
+            "{SIMS} sims,".format(SIMS=self.params['num_sims']),
             "{HYPOTHS:3} study_genes/sim".format(HYPOTHS=self.params['num_study_genes']),
             "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
         ]
@@ -46,7 +47,7 @@ class ManyGoeaSims(object):
         """Return percentile values for 'attr' list."""
         return [np.percentile([getattr(nt, attr) for nt in self.nts_tfpn], p) for p in percentiles]
 
-    def prt_num_goeasims_w_errs(self, prt=sys.stdout, desc=""):
+    def prt_num_sims_w_errs(self, prt=sys.stdout, desc=""):
         """Return the number of simulations that have errors."""
         msgpat = "{N} sims ({P:3} pvals/sim, {PERCNULL:3.0f}% True Null.) " \
                  "{E:5} had errs ({ERR_CNTS}) {DESC}\n"
@@ -69,7 +70,7 @@ class ManyGoeaSims(object):
 
     def _init_simobjs(self):
         """Simulate MANY multiple-test correction of P-values."""
-        num_sims = self.params['num_goeasims']
+        num_sims = self.params['num_sims']
         num_genes = self.params['num_study_genes']
         num_null = self.params['num_null']
         study_genes_bg = self.study_genes_bg

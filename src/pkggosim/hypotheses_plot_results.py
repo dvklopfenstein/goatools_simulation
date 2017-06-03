@@ -162,66 +162,57 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         dfrm = pd.DataFrame(_get_dftbl_boxplot(expsets, attrname, grpname))
         wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
-def plt_box_tiled(fout_img, key2exps, attrname='fdr_actual', grpname='FDR', **args_kws):
+def plt_box_tiled(fout_img, key2exps, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     kws = {
+        'attrname':'fdr_actual',
+        'grpname':'FDR',
+        'dotsize':2,
         'dpi':400,
         'title':'Hypotheses Simulations',
         'xlabel':'Number of Tested Hypotheses',
-        'ylabel':'Simulated {GRP} Ratios'.format(GRP=grpname),
+        'ylabel':'Simulated {GRP} Ratios'.format(GRP=args_kws['grpname']),
         'txtsz_title':20,
         'txtsz_xy'   :15,
         'txtsz_tile' :None,
         'txtsz_ticks':None,
     }
-    #ax_kws = {
-    #    'fout_img': None,
-    #    #'xlabel': 'Number of Tested Hypotheses',
-    #    #'ylabel': 'Simulated FDR Ratios',
-    #    'ylim_a':0, 'ylim_b':0.09}
+    for key, val in args_kws.items():
+        kws[key] = val
     num_rows, num_cols = _get_num_rows_cols(key2exps)
     plt.close('all')
     sns.set(style="ticks")
-    # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
     fig = plt.figure()
-    #axall = fig.add_subplot(1, 1, 1)
     axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
-    # http://matplotlib.org/users/recipes.html
     sorted_dat = sorted(key2exps.items(), key=lambda t: [-1*t[0][0], t[0][1]]) # perc_null, max_sig
-    bottom_row = num_cols*(num_rows-1)
-    dotsize = args_kws.get('dotsize', 2)
-    for idx, (axes, ((perc_null, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
+    #for idx, (axes, ((perc_null, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
+    for idx, tile_items in enumerate(zip(axes_2d, sorted_dat)):
         plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
-        dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, attrname, grpname))
-        set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=dotsize)
-        axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
-        axes.set_yticks([0.00, 0.025, 0.05, 0.075])
-        axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
-        if idx >= bottom_row:
-            axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
-        if idx%num_cols == 0:
-            axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
-        axes.set_ylim(0.0, 0.09)
-        axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
-
+        _plt_tile(idx, num_rows, num_cols, tile_items, **kws)
     _tiled_xyticklabels_off(axes_2d, num_cols)
-    # https://stackoverflow.com/questions/3584805/in-matplotlib-what-does-the-argument-mean-in-fig-add-subplot111
-    # https://matplotlib.org/examples/pylab_examples/shared_axis_demo.html
-    # https://stackoverflow.com/questions/1358977/how-to-make-several-plots-on-a-single-page-using-matplotlib
-    # https://stackoverflow.com/questions/6963035/pyplot-axes-labels-for-subplots
-    #axall.set_xticks([])
-    #axall.set_yticks([])
-    #axall.set_xlabel(kws['xlabel'], size=30)
-    #axall.set_ylabel(kws['ylabel'], size=30)
-    #plt.subplots_adjust(bottom=.25, left=.25)
+    xysz = kws['txtsz_xy']
     fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
-    fig.text(0.5, 0.06, kws['xlabel'], size=kws['txtsz_xy'], ha='center', va='center')
-    fig.text(0.06, 0.5, kws['ylabel'], size=kws['txtsz_xy'], ha='center', va='center', rotation='vertical')
-    #plt.tight_layout()
+    fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
+    fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
     plt.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if kws.get('show', False):
         plt.show()
+
+def _plt_tile(idx, num_rows, num_cols, tile_items, **kws):
+    """Plot one tile of a multi-tiled plot."""
+    (axes, ((perc_null, maxsig), exps)) = tile_items
+    dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
+    set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=kws['dotsize'])
+    axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
+    axes.set_yticks([0.00, 0.025, 0.05, 0.075])
+    axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
+    if idx >= num_cols*(num_rows-1): # bottom_row
+        axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
+    if idx%num_cols == 0:
+        axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
+    axes.set_ylim(0.0, 0.09)
+    axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
 
 def _get_tiled_axes(fig, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
