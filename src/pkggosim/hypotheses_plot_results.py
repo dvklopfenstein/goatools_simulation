@@ -61,7 +61,7 @@ class PlotInfo(object):
         for key, dfltval in self.dflts.items():
             kws[key] = args_kws.get(key, dfltval)
         if 'ylabel' not in args_kws:
-            kws['ylabel'].format(GRP=args_kws['grpname'])
+            kws['ylabel'] = kws['ylabel'].format(GRP=args_kws['grpname'])
         return kws
 
 
