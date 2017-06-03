@@ -11,7 +11,8 @@ from pkggosim.utils import get_fout_img
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
+#def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
+def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.80):
 # def main(randomseed, num_experiments=20, num_sims=20, dotsize=2):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     # User-configurable parameters
