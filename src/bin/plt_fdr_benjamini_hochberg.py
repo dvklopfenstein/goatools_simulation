@@ -38,7 +38,7 @@ def run_sim(params, rpt_items):
         obj.prt_experiments_stats(prt, rpt_items)
         obj.prt_experiments_means(prt, rpt_items)
         fout_img = os.path.join(REPO, "doc/md/images", img_base)
-        title = "Hypotheses Simulations with Benjamini/Hochberg FDR"
+        title = "Benjamini/Hochberg FDR Hypotheses Simulations"
         obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR', dotsize=1, title=title)
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
