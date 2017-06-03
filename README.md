@@ -23,7 +23,8 @@ In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
 (i.e. Null should be rejected; there is a difference between the study items and the population items),
 the simulated FDR drops dramatically below alpha(0.05).
 
-![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_500.png)
+#### Simulated FDR Ratios
+![FDR results](doc/logs/suppl_hypoth_fdr_actual_100to025_01to05_004to128_N00500_1000.png)
 The x-axis shows two simulation parameters.
 The first parameter is the _number of tested hypotheses_ in each simulation, which is 4, 16, and 128.
 The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-value_,
@@ -35,6 +36,9 @@ As the percentage of "True nulls" drops and the number of "non-true nulls" rises
 The maximum P-value for "non-true null hypotheses" is seen here with values 0.05, 0.03, & 0.01.
 This value has no affect on the simulated FDR values.
 But it has a large affect on the sensitivity of the test.
+
+#### Simulated Sensitivity Ratios
+![Sensitivity results](doc/logs/suppl_hypoth_sensitivity_100to025_01to05_004to128_N00500_1000.png)
 If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.01,
 all hypotheses will be discovered.
 If all "non-true null hypotheses" have a randomly generated P-value between 0.0 and 0.05,
