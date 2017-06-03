@@ -22,13 +22,13 @@ class ExperimentSet(object):
         self.num_null = int(round(float(params['perc_null'])*params['hypoth_qty']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
-    def get_fdr_actuals(self):
-        """Return list of actaul FDR values for simulation."""
-        return self.get_means("fdr_actual")
-
     def get_means(self, key):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
+
+    def get_stderrs(self, key):
+        """Return list of stderrs for a item like fdr_actual, frr_actual."""
+        return [e.get_stderr(key) for e in self.expset]
 
     def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval "
                            "{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {PVALQTY:4} P-Values)"):

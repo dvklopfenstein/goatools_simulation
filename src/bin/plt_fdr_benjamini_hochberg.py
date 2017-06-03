@@ -23,7 +23,7 @@ def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.9):
         'num_hypoths_list' : [4, 16, 128],
         'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
-    rpt_items = ['fdr_actual', 'frr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
+    rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     run_sim(sim_params, rpt_items, dotsize)
 
 def run_sim(sim_params, rpt_items, dotsize):
@@ -37,8 +37,8 @@ def run_sim(sim_params, rpt_items, dotsize):
     with open(os.path.join(REPO, fout_log), 'w') as prt:
         obj.prt_params(prt)
         obj.seed.prt(prt)
-        obj.prt_experiments_stats(prt, rpt_items)
         obj.prt_experiments_means(prt, rpt_items)
+        obj.prt_experiments_stats(prt, rpt_items)
         title = "Benjamini/Hochberg FDR Hypotheses Simulations"
         fout_img = os.path.join(REPO, fout_png)
         obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR', dotsize=dotsize, title=title)

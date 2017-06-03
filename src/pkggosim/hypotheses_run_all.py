@@ -17,17 +17,6 @@ from goatools.statsdescribe import StatsDescribe
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
 
-    # Parameters Example:
-    #
-    #     params = {
-    #         'seed'            : 0xdeadbeef,
-    #         'multi_params'    : {'alpha' : 0.05, 'method' : 'fdr_bh'},
-    #         'max_sigpvals'    : [0.005, 0.01, 0.02, 0.03, 0.04, 0.05],
-    #         'perc_nulls'       : [0, 5, 10, 20, 60, 80, 90, 95, 98, 100],
-    #         'num_hypoths_list'       : [20, 100, 500],
-    #         'num_experiments' : 100,
-    #         'num_sims'    : 100}
-
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
                            'num_experiments', 'num_sims'])
 
@@ -98,19 +87,28 @@ class ExperimentsAll(object):
                 objstat.prt_data(expname, means, prt)
 
     def prt_experiments_means(self, prt=sys.stdout, attrs=None):
-        """Print stats for user-specified data in experiment sets."""
+        """Print means and stderrs for user-specified data in experiment sets."""
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
         sys.stdout.write("\n{TITLE}\n".format(TITLE=self.get_desc()))
         num_attrs = len(attrs)
-        prt.write("nul% maxSig #tests {ATTRS}\n".format(ATTRS=" ".join(attrs)))
-        prt.write("---- ------ ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*10]*num_attrs)))
+        attrstrs = ["{:>19}".format(a) for a in attrs]
+        prt.write("\nSummary of mean values and standard errors:\n\n")
+        prt.write("nul% maxSig #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
+        prt.write("---- ------ ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
         namefmt = "{PERCNULL:3}%  {SIGMAX:5.3f}  {PVALQTY:5}"
         for experiment_set in self.expsets:
-            expname = experiment_set.get_desc(namefmt)
+            # expname = experiment_set.get_desc(namefmt)
             means = [np.mean(experiment_set.get_means(a)) for a in attrs]
-            mean_strs = ["{:10.4f}".format(m) for m in means]
-            prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
+            # mean_strs = ["{:10.4f}".format(m) for m in means]
+            stderrs = [np.std(experiment_set.get_stderrs(a)) for a in attrs]
+            # stderr_strs = ["{:10.4f}".format(m) for m in stderrs]
+            prt.write("{EXP_DESC} ".format(EXP_DESC=experiment_set.get_desc(namefmt)))
+            for mean, stderr in zip(means, stderrs):
+                prt.write("{AVG:10.4f} +/-{SE:5.3f} ".format(AVG=mean, SE=stderr))
+            prt.write("\n")
+            # prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
+        prt.write("\n")
 
     def prt_num_sims_w_errs(self, prt=sys.stdout):
         """Print if errors were seen in sims."""
