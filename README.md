@@ -23,7 +23,7 @@ In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
 (i.e. Null should be rejected; there is a difference between the study items and the population items),
 the simulated FDR drops dramatically below alpha(0.05).
 
-![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_100.png)
+![pval tiled FDR values](doc/md/images/suppl_hypoth_fdr_100to025_01to05_004to128_N00500_500.png)
 The x-axis shows two simulation parameters.
 The first parameter is the _number of tested hypotheses_ in each simulation, which is 4, 16, and 128.
 The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-value_,
