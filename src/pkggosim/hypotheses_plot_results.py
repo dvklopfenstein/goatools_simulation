@@ -8,7 +8,62 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-#import numpy as np
+
+class PlotInfo(object):
+    """Plot information for tiled plots in general and for one of various stats attributes."""
+
+    dflts = {
+        'attrname':'fdr_actual',
+        'grpname':'FDR',
+        'dotsize':2,
+        'dpi':400,
+        'title':'Hypotheses Simulations',
+        'xlabel':'Number of Tested Hypotheses',
+        'ylabel':'Simulated {GRP} Ratios',
+        'txtsz_title':20,
+        'txtsz_xy'   :15,
+        'txtsz_tile' :None,
+        'txtsz_ticks':None,
+    }
+
+    dfltvals = {
+        'yticks':[0.00, 0.025, 0.05, 0.075],
+        'yticklabels':["", "0.025", "0.050", "0.075"],
+        'ylim':[0.0, 0.09],
+        'alphaline':True,
+    }
+
+    attr2vals = {
+        'fdr_actual':{
+            'yticks':[0.00, 0.025, 0.05, 0.075],
+            'yticklabels':["", "0.025", "0.050", "0.075"],
+            'ylim':[0.0, 0.09],
+            'alphaline':True},
+        'sensitivity':{
+            'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
+            'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
+            'ylim':[-0.05, 1.05],
+            'alphaline':False},
+    }
+
+    def __init__(self, args_kws):
+        self.kws = self._init_kws(args_kws)
+        self.attrname = self.kws['attrname']
+
+    def get_val(self, nameplt='yticks'):
+        """Return plotting parameters based on the plotted statistical data."""
+        pltvals = self.attr2vals.get(self.attrname, None)
+        return pltvals[nameplt] if pltvals is not None else self.dfltvals[nameplt]
+
+    def _init_kws(self, args_kws):
+        """Return plotting parameters, returning either user-specfied value or default."""
+        kws = {}
+        for key, dfltval in self.dflts.items():
+            kws[key] = args_kws.get(key, dfltval)
+        if 'ylabel' not in args_kws:
+            kws['ylabel'].format(GRP=args_kws['grpname'])
+        return kws
+
 
 def plot_results_all(objsim, params):
     """Plot simulation results for many sets of p-values."""
@@ -80,16 +135,7 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     sns.set(style="ticks")
     fig, ax_boxplot = plt.subplots()
     set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws)
-    # # Set the tick labels font
-    # # http://stackoverflow.com/questions/3899980/how-to-change-the-font-size-on-a-matplotlib-plot
-    # axis = plt.subplot() # Defines variable by creating an empty plot
-    # for label in axis.get_xticklabels() + axis.get_yticklabels():
-    #     #label.set_fontname('Arial')
-    #     label.set_fontsize(15)
-    # # Plot text
     fout_img = kws.get("fout_img", "sim_hypotheses.png")
-    # #plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
-    # #plt.tight_layout()
     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     show = kws.get('show', False)
@@ -106,8 +152,9 @@ def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
     ax_boxplot.legend_.remove()
     _set_color_whiskers(ax_boxplot, lwd, 'black', 'red')
     _set_color_boxes(ax_boxplot, 'black')
-    ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
-                    linewidth=lwd, solid_capstyle="butt")
+    if alpha is not None:
+        ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
+                        linewidth=lwd, solid_capstyle="butt")
     if 'ylim_a' in kws and 'ylim_b' in kws:
         ax_boxplot.set_ylim(kws['ylim_a'], kws['ylim_b'])
     if 'title' in kws:
@@ -164,31 +211,17 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
 
 def plt_box_tiled(fout_img, key2exps, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    kws = {
-        'attrname':'fdr_actual',
-        'grpname':'FDR',
-        'dotsize':2,
-        'dpi':400,
-        'title':'Hypotheses Simulations',
-        'xlabel':'Number of Tested Hypotheses',
-        'ylabel':'Simulated {GRP} Ratios'.format(GRP=args_kws['grpname']),
-        'txtsz_title':20,
-        'txtsz_xy'   :15,
-        'txtsz_tile' :None,
-        'txtsz_ticks':None,
-    }
-    for key, val in args_kws.items():
-        kws[key] = val
+    objplt = PlotInfo(args_kws)
+    kws = objplt.kws
     num_rows, num_cols = _get_num_rows_cols(key2exps)
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
     axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: [-1*t[0][0], t[0][1]]) # perc_null, max_sig
-    #for idx, (axes, ((perc_null, maxsig), exps)) in enumerate(zip(axes_2d, sorted_dat)):
     for idx, tile_items in enumerate(zip(axes_2d, sorted_dat)):
         plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
-        _plt_tile(idx, num_rows, num_cols, tile_items, **kws)
+        _plt_tile(idx, num_rows, num_cols, tile_items, objplt)
     _tiled_xyticklabels_off(axes_2d, num_cols)
     xysz = kws['txtsz_xy']
     fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
@@ -199,19 +232,23 @@ def plt_box_tiled(fout_img, key2exps, **args_kws):
     if kws.get('show', False):
         plt.show()
 
-def _plt_tile(idx, num_rows, num_cols, tile_items, **kws):
+def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     """Plot one tile of a multi-tiled plot."""
+    kws = objplt.kws
     (axes, ((perc_null, maxsig), exps)) = tile_items
     dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
-    set_axis_boxplot(axes, dfrm, exps[0].alpha, dotsize=kws['dotsize'])
+    alpha = exps[0].alpha if objplt.get_val('alphaline') else None
+    set_axis_boxplot(axes, dfrm, alpha, dotsize=kws['dotsize'])
     axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
-    axes.set_yticks([0.00, 0.025, 0.05, 0.075])
-    axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
+    # axes.set_yticks([0.00, 0.025, 0.05, 0.075])
+    # axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
+    axes.set_yticks(objplt.get_val('yticks'))
+    axes.set_yticklabels(objplt.get_val('yticklabels'))
     if idx >= num_cols*(num_rows-1): # bottom_row
         axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
     if idx%num_cols == 0:
         axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
-    axes.set_ylim(0.0, 0.09)
+    axes.set_ylim(objplt.get_val('ylim'))
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
 
 def _get_tiled_axes(fig, n_rows, n_cols):
