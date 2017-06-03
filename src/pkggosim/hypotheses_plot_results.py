@@ -27,6 +27,7 @@ class PlotInfo(object):
     }
 
     dfltvals = {
+        'plottype':'boxplot',
         'yticks':[0.00, 0.025, 0.05, 0.075],
         'yticklabels':["", "0.025", "0.050", "0.075"],
         'ylim':[0.0, 0.09],
@@ -35,11 +36,13 @@ class PlotInfo(object):
 
     attr2vals = {
         'fdr_actual':{
+            'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
             'yticklabels':["", "0.025", "0.050", "0.075"],
             'ylim':[0.0, 0.09],
             'alphaline':True},
         'sensitivity':{
+            'plottype':'barplot',
             'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
             'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
             'ylim':[-0.05, 1.05],
@@ -129,12 +132,11 @@ def wrpng_boxplot_sigs_each2(dfrm, alpha, **kws):
 
 def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
-    # https://stackoverflow.com/questions/23969619/plotting-with-seaborn-using-the-matplotlib-object-oriented-interface
     plt.clf()
     sns.despine(offset=10, trim=True)
     sns.set(style="ticks")
     fig, ax_boxplot = plt.subplots()
-    set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws)
+    fill_axis(ax_boxplot, dfrm, alpha, **kws)
     fout_img = kws.get("fout_img", "sim_hypotheses.png")
     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
@@ -142,26 +144,31 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     if show:
         plt.show()
 
-def set_axis_boxplot(ax_boxplot, dfrm, alpha, **kws):
-    """Fills axis ax_boxplot with one set of boxplots of simulated FDRs."""
+def fill_axis(axis, dfrm, alpha, **kws):
+    """Fills axis axis with one set of boxplots of simulated FDRs."""
     lwd = kws.get('linewidth', 0.7)
     dotsz = kws.get('dotsize', 5)
-    sns.stripplot(x="xval", y="yval", data=dfrm, jitter=True, size=dotsz, ax=ax_boxplot)
-    sns.boxplot(x="xval", y="yval", hue="group", data=dfrm, # palette="PRGn",
-                ax=ax_boxplot, linewidth=lwd, color='black', saturation=1)
-    ax_boxplot.legend_.remove()
-    _set_color_whiskers(ax_boxplot, lwd, 'black', 'red')
-    _set_color_boxes(ax_boxplot, 'black')
+    plottype = kws.get('plottype', "boxplot")
+    pal = 'dark' # Seaborn color palette
+    plt_data = {'x':"xval", 'y':"yval", 'data':dfrm, 'ax':axis}
+    sns.stripplot(jitter=True, size=dotsz, palette=pal, **plt_data)
+    if plottype == 'boxplot':
+        sns.boxplot(hue="group", linewidth=lwd, color='black', saturation=1, **plt_data)
+        axis.legend_.remove()
+    elif plottype == 'barplot':
+        sns.barplot(palette=pal, alpha=.3, saturation=1, ci=None, **plt_data)
+    _set_color_whiskers(axis, lwd, 'black', 'red')
+    _set_color_boxes(axis, 'black')
     if alpha is not None:
-        ax_boxplot.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
-                        linewidth=lwd, solid_capstyle="butt")
+        axis.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
+                  linewidth=lwd, solid_capstyle="butt")
     if 'ylim_a' in kws and 'ylim_b' in kws:
-        ax_boxplot.set_ylim(kws['ylim_a'], kws['ylim_b'])
+        axis.set_ylim(kws['ylim_a'], kws['ylim_b'])
     if 'title' in kws:
-        ax_boxplot.set_title(kws['title'], size=25)
-    ax_boxplot.set_xlabel(kws.get('xlabel', ""), size=20)
-    ax_boxplot.set_ylabel(kws.get('ylabel', ""), size=20)
-    return ax_boxplot
+        axis.set_title(kws['title'], size=25)
+    axis.set_xlabel(kws.get('xlabel', ""), size=20)
+    axis.set_ylabel(kws.get('ylabel', ""), size=20)
+    return axis
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):
     """Set boxplot whisker line color and thinkness."""
@@ -238,10 +245,8 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     (axes, ((perc_null, maxsig), exps)) = tile_items
     dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
-    set_axis_boxplot(axes, dfrm, alpha, dotsize=kws['dotsize'])
+    fill_axis(axes, dfrm, alpha, dotsize=kws['dotsize'], plottype=objplt.get_val('plottype'))
     axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
-    # axes.set_yticks([0.00, 0.025, 0.05, 0.075])
-    # axes.set_yticklabels(["", "0.025", "0.050", "0.075"])
     axes.set_yticks(objplt.get_val('yticks'))
     axes.set_yticklabels(objplt.get_val('yticklabels'))
     if idx >= num_cols*(num_rows-1): # bottom_row
