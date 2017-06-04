@@ -8,7 +8,7 @@ import os
 import sys
 import timeit
 from pkggosim.hypotheses_run_all import ExperimentsAll
-from pkggosim.utils import get_fout_img, get_hms
+from pkggosim.utils import get_hms
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
@@ -38,7 +38,7 @@ def main(randomseed):
             obj.prt_experiments_means(prt, rpt_items)
             obj.plt_box_all("sim_{PSIMATTR}_{PERCNULL:03}_{SIGMAX:02}.png", 'fdr_actual', 'FDR')
             # sim_fdr_LgHypoth__100to025_01to05.png
-            fout_img = os.path.join(REPO, "doc/md/images", get_fout_img(exp_params, img_pat))
+            fout_img = os.path.join(REPO, "doc/md/images", obj.get_fout_img(img_pat))
             obj.plt_box_tiled(fout_img, 'fdr_actual', 'FDR')
         prt.write("HMS: {HMS}\n".format(HMS=get_hms(tic)))
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))

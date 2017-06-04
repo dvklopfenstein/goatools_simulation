@@ -46,18 +46,4 @@ def get_hms(tic):
     """Print elapsed time as simulations run."""
     return str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
 
-# TBD: Put in hypotheses_utils
-def get_fout_img(params, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
-    """Get the name of the png file for the tiled plot."""
-    return img_pat.format(
-        P0=params['perc_nulls'][0],   # True Null %
-        PN=params['perc_nulls'][-1],  # True Null %
-        MAX0=int(params['max_sigpvals'][0]*100),  # 0.01 ->"01"
-        MAXN=int(params['max_sigpvals'][-1]*100),
-        Q0=params['num_hypoths_list'][0],
-        QN=params['num_hypoths_list'][-1],
-        NEXP=params['num_experiments'],
-        NSIM=params['num_sims'])
-
-
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

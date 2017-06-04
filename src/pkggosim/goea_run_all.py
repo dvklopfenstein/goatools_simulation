@@ -26,6 +26,18 @@ class ExperimentsAll(object):
         assert set(params.keys()) == self.expected_params
         self.expsets = self._init_experiment_sets()
 
+    def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
+        """Get the name of the png file for the tiled plot."""
+        return img_pat.format(
+            P0=self.params['perc_nulls'][0],   # True Null %
+            PN=self.params['perc_nulls'][-1],  # True Null %
+            MAX0=int(self.params['max_sigpvals'][0]*100),  # 0.01 ->"01"
+            MAXN=int(self.params['max_sigpvals'][-1]*100),
+            Q0=self.params['num_hypoths_list'][0],
+            QN=self.params['num_hypoths_list'][-1],
+            NEXP=self.params['num_experiments'],
+            NSIM=self.params['num_sims'])
+
     def get_desc(self):
         """Return str describing params used in all simulations."""
         # Ex: Alpha(0.05) Method(fdr_bh) 10=Experiments/Set 100=P-Value simulations/Experiment
