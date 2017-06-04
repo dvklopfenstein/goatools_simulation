@@ -33,6 +33,7 @@ def run_sim(obj, rpt_items, dotsize):
     fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
+        obj.prt_hms(prt, "Simulations Completed")
         obj.prt_params(prt)
         obj.seed.prt(prt)
         obj.prt_experiments_means(prt, rpt_items)
@@ -44,6 +45,7 @@ def run_sim(obj, rpt_items, dotsize):
             base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
             fout_img = os.path.join(REPO, 'doc/logs', base_img)
             obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+        obj.prt_hms(prt, "Reports and Plots Completed")
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:
@@ -51,8 +53,8 @@ if __name__:
     NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member
     PARAMS = [
-        NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
-        # NTOBJ._make([100, 1000, {'fdr_actual':1.00, 'sensitivity':0.65}]),
+        NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]),
+        # NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # TBD Re-run
         # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:

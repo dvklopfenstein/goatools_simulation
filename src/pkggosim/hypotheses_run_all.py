@@ -21,6 +21,7 @@ class ExperimentsAll(object):
                            'num_experiments', 'num_sims'])
 
     def __init__(self, params):
+        self.tic = timeit.default_timer()
         self.seed = RandomSeed32(params.get('seed', None))
         self.params = params
         assert set(params.keys()) == self.expected_params
@@ -55,7 +56,6 @@ class ExperimentsAll(object):
     def _init_experiment_sets(self):
         """Run all variations of Experiments."""
         expsets = []
-        tic = timeit.default_timer()
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
@@ -69,9 +69,13 @@ class ExperimentsAll(object):
                         'hypoth_qty' : hypoth_qty,
                         'num_experiments' : self.params['num_experiments'],
                         'num_sims' : self.params['num_sims']}
-                    expsets.append(ExperimentSet(exp_parms, tic))
-        sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
+                    expsets.append(ExperimentSet(exp_parms, self.tic))
+        self.prt_hms(sys.stdout, "Simulations Completed")
         return expsets
+
+    def prt_hms(self, prt, msg):
+        """Print the elapsed time."""
+        prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
     def plt_box_all(self, fimg_pat, attrname='fdr_actual', grpname='FDR'):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
