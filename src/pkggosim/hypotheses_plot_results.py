@@ -65,6 +65,8 @@ class PlotInfo(object):
             kws[key] = args_kws.get(key, dfltval)
         if 'ylabel' not in args_kws:
             kws['ylabel'] = kws['ylabel'].format(GRP=args_kws['grpname'])
+        if 'dotsize' in args_kws:
+            kws['dotsize'] = args_kws['dotsize'][kws['attrname']]
         return kws
 
 

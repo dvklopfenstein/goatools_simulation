@@ -6,13 +6,12 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
+import collections as cx
 from pkggosim.hypotheses_run_all import ExperimentsAll
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-# def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
-# def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.70):
-def main(randomseed, num_experiments=20, num_sims=20, dotsize=2):
+def main(randomseed, num_experiments, num_sims, dotsize):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     # User-configurable parameters
     sim_params = {
@@ -39,7 +38,7 @@ def run_sim(obj, rpt_items, dotsize):
         obj.prt_experiments_means(prt, rpt_items)
         obj.prt_experiments_stats(prt, rpt_items)
         title = "Benjamini/Hochberg FDR Hypotheses Simulations"
-        plts = [('fdr_actual', 'FDR'), 
+        plts = [('fdr_actual', 'FDR'),
                 ('sensitivity', 'Sensitivity')]
         for attr, name in plts:
             base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
@@ -49,6 +48,14 @@ def run_sim(obj, rpt_items, dotsize):
 
 if __name__:
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
-    main(SEED)
+    NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
+    #pylint: disable=bad-whitespace, no-member
+    PARAMS = [
+        # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
+        NTOBJ._make([100, 1000, {'fdr_actual':0.90, 'sensitivity':0.65}]),
+        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+    ]
+    for ntd in PARAMS:
+        main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
