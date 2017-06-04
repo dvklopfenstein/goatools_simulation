@@ -32,7 +32,7 @@ def run_sim(sim_params, rpt_items, dotsize):
     obj = ExperimentsAll(sim_params)
     desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
     desc_str = get_fout_img(sim_params, desc_pat)
-    fout_log = os.path.join('doc/logs', 'suppl_hypoth_{DESC}.log'.format(DESC=desc_str))
+    fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
         obj.prt_params(prt)
@@ -43,7 +43,7 @@ def run_sim(sim_params, rpt_items, dotsize):
         plts = [('fdr_actual', 'FDR'), 
                 ('sensitivity', 'Sensitivity')]
         for attr, name in plts:
-            base_img = 'suppl_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
+            base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
             fout_img = os.path.join(REPO, 'doc/logs', base_img)
             obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
