@@ -45,10 +45,11 @@ class ExperimentsAll(object):
             "{E}=Experiments/Set".format(E=params['num_experiments']),
             "{P}=P-Value simulations/Experiment".format(P=params['num_sims'])])
 
-    def prt_params(self, prt=sys.stdout):
+    def prt_summary(self, prt):
         """Print user-specified input parameters."""
-        for key, val in self.pobj.params.items():
-            prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
+        self.pobj.prt_summary(prt)
+        # for key, val in self.pobj.params.items():
+        #     prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
 
     def run(self):
         """Run all variations of Experiments."""

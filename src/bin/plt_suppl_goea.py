@@ -9,7 +9,7 @@ import sys
 import collections as cx
 from pkggosim.goea_run_all_params import RunParams
 from pkggosim.goea_run_all import ExperimentsAll
-from pkggosim.goea_utils import get_study2genes
+from pkggosim.goea_utils import import_var
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
@@ -18,13 +18,13 @@ def main(randomseed, num_experiments, num_sims, dotsize):
     """Simulate Gene Ontology Enrichment Analyses."""
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
-    sim_params = {
+    params = {
         'seed' : randomseed,
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
-        'genes_study_bg':None, # TBD
-        'genes_popnullmaskout':None, # TBD
+        'genes_study_bg':import_var("pkggosim.genes_b_cell_activation", "GENES"),
+        'genes_popnullmaskout':import_var("pkggosim.genes_immune", "GENES"),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25],
         'num_genes_list' : [4, 16, 128],
@@ -33,7 +33,9 @@ def main(randomseed, num_experiments, num_sims, dotsize):
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
-    obj.prt_seed(sys.stdout)
+    prt = sys.stdout
+    obj.prt_summary(prt)
+    #obj.prt_seed(prt)
     # obj.run() # Loads obj.expsets
     # run_sim(obj, rpt_items, dotsize)
 

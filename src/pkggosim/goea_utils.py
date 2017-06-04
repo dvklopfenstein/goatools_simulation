@@ -20,6 +20,10 @@ def get_assoc_data(fin_assc, genes_pop):
     """Return associations as ens2gos."""
     return GoatoolsDataMaker.get_assoc_data(fin_assc, genes_pop)
 
+def get_assoc_hdr(fin_assc):
+    """Return associations as ens2gos."""
+    return GoatoolsDataMaker.get_assoc_hdr(fin_assc)
+
 def import_var(modulestr, varname, log=None, rpterr=False):
     """Return variable inside module."""
     mod = import_mod(modulestr, log)
