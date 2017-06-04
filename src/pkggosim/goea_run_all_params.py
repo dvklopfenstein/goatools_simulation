@@ -41,6 +41,10 @@ class RunParams(object):
         self.genes_study_bg = params['genes_study_bg'].intersection(self.genes_population)
         self.genes_null_bg = self.genes_population.difference(params['genes_popnullmaskout'])
 
+    def get_alpha(self):
+        """Return the alpha value."""
+        return self.objbg.objbase.alpha
+
     def prt_summary(self, prt):
         """Print summary of simulation parameters and background data."""
         prt.write("\nWRITTEN: {DATE}:\n\n".format(DATE=datetime.date.today()))

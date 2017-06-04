@@ -11,19 +11,14 @@ from pkggosim.goea_sim import GoeaSim
 class ManyGoeaSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set([
-        'num_sims', 'num_study_genes', 'perc_null', 'num_null', 'study_genes_bg'])
+    expected_params = set(['num_sims', 'num_study_genes', 'perc_null', 'num_null'])
 
-    def __init__(self, params, study_genes_bg, objbg):
+    def __init__(self, params, pobj):
         self.params = params
-        self.study_genes_bg = study_genes_bg
-        self.objbg = objbg
+        self.pobj = pobj
         assert set(params.keys()) == self.expected_params
-        # Data members
         simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
         self.nts_tfpn = [o.nt_tfpn for o in simobjs]
-        # Print header for each set of simulations
-        #self.prt_summary(prt=sys.stdout)
 
     def get_mean(self, key):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
@@ -73,7 +68,6 @@ class ManyGoeaSims(object):
         num_sims = self.params['num_sims']
         num_genes = self.params['num_study_genes']
         num_null = self.params['num_null']
-        study_genes_bg = self.study_genes_bg
-        return [GoeaSim(num_genes, num_null, study_genes_bg, self.objbg) for _ in range(num_sims)]
+        return [GoeaSim(num_genes, num_null, self.pobj) for _ in range(num_sims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

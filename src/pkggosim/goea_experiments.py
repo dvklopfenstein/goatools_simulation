@@ -13,15 +13,12 @@ class ExperimentSet(object):
 
     expected_params = set(['perc_null', 'num_study_genes', 'num_experiments', 'num_sims'])
 
-    def __init__(self, params, tic, study_genes_bg, objbg):
+    def __init__(self, params, pobj):
         self.params = params
-        self.study_genes_bg = study_genes_bg
-        self.objbg = objbg
-        self.alpha = self.objbg.objbg.alpha
-        assert study_genes_bg
+        self.pobj = pobj
         assert set(params.keys()) == self.expected_params
         self.num_null = int(round(float(params['perc_null'])*params['num_study_genes']/100.0))
-        self.expset = self._init_experiments(tic) # returns list of ManyGoeaSims objects
+        self.expset = self._init_experiments() # returns list of ManyGoeaSims objects
 
     def get_means(self, key):
         """Return list of means for a item like fdr_actual, frr_actual."""
@@ -35,7 +32,7 @@ class ExperimentSet(object):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
             PERCNULL=self.params['perc_null'],
-            EXP_ALPHA=float(self.params['perc_null'])/100.0*self.alpha,
+            EXP_ALPHA=float(self.params['perc_null'])/100.0*self.pobj.get_alpha(),
             TOTNULL=self.num_null,
             GOEAQTY=self.params['num_study_genes'])
 
@@ -52,16 +49,16 @@ class ExperimentSet(object):
         for experiment in self.expset:
             experiment.prt_num_sims_w_errs(prt, desc)
 
-    def _init_experiments(self, tic):
+    def _init_experiments(self):
         """Run a set of experiments."""
         expset = []
-        sys.stdout.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(tic)))
+        sys.stdout.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
         shared_param_keys = ['num_sims', 'num_study_genes', 'perc_null']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
             # One ManyGoeaSims is one experiment which can return one simulated FDR value
-            expset.append(ManyGoeaSims(experiment_params, self.study_genes_bg, self.objbg))
+            expset.append(ManyGoeaSims(experiment_params, self.pobj))
         return expset
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

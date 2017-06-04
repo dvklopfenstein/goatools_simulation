@@ -23,18 +23,19 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
-        'genes_study_bg':import_var("pkggosim.genes_b_cell_activation", "GENES"),
+       #'genes_study_bg':import_var("pkggosim.genes_b_cell_activation", "GENES"),
+        'genes_study_bg':import_var("pkggosim.cytokine_rsp", "GENES"),
         'genes_popnullmaskout':import_var("pkggosim.genes_immune", "GENES"),
         'association_file':'gene_association.mgi',
-        'perc_nulls' : [100, 75, 50, 25],
+        'perc_nulls' : [100, 75, 50, 25, 0],
+       #'perc_nulls' : [100, 80, 60, 40, 20, 0],
         'num_genes_list' : [4, 16, 128],
         'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
-    obj.run() # Runs simulations and Loads obj.expsets
-    # run_sim(obj, rpt_items, dotsize)
+    run_sim(obj, rpt_items, dotsize)
     obj.prt_seed(prt)
 
 def run_sim(obj, rpt_items, dotsize):
@@ -44,9 +45,8 @@ def run_sim(obj, rpt_items, dotsize):
     fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
+        obj.run(prt) # Runs simulations and Loads obj.expsets (Lists of Experiment Sets)
         obj.prt_summary(prt)
-        obj.prt_params(prt)
-        obj.prt_seed(prt)
         obj.prt_experiments_means(prt, rpt_items)
         obj.prt_experiments_stats(prt, rpt_items)
         title = "GOEA Simulations"
@@ -56,6 +56,7 @@ def run_sim(obj, rpt_items, dotsize):
             base_img = 'fig_goea_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
             fout_img = os.path.join(REPO, 'doc/logs', base_img)
             obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+        obj.prt_hms(prt, "Simulations complete. Reports and plots generated.")
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:
@@ -65,7 +66,7 @@ if __name__:
     PARAMS = [
         # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
         # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+        NTOBJ._make([ 2,   2, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:
         main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)

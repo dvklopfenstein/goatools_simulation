@@ -22,7 +22,8 @@ class DataBase(object):
             self.go_dag,
             propagate_counts=False,
             alpha=self.alpha,
-            methods=[self.method])
+            methods=[self.method],
+            log=None)
 
     def prt_summary(self, prt):
         """Print summary of base information."""

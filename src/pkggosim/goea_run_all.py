@@ -17,6 +17,7 @@ class ExperimentsAll(object):
 
     def __init__(self, pobj):
         self.pobj = pobj
+        self.tic = pobj.tic
         self.expsets = []
 
     def prt_seed(self, prt):
@@ -49,28 +50,28 @@ class ExperimentsAll(object):
         # for key, val in self.pobj.params.items():
         #     prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
 
-    def run(self):
+    def run(self, prt):
         """Run all variations of Experiments."""
         expsets = []
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
         prms = self.pobj.params
-        tic = self.pobj.tic
         for perc_null in prms['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
-            for max_sigpval in prms['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
-                for hypoth_qty in prms['num_genes_list']:   # Ex: [20, 100, 500]
-                    exp_parms = {
-                        'max_sigpval' : max_sigpval,
-                        'perc_null' : perc_null,
-                        'hypoth_qty' : hypoth_qty,
-                        'num_experiments' : prms['num_experiments'],
-                        'num_sims' : prms['num_sims']}
-                    # def __init__(self, prms, tic, study_genes_bg, objbg):
-                    eset = ExperimentSet(exp_parms, tic, prms['study_genes_bg'], self.pobj.objbg)
-                    expsets.append(eset)
-        sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
+            for num_study_genes in prms['num_genes_list']:   # Ex: [20, 100, 500]
+                exp_parms = { # Experiment Set Parameters
+                    'perc_null' : perc_null,
+                    'num_study_genes' : num_study_genes,
+                    'num_experiments' : prms['num_experiments'],
+                    'num_sims' : prms['num_sims']}
+                eset = ExperimentSet(exp_parms, self.pobj)
+                expsets.append(eset)
+        self.prt_hms(prt, "Simulations Completed")
         return expsets
+
+    def prt_hms(self, prt, msg):
+        """Print the elapsed time."""
+        prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
     def plt_box_all(self, fimg_pat, attrname='fdr_actual', grpname='FDR'):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""

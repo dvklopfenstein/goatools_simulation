@@ -16,8 +16,8 @@ class GoeaSim(object):
         "NtMtAll", "num_genes num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
-    def __init__(self, num_study_genes, num_null, study_genes_bg, objbg):
-        iniobj = _Init(num_study_genes, num_null, study_genes_bg, objbg)
+    def __init__(self, num_study_genes, num_null, pobj):
+        iniobj = _Init(num_study_genes, num_null, pobj)
         # List of info for each study gene: geneid reject expected_significance tfpn
         self.nts_goea_res = iniobj.get_nts_stugenes()
         # One namedtuple summarizing results of this GOEA simulation
@@ -71,12 +71,12 @@ class _Init(object):
                 tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
-    def __init__(self, num_study_genes, num_null, study_genes_bg, objbg):
-        self.objbg = objbg
+    def __init__(self, num_study_genes, num_null, pobj):
+        self.pobj = pobj
         # I. Genes in two groups: Different than population AND no different than population
         self.genes_stu = None  # List of randomly-generated gene lists
         self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)
-        self._init_study_genes(num_study_genes, num_null, study_genes_bg)
+        self._init_study_genes(num_study_genes, num_null)
         assert len(self.genes_stu) == num_study_genes
         assert num_study_genes - sum(self.expsig) == num_null
         goea_results = self._init_goea_results()
@@ -85,12 +85,11 @@ class _Init(object):
 
     def _init_goea_results(self):
         """Run Gene Ontology Analysis."""
-        attrname = "p_{METHOD}".format(METHOD=self.objbg.objbase.method)
-        alpha = self.objbg.objbase.alpha
-        keep_if = lambda nt: getattr(nt, attrname) < alpha
-        return self.objbg.objgoea.run_study(self.genes_stu, keep_if=keep_if)
+        attrname = "p_{METHOD}".format(METHOD=self.pobj.objbg.objbase.method)
+        keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbg.objbase.alpha
+        return self.pobj.objbg.objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
-    def _init_study_genes(self, num_study_genes, num_null, genes_study_bg):
+    def _init_study_genes(self, num_study_genes, num_null):
         """Generate 2 sets of genes: Not intended significant & intended to be significant."""
         # Calculate the number of "Non-true null hypotheses":
         #   Study genes found to be different than the population genes likely not by chance
@@ -98,8 +97,8 @@ class _Init(object):
         # 1. Generate random genes: Significant and Random
         #   True  -> gene is intended to be significant(different from the population)
         #   False -> If gene is determined significant, it occured by chance
-        genes_pop_bg = list(self.objbg.pop_genes.difference(genes_study_bg))
-        genes_study_bg = list(genes_study_bg)
+        genes_pop_bg = list(self.pobj.genes_null_bg)
+        genes_study_bg = list(self.pobj.genes_study_bg)
         shuffle(genes_pop_bg)
         shuffle(genes_study_bg)
         genes_expsig = \
