@@ -11,8 +11,8 @@ from pkggosim.utils import get_fout_img
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-#def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
-def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.80):
+# def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
+def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.70):
 # def main(randomseed, num_experiments=20, num_sims=20, dotsize=2):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     # User-configurable parameters
@@ -30,7 +30,7 @@ def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.80):
 def run_sim(sim_params, rpt_items, dotsize):
     """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
     obj = ExperimentsAll(sim_params)
-    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
+    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
     desc_str = get_fout_img(sim_params, desc_pat)
     fout_log = os.path.join('doc/logs', 'suppl_hypoth_{DESC}.log'.format(DESC=desc_str))
     # Report and plot simulation results

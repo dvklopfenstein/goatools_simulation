@@ -136,7 +136,7 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     sns.despine(offset=10, trim=True)
     sns.set(style="ticks")
     fig, ax_boxplot = plt.subplots()
-    fill_axis(ax_boxplot, dfrm, alpha, **kws)
+    fill_axes(ax_boxplot, dfrm, alpha, **kws)
     fout_img = kws.get("fout_img", "sim_hypotheses.png")
     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
@@ -144,31 +144,33 @@ def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     if show:
         plt.show()
 
-def fill_axis(axis, dfrm, alpha, **kws):
-    """Fills axis axis with one set of boxplots of simulated FDRs."""
+def fill_axes(axes, dfrm, alpha, **kws):
+    """Fills axes axes with one set of boxplots of simulated FDRs."""
     lwd = kws.get('linewidth', 0.7)
     dotsz = kws.get('dotsize', 5)
     plottype = kws.get('plottype', "boxplot")
     pal = 'dark' # Seaborn color palette
-    plt_data = {'x':"xval", 'y':"yval", 'data':dfrm, 'ax':axis}
+    plt_data = {'x':"xval", 'y':"yval", 'data':dfrm, 'ax':axes}
     sns.stripplot(jitter=True, size=dotsz, palette=pal, **plt_data)
     if plottype == 'boxplot':
         sns.boxplot(hue="group", linewidth=lwd, color='black', saturation=1, **plt_data)
-        axis.legend_.remove()
+        axes.legend_.remove()
     elif plottype == 'barplot':
         sns.barplot(palette=pal, alpha=.3, saturation=1, ci=None, **plt_data)
-    _set_color_whiskers(axis, lwd, 'black', 'red')
-    _set_color_boxes(axis, 'black')
+    _set_color_whiskers(axes, lwd, 'black', 'red')
+    _set_color_boxes(axes, 'black')
     if alpha is not None:
-        axis.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
+        axes.plot([-1000, 1000], [alpha, alpha], 'k--', alpha=1.0,
                   linewidth=lwd, solid_capstyle="butt")
-    if 'ylim_a' in kws and 'ylim_b' in kws:
-        axis.set_ylim(kws['ylim_a'], kws['ylim_b'])
+    if 'ylim' in kws:
+        axes.set_ylim(kws['ylim'])
     if 'title' in kws:
-        axis.set_title(kws['title'], size=25)
-    axis.set_xlabel(kws.get('xlabel', ""), size=20)
-    axis.set_ylabel(kws.get('ylabel', ""), size=20)
-    return axis
+        axes.set_title(kws['title'], size=25)
+    axes.set_xlabel(kws.get('xlabel', ""), size=20)
+    axes.set_ylabel(kws.get('ylabel', ""), size=20)
+    if 'letter' in kws and 'ylim' in kws:
+        axes.text(0.95*axes.get_xlim()[1], 0.82*kws['ylim'][1], kws['letter'], ha='right', va='center')
+    return axes
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):
     """Set boxplot whisker line color and thinkness."""
@@ -245,7 +247,8 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     (axes, ((perc_null, maxsig), exps)) = tile_items
     dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
-    fill_axis(axes, dfrm, alpha, dotsize=kws['dotsize'], plottype=objplt.get_val('plottype'))
+    fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
+              plottype=objplt.get_val('plottype'), letter=chr(65+idx), ylim=objplt.get_val('ylim'))
     axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
     axes.set_yticks(objplt.get_val('yticks'))
     axes.set_yticklabels(objplt.get_val('yticklabels'))
