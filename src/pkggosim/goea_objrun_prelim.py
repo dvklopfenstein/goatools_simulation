@@ -7,19 +7,17 @@ import sys
 import collections as cx
 from random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.goea_objbase import DataBase
+from pkggosim.goea_objbg import DataBackground
 from pkggosim.goea_utils import shuffle_associations
 
 
-class RunGoeas(object):
+class RunPrelim(object):
     """Holds GOEA information. Runs sets of GOEAs."""
 
     ntobj = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, multiparams, pop_genes, assc):
-        self.objbg = DataBase(multiparams['alpha'], multiparams['method'])
-        self.pop_genes = pop_genes
-        self.assc = assc
+    def __init__(self, alpha, method, pop_genes, assc_file):
+        self.objbg = DataBackground(alpha, method, pop_genes, assc_file)
 
     def run_goeas(self, study_lens, study_genes, study_desc, perc_null):
         """Run GOEAs."""
@@ -32,7 +30,7 @@ class RunGoeas(object):
             ntdesc = self.ntobj(name=study_desc, perc_null=perc_null, tot_study=len(study_genes))
             results_list.append((
                 ntdesc,
-                runfnc(self.assc, self.pop_genes, study_genes[:study_len], ntdesc)))
+                runfnc(self.objbg.assc, self.objbg.pop_genes, study_genes[:study_len], ntdesc)))
             if num_genes <= study_len:
                 return results_list
         return results_list
@@ -40,7 +38,7 @@ class RunGoeas(object):
     def prt_results(self, results_sims, prt=sys.stdout):
         """Prints a summary of results from function, run_goeas."""
         itemfmt = "{G:6,}   {s:5}/{S:5} {PNULL:10}% {ASSC} {TOT_STUDY:6,} {NAME}\n"
-        self.objbg.prt_versions(prt)
+        self.objbg.objbase.prt_versions(prt)
         prt.write("Sig. GOs Study genes % True Null   assc Max Genes Study Name\n")
         prt.write("-------- ----------- ----------- ------ --------- ----------\n")
         for ntdesc, res in results_sims:
@@ -58,8 +56,8 @@ class RunGoeas(object):
         """Simulate the significance of the user-provided study vs. the population gene sets."""
         genes_study = set(genes_study_arg)
         assc_desc = 'actual'
-        alpha = self.objbg.alpha
-        goeaobj = self.objbg.get_goeaobj(genes_pop, assoc_ens2gos)
+        alpha = self.objbg.objbase.alpha
+        goeaobj = self.objbg.objbase.get_goeaobj(genes_pop, assoc_ens2gos)
         goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < alpha)
         fout_txt = "goea_{DESC}_sig_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)
@@ -75,9 +73,9 @@ class RunGoeas(object):
         """Simulate no significance"""
         genes_study = set(genes_study_arg)
         assc_desc = 'random'
-        alpha = self.objbg.alpha
+        alpha = self.objbg.objbase.alpha
         rand_assoc = shuffle_associations(assoc_ens2gos)
-        goeaobj = self.objbg.get_goeaobj(genes_pop, rand_assoc)
+        goeaobj = self.objbg.objbase.get_goeaobj(genes_pop, rand_assoc)
         goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < alpha)
         fout_txt = "goea_{DESC}_rnd_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)

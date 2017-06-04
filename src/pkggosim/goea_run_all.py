@@ -5,9 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import collections as cx
-import timeit
 import numpy as np
-from pkggosim.randseed import RandomSeed32
 from pkggosim.goea_experiments import ExperimentSet
 from pkggosim.hypotheses_plot_results import plt_box_all, plt_box_tiled
 from pkggosim.utils import get_hms
@@ -15,62 +13,63 @@ from goatools.statsdescribe import StatsDescribe
 
 
 class ExperimentsAll(object):
-    """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
+    """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
-    expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals',
-                           'num_hypoths_list', 'num_experiments', 'num_sims'])
+    def __init__(self, pobj):
+        self.pobj = pobj
+        self.expsets = []
 
-    def __init__(self, params):
-        self.seed = RandomSeed32(params.get('seed', None))
-        self.params = params
-        assert set(params.keys()) == self.expected_params
-        self.expsets = self._init_experiment_sets()
+    def prt_seed(self, prt):
+        """Print random seed."""
+        self.pobj.objrnd.prt(prt)
 
     def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
         """Get the name of the png file for the tiled plot."""
+        params = self.pobj.params
         return img_pat.format(
-            P0=self.params['perc_nulls'][0],   # True Null %
-            PN=self.params['perc_nulls'][-1],  # True Null %
-            MAX0=int(self.params['max_sigpvals'][0]*100),  # 0.01 ->"01"
-            MAXN=int(self.params['max_sigpvals'][-1]*100),
-            Q0=self.params['num_hypoths_list'][0],
-            QN=self.params['num_hypoths_list'][-1],
-            NEXP=self.params['num_experiments'],
-            NSIM=self.params['num_sims'])
+            P0=params['perc_nulls'][0],   # True Null %
+            PN=params['perc_nulls'][-1],  # True Null %
+            MAX0=int(params['max_sigpvals'][0]*100),  # 0.01 ->"01"
+            MAXN=int(params['max_sigpvals'][-1]*100),
+            Q0=params['num_genes_list'][0],
+            QN=params['num_genes_list'][-1],
+            NEXP=params['num_experiments'],
+            NSIM=params['num_sims'])
 
     def get_desc(self):
         """Return str describing params used in all simulations."""
         # Ex: Alpha(0.05) Method(fdr_bh) 10=Experiments/Set 100=P-Value simulations/Experiment
-        prms = self.params['multi_params']
+        params = self.pobj.params
         return " ".join([
-            "Alpha({A}) Method({M})".format(A=prms['alpha'], M=prms['method']),
-            "{E}=Experiments/Set".format(E=self.params['num_experiments']),
-            "{P}=P-Value simulations/Experiment".format(P=self.params['num_sims'])])
+            "Alpha({A}) Method({M})".format(A=params['alpha'], M=params['method']),
+            "{E}=Experiments/Set".format(E=params['num_experiments']),
+            "{P}=P-Value simulations/Experiment".format(P=params['num_sims'])])
 
     def prt_params(self, prt=sys.stdout):
         """Print user-specified input parameters."""
-        for key, val in self.params.items():
+        for key, val in self.pobj.params.items():
             prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
 
-    def _init_experiment_sets(self):
+    def run(self):
         """Run all variations of Experiments."""
         expsets = []
-        tic = timeit.default_timer()
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
-        for perc_null in self.params['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
-            for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
-                for hypoth_qty in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
+        prms = self.pobj.params
+        tic = self.pobj.tic
+        for perc_null in prms['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
+            for max_sigpval in prms['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
+                for hypoth_qty in prms['num_genes_list']:   # Ex: [20, 100, 500]
                     exp_parms = {
-                        'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
                         'perc_null' : perc_null,
                         'hypoth_qty' : hypoth_qty,
-                        'num_experiments' : self.params['num_experiments'],
-                        'num_sims' : self.params['num_sims']}
-                    expsets.append(ExperimentSet(exp_parms, tic))
-        # def __init__(self, params, tic, study_genes_bg, objbg):
+                        'num_experiments' : prms['num_experiments'],
+                        'num_sims' : prms['num_sims']}
+                    # def __init__(self, prms, tic, study_genes_bg, objbg):
+                    eset = ExperimentSet(exp_parms, tic, prms['study_genes_bg'], self.pobj.objbg)
+                    expsets.append(eset)
         sys.stdout.write("  ELAPSED TIME: {HMS}\n".format(HMS=get_hms(tic)))
         return expsets
 

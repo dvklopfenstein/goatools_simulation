@@ -23,7 +23,7 @@ In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
 the simulated FDR drops dramatically below alpha(0.05).
 
 #### Simulated FDR Ratios
-![FDR results](doc/logs/suppl_hypoth_fdr_actual_100to025_01to05_004to128_N00500_1000.png)
+![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 The x-axis shows two simulation parameters.
 The first parameter is the _number of tested hypotheses_ in each simulation, which is 4, 16, and 128.
 The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-value_,
@@ -38,7 +38,7 @@ But it has a large affect on the sensitivity of the test.
 
 #### Simulated Sensitivity Ratios
 Sensitivity is also known as the _true positive rate_, _recall_, or _probability of detection_.
-![Sensitivity results](doc/logs/suppl_hypoth_sensitivity_100to025_01to05_004to128_N00500_1000.png)
+![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
 **At an alpha of 0.05, 100% of "non-true null hypotheses" are detected when their P-Values are <= 0.01**
 as seen in the leftmost "Sig.<=0.01" column.
 The top row shows sensitivity is 0% because all hypotheses are set to null for these simulations,

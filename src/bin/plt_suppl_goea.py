@@ -6,34 +6,36 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
+import collections as cx
+from pkggosim.goea_run_all_params import RunParams
 from pkggosim.goea_run_all import ExperimentsAll
-
-REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
-from pkggosim.goea_objrun_prelim import RunGoeas
-from pkggosim.goea_utils import get_study2genes, get_assoc_data
+from pkggosim.goea_utils import get_study2genes
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
-#def main(randomseed, num_experiments=500, num_sims=1000, dotsize=0.80):
-#def main(randomseed, num_experiments=100, num_sims=1000, dotsize=0.80):
-def main(randomseed, num_experiments=20, num_sims=20, dotsize=2):
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
+
+def main(randomseed, num_experiments, num_sims, dotsize):
     """Simulate Gene Ontology Enrichment Analyses."""
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
-    objrun = RunGoeas(
-        {'alpha':0.05, 'method':'fdr_bh'},
-        genes_mus,  # Population genes
-        get_assoc_data("gene_association.mgi", genes_mus)) # Associations: ens2gos
-    # User-configurable parameters
     sim_params = {
         'seed' : randomseed,
-        'max_sigpvals' : [0.01, 0.03, 0.05],
+        'alpha' : 0.05,
+        'method' : 'fdr_bh',
+        'genes_population':genes_mus,
+        'genes_study_bg':None, # TBD
+        'genes_popnullmaskout':None, # TBD
+        'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25],
-        'num_hypoths_list' : [4, 16, 128],
+        'num_genes_list' : [4, 16, 128],
         'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
-    obj = ExperimentsAll(sim_params)
-    run_sim(obj, rpt_items, dotsize)
+    objparams = RunParams(params)
+    obj = ExperimentsAll(objparams)
+    obj.prt_seed(sys.stdout)
+    # obj.run() # Loads obj.expsets
+    # run_sim(obj, rpt_items, dotsize)
 
 def run_sim(obj, rpt_items, dotsize):
     """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
@@ -43,11 +45,11 @@ def run_sim(obj, rpt_items, dotsize):
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
         obj.prt_params(prt)
-        obj.seed.prt(prt)
+        obj.prt_seed(prt)
         obj.prt_experiments_means(prt, rpt_items)
         obj.prt_experiments_stats(prt, rpt_items)
         title = "GOEA Simulations"
-        plts = [('fdr_actual', 'FDR'), 
+        plts = [('fdr_actual', 'FDR'),
                 ('sensitivity', 'Sensitivity')]
         for attr, name in plts:
             base_img = 'fig_goea_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
@@ -57,6 +59,14 @@ def run_sim(obj, rpt_items, dotsize):
 
 if __name__:
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
-    main(SEED)
+    NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
+    #pylint: disable=bad-whitespace, no-member
+    PARAMS = [
+        # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
+        NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
+        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+    ]
+    for ntd in PARAMS:
+        main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

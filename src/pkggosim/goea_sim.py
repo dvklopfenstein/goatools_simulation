@@ -85,8 +85,8 @@ class _Init(object):
 
     def _init_goea_results(self):
         """Run Gene Ontology Analysis."""
-        attrname = "p_{METHOD}".format(METHOD=self.objbg.objbg.method)
-        alpha = self.objbg.objbg.alpha
+        attrname = "p_{METHOD}".format(METHOD=self.objbg.objbase.method)
+        alpha = self.objbg.objbase.alpha
         keep_if = lambda nt: getattr(nt, attrname) < alpha
         return self.objbg.objgoea.run_study(self.genes_stu, keep_if=keep_if)
 

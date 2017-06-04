@@ -18,6 +18,7 @@ class ExperimentSet(object):
         self.study_genes_bg = study_genes_bg
         self.objbg = objbg
         self.alpha = self.objbg.objbg.alpha
+        assert study_genes_bg
         assert set(params.keys()) == self.expected_params
         self.num_null = int(round(float(params['perc_null'])*params['num_study_genes']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyGoeaSims objects

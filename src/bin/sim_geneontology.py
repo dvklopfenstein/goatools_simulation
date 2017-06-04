@@ -132,24 +132,22 @@ Sig. GOs Study genes % True Null   assc Max Genes Study Name
 __cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 
 from pkggosim.randseed import RandomSeed32
-from pkggosim.goea_objrun_prelim import RunGoeas
-from pkggosim.goea_utils import get_study2genes, get_assoc_data
-
+from pkggosim.goea_objrun_prelim import RunPrelim
+from pkggosim.goea_utils import get_study2genes
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(seed, prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
     seed = RandomSeed32(seed)
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     genes_mus = ensm2sym.keys()  # Population genes
-    objrun = RunGoeas(
-        {'alpha':0.05, 'method':'fdr_bh'},
-        genes_mus,  # Population genes
-        get_assoc_data("gene_association.mgi", genes_mus)) # Associations: ens2gos
+    objrun = RunPrelim(0.05, 'fdr_bh', genes_mus, os.path.join(REPO, 'gene_association.mgi'))
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ... 1024, 2048, 4096
     results_list = []
