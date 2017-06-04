@@ -33,19 +33,18 @@ def main(randomseed, num_experiments, num_sims, dotsize):
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
-    prt = sys.stdout
-    obj.prt_summary(prt)
-    #obj.prt_seed(prt)
-    # obj.run() # Loads obj.expsets
+    obj.run() # Runs simulations and Loads obj.expsets
     # run_sim(obj, rpt_items, dotsize)
+    obj.prt_seed(prt)
 
 def run_sim(obj, rpt_items, dotsize):
     """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
+    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
     desc_str = obj.get_fout_img(desc_pat)
     fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
     # Report and plot simulation results
     with open(os.path.join(REPO, fout_log), 'w') as prt:
+        obj.prt_summary(prt)
         obj.prt_params(prt)
         obj.prt_seed(prt)
         obj.prt_experiments_means(prt, rpt_items)
@@ -65,8 +64,8 @@ if __name__:
     #pylint: disable=bad-whitespace, no-member
     PARAMS = [
         # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
-        NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+        # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
+        NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:
         main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)

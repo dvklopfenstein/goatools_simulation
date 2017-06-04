@@ -23,14 +23,12 @@ class ExperimentsAll(object):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
-    def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
+    def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}.png"):
         """Get the name of the png file for the tiled plot."""
         params = self.pobj.params
         return img_pat.format(
             P0=params['perc_nulls'][0],   # True Null %
             PN=params['perc_nulls'][-1],  # True Null %
-            MAX0=int(params['max_sigpvals'][0]*100),  # 0.01 ->"01"
-            MAXN=int(params['max_sigpvals'][-1]*100),
             Q0=params['num_genes_list'][0],
             QN=params['num_genes_list'][-1],
             NEXP=params['num_experiments'],
