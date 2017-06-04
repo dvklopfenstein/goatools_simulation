@@ -7,7 +7,7 @@ import sys
 import collections as cx
 from random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.goea_objbg import GoeaSimObj
+from pkggosim.goea_objbase import DataBase
 from pkggosim.goea_utils import shuffle_associations
 
 
@@ -17,7 +17,7 @@ class RunGoeas(object):
     ntobj = cx.namedtuple("results", "name perc_null tot_study")
 
     def __init__(self, multiparams, pop_genes, assc):
-        self.objbg = GoeaSimObj(multiparams['alpha'], multiparams['method'])
+        self.objbg = DataBase(multiparams['alpha'], multiparams['method'])
         self.pop_genes = pop_genes
         self.assc = assc
 
