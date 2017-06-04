@@ -171,7 +171,7 @@ def fill_axes(axes, dfrm, alpha, **kws):
     axes.set_xlabel(kws.get('xlabel', ""), size=20)
     axes.set_ylabel(kws.get('ylabel', ""), size=20)
     if 'letter' in kws and 'ylim' in kws:
-        axes.text(0.95*axes.get_xlim()[1], 0.82*kws['ylim'][1], kws['letter'], ha='right', va='center')
+        axes.text(0.96*axes.get_xlim()[1], 0.85*kws['ylim'][1], kws['letter'], ha='right', va='center')
     return axes
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):
@@ -249,8 +249,9 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     (axes, ((perc_null, maxsig), exps)) = tile_items
     dfrm = pd.DataFrame(_get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
+    letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
-              plottype=objplt.get_val('plottype'), letter=chr(65+idx), ylim=objplt.get_val('ylim'))
+              plottype=objplt.get_val('plottype'), letter=letter, ylim=objplt.get_val('ylim'))
     axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
     axes.set_yticks(objplt.get_val('yticks'))
     axes.set_yticklabels(objplt.get_val('yticklabels'))

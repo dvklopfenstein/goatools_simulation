@@ -53,8 +53,8 @@ if __name__:
     NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member
     PARAMS = [
-        NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]),
-        # NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # TBD Re-run
+        # NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]),
+        NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # TBD Re-run
         # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:
