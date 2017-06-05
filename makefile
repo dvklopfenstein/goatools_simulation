@@ -6,15 +6,15 @@ pylint:
 vim_sim_geneontology:
 	vim -p \
 	src/bin/plt_suppl_goea.py \
-	src/pkggosim/goea_sim.py \
-	src/pkggosim/goea_sims.py \
-	src/pkggosim/goea_experiments.py \
-	src/pkggosim/goea_run_all.py \
-	src/pkggosim/goea_run_all_params.py \
-	src/pkggosim/goea_utils.py \
-	src/pkggosim/goea_objassc.py \
-	src/pkggosim/goea_objbase.py \
-	src/pkggosim/utils.py
+	src/pkggosim/goea/sim.py \
+	src/pkggosim/goea/sims.py \
+	src/pkggosim/goea/experiments.py \
+	src/pkggosim/goea/run_all.py \
+	src/pkggosim/goea/run_all_params.py \
+	src/pkggosim/goea/utils.py \
+	src/pkggosim/goea/objassc.py \
+	src/pkggosim/goea/objbase.py \
+	src/pkggosim/common/true_positive.py
 
 vim_presim_geneontology:
 	vim -p \
@@ -26,13 +26,13 @@ vim_sim_benjamini_hochberg:
 	vim -p \
 	src/bin/plt_fdr_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \
-	src/pkggosim/hypotheses_sim.py \
-	src/pkggosim/hypotheses_sims.py \
-	src/pkggosim/hypotheses_experiments.py \
-	src/pkggosim/hypotheses_run_all.py \
-	src/pkggosim/hypotheses_plot_results.py \
-	src/pkggosim/randseed.py \
-	src/pkggosim/utils.py
+	src/pkggosim/hypotheses/sim.py \
+	src/pkggosim/hypotheses/sims.py \
+	src/pkggosim/hypotheses/experiments.py \
+	src/pkggosim/hypotheses/run_all.py \
+	src/pkggosim/hypotheses/plot_results.py \
+	src/pkggosim/common/randseed.py \
+	src/pkggosim/common/true_positive.py
 
 vim_md:
 	vim -p \
