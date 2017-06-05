@@ -13,7 +13,7 @@ from goatools_suppl.proj_data import GoatoolsDataMaker
 def get_study2genes():
     """Return study2genes."""
     studies = ['immune', 'viral_bacteria', 'cytokine_rsp', 'humoral_rsp', 'gamma_delta_t']
-    study_genes = [(s, import_var('pkggosim.genes_{S}'.format(S=s), 'GENES')) for s in studies]
+    study_genes = [(s, import_var('pkggosim.gene_data.genes_{S}'.format(S=s), 'GENES')) for s in studies]
     return cx.OrderedDict(study_genes)
 
 def get_assoc_data(fin_assc, genes_pop):

@@ -6,9 +6,9 @@ __author__ = "DV Klopfenstein"
 import sys
 import collections as cx
 import numpy as np
-from pkggosim.goea_experiments import ExperimentSet
-from pkggosim.hypotheses_plot_results import plt_box_all, plt_box_tiled
-from pkggosim.utils import get_hms
+from pkggosim.goea.experiments import ExperimentSet
+from pkggosim.hypotheses.plot_results import plt_box_all, plt_box_tiled
+from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 

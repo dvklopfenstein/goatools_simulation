@@ -6,10 +6,10 @@ __author__ = "DV Klopfenstein"
 
 import timeit
 import datetime
-from pkggosim.goea_utils import import_var
-from pkggosim.goea_objbase import DataBase
-from pkggosim.goea_objassc import DataAssc
-from pkggosim.randseed import RandomSeed32
+from pkggosim.goea.utils import import_var
+from pkggosim.goea.objbase import DataBase
+from pkggosim.goea.objassc import DataAssc
+from pkggosim.common.randseed import RandomSeed32
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
@@ -60,7 +60,7 @@ class RunParams(object):
 
     def get_genes(self, moddesc):
         """Return gene list using description."""
-        modstr = 'pkggosim.genes_{DESC}'.format(DESC=moddesc)
+        modstr = 'pkggosim.gene_data.genes_{DESC}'.format(DESC=moddesc)
         genes = import_var(modstr, "GENES")
         assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
         return genes

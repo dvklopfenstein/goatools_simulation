@@ -7,9 +7,9 @@ __author__ = "DV Klopfenstein"
 import os
 import sys
 import collections as cx
-from pkggosim.goea_run_all_params import RunParams
-from pkggosim.goea_run_all import ExperimentsAll
-from pkggosim.goea_utils import import_var
+from pkggosim.goea.run_all_params import RunParams
+from pkggosim.goea.run_all import ExperimentsAll
+from pkggosim.goea.utils import import_var
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")

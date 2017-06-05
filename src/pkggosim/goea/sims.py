@@ -5,7 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import numpy as np
-from pkggosim.goea_sim import GoeaSim
+from pkggosim.goea.sim import GoeaSim
 
 
 class ManyGoeaSims(object):

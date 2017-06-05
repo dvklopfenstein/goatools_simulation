@@ -5,13 +5,13 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import sys
-from pkggosim.goea_sims import ManyGoeaSims
-from pkggosim.goea_utils import get_study2genes, get_assoc_data
-from pkggosim.goea_objassc import DataAssc
+from pkggosim.goea.sims import ManyGoeaSims
+from pkggosim.goea.utils import get_study2genes, get_assoc_data
+from pkggosim.goea.objassc import DataAssc
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 def main(prt=sys.stdout):
-    """Test ManyGoeaSims in ./src/pkggosim/goea_sims.py"""
+    """Test ManyGoeaSims in ./src/pkggosim.goea.sims.py"""
     alpha = 0.05
     method = 'fdr_bh'
 

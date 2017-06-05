@@ -7,8 +7,8 @@ __author__ = "DV Klopfenstein"
 import os
 import sys
 import timeit
-from pkggosim.hypotheses_run_all import ExperimentsAll
-from pkggosim.utils import get_hms
+from pkggosim.hypotheses.run_all import ExperimentsAll
+from pkggosim.common.utils import get_hms
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 

@@ -7,10 +7,10 @@ import sys
 import collections as cx
 import timeit
 import numpy as np
-from pkggosim.randseed import RandomSeed32
-from pkggosim.hypotheses_experiments import ExperimentSet
-from pkggosim.hypotheses_plot_results import plt_box_all, plt_box_tiled
-from pkggosim.utils import get_hms
+from pkggosim.common.randseed import RandomSeed32
+from pkggosim.hypotheses.experiments import ExperimentSet
+from pkggosim.hypotheses.plot_results import plt_box_all, plt_box_tiled
+from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 

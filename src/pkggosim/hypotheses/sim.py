@@ -18,7 +18,7 @@ import sys
 import collections as cx
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
-from pkggosim.utils import get_result_desc, calc_ratio
+from pkggosim.common.utils import get_result_desc, calc_ratio
 
 class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""

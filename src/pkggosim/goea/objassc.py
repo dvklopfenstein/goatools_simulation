@@ -4,8 +4,8 @@ __cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights 
 __author__ = "DV Klopfenstein"
 
 import collections as cx
-from pkggosim.goea_objbase import DataBase
-from pkggosim.goea_utils import get_assoc_data, get_assoc_hdr
+from pkggosim.goea.objbase import DataBase
+from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""

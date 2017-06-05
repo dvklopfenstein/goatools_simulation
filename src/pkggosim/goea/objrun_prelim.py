@@ -7,9 +7,9 @@ import sys
 import collections as cx
 from random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.goea_objbase import DataBase
-from pkggosim.goea_objassc import DataAssc
-from pkggosim.goea_utils import shuffle_associations
+from pkggosim.goea.objbase import DataBase
+from pkggosim.goea.objassc import DataAssc
+from pkggosim.goea.utils import shuffle_associations
 
 
 class RunPrelim(object):

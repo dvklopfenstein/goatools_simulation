@@ -135,9 +135,9 @@ __author__ = "DV Klopfenstein"
 import os
 import sys
 
-from pkggosim.randseed import RandomSeed32
-from pkggosim.goea_objrun_prelim import RunPrelim
-from pkggosim.goea_utils import get_study2genes
+from pkggosim.common.randseed import RandomSeed32
+from pkggosim.goea.objrun_prelim import RunPrelim
+from pkggosim.goea.utils import get_study2genes
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")

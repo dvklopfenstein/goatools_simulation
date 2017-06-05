@@ -4,8 +4,8 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import sys
-from pkggosim.goea_sims import ManyGoeaSims
-from pkggosim.utils import get_hms
+from pkggosim.goea.sims import ManyGoeaSims
+from pkggosim.common.utils import get_hms
 
 
 class ExperimentSet(object):
