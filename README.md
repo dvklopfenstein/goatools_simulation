@@ -34,7 +34,7 @@ The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-v
 of randomly generated non-true null hypotheses test results.
 The y-axis shows the _percentage of "True nulls"_.
 The simulated FDR drops dramatically
-As the percentage of "True nulls" drops and the number of "non-true nulls" rises.
+As the percentage of "True nulls" drops causing the number of "non-true nulls" to rise.
 
 The maximum P-value for "non-true null hypotheses" is seen here with values 0.01, 0.03, & 0.05
 in columns A, B, and C repectively.
@@ -52,18 +52,18 @@ so there are no "non-true null hypotheses" to detect.
 A "non-true null hypotheses" in gene ontology analyses are genes which
 are extremely likely to be different from the general population of genes.
 
-**The sensitivity improves as the percentage of "non-true null hypotheses" increases.**
+**The sensitivity improves as the percentage of "non-true null hypotheses" increases.**    
 For example, only 21% of the "non-true nulls" are detected when 25% of the hypotheses are "non-true nulls" as seen in B2.
 But the detection rate rises to 62% of the total "non-true nulls" when 50% of the hypotheses are "non-true nulls" as seen in B3.
 
-**The sensitivity decreases as the P-values of the "non-true null hypotheses" approach the alpha value 0.05.**
+**The sensitivity decreases as the P-values of the "non-true null hypotheses" approach the alpha value 0.05.**    
 When the "non-true nulls" have a maximum P-value of 0.01 and the alpha is 0.05, all "non-true nulls" are detected in all simulations (A2, A3, A4).
 
-The detection drops to a worst case of only 1% of all possible "non-true nulls" detected (C2)
+The detection is shown to drop to only 1% of all possible "non-true nulls" detected (C2)
 when 25% of the 128 hypotheses tested are "non-true nulls" which have P-values between 0 and alpha.
 
-**The sensitivity decreases as the number of total tested hypotheses get larger.**
-Over many simulations the detection rate is 61% for groups of 4 tested hypotheses,
+**The sensitivity decreases as the number of total tested hypotheses get larger.**    
+Over many simulations the detection rate is 61% for groups of 4 tested hypotheses (C4, blue bar),
 but only 10% for groups of 128 hypotheses tested as shown in C4.
 
 
