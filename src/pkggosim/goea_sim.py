@@ -77,17 +77,22 @@ class _Init(object):
         self.genes_stu = None  # List of randomly-generated gene lists
         self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)
         self._init_study_genes(num_study_genes, num_null)
-        assert len(self.genes_stu) == num_study_genes
+        assert len(self.genes_stu) == num_study_genes, "{} {}".format(len(self.genes_stu), num_study_genes)
         assert num_study_genes - sum(self.expsig) == num_null
         goea_results = self._init_goea_results()
         self.genes_sig = get_study_items(goea_results)
-        print "STUDY({}) SIG({}) NULL({})".format(len(self.genes_stu), len(self.genes_sig), num_null)
+        num_study = len(self.genes_stu)
+        num_sig = len(self.genes_sig)
+        sys.stdout.write("NULL({NULL}) STUDY({STU}) EXP_SIG({EXP}) ACT_SIG({SIG})\n".format(
+            STU=num_study, SIG=num_sig, EXP=num_study-num_null, NULL=num_null))
 
     def _init_goea_results(self):
         """Run Gene Ontology Analysis."""
-        attrname = "p_{METHOD}".format(METHOD=self.pobj.objbg.objbase.method)
-        keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbg.objbase.alpha
-        return self.pobj.objbg.objgoea.run_study(self.genes_stu, keep_if=keep_if)
+        attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
+        keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
+        genes_pop_masked = self.pobj.genes_null_bg.union(self.genes_stu)
+        objgoea = self.pobj.objbase.get_goeaobj(genes_pop_masked, self.pobj.objassc.assc)
+        return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
     def _init_study_genes(self, num_study_genes, num_null):
         """Generate 2 sets of genes: Not intended significant & intended to be significant."""

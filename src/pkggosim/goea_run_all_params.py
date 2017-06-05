@@ -6,6 +6,8 @@ __author__ = "DV Klopfenstein"
 
 import timeit
 import datetime
+from pkggosim.goea_utils import import_var
+from pkggosim.goea_objbase import DataBase
 from pkggosim.goea_objassc import DataAssc
 from pkggosim.randseed import RandomSeed32
 
@@ -18,8 +20,8 @@ class RunParams(object):
         'method',                # 'fdr_bh'
         'association_file',      # 'gene_association.mgi'
         'genes_population',      # genes_mus
-        'genes_study_bg',        # import_var("pkggosim.genes_b_cell_activation", "GENES")
-        'genes_popnullmaskout',  # import_var("pkggosim.genes_immune", "GENES")
+        'genes_study_bg',        # 'humoral_rsp'
+        'genes_popnullmaskout',  # ['immune', 'viral_bacteria']
         'perc_nulls',            # [100, 75, 50, 25]
         'num_genes_list',        # [4, 16, 128]
         'num_experiments',       # Number of simulated FDR ratios in an experiment set
@@ -31,19 +33,37 @@ class RunParams(object):
         self.tic = timeit.default_timer()
         self.params = params
         self.objrnd = RandomSeed32(params['seed'])
-        self.objbg = DataAssc(
-            params['alpha'],
-            params['method'],
-            params['genes_population'], # Population genes
-            params['association_file']) # Associations: ens2gos
+        self.objbase = DataBase(params['alpha'], params['method'])
+        self.objassc = DataAssc(params['association_file'], params['genes_population'])
         # These study background genes have associations
-        self.genes_population = self.objbg.pop_genes
-        self.genes_study_bg = params['genes_study_bg'].intersection(self.genes_population)
-        self.genes_null_bg = self.genes_population.difference(params['genes_popnullmaskout'])
+        self.genes_population = self.objassc.pop_genes
+        self.genes_study_bg = self._init_genes_study_bg()
+        self.genes_null_bg = self._init_genes_null_bg()
 
-    def get_alpha(self):
-        """Return the alpha value."""
-        return self.objbg.objbase.alpha
+    def _init_genes_study_bg(self):
+        """Read genes in user-provided module. Limit study genes to those in assc."""
+        study_genes = self.get_genes(self.params['genes_study_bg'])
+        return study_genes.intersection(self.genes_population)
+
+    def _init_genes_null_bg(self):
+        """Read genes in user-provided module. Limit study genes to those in assc."""
+        null_bg = set(self.genes_population)
+        for genedesc in self.params['genes_popnullmaskout']:
+            genes_rm = self.get_genes(genedesc)
+            null_bg = null_bg.difference(genes_rm)
+        return null_bg
+
+    def get_objgoea(self, study_genes):
+        """Return population genes, including study genes. But minus closely related genes."""
+        genes_pop_masked = self.genes_null_bg.union(study_genes)
+        return self.objbase.get_goeaobj(genes_pop_masked, self.objassc.assc)
+
+    def get_genes(self, moddesc):
+        """Return gene list using description."""
+        modstr = 'pkggosim.genes_{DESC}'.format(DESC=moddesc)
+        genes = import_var(modstr, "GENES")
+        assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
+        return genes
 
     def prt_summary(self, prt):
         """Print summary of simulation parameters and background data."""
@@ -51,7 +71,8 @@ class RunParams(object):
         # Print Random seed
         self.objrnd.prt(prt)
         # Print Info: GO-DAG, Associations, Population
-        self.objbg.prt_summary(prt)
+        self.objbase.prt_summary(prt)
+        self.objassc.prt_summary(prt)
         prt.write("{N:6,} GENES  IN STUDY BACKGROUND\n".format(N=len(self.genes_study_bg)))
         prt.write("{N:6,} GENES  IN NULL  BACKGROUND\n".format(N=len(self.genes_null_bg)))
         prt.write("\n")

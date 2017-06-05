@@ -32,7 +32,7 @@ class ExperimentSet(object):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
             PERCNULL=self.params['perc_null'],
-            EXP_ALPHA=float(self.params['perc_null'])/100.0*self.pobj.get_alpha(),
+            EXP_ALPHA=float(self.params['perc_null'])/100.0*self.pobj.objbase.alpha,
             TOTNULL=self.num_null,
             GOEAQTY=self.params['num_study_genes'])
 

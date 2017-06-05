@@ -16,6 +16,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(randomseed, num_experiments, num_sims, dotsize):
     """Simulate Gene Ontology Enrichment Analyses."""
+    study_bg = "humoral_rsp"
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
     params = {
@@ -23,20 +24,17 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
-       #'genes_study_bg':import_var("pkggosim.genes_b_cell_activation", "GENES"),
-        'genes_study_bg':import_var("pkggosim.cytokine_rsp", "GENES"),
-        'genes_popnullmaskout':import_var("pkggosim.genes_immune", "GENES"),
+        'genes_study_bg':study_bg,
+        'genes_popnullmaskout':['immune', 'viral_bacteria'],
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
-       #'perc_nulls' : [100, 80, 60, 40, 20, 0],
-        'num_genes_list' : [4, 16, 128],
+        'num_genes_list' : [4, 16, 64],
         'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
     run_sim(obj, rpt_items, dotsize)
-    obj.prt_seed(prt)
 
 def run_sim(obj, rpt_items, dotsize):
     """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
@@ -55,8 +53,9 @@ def run_sim(obj, rpt_items, dotsize):
         for attr, name in plts:
             base_img = 'fig_goea_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
             fout_img = os.path.join(REPO, 'doc/logs', base_img)
-            obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+            #obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
         obj.prt_hms(prt, "Simulations complete. Reports and plots generated.")
+        obj.prt_seed(sys.stdout)
         sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:

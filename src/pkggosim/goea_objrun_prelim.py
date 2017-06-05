@@ -79,7 +79,6 @@ class RunPrelim(object):
         goeaobj.wr_txt(fout_txt, goea_results)
         genes_sig = get_study_items(goea_results)
         if genes_study != genes_sig:
-            msg = "EXPECTED ALL {STU} STUDY GENES TO SHOW SIGNIFICANT GO TERMS. FOUND {M}\n"
             msg = "FOUND {STUSIG:4} OF {STU:4} {DESC} GENES TO BE SIGNIFICANT\n"
             genes_study_sig = genes_study.intersection(genes_sig)
             sys.stdout.write(msg.format(STU=len(genes_study), STUSIG=len(genes_study_sig), DESC=ntdesc.name))
