@@ -1,5 +1,6 @@
 # Simulations to Verify GOEA Results
-The characteristics of **Gene Ontology Enrichment Analyses** (**GOEAs**)
+The characteristics of **Gene Ontology Enrichment Analyses** (**GOEAs**) using
+[GOATOOLS](https://github.com/tanghaibao/goatools)
 are examined using stochastic simulations.
 
 All simulations use [**Benjamini/Hochberg multiple test correction**](
