@@ -18,28 +18,6 @@ from goatools.statsdescribe import StatsDescribe
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 
 
-def run_sim(obj, rpt_items, dotsize=None):
-    """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-    desc_str = obj.get_fout_img()
-    fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
-    # Report and plot simulation results
-    with open(os.path.join(REPO, fout_log), 'w') as prt:
-        obj.prt_hms(prt, "Simulations Completed")
-        obj.prt_params(prt)
-        obj.seed.prt(prt)
-        obj.prt_experiments_means(prt, rpt_items)
-        obj.prt_experiments_stats(prt, rpt_items)
-        title = "Benjamini/Hochberg Hypotheses Simulations"
-        plts = [('fdr_actual', 'FDR'),
-                ('sensitivity', 'Sensitivity')]
-        for attr, name in plts:
-            base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
-            fout_img = os.path.join(REPO, 'doc/logs', base_img)
-            obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
-        obj.prt_hms(prt, "Reports and Plots Completed")
-        sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
-
-
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
 
@@ -54,6 +32,27 @@ class ExperimentsAll(object):
         self.params = params
         assert set(params.keys()) == self.expected_params
         self.expsets = self._init_experiment_sets()
+
+    def run_all(self, rpt_items, dotsize=None):
+        """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
+        desc_str = self.get_fout_img()
+        fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
+        # Report and plot simulation results
+        with open(os.path.join(REPO, fout_log), 'w') as prt:
+            self.prt_hms(prt, "Simulations Completed")
+            self.prt_params(prt)
+            self.seed.prt(prt)
+            self.prt_experiments_means(prt, rpt_items)
+            self.prt_experiments_stats(prt, rpt_items)
+            title = "Benjamini/Hochberg Hypotheses Simulations"
+            plts = [('fdr_actual', 'FDR'),
+                    ('sensitivity', 'Sensitivity')]
+            for attr, name in plts:
+                base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
+                fout_img = os.path.join(REPO, 'doc/logs', base_img)
+                self.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+            self.prt_hms(prt, "Reports and Plots Completed")
+            sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
     def get_fout_img(self, img_pat=None):
         """Get the name of the png file for the tiled plot."""

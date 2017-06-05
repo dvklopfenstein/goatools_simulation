@@ -34,29 +34,8 @@ def main(randomseed, num_experiments, num_sims, dotsize):
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
-    run_sim(obj, rpt_items, dotsize)
+    obj.run_all(rpt_items, dotsize)
 
-def run_sim(obj, rpt_items, dotsize):
-    """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
-    desc_str = obj.get_fout_img(desc_pat)
-    fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
-    # Report and plot simulation results
-    with open(os.path.join(REPO, fout_log), 'w') as prt:
-        obj.run(prt) # Runs simulations and Loads obj.expsets (Lists of Experiment Sets)
-        obj.prt_summary(prt)
-        obj.prt_experiments_means(prt, rpt_items)
-        obj.prt_experiments_stats(prt, rpt_items)
-        title = "GOEA Simulations"
-        plts = [('fdr_actual', 'FDR'),
-                ('sensitivity', 'Sensitivity')]
-        for attr, name in plts:
-            base_img = 'fig_goea_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
-            fout_img = os.path.join(REPO, 'doc/logs', base_img)
-            #obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
-        obj.prt_hms(prt, "Simulations complete. Reports and plots generated.")
-        obj.prt_seed(sys.stdout)
-        sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
 if __name__:
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None

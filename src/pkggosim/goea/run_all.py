@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 import collections as cx
 import numpy as np
@@ -10,6 +11,8 @@ from pkggosim.goea.experiments import ExperimentSet
 from pkggosim.hypotheses.plot_results import plt_box_all, plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
+
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 
 class ExperimentsAll(object):
@@ -19,6 +22,28 @@ class ExperimentsAll(object):
         self.pobj = pobj
         self.tic = pobj.tic
         self.expsets = []
+
+    def run_sim(self, rpt_items, dotsize):
+        """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
+        desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
+        desc_str = self.get_fout_img(desc_pat)
+        fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
+        # Report and plot simulation results
+        with open(os.path.join(REPO, fout_log), 'w') as prt:
+            self.run(prt) # Runs simulations and Loads self.expsets (Lists of Experiment Sets)
+            self.prt_summary(prt)
+            self.prt_experiments_means(prt, rpt_items)
+            self.prt_experiments_stats(prt, rpt_items)
+            title = "GOEA Simulations"
+            plts = [('fdr_actual', 'FDR'),
+                    ('sensitivity', 'Sensitivity')]
+            for attr, name in plts:
+                base_img = 'fig_goea_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
+                fout_img = os.path.join(REPO, 'doc/logs', base_img)
+                #self.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+            self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
+            self.prt_seed(sys.stdout)
+            sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
     def prt_seed(self, prt):
         """Print random seed."""

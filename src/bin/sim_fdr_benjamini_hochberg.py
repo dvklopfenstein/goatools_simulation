@@ -6,7 +6,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import timeit
-from pkggosim.hypotheses.run_all import ExperimentsAll, run_sim
+from pkggosim.hypotheses.run_all import ExperimentsAll
 from pkggosim.common.utils import get_hms
 
 
@@ -26,7 +26,7 @@ def main(randomseed):
     for num_hypoths_list in [[32, 128, 512], [4, 8, 16]]:
         exp_params['num_hypoths_list'] = num_hypoths_list
         obj = ExperimentsAll(exp_params)
-        run_sim(obj, rpt_items)
+        obj.run_all(rpt_items)
     sys.stdout.write("HMS: {HMS}\n".format(HMS=get_hms(tic)))
 
 
