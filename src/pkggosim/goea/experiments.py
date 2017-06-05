@@ -28,13 +28,13 @@ class ExperimentSet(object):
         """Return list of stderrs for a item like fdr_actual, frr_actual."""
         return [e.get_stderr(key) for e in self.expset]
 
-    def get_desc(self, fmt="{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {GOEAQTY:4} P-Values)"):
+    def get_desc(self, fmt="{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {QTY:4} P-Values)"):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
             PERCNULL=self.params['perc_null'],
             EXP_ALPHA=float(self.params['perc_null'])/100.0*self.pobj.objbase.alpha,
             TOTNULL=self.num_null,
-            GOEAQTY=self.params['num_items'])
+            QTY=self.params['num_items'])
 
     def get_strhdr(self):
         """Return a short 1-line summary of this experiment set."""
@@ -52,7 +52,8 @@ class ExperimentSet(object):
     def _init_experiments(self):
         """Run a set of experiments."""
         expset = []
-        sys.stdout.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
+        txt = "{DESC} HMS={HMS}\n".
+        sys.stdout.write(txt.format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
         shared_param_keys = ['num_sims', 'num_items', 'perc_null']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}

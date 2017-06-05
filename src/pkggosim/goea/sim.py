@@ -19,7 +19,7 @@ class GoeaSim(object):
     def __init__(self, num_study_genes, num_null, pobj):
         iniobj = _Init(num_study_genes, num_null, pobj)
         # List of info for each study gene: geneid reject expected_significance tfpn
-        self.nts_goea_res = iniobj.get_nts_stugenes()
+        self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
 

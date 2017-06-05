@@ -18,7 +18,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
-    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
+    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
 
     def __init__(self, pobj):
         self.pobj = pobj
@@ -31,7 +31,7 @@ class ExperimentsAll(object):
         fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
-            self.run(prt) # Runs simulations and Loads self.expsets (Lists of Experiment Sets)
+            self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_summary(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
@@ -79,8 +79,7 @@ class ExperimentsAll(object):
         #     prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
 
     def run(self, prt):
-        """Run all variations of Experiments."""
-        expsets = []
+        """Run all variations of Experiments. Save in self.expsets."""
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
@@ -93,9 +92,8 @@ class ExperimentsAll(object):
                     'num_experiments' : prms['num_experiments'],
                     'num_sims' : prms['num_sims']}
                 eset = ExperimentSet(exp_parms, self.pobj)
-                expsets.append(eset)
+                self.expsets.append(eset)
         self.prt_hms(prt, "Simulations Completed")
-        return expsets
 
     def prt_hms(self, prt, msg):
         """Print the elapsed time."""
@@ -116,7 +114,7 @@ class ExperimentsAll(object):
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
         hdrexps = "Nul(% max) #pval #tests" # Header for col0, the description of the statistic
-        namefmt = "{PERCNULL:3}% {SIGMAX:5.3f} {EXP_ALPHA:5.3f} {PVALQTY:5}"
+        namefmt = "{PERCNULL:3}% {EXP_ALPHA:5.3f} {QTY:5}"
         for attrname in attrs:
             prt.write("\n{ATTR} statistics:\n".format(ATTR=attrname))
             objstat = StatsDescribe("exps", "{:10.2f}" if attrname[:3] == "num" else "{:6.4f}")
@@ -133,10 +131,11 @@ class ExperimentsAll(object):
         sys.stdout.write("\n{TITLE}\n".format(TITLE=self.get_desc()))
         num_attrs = len(attrs)
         attrstrs = ["{:>19}".format(a) for a in attrs]
-        prt.write("\nSummary of mean values and standard errors:\n\n")
+        prt.write("\nSummary of mean values and standard errors ")
+        prt.write(" for {N} sets of experiments\n\n".format(N=len(self.expsets)))
         prt.write("nul% maxSig #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
         prt.write("---- ------ ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
-        namefmt = "{PERCNULL:3}%  {SIGMAX:5.3f}  {PVALQTY:5}"
+        namefmt = "{PERCNULL:3}% {QTY:5}"
         for experiment_set in self.expsets:
             # expname = experiment_set.get_desc(namefmt)
             means = [np.mean(experiment_set.get_means(a)) for a in attrs]
