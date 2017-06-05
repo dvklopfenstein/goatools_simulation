@@ -3,10 +3,6 @@ The characteristics of **Gene Ontology Enrichment Analyses** (**GOEAs**) using
 [GOATOOLS](https://github.com/tanghaibao/goatools)
 are examined using stochastic simulations.
 
-All simulations use [**Benjamini/Hochberg multiple test correction**](
-http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
-with **alpha=0.05**.
-
 **There are two categories of simulations**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](
      #preparatory-hypotheses-and-multiple-test-simulations)    
@@ -15,6 +11,10 @@ with **alpha=0.05**.
      #consequent-gene-ontology-enrichment-results-goea-simulations)    
      Simulations encompass the Benjamini/Hochberg functions from step 1, as well as
      gene ontology associations, and Fisher's exact test.
+
+All simulations use [**Benjamini/Hochberg multiple test correction**](
+http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
+with **alpha=0.05**.
 
 ## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
