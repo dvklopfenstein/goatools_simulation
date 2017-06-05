@@ -7,7 +7,7 @@ __author__ = "DV Klopfenstein"
 import sys
 from pkggosim.goea_sims import ManyGoeaSims
 from pkggosim.goea_utils import get_study2genes, get_assoc_data
-from pkggosim.goea_objbg import DataBackground
+from pkggosim.goea_objassc import DataAssc
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 def main(prt=sys.stdout):
@@ -38,7 +38,7 @@ def get_objbg():
     study2genes = get_study2genes()
     genes_mus = ensm2sym.keys()  # Population genes
     assc_geneid2gos = get_assoc_data("gene_association.mgi", genes_mus)
-    objbg = DataBackground(alpha, method, genes_mus, assc_geneid2gos)
+    objbg = DataAssc(alpha, method, genes_mus, assc_geneid2gos)
 
 if __name__ == '__main__':
     main()

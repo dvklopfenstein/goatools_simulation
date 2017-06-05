@@ -6,7 +6,7 @@ __author__ = "DV Klopfenstein"
 
 import timeit
 import datetime
-from pkggosim.goea_objbg import DataBackground
+from pkggosim.goea_objassc import DataAssc
 from pkggosim.randseed import RandomSeed32
 
 class RunParams(object):
@@ -31,7 +31,7 @@ class RunParams(object):
         self.tic = timeit.default_timer()
         self.params = params
         self.objrnd = RandomSeed32(params['seed'])
-        self.objbg = DataBackground(
+        self.objbg = DataAssc(
             params['alpha'],
             params['method'],
             params['genes_population'], # Population genes

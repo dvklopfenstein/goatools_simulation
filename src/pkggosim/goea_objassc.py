@@ -7,13 +7,14 @@ import collections as cx
 from pkggosim.goea_objbase import DataBase
 from pkggosim.goea_utils import get_assoc_data, get_assoc_hdr
 
-class DataBackground(object):
+class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
 
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, alpha, method, pop_genes, assc_file):
-        self.objbase = DataBase(alpha, method)
+    #### def __init__(self, alpha, method, pop_genes, assc_file):
+    def __init__(self, assc_file, pop_genes):
+        #### self.objbase = DataBase(alpha, method)
         # Read the association file. Save GOs related to population genes
         assc_geneid2gos = get_assoc_data(assc_file, pop_genes)
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
@@ -21,11 +22,11 @@ class DataBackground(object):
         # Speed sims: Use the association subset actually in the population
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
-        self.objgoea = self.objbase.get_goeaobj(self.pop_genes, self.assc) # GOEnrichmentStudy obj
+        #### self.objgoea = self.objbase.get_goeaobj(self.pop_genes, self.assc) # GOEnrichmentStudy obj
 
     def prt_summary(self, prt):
         """Print summary of parameters and background data."""
-        self.objbase.prt_summary(prt)
+        #### self.objbase.prt_summary(prt)
         prt.write("\nASSOCIATION INFORMATION:\n    ")
         prt.write("{ASSC}\n\n".format(ASSC="\n    ".join(self.assc_hdr.split("\n"))))
         prt.write("{N:6,} GENES  IN ASSOCIATION\n".format(N=len(self.assc)))

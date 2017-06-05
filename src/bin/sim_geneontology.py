@@ -145,15 +145,16 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def main(seed, prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
     seed = RandomSeed32(seed)
-    # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     genes_mus = ensm2sym.keys()  # Population genes
+    # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     objrun = RunPrelim(0.05, 'fdr_bh', genes_mus, os.path.join(REPO, 'gene_association.mgi'))
+    study2genes = get_study2genes()
+    objrun.set_maskout(study2genes['immune'].union(study2genes['viral_bacteria']))
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
     study_lens = [pow(2, exp) for exp in reversed(range(2, 13))]  # 4, 8, ... 1024, 2048, 4096
     results_list = []
     # Gene quantities:  2,092        592             227             124              15
     # Studies include: immune viral_bacteria cytokine_rsp humoral_rsp gamma_delta_t
-    study2genes = get_study2genes()
     # 3. SIMULATE 100% SIGNIFICANCE
     for study_desc, study_genes in study2genes.items():
         results_list.extend(objrun.run_goeas(study_lens, study_genes, study_desc, perc_null=0))
