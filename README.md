@@ -1,6 +1,6 @@
 # Simulations to Verify GOEA Results
-Stochastic simulations are used to investigate the results of
-**Gene Ontology Enrichment Analyses** (**GOEAs**).
+The characteristics of **Gene Ontology Enrichment Analyses** (**GOEAs**)
+are examined using stochastic simulations.
 
 All simulations use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
@@ -8,7 +8,8 @@ with **alpha=0.05**.
 
 **There are two categories of simulations**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](
-     #preparatory-hypotheses-and-multiple-test-simulations) (FDR simulation only with no gene ontology)
+     #preparatory-hypotheses-and-multiple-test-simulations)    
+     Benjamini/Hochberg FDR simulation only with no gene ontology
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
      #consequent-gene-ontology-enrichment-results-goea-simulations)
 
