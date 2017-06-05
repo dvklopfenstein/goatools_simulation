@@ -9,9 +9,11 @@ with **alpha=0.05**.
 **There are two categories of simulations**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](
      #preparatory-hypotheses-and-multiple-test-simulations)    
-     Benjamini/Hochberg FDR simulation only with no gene ontology
+     Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
      #consequent-gene-ontology-enrichment-results-goea-simulations)
+     Simulations encompass the Benjamini/Hochberg functions from step 1, as well as
+     gene ontology associations, and Fisher's exact test.
 
 ## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
