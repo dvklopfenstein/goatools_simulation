@@ -144,7 +144,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(seed, prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
-    seed = RandomSeed32(seed)
+    objrnd = RandomSeed32(seed)
     genes_mus = ensm2sym.keys()  # Population genes
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     objrun = RunPrelim(0.05, 'fdr_bh', genes_mus, os.path.join(REPO, 'gene_association.mgi'))
@@ -162,8 +162,9 @@ def main(seed, prt=sys.stdout):
     for study_desc, study_genes in study2genes.items():
         results_list.extend(objrun.run_goeas(study_lens, study_genes, study_desc, perc_null=100))
     # 5. REPORT RESULTS:
+    objrun.prt_summary(prt)
     objrun.prt_results(results_list)
-    seed.prt(prt)
+    objrnd.prt(prt)
 
 
 if __name__ == '__main__':
