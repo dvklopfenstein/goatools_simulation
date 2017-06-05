@@ -12,7 +12,7 @@ with **alpha=0.05**.
      #preparatory-hypotheses-and-multiple-test-simulations)    
      Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
-     #consequent-gene-ontology-enrichment-results-goea-simulations)
+     #consequent-gene-ontology-enrichment-results-goea-simulations)    
      Simulations encompass the Benjamini/Hochberg functions from step 1, as well as
      gene ontology associations, and Fisher's exact test.
 
