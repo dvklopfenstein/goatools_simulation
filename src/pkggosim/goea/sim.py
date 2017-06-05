@@ -7,7 +7,7 @@ import sys
 import collections as cx
 from random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.common.utils import get_result_desc, calc_ratio
+from pkggosim.common.true_positive import get_result_desc, calc_ratio
 
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
