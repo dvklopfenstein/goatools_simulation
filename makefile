@@ -11,6 +11,8 @@ vim_sim_geneontology:
 	src/pkggosim/goea/experiments.py \
 	src/pkggosim/goea/run_all.py \
 	src/pkggosim/goea/run_all_params.py \
+	src/pkggosim/goea/plot_results.py \
+	src/pkggosim/common/plot_results.py \
 	src/pkggosim/goea/utils.py \
 	src/pkggosim/goea/objassc.py \
 	src/pkggosim/goea/objbase.py \
@@ -31,8 +33,9 @@ vim_sim_benjamini_hochberg:
 	src/pkggosim/hypotheses/experiments.py \
 	src/pkggosim/hypotheses/run_all.py \
 	src/pkggosim/hypotheses/plot_results.py \
-	src/pkggosim/common/randseed.py \
-	src/pkggosim/common/true_positive.py
+	src/pkggosim/common/plot_results.py \
+	src/pkggosim/common/true_positive.py \
+	src/pkggosim/common/randseed.py
 
 vim_md:
 	vim -p \

@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import collections as cx
 import seaborn as sns
 import pandas as pd
 import numpy as np
@@ -10,7 +11,7 @@ import numpy as np
 class PlotInfo(object):
     """Plot information for tiled plots in general and for one of various stats attributes."""
 
-    dflts = {
+    dflts_plt = {
         'attrname':'fdr_actual',
         'grpname':'FDR',
         'dotsize':2,
@@ -19,12 +20,12 @@ class PlotInfo(object):
         'xlabel':'Number of Tested Hypotheses',
         'ylabel':'Simulated {GRP} Ratios',
         'txtsz_title':20,
-        'txtsz_xy'   :15,
+        'txtsz_xy'   :17,
         'txtsz_tile' :None,
         'txtsz_ticks':None,
     }
 
-    dfltvals = {
+    dflts_ax = {
         'plottype':'boxplot',
         'yticks':[0.00, 0.025, 0.05, 0.075],
         'yticklabels':["", "0.025", "0.050", "0.075"],
@@ -54,13 +55,26 @@ class PlotInfo(object):
     def get_val(self, nameplt='yticks'):
         """Return plotting parameters based on the plotted statistical data."""
         pltvals = self.attr2vals.get(self.attrname, None)
-        return pltvals[nameplt] if pltvals is not None else self.dfltvals[nameplt]
+        return pltvals[nameplt] if pltvals is not None else self.dflts_ax[nameplt]
+
+    def get_str_mean(self, exps):
+        """Get value with x and y location to be printing inside plot."""
+        valstrs = []
+        if self.attrname == "sensitivity":
+            ntobj = cx.namedtuple("NtValstr", "valstr x y")
+            for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
+                val = np.mean(exp.get_means(self.attrname))
+                # Plot text that can comfortably fit in plot.
+                if val > 0.0001 and val < 0.75:
+                    valstr = "{VAL:2.0f}%".format(VAL=val*100)
+                    valstrs.append(ntobj(valstr=valstr, x=xval, y=val+0.05))
+        return valstrs
 
     def _init_kws(self, args_kws):
         """Return plotting parameters, returning either user-specfied value or default."""
         # Copy user keywords if they exist, otherwise use default values.
         kws = {}
-        for key, dfltval in self.dflts.items():
+        for key, dfltval in self.dflts_plt.items():
             kws[key] = args_kws.get(key, dfltval)
         # Update ylabel with friendlier text
         if 'ylabel' not in args_kws:
@@ -71,7 +85,7 @@ class PlotInfo(object):
             if dotsize_usr is not None:
                 kws['dotsize'] = dotsize_usr[kws['attrname']]
             else:
-                kws['dotsize'] = self.dflts['dotsize']
+                kws['dotsize'] = self.dflts_plt['dotsize']
         return kws
 
 
@@ -125,9 +139,6 @@ def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     kws = objplt.kws
     (axes, ((perc_null, maxsig), exps)) = tile_items
     letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
-    for exp in exps: # ManyHypothesesSims or ManyGoeaSims
-        print "EEEEEEEEEEE {} {} {:4} {:8.6f}".format(
-            letter, objplt.attrname, exp.params['num_items'], np.mean(exp.get_means(objplt.attrname)))
     dfrm = pd.DataFrame(get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
@@ -141,6 +152,9 @@ def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
         axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
     axes.set_ylim(objplt.get_val('ylim'))
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
+    # Add value text above plot bars to make plot easier to read
+    for ntval in objplt.get_str_mean(exps):
+        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
 
 def get_tiled_axes(fig, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""

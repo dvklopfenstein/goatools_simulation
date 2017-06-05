@@ -61,7 +61,7 @@ def wrpng_boxplot_sigs_each2(dfrm, alpha, **kws):
         label.set_fontsize(15)
     # Plot text
     fout_img = kws.get("fout_img", "sim_pvals.png")
-    plt.title(kws.get('title', 'P-values'), size=25)
+    plt.title(kws['title'], size=25)
     plt.yticks([0.01, 0.03, 0.05, 0.07, 0.09])
     plt.xlabel(kws.get('xlabel', '# P-values/multitest correction'), size=20)
     plt.ylabel("Simulated FDR Ratios", size=20)
