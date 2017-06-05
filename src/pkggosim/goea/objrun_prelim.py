@@ -5,6 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import collections as cx
+import datetime
 from random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.goea.objbase import DataBase
@@ -22,6 +23,12 @@ class RunPrelim(object):
         self.objassc = DataAssc(assc_file, pop_genes)
         self.maskout = None
 
+    def prt_summary(self, prt):
+        """Print summary of simulation parameters and background data."""
+        prt.write("\nWRITTEN: {DATE}:\n\n".format(DATE=datetime.date.today()))
+        self.objbase.prt_summary(prt)
+        self.objassc.prt_summary(prt)
+
     def set_maskout(self, pop_maskout_genes):
         """Sets genes to mask out from population genes."""
         self.maskout = pop_maskout_genes
@@ -34,12 +41,8 @@ class RunPrelim(object):
         runfnc = self.run_random_assc if perc_null == 100 else self.run_actual_assc
         for study_len in sorted(study_lens):
             shuffle(study_genes)
-            #                          name        perc_null  tot_study
-            ntdesc = self.ntobj._make([study_desc, perc_null, len(study_genes)])
-            results_list.append((
-                ntdesc,
-                # runfnc(self.objassc.assc, self.objassc.pop_genes, study_genes[:study_len], ntdesc)))
-                runfnc(study_genes[:study_len], ntdesc)))
+            ntdesc = self.ntobj(name=study_desc, perc_null=perc_null, tot_study=len(study_genes))
+            results_list.append((ntdesc, runfnc(study_genes[:study_len], ntdesc)))
             if num_genes <= study_len:
                 return results_list
         return results_list
@@ -78,10 +81,11 @@ class RunPrelim(object):
         fout_txt = "goea_{DESC}_sig_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)
         genes_sig = get_study_items(goea_results)
-        if genes_study != genes_sig:
-            msg = "FOUND {STUSIG:4} OF {STU:4} {DESC} GENES TO BE SIGNIFICANT\n"
-            genes_study_sig = genes_study.intersection(genes_sig)
-            sys.stdout.write(msg.format(STU=len(genes_study), STUSIG=len(genes_study_sig), DESC=ntdesc.name))
+        # if genes_study != genes_sig:
+        #     msg = "FOUND {STUSIG:4} OF {STU:4} {DESC} GENES TO BE SIGNIFICANT\n"
+        #     genes_study_sig = genes_study.intersection(genes_sig)
+        #     sys.stdout.write(msg.format(
+        #         STU=len(genes_study), STUSIG=len(genes_study_sig), DESC=ntdesc.name))
         return {'goea_results':goea_results, 'genes_sig':genes_sig, 'genes_study':genes_study,
                 'assc_desc':assc_desc}
 
