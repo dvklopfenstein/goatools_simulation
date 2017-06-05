@@ -9,7 +9,7 @@ import sys
 import collections as cx
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
-from pkggosim.goea.utils import import_var
+from pkggosim.goea.utils import get_genes, get_genes_all
 from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
@@ -17,6 +17,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def main(randomseed, num_experiments, num_sims, dotsize):
     """Simulate Gene Ontology Enrichment Analyses."""
     study_bg = "humoral_rsp"
+    popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
     params = {
@@ -24,8 +25,8 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
-        'genes_study_bg':study_bg,
-        'genes_popnullmaskout':['immune', 'viral_bacteria'],
+        'genes_study_bg':get_genes(study_bg),
+        'genes_popnullmaskout':get_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
         'num_genes_list' : [4, 16, 64],

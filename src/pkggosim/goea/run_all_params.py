@@ -6,7 +6,6 @@ __author__ = "DV Klopfenstein"
 
 import timeit
 import datetime
-from pkggosim.goea.utils import import_var
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
@@ -36,34 +35,25 @@ class RunParams(object):
         self.objbase = DataBase(params['alpha'], params['method'])
         self.objassc = DataAssc(params['association_file'], params['genes_population'])
         # These study background genes have associations
-        self.genes_population = self.objassc.pop_genes
-        self.genes_study_bg = self._init_genes_study_bg()
-        self.genes_null_bg = self._init_genes_null_bg()
+        _maskout = params['genes_popnullmaskout'].union(params['genes_study_bg'])
+        self.genes = {
+            "population" : self.objassc.pop_genes,
+            "study_bg" : params['genes_study_bg'].intersection(self.objassc.pop_genes),
+            "null_bg" : self.objassc.pop_genes.difference(_maskout)}
+        self._chk_genes(params, self.genes)
 
-    def _init_genes_study_bg(self):
-        """Read genes in user-provided module. Limit study genes to those in assc."""
-        study_genes = self.get_genes(self.params['genes_study_bg'])
-        return study_genes.intersection(self.genes_population)
-
-    def _init_genes_null_bg(self):
-        """Read genes in user-provided module. Limit study genes to those in assc."""
-        null_bg = set(self.genes_population)
-        for genedesc in self.params['genes_popnullmaskout']:
-            genes_rm = self.get_genes(genedesc)
-            null_bg = null_bg.difference(genes_rm)
-        return null_bg
+    @staticmethod
+    def _chk_genes(params, genes):
+        """Check the gene counts."""
+        assert len(genes['population']) <= len(params['genes_population'])
+        assert len(genes['study_bg']) <= len(params['genes_study_bg'])
+        assert genes['population'].intersection(genes['study_bg']) == genes['study_bg']
+        assert not genes['null_bg'].intersection(genes['study_bg'])
 
     def get_objgoea(self, study_genes):
         """Return population genes, including study genes. But minus closely related genes."""
-        genes_pop_masked = self.genes_null_bg.union(study_genes)
+        genes_pop_masked = self.genes['null_bg'].union(study_genes)
         return self.objbase.get_goeaobj(genes_pop_masked, self.objassc.assc)
-
-    def get_genes(self, moddesc):
-        """Return gene list using description."""
-        modstr = 'pkggosim.goea_data.genes_{DESC}'.format(DESC=moddesc)
-        genes = import_var(modstr, "GENES")
-        assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
-        return genes
 
     def prt_summary(self, prt):
         """Print summary of simulation parameters and background data."""
@@ -73,12 +63,16 @@ class RunParams(object):
         # Print Info: GO-DAG, Associations, Population
         self.objbase.prt_summary(prt)
         self.objassc.prt_summary(prt)
-        prt.write("{N:6,} GENES  IN STUDY BACKGROUND\n".format(N=len(self.genes_study_bg)))
-        prt.write("{N:6,} GENES  IN NULL  BACKGROUND\n".format(N=len(self.genes_null_bg)))
+        prms = self.params
+        prt.write("{N:6,} population genes (user)\n".format(N=len(prms['genes_population'])))
+        prt.write("{N:6,} population genes in assc.\n".format(N=len(self.genes['population'])))
+        prt.write("{N:6,} study genes (user)\n".format(N=len(prms['genes_study_bg'])))
+        prt.write("{N:6,} study genes in assc.\n".format(N=len(self.genes['study_bg'])))
+        prt.write("{N:6,} population genes - study buffer\n".format(N=len(self.genes['null_bg'])))
         prt.write("\n")
         prt.write("SIMULATION PARAMETERS:\n")
         for key in ['perc_nulls', 'num_genes_list', 'num_experiments', 'num_sims']:
-            prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=self.params[key]))
+            prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=prms[key]))
         prt.write("\n")
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

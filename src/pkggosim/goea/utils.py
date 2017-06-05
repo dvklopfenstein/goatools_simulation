@@ -13,7 +13,8 @@ from goatools_suppl.proj_data import GoatoolsDataMaker
 def get_study2genes():
     """Return study2genes."""
     studies = ['immune', 'viral_bacteria', 'cytokine_rsp', 'humoral_rsp', 'gamma_delta_t']
-    study_genes = [(s, import_var('pkggosim.goea_data.genes_{S}'.format(S=s), 'GENES')) for s in studies]
+    modpat = "pkggosim.goea_data.genes_{S}"
+    study_genes = [(s, import_var(modpat.format(S=s), 'GENES')) for s in studies]
     return cx.OrderedDict(study_genes)
 
 def get_assoc_data(fin_assc, genes_pop):
@@ -23,6 +24,20 @@ def get_assoc_data(fin_assc, genes_pop):
 def get_assoc_hdr(fin_assc):
     """Return associations as ens2gos."""
     return GoatoolsDataMaker.get_assoc_hdr(fin_assc)
+
+def get_genes_all(moddesc_list):
+    """Read genes in all user-provided modules. Return set of genes."""
+    genes = set()
+    for moddesc in moddesc_list:
+        genes |= get_genes(moddesc)
+    return genes
+
+def get_genes(moddesc):
+    """Return gene list using description."""
+    modstr = 'pkggosim.goea_data.genes_{DESC}'.format(DESC=moddesc)
+    genes = import_var(modstr, "GENES")
+    assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
+    return genes
 
 def import_var(modulestr, varname, log=None, rpterr=False):
     """Return variable inside module."""

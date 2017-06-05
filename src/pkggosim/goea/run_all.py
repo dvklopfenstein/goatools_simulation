@@ -12,21 +12,22 @@ from pkggosim.hypotheses.plot_results import plt_box_all, plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
-REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 
 
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
+
+    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
 
     def __init__(self, pobj):
         self.pobj = pobj
         self.tic = pobj.tic
         self.expsets = []
 
-    def run_sim(self, rpt_items, dotsize):
+    def run_all(self, rpt_items, dotsize):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-        desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM}'
-        desc_str = self.get_fout_img(desc_pat)
+        desc_str = self.get_fout_img()
         fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
@@ -49,8 +50,10 @@ class ExperimentsAll(object):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
-    def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}.png"):
+    def get_fout_img(self, img_pat=None):
         """Get the name of the png file for the tiled plot."""
+        if img_pat is None:
+            img_pat = self.desc_pat
         params = self.pobj.params
         return img_pat.format(
             P0=params['perc_nulls'][0],   # True Null %

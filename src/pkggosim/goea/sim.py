@@ -71,27 +71,31 @@ class _Init(object):
                 tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
-    def __init__(self, num_study_genes, num_null, pobj):
+    def __init__(self, num_study_genes, num_null, pobj, log=sys.stdout):
         self.pobj = pobj
         # I. Genes in two groups: Different than population AND no different than population
         self.genes_stu = None  # List of randomly-generated gene lists
         self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)
         self._init_study_genes(num_study_genes, num_null)
-        assert len(self.genes_stu) == num_study_genes, "{} {}".format(len(self.genes_stu), num_study_genes)
+        num_study = len(self.genes_stu)
+        assert num_study == num_study_genes, "{} {}".format(num_study, num_study_genes)
         assert num_study_genes - sum(self.expsig) == num_null
         goea_results = self._init_goea_results()
         self.genes_sig = get_study_items(goea_results)
-        num_study = len(self.genes_stu)
         num_sig = len(self.genes_sig)
-        sys.stdout.write("NULL({NULL}) STUDY({STU}) EXP_SIG({EXP}) ACT_SIG({SIG})\n".format(
-            STU=num_study, SIG=num_sig, EXP=num_study-num_null, NULL=num_null))
+        if log is not None:
+            num_exp = num_study-num_null
+            mrk = "*" if num_exp != num_sig else ""
+            txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
+            log.write(txt.format(STU=num_study, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
     def _init_goea_results(self):
         """Run Gene Ontology Analysis."""
         attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
-        genes_pop_masked = self.pobj.genes_null_bg.union(self.genes_stu)
-        objgoea = self.pobj.objbase.get_goeaobj(genes_pop_masked, self.pobj.objassc.assc)
+        # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
+        pop_genes = self.pobj.genes['population']
+        objgoea = self.pobj.objbase.get_goeaobj(pop_genes, self.pobj.objassc.assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
     def _init_study_genes(self, num_study_genes, num_null):
@@ -102,8 +106,8 @@ class _Init(object):
         # 1. Generate random genes: Significant and Random
         #   True  -> gene is intended to be significant(different from the population)
         #   False -> If gene is determined significant, it occured by chance
-        genes_pop_bg = list(self.pobj.genes_null_bg)
-        genes_study_bg = list(self.pobj.genes_study_bg)
+        genes_pop_bg = list(self.pobj.genes['null_bg'])
+        genes_study_bg = list(self.pobj.genes['study_bg'])
         shuffle(genes_pop_bg)
         shuffle(genes_study_bg)
         genes_expsig = \
