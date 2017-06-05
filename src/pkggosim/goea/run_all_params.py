@@ -60,7 +60,7 @@ class RunParams(object):
 
     def get_genes(self, moddesc):
         """Return gene list using description."""
-        modstr = 'pkggosim.gene_data.genes_{DESC}'.format(DESC=moddesc)
+        modstr = 'pkggosim.goea_data.genes_{DESC}'.format(DESC=moddesc)
         genes = import_var(modstr, "GENES")
         assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
         return genes
