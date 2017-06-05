@@ -91,12 +91,12 @@ class ExperimentsAll(object):
         # Run all experiment sets
         for perc_null in self.params['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
             for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
-                for hypoth_qty in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
+                for num_items in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
                     exp_parms = {
                         'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
                         'perc_null' : perc_null,
-                        'hypoth_qty' : hypoth_qty,
+                        'num_items' : num_items,
                         'num_experiments' : self.params['num_experiments'],
                         'num_sims' : self.params['num_sims']}
                     expsets.append(ExperimentSet(exp_parms, self.tic))

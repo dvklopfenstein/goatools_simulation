@@ -11,7 +11,7 @@ from pkggosim.goea.sim import GoeaSim
 class ManyGoeaSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set(['num_sims', 'num_study_genes', 'perc_null', 'num_null'])
+    expected_params = set(['num_sims', 'num_items', 'perc_null', 'num_null'])
 
     def __init__(self, params, pobj):
         self.params = params
@@ -33,7 +33,7 @@ class ManyGoeaSims(object):
         msg = [
             "    ManyGoeaSims:",
             "{SIMS} sims,".format(SIMS=self.params['num_sims']),
-            "{HYPOTHS:3} study_genes/sim".format(HYPOTHS=self.params['num_study_genes']),
+            "{HYPOTHS:3} study_genes/sim".format(HYPOTHS=self.params['num_items']),
             "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
         ]
         prt.write(" ".join(msg))
@@ -53,7 +53,7 @@ class ManyGoeaSims(object):
         num_errsimst1 = sum([n != 0 for n in t1s])
         num_errsimst2 = sum([n != 0 for n in t2s])
         prt.write(msgpat.format(
-            N=len(self.nts_tfpn), P=self.params['num_study_genes'],
+            N=len(self.nts_tfpn), P=self.params['num_items'],
             PERCNULL=self.params['perc_null'],
             E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2), DESC=desc))
 
@@ -66,7 +66,7 @@ class ManyGoeaSims(object):
     def _init_simobjs(self):
         """Simulate MANY multiple-test correction of P-values."""
         num_sims = self.params['num_sims']
-        num_genes = self.params['num_study_genes']
+        num_genes = self.params['num_items']
         num_null = self.params['num_null']
         return [GoeaSim(num_genes, num_null, self.pobj) for _ in range(num_sims)]
 

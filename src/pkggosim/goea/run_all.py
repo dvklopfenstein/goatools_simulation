@@ -58,10 +58,10 @@ class ExperimentsAll(object):
         # Run all experiment sets
         prms = self.pobj.params
         for perc_null in prms['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
-            for num_study_genes in prms['num_genes_list']:   # Ex: [20, 100, 500]
+            for num_items in prms['num_genes_list']:   # Ex: [20, 100, 500]
                 exp_parms = { # Experiment Set Parameters
                     'perc_null' : perc_null,
-                    'num_study_genes' : num_study_genes,
+                    'num_items' : num_items,
                     'num_experiments' : prms['num_experiments'],
                     'num_sims' : prms['num_sims']}
                 eset = ExperimentSet(exp_parms, self.pobj)

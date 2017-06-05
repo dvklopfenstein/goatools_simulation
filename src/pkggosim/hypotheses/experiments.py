@@ -11,7 +11,7 @@ from pkggosim.common.utils import get_hms
 class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
-    expected_params = set(['multi_params', 'perc_null', 'hypoth_qty', 'num_experiments',
+    expected_params = set(['multi_params', 'perc_null', 'num_items', 'num_experiments',
                            'num_sims', 'max_sigpval'])
 
     def __init__(self, params, tic):
@@ -19,7 +19,7 @@ class ExperimentSet(object):
         self.alpha = params['multi_params']['alpha']
         assert set(params.keys()) == self.expected_params
         self.max_sigpval = params['max_sigpval']
-        self.num_null = int(round(float(params['perc_null'])*params['hypoth_qty']/100.0))
+        self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
     def get_means(self, key):
@@ -38,7 +38,7 @@ class ExperimentSet(object):
             PERCNULL=self.params['perc_null'],
             EXP_ALPHA=float(self.params['perc_null'])/100.0*self.alpha,
             TOTNULL=self.num_null,
-            PVALQTY=self.params['hypoth_qty'])
+            PVALQTY=self.params['num_items'])
 
     def get_strhdr(self):
         """Return a short 1-line summary of this experiment set."""
@@ -58,7 +58,7 @@ class ExperimentSet(object):
         expset = []
         sys.stdout.write("{EXPSET_DESC} HMS={HMS}\n".format(
             EXPSET_DESC=self.get_strhdr(), HMS=get_hms(tic)))
-        shared_param_keys = ['num_sims', 'hypoth_qty', 'perc_null', 'multi_params']
+        shared_param_keys = ['num_sims', 'num_items', 'perc_null', 'multi_params']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null

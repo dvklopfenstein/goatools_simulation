@@ -11,7 +11,7 @@ from pkggosim.hypotheses.sim import HypothesesSim
 class ManyHypothesesSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
-    expected_params = set(['num_sims', 'hypoth_qty', 'perc_null',
+    expected_params = set(['num_sims', 'num_items', 'perc_null',
                            'multi_params', 'num_null', 'max_sigpval'])
 
     def __init__(self, params):
@@ -36,7 +36,7 @@ class ManyHypothesesSims(object):
         msg = [
             "    ManyHypothesesSims:",
             "{SIMS} sims,".format(SIMS=self.params['num_sims']),
-            "{HYPOTHS:3} pvals/sim".format(HYPOTHS=self.params['hypoth_qty']),
+            "{HYPOTHS:3} pvals/sim".format(HYPOTHS=self.params['num_items']),
             "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
             "{M:5.2f} max sig)\n".format(M=self.params['max_sigpval']),
         ]
@@ -57,7 +57,7 @@ class ManyHypothesesSims(object):
         num_errsimst1 = sum([n != 0 for n in t1s])
         num_errsimst2 = sum([n != 0 for n in t2s])
         prt.write(msgpat.format(
-            N=len(self.nts_tfpn), P=self.params['hypoth_qty'], PERCNULL=self.params['perc_null'],
+            N=len(self.nts_tfpn), P=self.params['num_items'], PERCNULL=self.params['perc_null'],
             E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2), DESC=desc))
 
     def get_percentile_strs(self, attr, percentiles):
@@ -69,10 +69,10 @@ class ManyHypothesesSims(object):
     def _init_hypothsimobjs(self):
         """Simulate MANY multiple-test correction of P-values."""
         num_sims = self.params['num_sims']
-        hypoth_qty = self.params['hypoth_qty']
+        num_items = self.params['num_items']
         num_null = self.params['num_null']
         multi = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
-        return [HypothesesSim(hypoth_qty, num_null, multi, max_sigpval) for _ in range(num_sims)]
+        return [HypothesesSim(num_items, num_null, multi, max_sigpval) for _ in range(num_sims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

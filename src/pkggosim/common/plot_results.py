@@ -5,6 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import seaborn as sns
 import pandas as pd
+import numpy as np
 
 class PlotInfo(object):
     """Plot information for tiled plots in general and for one of various stats attributes."""
@@ -123,12 +124,15 @@ def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     """Plot one tile of a multi-tiled plot."""
     kws = objplt.kws
     (axes, ((perc_null, maxsig), exps)) = tile_items
+    letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
+    for exp in exps: # ManyHypothesesSims or ManyGoeaSims
+        print "EEEEEEEEEEE {} {} {:4} {:8.6f}".format(
+            letter, objplt.attrname, exp.params['num_items'], np.mean(exp.get_means(objplt.attrname)))
     dfrm = pd.DataFrame(get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
-    letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
               plottype=objplt.get_val('plottype'), letter=letter, ylim=objplt.get_val('ylim'))
-    axes.set_xticklabels([e.params['hypoth_qty'] for e in exps], size=kws['txtsz_ticks'])
+    axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
     axes.set_yticks(objplt.get_val('yticks'))
     axes.set_yticklabels(objplt.get_val('yticklabels'))
     if idx >= num_cols*(num_rows-1): # bottom_row
@@ -163,7 +167,7 @@ def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
     """Get plotting data suitable for a single plot of boxplots."""
     tbl = []
     for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_null
-        tot_h = exps.params['hypoth_qty'] # Number of hypotheses
+        tot_h = exps.params['num_items'] # Number of hypotheses
         # Make one dictionary line for each value of fdr_actual
         dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]
         tbl.extend(dcts)

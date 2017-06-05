@@ -11,13 +11,13 @@ from pkggosim.common.utils import get_hms
 class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
-    expected_params = set(['perc_null', 'num_study_genes', 'num_experiments', 'num_sims'])
+    expected_params = set(['perc_null', 'num_items', 'num_experiments', 'num_sims'])
 
     def __init__(self, params, pobj):
         self.params = params
         self.pobj = pobj
         assert set(params.keys()) == self.expected_params
-        self.num_null = int(round(float(params['perc_null'])*params['num_study_genes']/100.0))
+        self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments() # returns list of ManyGoeaSims objects
 
     def get_means(self, key):
@@ -34,7 +34,7 @@ class ExperimentSet(object):
             PERCNULL=self.params['perc_null'],
             EXP_ALPHA=float(self.params['perc_null'])/100.0*self.pobj.objbase.alpha,
             TOTNULL=self.num_null,
-            GOEAQTY=self.params['num_study_genes'])
+            GOEAQTY=self.params['num_items'])
 
     def get_strhdr(self):
         """Return a short 1-line summary of this experiment set."""
@@ -53,7 +53,7 @@ class ExperimentSet(object):
         """Run a set of experiments."""
         expset = []
         sys.stdout.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
-        shared_param_keys = ['num_sims', 'num_study_genes', 'perc_null']
+        shared_param_keys = ['num_sims', 'num_items', 'perc_null']
         for _ in range(self.params['num_experiments']):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
