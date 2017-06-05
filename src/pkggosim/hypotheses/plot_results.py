@@ -60,13 +60,20 @@ class PlotInfo(object):
 
     def _init_kws(self, args_kws):
         """Return plotting parameters, returning either user-specfied value or default."""
+        # Copy user keywords if they exist, otherwise use default values.
         kws = {}
         for key, dfltval in self.dflts.items():
             kws[key] = args_kws.get(key, dfltval)
+        # Update ylabel with friendlier text
         if 'ylabel' not in args_kws:
             kws['ylabel'] = kws['ylabel'].format(GRP=args_kws['grpname'])
+        # dostsize
         if 'dotsize' in args_kws:
-            kws['dotsize'] = args_kws['dotsize'][kws['attrname']]
+            dotsize_usr = args_kws.get('dotsize', None)
+            if dotsize_usr is not None:
+                kws['dotsize'] = dotsize_usr[kws['attrname']]
+            else:
+                kws['dotsize'] = self.dflts['dotsize']
         return kws
 
 
@@ -171,7 +178,9 @@ def fill_axes(axes, dfrm, alpha, **kws):
     axes.set_xlabel(kws.get('xlabel', ""), size=20)
     axes.set_ylabel(kws.get('ylabel', ""), size=20)
     if 'letter' in kws and 'ylim' in kws:
-        axes.text(0.96*axes.get_xlim()[1], 0.85*kws['ylim'][1], kws['letter'], ha='right', va='center')
+        xpos = 0.96*axes.get_xlim()[1]
+        ypos = 0.85*kws['ylim'][1]
+        axes.text(xpos, ypos, kws['letter'], ha='right', va='center')
     return axes
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):

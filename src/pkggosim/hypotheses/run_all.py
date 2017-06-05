@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 import collections as cx
 import timeit
@@ -14,8 +15,35 @@ from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 
+REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
+
+
+def run_sim(obj, rpt_items, dotsize=None):
+    """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
+    desc_str = obj.get_fout_img()
+    fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
+    # Report and plot simulation results
+    with open(os.path.join(REPO, fout_log), 'w') as prt:
+        obj.prt_hms(prt, "Simulations Completed")
+        obj.prt_params(prt)
+        obj.seed.prt(prt)
+        obj.prt_experiments_means(prt, rpt_items)
+        obj.prt_experiments_stats(prt, rpt_items)
+        title = "Benjamini/Hochberg Hypotheses Simulations"
+        plts = [('fdr_actual', 'FDR'),
+                ('sensitivity', 'Sensitivity')]
+        for attr, name in plts:
+            base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
+            fout_img = os.path.join(REPO, 'doc/logs', base_img)
+            obj.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+        obj.prt_hms(prt, "Reports and Plots Completed")
+        sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
+
+
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
+
+    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
 
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
                            'num_experiments', 'num_sims'])
@@ -27,8 +55,10 @@ class ExperimentsAll(object):
         assert set(params.keys()) == self.expected_params
         self.expsets = self._init_experiment_sets()
 
-    def get_fout_img(self, img_pat="sim_{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}.png"):
+    def get_fout_img(self, img_pat=None):
         """Get the name of the png file for the tiled plot."""
+        if img_pat is None:
+            img_pat = self.desc_pat
         return img_pat.format(
             P0=self.params['perc_nulls'][0],   # True Null %
             PN=self.params['perc_nulls'][-1],  # True Null %
