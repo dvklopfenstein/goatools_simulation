@@ -9,14 +9,14 @@ are examined using stochastic simulations.
      Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
      #consequent-gene-ontology-enrichment-results-goea-simulations)    
-     Simulations encompass the Benjamini/Hochberg functions from step 1, as well as
+     Simulations encompass the Benjamini/Hochberg calculations like those from step 1, as well as
      gene ontology associations, and Fisher's exact test.
 
+## Two categories of simulations (details):
 All simulations use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
 with **alpha=0.05**.
 
-## Two categories of simulations (details):
 ### [**Preparatory**: Hypotheses and multiple-test simulations]()
 These simulations demonstrate that the mean False Discovery Rates (FDRs),
 center around the alpha-level set by the user (0.05) when all hypotheses are true (row 1 in figure 1),
