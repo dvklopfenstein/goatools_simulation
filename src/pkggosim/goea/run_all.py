@@ -36,14 +36,13 @@ class ExperimentsAll(object):
             self.prt_summary(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
-            title = "GOEA Simulations"
             #for attr, name in ['fdr_actual', 'sensitivity']:
             for attrname in ['fdr_actual', 'sensitivity']:
-                base_img = 'fig_goea_{DESC}_{ATTR}'.format(ATTR=attrname, DESC=desc_str)
-                fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=base_img))
-                #self.plt_box_all(fout_pat, attrname=attr, grpname=name, title=title, dotsize=dotsize, ylim=ylim)
-                fout_img = os.path.join(REPO, 'doc/logs/{B}'.format(B=base_img))
-                self.plt_box_tiled(fout_img, attrname, title=title, **pltargs)
+                baseimg = 'fig_goea_{DESC}_{ATTR}'.format(ATTR=attrname, DESC=desc_str)
+                #fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=baseimg))
+                #self.plt_box_all(fout_pat, attrname, **pltargs)
+                fout_img = os.path.join(REPO, 'doc/logs/{B}'.format(B=baseimg))
+                self.plt_box_tiled(fout_img, attrname, **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
