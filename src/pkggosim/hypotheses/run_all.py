@@ -31,16 +31,18 @@ class ExperimentsAll(object):
         self.seed = RandomSeed32(params.get('seed', None))
         self.params = params
         assert set(params.keys()) == self.expected_params
-        self.expsets = self._init_experiment_sets()
+        self.expsets = []
 
     def run_all(self, rpt_items, dotsize=None):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-        desc_str = self.get_fout_img()
+        self._run_experiments()
+        desc_str = self._get_fout_img()
         fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
-            self.prt_hms(prt, "Simulations Completed")
+            self.prt_hms(prt, "Simulations Completed\n")
             self.prt_params(prt)
+            self.prt_num_sims(prt)
             self.seed.prt(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
@@ -49,10 +51,23 @@ class ExperimentsAll(object):
                 base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
                 fout_img = os.path.join(REPO, 'doc/logs', base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
+            self.prt_num_sims(sys.stdout)
             self.prt_hms(prt, "Reports and Plots Completed")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
-    def get_fout_img(self, img_pat=None):
+    def prt_num_sims(self, prt):
+        """Returns the number of simulations run."""
+        lens = [len(self.params[k]) for k in ['perc_nulls', 'max_sigpvals', 'num_hypoths_list']]
+        tot_sets = np.prod(lens)
+        tot_fdrs = self.params['num_experiments']*tot_sets
+        prt.write("{N:12,} Total sets\n".format(N=tot_sets))
+        prt.write("{F:12,} Total FDRs; {f:7,} FDRs/set\n".format(
+            F=tot_fdrs, f=self.params['num_experiments']))
+        prt.write("{F:12,} Total sims; {f:7,} sims/FDR\n".format(
+            F=self.params['num_sims']*tot_fdrs, f=self.params['num_sims']))
+        prt.write("\n")
+
+    def _get_fout_img(self, img_pat=None):
         """Get the name of the png file for the tiled plot."""
         if img_pat is None:
             img_pat = self.desc_pat
@@ -79,11 +94,12 @@ class ExperimentsAll(object):
         """Print user-specified input parameters."""
         for key, val in self.params.items():
             prt.write("{KEY:16} {VAL}\n".format(KEY=key, VAL=val))
+        prt.write("\n")
 
-    def _init_experiment_sets(self):
+    def _run_experiments(self):
         """Run all variations of Experiments."""
-        expsets = []
         # Alpha(0.05) Method(fdr_bh) 10=Experiments 100=P-Value simulations/Experiment
+        assert not self.expsets
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
         for perc_null in self.params['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
@@ -96,9 +112,8 @@ class ExperimentsAll(object):
                         'num_items' : num_items,
                         'num_experiments' : self.params['num_experiments'],
                         'num_sims' : self.params['num_sims']}
-                    expsets.append(ExperimentSet(exp_parms, self.tic))
+                    self.expsets.append(ExperimentSet(exp_parms, self.tic))
         self.prt_hms(sys.stdout, "Simulations Completed")
-        return expsets
 
     def prt_hms(self, prt, msg):
         """Print the elapsed time."""

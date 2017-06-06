@@ -161,7 +161,6 @@ def _get_row_means(key2exps, objplt):
     for (nullperc, _), expsets in key2exps.items():
         for expset in expsets:
             means = expset.get_means(objplt.attrname)
-            print expset, len(means)
             nullperc2means[nullperc].extend(means)
     nullperc2meantxt = {}
     for nullperc, means in nullperc2means.items():

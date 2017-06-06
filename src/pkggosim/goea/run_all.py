@@ -28,7 +28,7 @@ class ExperimentsAll(object):
     #def run_all(self, rpt_items, dotsize, ylim, yticklabels):
     def run_all(self, rpt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-        desc_str = self.get_fout_img()
+        desc_str = self._get_fout_img()
         fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
@@ -52,7 +52,7 @@ class ExperimentsAll(object):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
-    def get_fout_img(self, img_pat=None):
+    def _get_fout_img(self, img_pat=None):
         """Get the name of the png file for the tiled plot."""
         if img_pat is None:
             img_pat = self.desc_pat

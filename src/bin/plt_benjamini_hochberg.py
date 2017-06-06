@@ -21,6 +21,8 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
     obj = ExperimentsAll(sim_params)
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
+    #obj.prt_params(sys.stdout)
+    #obj.prt_num_sims(sys.stdout)
     obj.run_all(rpt_items, dotsize)
 
 
@@ -29,10 +31,11 @@ if __name__:
     NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member
     PARAMS = [
-        # NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]),
-        # NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # TBD Re-run
-        NTOBJ._make([ 20,   200, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:01:00
-        # NTOBJ._make([ 10,    10, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:00:02
+        # NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]), # 00:NN:NN
+        # NTOBJ._make([500, 1000, {'fdr_actual':0.90, 'sensitivity':0.65}]), # 00:NN:NN
+        # NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # 00:24:31
+        # NTOBJ._make([ 20,  200, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:01:00
+        NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:00:02
     ]
     for ntd in PARAMS:
         main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
