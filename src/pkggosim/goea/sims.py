@@ -6,6 +6,7 @@ __author__ = "DV Klopfenstein"
 import sys
 import numpy as np
 from pkggosim.goea.sim import GoeaSim
+from pkggosim.common.utils import get_hms
 
 
 class ManyGoeaSims(object):
@@ -28,15 +29,17 @@ class ManyGoeaSims(object):
         """Returns the actual stderr value for the set of P-Value simulations run in this class."""
         return np.std([getattr(nt, key) for nt in self.nts_tfpn])
 
-    def prt_summary(self, prt=sys.stdout):
+    def get_summary_str(self):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
-        msg = [
+        return " ".join([
             "    ManyGoeaSims:",
             "{SIMS} sims,".format(SIMS=self.params['num_sims']),
             "{HYPOTHS:3} study_genes/sim".format(HYPOTHS=self.params['num_items']),
-            "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
-        ]
-        prt.write(" ".join(msg))
+            "SET({P:3.0f}% null)".format(P=self.params['perc_null'])])
+
+    def prt_summary(self, prt=sys.stdout):
+        """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
+        prt.write("{MSG}\n".format(MSG=self.get_summary_str()))
 
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
@@ -68,6 +71,12 @@ class ManyGoeaSims(object):
         num_sims = self.params['num_sims']
         num_genes = self.params['num_items']
         num_null = self.params['num_null']
-        return [GoeaSim(num_genes, num_null, self.pobj) for _ in range(num_sims)]
+        sims = []
+        for sim_num in range(num_sims):
+            sims.append(GoeaSim(num_genes, num_null, self.pobj))
+            if sim_num%100 == 0:
+                sys.stdout.write("{I:4} {MSG} {HMS}\n".format(
+                    I=sim_num, MSG=self.get_summary_str(), HMS=get_hms(self.pobj.tic)))
+        return sims
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

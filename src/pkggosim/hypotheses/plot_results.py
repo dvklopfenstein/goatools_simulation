@@ -35,7 +35,7 @@ def plot_results_all(objsim, params):
             'ylabel':'Simulated FDR Ratios',
             'fout_img':fout_img,
         }
-        wrpng_boxplot_sigs_each(numpvals_sims, alpha, **pltargs)
+        _wrpng_boxplot_sigs_each(numpvals_sims, alpha, **pltargs)
 
 def wrpng_boxplot_sigs_each2(dfrm, alpha, **kws):
     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
@@ -74,7 +74,7 @@ def wrpng_boxplot_sigs_each2(dfrm, alpha, **kws):
     if show:
         plt.show()
 
-def wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
+def _wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
     plt.clf()
     sns.despine(offset=10, trim=True)
@@ -118,7 +118,7 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         title_pat = title_pat100 if perc_true_null == 100 else title_patpnul
         kws['title'] = title_pat.format(P=perc_true_null, M=max_sigpval)
         dfrm = pd.DataFrame(get_dftbl_boxplot(expsets, attrname, grpname))
-        wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
+        _wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
 def plt_box_tiled(fout_img, key2exps, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""

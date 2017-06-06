@@ -49,13 +49,14 @@ class ExperimentSet(object):
         for experiment in self.expset:
             experiment.prt_num_sims_w_errs(prt, desc)
 
-    def _init_experiments(self):
+    def _init_experiments(self, prt=sys.stdout):
         """Run a set of experiments."""
         expset = []
-        txt = "{DESC} HMS={HMS}\n".
-        sys.stdout.write(txt.format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
+        prt.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
         shared_param_keys = ['num_sims', 'num_items', 'perc_null']
-        for _ in range(self.params['num_experiments']):
+        for idx in range(self.params['num_experiments']):
+            prt.write("{IDX:4} {DESC} HMS={HMS}\n".format(
+                IDX=idx, DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
             # One ManyGoeaSims is one experiment which can return one simulated FDR value

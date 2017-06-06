@@ -11,9 +11,14 @@ import numpy as np
 class PlotInfo(object):
     """Plot information for tiled plots in general and for one of various stats attributes."""
 
+    attrname2grpname = {
+        'fdr_actual':'FDR',
+        'sensitivity':'Sensitivity',
+    }
+
     dflts_plt = {
         'attrname':'fdr_actual',
-        'grpname':'FDR',
+        'grpname':None,
         'dotsize':2,
         'dpi':400,
         'title':'Hypotheses Simulations',
@@ -51,6 +56,8 @@ class PlotInfo(object):
     def __init__(self, args_kws):
         self.kws = self._init_kws(args_kws)
         self.attrname = self.kws['attrname']
+        _grpname = self.kws['grpname']
+        self.grpname = _grpname if _grpname is not None else self.attrname2grpname[self.attrname]
 
     def get_val(self, nameplt='yticks'):
         """Return plotting parameters based on the plotted statistical data."""

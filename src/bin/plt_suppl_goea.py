@@ -45,7 +45,7 @@ if __name__:
     PARAMS = [
         # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
         # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        NTOBJ._make([ 2,   2, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+          NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:
         main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
