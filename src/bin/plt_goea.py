@@ -49,8 +49,9 @@ if __name__:
         # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
         # NTOBJ._make([100,  100, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
         # NTOBJ._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels])
-        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, yticklabels]), # 1:30 
-        NTOBJ._make([  4,    4, {'fdr_actual':5.00, 'sensitivity':5.00}, ylim, yticklabels]),
+        # NTOBJ._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels])
+        NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, yticklabels]), # 1:30 
+        # NTOBJ._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00}, ylim, yticklabels]), # 0:04
     ]
     for ntd in PARAMS:
         main(SEED, ntd)
