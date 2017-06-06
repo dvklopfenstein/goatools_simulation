@@ -66,7 +66,7 @@ class ManyGoeaSims(object):
         fmt = "{:6.2f}" if attr[:3] == "per" else "{:4}"
         return [fmt.format(v) for v in vals]
 
-    def _init_simobjs(self):
+    def _init_simobjs(self, prt=None):
         """Simulate MANY multiple-test correction of P-values."""
         num_sims = self.params['num_sims']
         num_genes = self.params['num_items']
@@ -75,8 +75,9 @@ class ManyGoeaSims(object):
         for sim_num in range(num_sims):
             sims.append(GoeaSim(num_genes, num_null, self.pobj))
             if sim_num%100 == 0:
-                sys.stdout.write("{I:4} {MSG} {HMS}\n".format(
-                    I=sim_num, MSG=self.get_summary_str(), HMS=get_hms(self.pobj.tic)))
+                if prt is not None:
+                    prt.write("{I:4} {MSG} {HMS}\n".format(
+                        I=sim_num, MSG=self.get_summary_str(), HMS=get_hms(self.pobj.tic)))
         return sims
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

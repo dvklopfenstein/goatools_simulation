@@ -58,6 +58,9 @@ class PlotInfo(object):
         self.attrname = self.kws['attrname']
         _grpname = self.kws['grpname']
         self.grpname = _grpname if _grpname is not None else self.attrname2grpname[self.attrname]
+        # Update ylabel with friendlier text
+        if 'ylabel' not in args_kws:
+            self.kws['ylabel'] = self.kws['ylabel'].format(GRP=self.grpname)
 
     def get_val(self, nameplt='yticks'):
         """Return plotting parameters based on the plotted statistical data."""
@@ -83,9 +86,6 @@ class PlotInfo(object):
         kws = {}
         for key, dfltval in self.dflts_plt.items():
             kws[key] = args_kws.get(key, dfltval)
-        # Update ylabel with friendlier text
-        if 'ylabel' not in args_kws:
-            kws['ylabel'] = kws['ylabel'].format(GRP=args_kws['grpname'])
         # dostsize
         if 'dotsize' in args_kws:
             dotsize_usr = args_kws.get('dotsize', None)
@@ -140,13 +140,13 @@ def _set_color_boxes(axes, color):
     for artist in axes.artists:
         artist.set_edgecolor(color)
 
-
+# TBD move to hypothesis/plot_results
 def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     """Plot one tile of a multi-tiled plot."""
     kws = objplt.kws
     (axes, ((perc_null, maxsig), exps)) = tile_items
     letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
-    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, kws['attrname'], kws['grpname']))
+    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, kws['attrname'], objplt.grpname))
     alpha = exps[0].alpha if objplt.get_val('alphaline') else None
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
               plottype=objplt.get_val('plottype'), letter=letter, ylim=objplt.get_val('ylim'))

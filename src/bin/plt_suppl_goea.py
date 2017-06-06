@@ -28,7 +28,7 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'genes_study_bg':get_genes(study_bg),
         'genes_popnullmaskout':get_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
-        'perc_nulls' : [100, 75, 50, 25, 0],
+        'perc_nulls' : [100, 75, 50, 25],
         'num_genes_list' : [4, 16, 64],
         'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
         'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
@@ -45,7 +45,8 @@ if __name__:
     PARAMS = [
         # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
         # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-          NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+        NTOBJ._make([  2,    2, {'fdr_actual':2.00, 'sensitivity':1.00}]),
     ]
     for ntd in PARAMS:
         main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)

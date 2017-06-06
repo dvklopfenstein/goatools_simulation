@@ -36,13 +36,13 @@ class ExperimentsAll(object):
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
             title = "GOEA Simulations"
-            plts = [('fdr_actual', 'FDR'),
-                    ('sensitivity', 'Sensitivity')]
-            for attr, name in plts:
-                base_img = 'fig_goea_{DESC}_{ATTR}_{{PERCNULL:03}}.png'.format(ATTR=attr, DESC=desc_str)
-                fout_pat = os.path.join(REPO, 'doc/logs', base_img)
-                self.plt_box_all(fout_pat, attrname=attr, grpname=name, dotsize=dotsize, title=title)
-                #self.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+            #for attr, name in ['fdr_actual', 'sensitivity']:
+            for attr in ['fdr_actual', 'sensitivity']:
+                base_img = 'fig_goea_{DESC}_{ATTR}'.format(ATTR=attr, DESC=desc_str)
+                fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=base_img))
+                #self.plt_box_all(fout_pat, attrname=attr, grpname=name, dotsize=dotsize, title=title)
+                fout_img = os.path.join(REPO, 'doc/logs/{B}'.format(B=base_img))
+                self.plt_box_tiled(fout_img, attr, dotsize=dotsize, title=title)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
@@ -106,10 +106,10 @@ class ExperimentsAll(object):
         key2exps = self._get_key2expsets('perc_null')
         plt_box_all(fout_img, key2exps, **kws)
 
-    def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR', **kws):
+    def plt_box_tiled(self, fout_img, attrname='fdr_actual', **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null')
-        plt_box_tiled(fout_img, key2exps, attrname=attrname, grpname=grpname, **kws)
+        plt_box_tiled(fout_img, key2exps, attrname=attrname, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
