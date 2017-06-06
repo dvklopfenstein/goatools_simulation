@@ -45,12 +45,10 @@ class ExperimentsAll(object):
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
             title = "Benjamini/Hochberg Hypotheses Simulations"
-            plts = [('fdr_actual', 'FDR'),
-                    ('sensitivity', 'Sensitivity')]
-            for attr, name in plts:
-                base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attr, DESC=desc_str)
+            for attrname in ['fdr_actual', 'sensitivity']:
+                base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
                 fout_img = os.path.join(REPO, 'doc/logs', base_img)
-                self.plt_box_tiled(fout_img, attr, name, dotsize=dotsize, title=title)
+                self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
             self.prt_hms(prt, "Reports and Plots Completed")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
@@ -111,10 +109,10 @@ class ExperimentsAll(object):
         key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
         plt_box_all(fimg_pat, key2exps, attrname, grpname)
 
-    def plt_box_tiled(self, fout_img, attrname='fdr_actual', grpname='FDR', **kws):
+    def plt_box_tiled(self, fout_img, attrname, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
-        plt_box_tiled(fout_img, key2exps, attrname=attrname, grpname=grpname, **kws)
+        plt_box_tiled(fout_img, key2exps, attrname, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""

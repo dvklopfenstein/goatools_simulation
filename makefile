@@ -5,7 +5,7 @@ pylint:
 
 vim_sim_geneontology:
 	vim -p \
-	src/bin/plt_suppl_goea.py \
+	src/bin/plt_goea.py \
 	src/pkggosim/goea/sim.py \
 	src/pkggosim/goea/sims.py \
 	src/pkggosim/goea/experiments.py \
@@ -26,7 +26,7 @@ vim_presim_geneontology:
 
 vim_sim_benjamini_hochberg:
 	vim -p \
-	src/bin/plt_fdr_benjamini_hochberg.py \
+	src/bin/plt_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \
 	src/pkggosim/hypotheses/sim.py \
 	src/pkggosim/hypotheses/sims.py \

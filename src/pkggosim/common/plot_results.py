@@ -11,15 +11,13 @@ import numpy as np
 class PlotInfo(object):
     """Plot information for tiled plots in general and for one of various stats attributes."""
 
-    attrname2grpname = {
+    attr2grp = {
         'fdr_actual':'FDR',
         'sensitivity':'Sensitivity',
     }
 
     dflts_plt = {
-        'attrname':'fdr_actual',
         'grpname':None,
-        'dotsize':2,
         'dpi':400,
         'title':'Hypotheses Simulations',
         'xlabel':'Number of Tested Hypotheses',
@@ -30,15 +28,14 @@ class PlotInfo(object):
         'txtsz_ticks':None,
     }
 
-    dflts_ax = {
-        'plottype':'boxplot',
-        'yticks':[0.00, 0.025, 0.05, 0.075],
-        'yticklabels':["", "0.025", "0.050", "0.075"],
-        'ylim':[0.0, 0.09],
-        'alphaline':True,
-    }
-
-    attr2vals = {
+    dflt_attr2vals = {
+        'dflt':{
+            'dotsize':1.0,
+            'plottype':'boxplot',
+            'yticks':[0.00, 0.025, 0.05, 0.075],
+            'yticklabels':["", "0.025", "0.050", "0.075"],
+            'ylim':[0.0, 0.09],
+            'alphaline':True},
         'fdr_actual':{
             'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
@@ -53,19 +50,15 @@ class PlotInfo(object):
             'alphaline':False},
     }
 
-    def __init__(self, args_kws):
-        self.kws = self._init_kws(args_kws)
-        self.attrname = self.kws['attrname']
+    def __init__(self, attrname, args_kws):
+        self.attrname = attrname
+        self.kws = {key:args_kws.get(key, dfltval) for key, dfltval in self.dflts_plt.items()}
         _grpname = self.kws['grpname']
-        self.grpname = _grpname if _grpname is not None else self.attrname2grpname[self.attrname]
+        self.grpname = _grpname if _grpname is not None else self.attr2grp[self.attrname]
         # Update ylabel with friendlier text
         if 'ylabel' not in args_kws:
             self.kws['ylabel'] = self.kws['ylabel'].format(GRP=self.grpname)
-
-    def get_val(self, nameplt='yticks'):
-        """Return plotting parameters based on the plotted statistical data."""
-        pltvals = self.attr2vals.get(self.attrname, None)
-        return pltvals[nameplt] if pltvals is not None else self.dflts_ax[nameplt]
+        self._init_axes_params(args_kws)
 
     def get_str_mean(self, exps):
         """Get value with x and y location to be printing inside plot."""
@@ -80,20 +73,26 @@ class PlotInfo(object):
                     valstrs.append(ntobj(valstr=valstr, x=xval, y=val+0.05))
         return valstrs
 
-    def _init_kws(self, args_kws):
-        """Return plotting parameters, returning either user-specfied value or default."""
-        # Copy user keywords if they exist, otherwise use default values.
+    def _init_axes_params(self, usr_pltattr2pltnm2val):
+        """Return plotting parameters that differ for various plotting values; dostsize, ylim."""
+        print "AAAAAA", usr_pltattr2pltnm2val
         kws = {}
-        for key, dfltval in self.dflts_plt.items():
-            kws[key] = args_kws.get(key, dfltval)
-        # dostsize
-        if 'dotsize' in args_kws:
-            dotsize_usr = args_kws.get('dotsize', None)
-            if dotsize_usr is not None:
-                kws['dotsize'] = dotsize_usr[kws['attrname']]
-            else:
-                kws['dotsize'] = self.dflts_plt['dotsize']
-        return kws
+        plt_attr2vals = self.dflt_attr2vals.get(self.attrname, None)
+        # pltattr: dotsize plottype yticks yticklabels ylim alphaline
+        for pltattr, val_dflt in self.dflt_attr2vals['dflt'].items():
+            curval = None
+            val_plt = plt_attr2vals.get(pltattr, None)
+            # Ex: {'fdr_actual':2.00, 'sensitivity':1.00}
+            usr_pltnm2val = usr_pltattr2pltnm2val.get(pltattr, None)
+            print "PPPPPP", pltattr, val_dflt, usr_pltnm2val
+            if usr_pltnm2val is not None:
+                curval = usr_pltnm2val.get(self.attrname, None)
+            if curval is None:
+                curval = val_plt if val_plt is not None else val_dflt
+            kws[pltattr] = curval
+        for k, v in kws.items():
+            self.kws[k] = v
+            print "WWWWWW", k, v
 
 
 def fill_axes(axes, dfrm, alpha, **kws):
@@ -146,18 +145,18 @@ def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     kws = objplt.kws
     (axes, ((perc_null, maxsig), exps)) = tile_items
     letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
-    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, kws['attrname'], objplt.grpname))
-    alpha = exps[0].alpha if objplt.get_val('alphaline') else None
+    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, objplt.attrname, objplt.grpname))
+    alpha = exps[0].alpha if kws['alphaline'] else None
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
-              plottype=objplt.get_val('plottype'), letter=letter, ylim=objplt.get_val('ylim'))
+              plottype=kws['plottype'], letter=letter, ylim=kws['ylim'])
     axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
-    axes.set_yticks(objplt.get_val('yticks'))
-    axes.set_yticklabels(objplt.get_val('yticklabels'))
+    axes.set_yticks(kws['yticks'])
+    axes.set_yticklabels(kws['yticklabels'])
     if idx >= num_cols*(num_rows-1): # bottom_row
         axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
     if idx%num_cols == 0:
         axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
-    axes.set_ylim(objplt.get_val('ylim'))
+    axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
     # Add value text above plot bars to make plot easier to read
     for ntval in objplt.get_str_mean(exps):

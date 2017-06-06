@@ -14,7 +14,7 @@ from goatools_suppl.data.ensmusg2sym import ensm2sym
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def main(randomseed, num_experiments, num_sims, dotsize):
+def main(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     study_bg = "humoral_rsp"
     popnullmaskout = ['immune', 'viral_bacteria']
@@ -30,25 +30,29 @@ def main(randomseed, num_experiments, num_sims, dotsize):
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25],
         'num_genes_list' : [4, 16, 64],
-        'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
-        'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
+        'num_experiments' : ntd.num_experiments, # Number of simulated FDR ratios in an experiment set
+        'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
-    obj.run_all(rpt_items, dotsize)
+    obj.run_all(rpt_items, dotsize=ntd.dotsize, ylim=ntd.ylim, yticklabels=ntd.yticklabels)
 
 
 if __name__:
     SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
-    NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
+    NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize ylim yticklabels")
     #pylint: disable=bad-whitespace, no-member
+    ylim = {'fdr_actual':[-0.005, 0.10]}
+    yticklabels = {'fdr_actual':['0.00', '0.25', '0.50', '0.75', '1.00']}
     PARAMS = [
-        # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
-        NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]),
-        # NTOBJ._make([  2,    2, {'fdr_actual':2.00, 'sensitivity':1.00}]),
+        # NTOBJ._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}, ylim, yticklabels]),
+        # NTOBJ._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
+        # NTOBJ._make([100,  100, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
+        # NTOBJ._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels])
+        # NTOBJ._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, yticklabels]), # 1:30 
+        NTOBJ._make([  4,    4, {'fdr_actual':5.00, 'sensitivity':5.00}, ylim, yticklabels]),
     ]
     for ntd in PARAMS:
-        main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
+        main(SEED, ntd)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

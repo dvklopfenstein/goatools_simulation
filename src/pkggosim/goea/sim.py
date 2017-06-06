@@ -86,7 +86,9 @@ class _Init(object):
         num_sig = len(self.genes_sig)
         if log is not None:
             num_exp = num_study-num_null
-            mrk = "*" if num_exp != num_sig else ""
+            mrk = ""
+            if num_exp != num_sig:
+                mrk = "+" if num_sig < num_exp else "-"
             txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
             log.write(txt.format(STU=num_study, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 

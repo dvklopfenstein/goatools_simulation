@@ -120,9 +120,9 @@ def plt_box_all(fimg_pat, key2exps, attrname='fdr_actual', grpname='FDR'):
         dfrm = pd.DataFrame(get_dftbl_boxplot(expsets, attrname, grpname))
         _wrpng_boxplot_sigs_each(dfrm, expsets[0].alpha, **kws)
 
-def plt_box_tiled(fout_img, key2exps, **args_kws):
+def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    objplt = PlotInfo(args_kws)
+    objplt = PlotInfo(attrname, args_kws)
     kws = objplt.kws
     num_rows, num_cols = get_num_rows_cols(key2exps)
     plt.close('all')

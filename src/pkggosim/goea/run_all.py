@@ -25,7 +25,8 @@ class ExperimentsAll(object):
         self.tic = pobj.tic
         self.expsets = []
 
-    def run_all(self, rpt_items, dotsize):
+    #def run_all(self, rpt_items, dotsize, ylim, yticklabels):
+    def run_all(self, rpt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         desc_str = self.get_fout_img()
         fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
@@ -37,12 +38,12 @@ class ExperimentsAll(object):
             self.prt_experiments_stats(prt, rpt_items)
             title = "GOEA Simulations"
             #for attr, name in ['fdr_actual', 'sensitivity']:
-            for attr in ['fdr_actual', 'sensitivity']:
-                base_img = 'fig_goea_{DESC}_{ATTR}'.format(ATTR=attr, DESC=desc_str)
+            for attrname in ['fdr_actual', 'sensitivity']:
+                base_img = 'fig_goea_{DESC}_{ATTR}'.format(ATTR=attrname, DESC=desc_str)
                 fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=base_img))
-                #self.plt_box_all(fout_pat, attrname=attr, grpname=name, dotsize=dotsize, title=title)
+                #self.plt_box_all(fout_pat, attrname=attr, grpname=name, title=title, dotsize=dotsize, ylim=ylim)
                 fout_img = os.path.join(REPO, 'doc/logs/{B}'.format(B=base_img))
-                self.plt_box_tiled(fout_img, attr, dotsize=dotsize, title=title)
+                self.plt_box_tiled(fout_img, attrname, title=title, **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
@@ -101,15 +102,15 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_all(self, fout_img, **kws):
+    def plt_box_all(self, fout_img, attrname, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null')
-        plt_box_all(fout_img, key2exps, **kws)
+        plt_box_all(fout_img, key2exps, attrname, **kws)
 
-    def plt_box_tiled(self, fout_img, attrname='fdr_actual', **kws):
+    def plt_box_tiled(self, fout_img, attrname, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null')
-        plt_box_tiled(fout_img, key2exps, attrname=attrname, **kws)
+        plt_box_tiled(fout_img, key2exps, attrname, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
         """Print stats for user-specified data in experiment sets."""
@@ -135,8 +136,8 @@ class ExperimentsAll(object):
         attrstrs = ["{:>19}".format(a) for a in attrs]
         prt.write("\nSummary of mean values and standard errors ")
         prt.write(" for {N} sets of experiments\n\n".format(N=len(self.expsets)))
-        prt.write("nul% maxSig #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
-        prt.write("---- ------ ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
+        prt.write("nul% #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
+        prt.write("---- ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
         namefmt = "{PERCNULL:3}% {QTY:5}"
         for experiment_set in self.expsets:
             # expname = experiment_set.get_desc(namefmt)
