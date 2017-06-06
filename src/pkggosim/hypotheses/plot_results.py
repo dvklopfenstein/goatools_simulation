@@ -5,6 +5,8 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
+import collections as cx
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -135,6 +137,8 @@ def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
         _plt_tile(idx, num_rows, num_cols, tile_items, objplt)
     tiled_xyticklabels_off(axes_2d, num_cols)
     xysz = kws['txtsz_xy']
+    if attrname == "fdr_actual":
+        _add_means_txt(fig, key2exps, objplt, .92-.2, .2+.1) # top-bottom, bottom+hspace
     fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
     fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
@@ -142,6 +146,30 @@ def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if kws.get('show', False):
         plt.show()
+
+def _add_means_txt(fig, key2exps, objplt, y_m, y_b):
+    """Add means per row to plot."""
+    nullperc_meantxt = sorted(_get_row_means(key2exps, objplt).items())
+    num_rows = len(nullperc_meantxt)
+    for row, (_, meantxt) in enumerate(nullperc_meantxt):
+        yval = y_m*row/num_rows + y_b
+        fig.text(0.93, yval, meantxt, ha='center', va='center', rotation='vertical')
+
+def _get_row_means(key2exps, objplt):
+    """Get the mean and SE for each row."""
+    nullperc2means = cx.defaultdict(list)
+    for (nullperc, _), expsets in key2exps.items():
+        for expset in expsets:
+            means = expset.get_means(objplt.attrname)
+            print expset, len(means)
+            nullperc2means[nullperc].extend(means)
+    nullperc2meantxt = {}
+    for nullperc, means in nullperc2means.items():
+        mean = np.mean(means)
+        stderr = np.std(means)
+        txt = "{NAME}={MEAN:5.3f}\nSE={SE:5.3f}".format(NAME=objplt.grpname, MEAN=mean, SE=stderr)
+        nullperc2meantxt[nullperc] = txt
+    return nullperc2meantxt
 
 def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     """Plot one tile of a multi-tiled plot."""
@@ -165,4 +193,4 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     for ntval in objplt.get_str_mean(exps):
         axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.154
