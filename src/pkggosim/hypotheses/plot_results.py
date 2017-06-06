@@ -8,7 +8,7 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from pkggosim.common.plot_results import PlotInfo, plt_tile, get_tiled_axes, get_dftbl_boxplot
+from pkggosim.common.plot_results import PlotInfo, get_tiled_axes, get_dftbl_boxplot
 from pkggosim.common.plot_results import tiled_xyticklabels_off, get_num_rows_cols, fill_axes
 
 
@@ -132,7 +132,7 @@ def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
     sorted_dat = sorted(key2exps.items(), key=lambda t: [-1*t[0][0], t[0][1]]) # perc_null, max_sig
     for idx, tile_items in enumerate(zip(axes_2d, sorted_dat)):
         plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
-        plt_tile(idx, num_rows, num_cols, tile_items, objplt)
+        _plt_tile(idx, num_rows, num_cols, tile_items, objplt)
     tiled_xyticklabels_off(axes_2d, num_cols)
     xysz = kws['txtsz_xy']
     fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
@@ -142,5 +142,27 @@ def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if kws.get('show', False):
         plt.show()
+
+def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
+    """Plot one tile of a multi-tiled plot."""
+    kws = objplt.kws
+    (axes, ((perc_null, maxsig), exps)) = tile_items
+    letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
+    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, objplt.attrname, objplt.grpname))
+    alpha = exps[0].alpha if kws['alphaline'] else None
+    fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
+              plottype=kws['plottype'], letter=letter, ylim=kws['ylim'])
+    axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
+    axes.set_yticks(kws['yticks'])
+    axes.set_yticklabels(kws['yticklabels'])
+    if idx >= num_cols*(num_rows-1): # bottom_row
+        axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
+    if idx%num_cols == 0:
+        axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
+    axes.set_ylim(kws['ylim'])
+    axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
+    # Add value text above plot bars to make plot easier to read
+    for ntval in objplt.get_str_mean(exps):
+        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

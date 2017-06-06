@@ -64,8 +64,12 @@ class RunParams(object):
         self.objbase.prt_summary(prt)
         self.objassc.prt_summary(prt)
         prms = self.params
-        prt.write("{N:6,} population genes (user)\n".format(N=len(prms['genes_population'])))
-        prt.write("{N:6,} population genes in assc.\n".format(N=len(self.genes['population'])))
+        num_pop_tot = len(prms['genes_population'])
+        num_pop_assc = len(self.genes['population'])
+        perc_pop = 100.0*num_pop_assc/num_pop_tot
+        prt.write("{N:6,} population genes (user)\n".format(N=num_pop_tot))
+        prt.write("{N:6,} population genes in assc.\n".format(N=num_pop_assc))
+        prt.write("{N:5.0f}% population genes coverage in assc.\n".format(N=perc_pop))
         prt.write("{N:6,} study genes (user)\n".format(N=len(prms['genes_study_bg'])))
         prt.write("{N:6,} study genes in assc.\n".format(N=len(self.genes['study_bg'])))
         prt.write("{N:6,} population genes - study buffer\n".format(N=len(self.genes['null_bg'])))

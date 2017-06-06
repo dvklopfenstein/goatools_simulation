@@ -139,29 +139,6 @@ def _set_color_boxes(axes, color):
     for artist in axes.artists:
         artist.set_edgecolor(color)
 
-# TBD move to hypothesis/plot_results
-def plt_tile(idx, num_rows, num_cols, tile_items, objplt):
-    """Plot one tile of a multi-tiled plot."""
-    kws = objplt.kws
-    (axes, ((perc_null, maxsig), exps)) = tile_items
-    letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
-    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, objplt.attrname, objplt.grpname))
-    alpha = exps[0].alpha if kws['alphaline'] else None
-    fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
-              plottype=kws['plottype'], letter=letter, ylim=kws['ylim'])
-    axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
-    axes.set_yticks(kws['yticks'])
-    axes.set_yticklabels(kws['yticklabels'])
-    if idx >= num_cols*(num_rows-1): # bottom_row
-        axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
-    if idx%num_cols == 0:
-        axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
-    axes.set_ylim(kws['ylim'])
-    axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
-    # Add value text above plot bars to make plot easier to read
-    for ntval in objplt.get_str_mean(exps):
-        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
-
 def get_tiled_axes(fig, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
     ax1 = fig.add_subplot(n_rows, n_cols, 1)
