@@ -69,8 +69,12 @@ but only 10% for groups of 128 hypotheses tested as shown in C4.
 
 
 ### [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
-TBD
 
+#### Simulated FDR Ratios
+![FDR results](doc/logs/fig_goea_100to025_004to064_N00050_00020_fdr_actual.png)
+
+#### Simulated Sensitivity Ratios
+![Sensitivity results](doc/logs/fig_goea_100to025_004to064_N00050_00020_sensitivity.png)
 
 ## Prerequisites
 
