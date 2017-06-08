@@ -1,18 +1,16 @@
 # Simulations to Verify GOEA Results
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
 are used to generate simulated values of FDR, sensitivity, and specificity
-for GOEAs done using [GOATOOLS](https://github.com/tanghaibao/goatools).
+for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
 **There are two categories of simulations**:
-  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md)    
-     Simulation elements:    
+  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md) includes:    
        * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
-     #consequent-gene-ontology-enrichment-results-goea-simulations)    
-     Simulation elements:    
+     #consequent-gene-ontology-enrichment-results-goea-simulations) includes    
+       * Fisher's exact test    
        * Benjamini/Hochberg calculations    
-       * gene ontology associations    
-       * Fisher's exact test.    
+       * Gene ontology associations    
 
 All simulations use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
