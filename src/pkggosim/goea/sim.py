@@ -88,7 +88,7 @@ class _Init(object):
             num_exp = num_study-num_null
             mrk = ""
             if num_exp != num_sig:
-                mrk = "+" if num_sig < num_exp else "-"
+                mrk = "-" if num_sig < num_exp else "+"
             txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
             log.write(txt.format(STU=num_study, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
@@ -109,8 +109,8 @@ class _Init(object):
         # 1. Generate random genes: Significant and Random
         #   True  -> gene is intended to be significant(different from the population)
         #   False -> If gene is determined significant, it occured by chance
-        genes_pop_bg = list(self.pobj.genes['null_bg'])
-        genes_study_bg = list(self.pobj.genes['study_bg'])
+        genes_pop_bg = self.pobj.gene_lists['null_bg']
+        genes_study_bg = self.pobj.gene_lists['study_bg']
         shuffle(genes_pop_bg)
         shuffle(genes_study_bg)
         genes_expsig = \

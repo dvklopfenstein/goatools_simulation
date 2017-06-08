@@ -35,11 +35,13 @@ class RunParams(object):
         self.objbase = DataBase(params['alpha'], params['method'])
         self.objassc = DataAssc(params['association_file'], params['genes_population'])
         # These study background genes have associations
-        _maskout = params['genes_popnullmaskout'].union(params['genes_study_bg'])
         self.genes = {
             "population" : self.objassc.pop_genes,
             "study_bg" : params['genes_study_bg'].intersection(self.objassc.pop_genes),
-            "null_bg" : self.objassc.pop_genes.difference(_maskout)}
+            "null_bg" : self._init_null_bg()}
+        self.gene_lists = {
+            "study_bg" : list(params['genes_study_bg'].intersection(self.objassc.pop_genes)),
+            "null_bg" : list(self._init_null_bg())}
         self._chk_genes(params, self.genes)
 
     @staticmethod
@@ -78,5 +80,12 @@ class RunParams(object):
         for key in ['perc_nulls', 'num_genes_list', 'num_experiments', 'num_sims']:
             prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=prms[key]))
         prt.write("\n")
+
+    def _init_null_bg(self):
+        """Initialize null background, the population subset not related to study genes."""
+        maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
+        study_genes = self.params['genes_study_bg']
+        #study_goids = {for g, gos in self.objassc.assc.items()}
+        return self.objassc.pop_genes.difference(maskout)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
