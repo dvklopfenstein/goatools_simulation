@@ -1,4 +1,7 @@
 # [**Preparatory**: Hypotheses and multiple-test simulations]()
+These preparatory simulations are used to develop the simulation code and
+verify the simulation methodology.
+
 
 ## Introduction
 

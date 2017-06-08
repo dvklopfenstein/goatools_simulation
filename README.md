@@ -1,28 +1,33 @@
 # Simulations to Verify GOEA Results
-The characteristics of **Gene Ontology Enrichment Analyses** (**GOEAs**) using
-[GOATOOLS](https://github.com/tanghaibao/goatools)
-are examined using stochastic simulations.
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
+are used to generate simulated values of FDR, sensitivity, and specificity
+for GOEAs done using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
 **There are two categories of simulations**:
-  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md)
-     Benjamini/Hochberg FDR simulation only
+  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md)    
+     Simulation elements:    
+       * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
      #consequent-gene-ontology-enrichment-results-goea-simulations)    
-     Simulations encompass the Benjamini/Hochberg calculations like those from step 1, as well as
-     gene ontology associations, and Fisher's exact test.
+     Simulation elements:    
+       * Benjamini/Hochberg calculations    
+       * gene ontology associations    
+       * Fisher's exact test.    
 
 All simulations use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
 with **alpha=0.05**.
 
 
-### [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
+## [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
-#### Simulated FDR Ratios
+### Simulated FDR Ratios
 ![FDR results](doc/logs/fig_goea_100to025_004to064_N00050_00020_fdr_actual.png)
 
-#### Simulated Sensitivity Ratios
+### Simulated Sensitivity Ratios
 ![Sensitivity results](doc/logs/fig_goea_100to025_004to064_N00050_00020_sensitivity.png)
+
+
 
 ## Prerequisites
 
