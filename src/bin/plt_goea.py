@@ -36,9 +36,10 @@ def run(randomseed, ntd):
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     objparams = RunParams(params)
-    obj = ExperimentsAll(objparams)
-    pltargs = {'dotsize':ntd.dotsize, 'ylim':ntd.ylim, 'yticklabels':ntd.yticklabels, 'title':title}
-    obj.run_all(rpt_items, **pltargs)
+    # obj = ExperimentsAll(objparams)
+    # pltargs = {'dotsize':ntd.dotsize, 'ylim':ntd.ylim, 'yticklabels':ntd.yticklabels, 'title':title}
+    # obj.run_all(rpt_items, **pltargs)
+    objparams.prt_summary(sys.stdout)
 
 def main():
     """Arguments for running all experiments."""
