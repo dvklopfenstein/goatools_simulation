@@ -33,25 +33,25 @@ class PlotInfo(object):
             'dotsize':1.0,
             'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
-            'yticklabels':["", "0.025", "0.050", "0.075"],
+            'yticklabels':["0.000", "0.025", "0.050", "0.075"],
             'ylim':[0.0, 0.09],
             'alphaline':True},
         'fdr_actual':{
             'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
-            'yticklabels':["", "0.025", "0.050", "0.075"],
+            'yticklabels':["0.000", "0.025", "0.050", "0.075"],
             'ylim':[0.0, 0.09],
             'alphaline':True},
         'sensitivity':{
             'plottype':'barplot',
             'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
-            'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
+            'yticklabels':["0.00", "0.25", "0.50", "0.75", "1.00"],
             'ylim':[-0.05, 1.05],
             'alphaline':False},
         'specificity':{
             'plottype':'barplot',
             'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
-            'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
+            'yticklabels':["0.00", "0.25", "0.50", "0.75", "1.00"],
             'ylim':[-0.05, 1.05],
             'alphaline':False},
     }
@@ -69,14 +69,19 @@ class PlotInfo(object):
     def get_str_mean(self, exps):
         """Get value with x and y location to be printing inside plot."""
         valstrs = []
-        if self.attrname == "sensitivity":
-            ntobj = cx.namedtuple("NtValstr", "valstr x y")
+        if self.kws['plottype'] == 'barplot':
+            ntobj = cx.namedtuple("NtValstr", "valstr x y ha va")
             for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
-                val = np.mean(exp.get_means(self.attrname))
+                yval = np.mean(exp.get_means(self.attrname))
                 # Plot text that can comfortably fit in plot.
-                if val > 0.0001 and val < 0.75:
-                    valstr = "{VAL:2.0f}%".format(VAL=val*100)
-                    valstrs.append(ntobj(valstr=valstr, x=xval, y=val+0.05))
+                if yval > 0.0001 and yval <= 0.50:
+                    valstr = "{VAL:2.0f}%".format(VAL=yval*100)
+                    print "BOT", valstr
+                    valstrs.append(ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom'))
+                elif yval > 0.50 and yval <= 0.99:
+                    valstr = "{VAL:2.0f}%".format(VAL=yval*100)
+                    print "TOP", valstr
+                    valstrs.append(ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom'))
         return valstrs
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
@@ -122,9 +127,12 @@ def fill_axes(axes, dfrm, alpha, **kws):
     axes.set_xlabel(kws.get('xlabel', ""), size=20)
     axes.set_ylabel(kws.get('ylabel', ""), size=20)
     if 'letter' in kws and 'ylim' in kws:
-        xpos = 0.96*axes.get_xlim()[1]
+        #xpos = 0.96*axes.get_xlim()[1]
+        #ypos = 0.85*kws['ylim'][1]
+        #axes.text(xpos, ypos, kws['letter'], ha='right', va='center')
+        xpos = axes.get_xlim()[0] + 0.05
         ypos = 0.85*kws['ylim'][1]
-        axes.text(xpos, ypos, kws['letter'], ha='right', va='center')
+        axes.text(xpos, ypos, kws['letter'], ha='left', va='center')
     return axes
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):

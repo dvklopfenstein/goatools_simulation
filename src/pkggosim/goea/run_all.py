@@ -40,7 +40,7 @@ class ExperimentsAll(object):
             baseimg = 'fig_goea_{DESC}_{NAME}'.format(DESC=desc_str, NAME=simname)
             #fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=baseimg))
             #self.plt_box_all(fout_pat, attrname, **pltargs)
-            fout_img = os.path.join(REPO, 'doc/logs/{B}'.format(B=baseimg))
+            fout_img = os.path.join(REPO, 'doc/logs/{B}.png'.format(B=baseimg))
             self.plt_box_tiled(fout_img, plt_items, **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")

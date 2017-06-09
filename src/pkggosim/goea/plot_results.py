@@ -6,6 +6,7 @@ __author__ = "DV Klopfenstein"
 import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 import pandas as pd
 from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
 from pkggosim.common.plot_results import fill_axes
@@ -45,52 +46,52 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
-    axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
+    gspecs = get_gridspecs(num_rows, num_cols)
+    axes_all = _get_tiled_axes(fig, gspecs, num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
             _plt_tile(pltobj, {
-                'axes':axes_2d[row_idx*num_cols + col_idx],
+                'axes':axes_all[row_idx*num_cols + col_idx],
                 'perc_null':perc_null,
                 'exps':exps,
                 'letter':"{C}{R}".format(R=row_idx+1, C=chr(65+col_idx)),
                 'is_bottom_row':row_idx == num_rows-1,
                 'is_left_column':col_idx%num_cols == 0})
-            #plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
-            #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
-            #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
-    _tiled_xyticklabels_off(axes_2d, num_cols)
+    _tiled_xyticklabels_off(axes_all, num_cols)
     set_tiled_txt(fig, pltobjs[0])
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
         plt.show()
 
+def _get_tiled_axes(fig, gspecs, n_rows, n_cols):
+    """Create empty axes to be filled and used in tiled boxplot image."""
+    gs_c0 = gspecs[0]
+    gs_cn = gspecs[1]
+    ax_c0 = fig.add_subplot(gs_c0[0, 0])  # Row 0, col 0 of GridSpec(4, 1)
+    ax_cn = fig.add_subplot(gs_cn[0, 0])  # Row 0, col 0 of GridSpec(4, 3)
+    axes = [ax_c0, ax_cn]
+    for idx in range(2, n_rows*n_cols):
+        colidx = idx%n_cols
+        if colidx == 0: # Append SubplotSpec object
+            axes.append(fig.add_subplot(gs_c0[idx/n_cols, 0], sharex=ax_c0, sharey=ax_c0))
+        else:
+            axes.append(fig.add_subplot(gs_cn[idx/n_cols, colidx-1], sharex=ax_cn, sharey=ax_cn))
+    return axes
+
 def _tiled_xyticklabels_off(axes, num_cols):
     """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
     for xaxis in axes[:-1*num_cols]:
         for label in xaxis.get_xticklabels():
             label.set_visible(False)
-    # for idx, yaxis in enumerate(axes):
-    #     if idx%num_cols != 0:
-    #         for label in yaxis.get_yticklabels():
-    #             label.set_visible(False)
-
-def _get_tiled_axes(fig, n_rows, n_cols):
-    """Create empty axes to be filled and used in tiled boxplot image."""
-    ax1 = fig.add_subplot(n_rows, n_cols, 1)
-    rng = range(2, n_rows*n_cols+1)
-    return [ax1] + [fig.add_subplot(n_rows, n_cols, i, sharex=ax1, sharey=ax1) for i in rng]
-
-def set_tiled_txt(fig, pltobj):
-    """Add text around edges of plot."""
-    kws = pltobj.kws
-    xysz = kws['txtsz_xy']
-    fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
-    fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
-    fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
+    for idx, yaxis in enumerate(axes):
+        col_idx = idx%num_cols
+        if col_idx > 1:
+            for label in yaxis.get_yticklabels():
+                label.set_visible(False)
 
 def _plt_tile(pltobj, pvars):
     """Plot one tile of a multi-tiled plot."""
@@ -114,5 +115,27 @@ def _plt_tile(pltobj, pvars):
     if pvars['is_left_column']:
         axes.set_ylabel("{PERCNULL}% Null".format(
             PERCNULL=pvars['perc_null']), size=kws['txtsz_tile'])
+
+def get_gridspecs(num_rows, num_cols):
+    """Get gridspecs, adjusted to fit well into figure."""
+    margin = 0.07
+    wspc = .08
+    c0_l = .18
+    cn_r = 0.99
+    col_wid = (cn_r - c0_l - margin)/num_cols
+    c0_r = c0_l + col_wid
+    cn_l = c0_r + margin
+    gspecs = [gridspec.GridSpec(num_rows, 1), gridspec.GridSpec(num_rows, num_cols-1)]
+    gspecs[0].update(hspace=.10, wspace=wspc, left=c0_l, right=c0_r, bottom=.19, top=.92)
+    gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=.19, top=.92)
+    return gspecs
+
+def set_tiled_txt(fig, pltobj):
+    """Add text around edges of plot."""
+    kws = pltobj.kws
+    xysz = kws['txtsz_xy']
+    fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
+    fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
+    fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
