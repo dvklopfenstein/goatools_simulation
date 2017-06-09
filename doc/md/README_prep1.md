@@ -1,8 +1,9 @@
 # [**Preparatory**: Hypotheses and multiple-test simulations]()
-These preparatory Benjamini/Hochberg FDR (False Discovery Rate)
-simulations are used to develop the simulation code and
-verify the simulation methodology.
-
+These preparatory Benjamini/Hochberg FDR (False Discovery Rate) simulations
+are used to establish proof of concept for the architecture and implementation
+of the simulation methodology used in both levels of simulations:
+  * **Benjamini/Hochberg FDR simulation only**    
+  * **Gene Ontology Enrichment Results (GOEA) simulations**    
 
 ## Introduction
 

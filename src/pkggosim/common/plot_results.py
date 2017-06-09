@@ -94,6 +94,8 @@ class PlotInfo(object):
             if curval is None:
                 curval = val_plt if val_plt is not None else val_dflt
             kws[pltattr] = curval
+        for key, val in kws.items():
+            self.kws[key] = val
 
 def fill_axes(axes, dfrm, alpha, **kws):
     """Fills axes axes with one set of boxplots of simulated FDRs."""
@@ -138,22 +140,6 @@ def _set_color_boxes(axes, color):
     """Set boxplot box line color."""
     for artist in axes.artists:
         artist.set_edgecolor(color)
-
-def get_tiled_axes(fig, n_rows, n_cols):
-    """Create empty axes to be filled and used in tiled boxplot image."""
-    ax1 = fig.add_subplot(n_rows, n_cols, 1)
-    rng = range(2, n_rows*n_cols+1)
-    return [ax1] + [fig.add_subplot(n_rows, n_cols, i, sharex=ax1, sharey=ax1) for i in rng]
-
-def tiled_xyticklabels_off(axes, num_cols):
-    """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
-    for xaxis in axes[:-1*num_cols]:
-        for label in xaxis.get_xticklabels():
-            label.set_visible(False)
-    for idx, yaxis in enumerate(axes):
-        if idx%num_cols != 0:
-            for label in yaxis.get_yticklabels():
-                label.set_visible(False)
 
 def get_num_rows_cols(key2exps):
     """Return the number of rows and columns for a matrix of tiled boxplots."""

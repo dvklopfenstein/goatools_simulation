@@ -7,8 +7,8 @@ import sys
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from pkggosim.common.plot_results import PlotInfo, get_tiled_axes, get_dftbl_boxplot
-from pkggosim.common.plot_results import tiled_xyticklabels_off, fill_axes
+from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
+from pkggosim.common.plot_results import fill_axes
 
 
 def _wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
@@ -45,7 +45,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
-    axes_2d = get_tiled_axes(fig, num_rows, num_cols)
+    axes_2d = _get_tiled_axes(fig, num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
@@ -61,12 +61,28 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
             #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
             #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
             plt.subplots_adjust(hspace=.16, wspace=.15, left=.15, bottom=.19, top=.92)
-    tiled_xyticklabels_off(axes_2d, num_cols)
+    _tiled_xyticklabels_off(axes_2d, num_cols)
     set_tiled_txt(fig, pltobjs[0])
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
         plt.show()
+
+def _tiled_xyticklabels_off(axes, num_cols):
+    """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
+    for xaxis in axes[:-1*num_cols]:
+        for label in xaxis.get_xticklabels():
+            label.set_visible(False)
+    # for idx, yaxis in enumerate(axes):
+    #     if idx%num_cols != 0:
+    #         for label in yaxis.get_yticklabels():
+    #             label.set_visible(False)
+
+def _get_tiled_axes(fig, n_rows, n_cols):
+    """Create empty axes to be filled and used in tiled boxplot image."""
+    ax1 = fig.add_subplot(n_rows, n_cols, 1)
+    rng = range(2, n_rows*n_cols+1)
+    return [ax1] + [fig.add_subplot(n_rows, n_cols, i, sharex=ax1, sharey=ax1) for i in rng]
 
 def set_tiled_txt(fig, pltobj):
     """Add text around edges of plot."""
