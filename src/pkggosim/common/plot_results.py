@@ -5,7 +5,6 @@ __author__ = "DV Klopfenstein"
 
 import collections as cx
 import seaborn as sns
-import pandas as pd
 import numpy as np
 
 class PlotInfo(object):
@@ -14,6 +13,7 @@ class PlotInfo(object):
     attr2grp = {
         'fdr_actual':'FDR',
         'sensitivity':'Sensitivity',
+        'specificity':'Specificity',
     }
 
     dflts_plt = {
@@ -48,6 +48,12 @@ class PlotInfo(object):
             'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
             'ylim':[-0.05, 1.05],
             'alphaline':False},
+        'specificity':{
+            'plottype':'barplot',
+            'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
+            'yticklabels':["", "0.25", "0.50", "0.75", "1.00"],
+            'ylim':[-0.05, 1.05],
+            'alphaline':False},
     }
 
     def __init__(self, attrname, args_kws):
@@ -75,7 +81,6 @@ class PlotInfo(object):
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
         """Return plotting parameters that differ for various plotting values; dostsize, ylim."""
-        print "AAAAAA", usr_pltattr2pltnm2val
         kws = {}
         plt_attr2vals = self.dflt_attr2vals.get(self.attrname, None)
         # pltattr: dotsize plottype yticks yticklabels ylim alphaline
@@ -84,16 +89,11 @@ class PlotInfo(object):
             val_plt = plt_attr2vals.get(pltattr, None)
             # Ex: {'fdr_actual':2.00, 'sensitivity':1.00}
             usr_pltnm2val = usr_pltattr2pltnm2val.get(pltattr, None)
-            print "PPPPPP", pltattr, val_dflt, usr_pltnm2val
             if usr_pltnm2val is not None:
                 curval = usr_pltnm2val.get(self.attrname, None)
             if curval is None:
                 curval = val_plt if val_plt is not None else val_dflt
             kws[pltattr] = curval
-        for k, v in kws.items():
-            self.kws[k] = v
-            print "WWWWWW", k, v
-
 
 def fill_axes(axes, dfrm, alpha, **kws):
     """Fills axes axes with one set of boxplots of simulated FDRs."""

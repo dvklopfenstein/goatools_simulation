@@ -17,8 +17,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     study_bg = "humoral_rsp"
-    title = 'GOEA Simulations with Humoral Response Genes'
-    title = 'GOEA Simulations'
+    title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
@@ -35,10 +34,11 @@ def run(randomseed, ntd):
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
+    plt_items = ['fdr_actual', 'sensitivity', 'specificity']
+    pltargs = {'dotsize':ntd.dotsize, 'ylim':ntd.ylim, 'yticklabels':ntd.yticklabels, 'title':title}
     objparams = RunParams(params)
-    # obj = ExperimentsAll(objparams)
-    # pltargs = {'dotsize':ntd.dotsize, 'ylim':ntd.ylim, 'yticklabels':ntd.yticklabels, 'title':title}
-    # obj.run_all(rpt_items, **pltargs)
+    obj = ExperimentsAll(objparams)
+    obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
     objparams.prt_summary(sys.stdout)
 
 def main():
@@ -51,11 +51,11 @@ def main():
     params = [
         # ntobj._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}, ylim, yticklabels]),
         # ntobj._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
-        # ntobj._make([100,  100, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
-        # ntobj._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels])
-        # ntobj._make([ 50,   20, {'fdr_actual':3.00, 'sensitivity':2.00}, ylim, yticklabels])
+        # ntobj._make([100,   20, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
+        # ntobj._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels]),
+        ntobj._make([ 50,   20, {'fdr_actual':3.00, 'sensitivity':2.00}, ylim, yticklabels]),
         # ntobj._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, yticklabels]), # 1:25
-        ntobj._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00}, ylim, yticklabels]), # 0:04
+        # ntobj._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00}, ylim, yticklabels]), # 0:04
     ]
     for ntd in params:
         run(seed, ntd)
