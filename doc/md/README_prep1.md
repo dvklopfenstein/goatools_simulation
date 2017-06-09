@@ -2,10 +2,25 @@
 These preparatory Benjamini/Hochberg FDR (False Discovery Rate) simulations
 are used to establish proof of concept for the architecture and implementation
 of the simulation methodology used in both levels of simulations:
-  * **Benjamini/Hochberg FDR simulation only**    
-  * **Gene Ontology Enrichment Results (GOEA) simulations**    
+  1. **Benjamini/Hochberg FDR simulation only** (described here)     
+  2. **Gene Ontology Enrichment Results (GOEA) simulations**    
+
+
+## Table of Contents
+  * [Abstract](#abstract)
+  * [Introduction](#introduction)
+  * [Methods](#methods)
+  * [Discussion](#discussion)
+  * [Results](#results)
+  * [Conclusion](#conclusion)
+  * [References](#references)   
+
+
+## Abstract
 
 ## Introduction
+
+## Methods
 
 
 ## Discussion
@@ -62,5 +77,8 @@ when 25% of the 128 hypotheses tested are "non-true nulls" which have P-values b
 Over many simulations the detection rate is 61% for groups of 4 tested hypotheses (C4, blue bar),
 but only 10% for groups of 128 hypotheses tested as shown in C4.
 
+## Conclusion
+
+## References
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
