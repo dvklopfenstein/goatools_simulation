@@ -44,18 +44,18 @@ def run(randomseed, ntd):
 def main():
     """Arguments for running all experiments."""
     seed = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
-    ntobj = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize ylim yticklabels")
+    nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize ylim yticklabels")
     #pylint: disable=bad-whitespace, no-member, line-too-long
     ylim = {'fdr_actual':[-0.005, 0.10]}
-    yticklabels = {'fdr_actual':['0.00', '0.25', '0.50', '0.75', '1.00']}
+    ylab = {'fdr_actual':['0.00', '0.25', '0.50', '0.75', '1.00']}
     params = [
-        # ntobj._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}, ylim, yticklabels]),
-        # ntobj._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
-        # ntobj._make([100,   20, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, yticklabels]),
-        # ntobj._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, yticklabels]),
-        # ntobj._make([ 50,   20, {'fdr_actual':3.00, 'sensitivity':2.00}, ylim, yticklabels]), # 2:50
-        # ntobj._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, yticklabels]), # 1:25
-        ntobj._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00}, ylim, yticklabels]), # 0:04
+        # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}, ylim, ylab]),
+        # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, ylab]),
+        # nto._make([100,   20, {'fdr_actual':0.95, 'sensitivity':0.60}, ylim, ylab]),
+        # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}, ylim, ylab]),
+        # nto._make([ 50,   20, {'fdr_actual':3.00, 'sensitivity':2.00}, ylim, ylab]), # 2:50
+        # nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}, ylim, ylab]), # 1:25
+        nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}, ylim, ylab]), # 0:04
     ]
     for ntd in params:
         run(seed, ntd)

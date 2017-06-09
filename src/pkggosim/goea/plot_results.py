@@ -60,7 +60,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
             #plt.subplots_adjust(hspace=.1, wspace=.1, left=.18, bottom=.2, top=.92)
             #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
             #plt.subplots_adjust(hspace=.17, wspace=.1, left=.15, bottom=.15, top=.87)
-            plt.subplots_adjust(hspace=.16, wspace=.15, left=.15, bottom=.19, top=.92)
+            plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_2d, num_cols)
     set_tiled_txt(fig, pltobjs[0])
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
