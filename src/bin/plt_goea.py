@@ -16,14 +16,17 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
+    # User parameters
+    randomize_truenull_assc = True
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2sym.keys()  # Population genes
     params = {
+        'prefix' : 'fig_goea{RND}'.format(RND="_rnd" if randomize_truenull_assc else ""),
+        'randomize_truenull_assc' : randomize_truenull_assc,
         'seed' : randomseed,
-        'randomize_truenull_assc' : False,
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
@@ -48,13 +51,14 @@ def main():
     nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member, line-too-long
     params = [
-        # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
-        # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        nto._make([100,   30, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}]),
-        # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]), # 4:56
-        # nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 1:25
-        # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04
+        # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50}]),
+        # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
+        # nto._make([100,   30, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
+        # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70}]),
+        # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}]), # 4:56
+        nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}]), # 1:25
+        # nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04 0:05
+        # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
     for ntd in params:
         run(seed, ntd)

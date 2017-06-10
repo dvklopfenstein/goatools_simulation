@@ -40,15 +40,18 @@ class DataAssc(object):
                     go2genes[goid].add(gene)
         return go2genes
 
-    def get_randomized_assc(self, genes_nontruenull):
-        """Randomize assc. with all "True Null" genes."""
-        assc_rand = self.assc
-        raise RuntimeError("TIME TO IMPLEMENT get_randomized_assc")
+    def get_randomized_assc(self, genes_truenull, genes_nontruenull):
+        """Randomize assc. for only all "True Null" genes."""
+        if not genes_truenull:
+            return self.assc
+        assc_rand = self.shuffle_associations({g:self.assc[g] for g in genes_truenull})
+        for gene in genes_nontruenull:
+            assc_rand[gene] = self.assc[gene]
         return assc_rand
 
     @staticmethod
     def shuffle_associations(assoc_ens2gos):
-        """Randomly shuffle associations to mimic a list of genes having no significance."""
+        """Randomly shuffle all associations to mimic a list of genes having no significance."""
         # Get a list of GO-list length of all genes
         goset_lens = [len(gos) for gos in assoc_ens2gos.values()]
         gos_all_set = set()

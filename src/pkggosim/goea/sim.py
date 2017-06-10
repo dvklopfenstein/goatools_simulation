@@ -97,7 +97,12 @@ class _Init(object):
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
         # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
         pop_genes = self.pobj.genes['population']
-        objgoea = self.pobj.objbase.get_goeaobj(pop_genes, self.pobj.objassc.assc)
+        assc = self.pobj.objassc.assc
+        if self.pobj.objassc.randomize_truenull_assc:
+            genes_trunull = pop_genes.difference(self.genes_stu)
+            genes_nontrunull = self.genes_stu
+            assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
+        objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
     def _init_study_genes(self, num_study_genes, num_null):

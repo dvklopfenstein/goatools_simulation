@@ -27,8 +27,9 @@ class ExperimentsAll(object):
 
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
+        pre = self.pobj.params['prefix']
         desc_str = self._get_fout_img()
-        fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
+        fout_log = os.path.join('doc/logs', '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
@@ -38,7 +39,7 @@ class ExperimentsAll(object):
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
             #for attr, name in ['fdr_actual', 'sensitivity']:
-            baseimg = 'fig_goea_{DESC}_{NAME}'.format(DESC=desc_str, NAME=simname)
+            baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
             #fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=baseimg))
             #self.plt_box_all(fout_pat, attrname, **pltargs)
             fout_img = os.path.join(REPO, 'doc/logs/{B}.png'.format(B=baseimg))

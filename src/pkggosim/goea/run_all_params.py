@@ -15,6 +15,7 @@ class RunParams(object):
 
     expected_params = set([
         'seed',                  # randomseed
+        'prefix',                # fig_goea_rnd
         'randomize_truenull_assc',
         'alpha',                 # 0.05
         'method',                # 'fdr_bh'
