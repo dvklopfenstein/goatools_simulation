@@ -71,6 +71,10 @@ class _Init(object):
                 tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
+    def get_genes_nontruenull(self):
+        """Get the list of study genes which are non-true nulls."""
+        return set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+
     def __init__(self, num_study_genes, num_null, pobj, log=None):
         self.pobj = pobj
         # I. Genes in two groups: Different than population AND no different than population
@@ -99,8 +103,8 @@ class _Init(object):
         pop_genes = self.pobj.genes['population']
         assc = self.pobj.objassc.assc
         if self.pobj.objassc.randomize_truenull_assc:
-            genes_trunull = pop_genes.difference(self.genes_stu)
-            genes_nontrunull = self.genes_stu
+            genes_nontrunull = self.get_genes_nontruenull()
+            genes_trunull = pop_genes.difference(genes_nontrunull)
             assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
@@ -119,7 +123,7 @@ class _Init(object):
         shuffle(genes_study_bg)
         genes_expsig = \
             [(g, True) for g in genes_study_bg[:num_ntnull]] + \
-            [(g, False) for g in genes_pop_bg[:num_null]]
+            [(g, False) for g in genes_pop_bg[:num_null]]         # True Null
         # 2. Extract "genes" and "intended significance" by transposing data
         self.genes_stu, self.expsig = zip(*genes_expsig)
 
