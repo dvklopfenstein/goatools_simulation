@@ -19,11 +19,7 @@ with **alpha=0.05**.
 
 ## [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
-### Simulated FDR Ratios
-![FDR results](doc/logs/fig_goea_100to025_004to064_N00050_00020_fdr_actual.png)
-
-### Simulated Sensitivity Ratios
-![Sensitivity results](doc/logs/fig_goea_100to025_004to064_N00050_00020_sensitivity.png)
+![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 
 
