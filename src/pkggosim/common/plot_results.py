@@ -34,13 +34,13 @@ class PlotInfo(object):
             'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
             'yticklabels':["0.000", "0.025", "0.050", "0.075"],
-            'ylim':[0.0, 0.09],
+            'ylim':[-0.005, 0.09],
             'alphaline':True},
         'fdr_actual':{
             'plottype':'boxplot',
             'yticks':[0.00, 0.025, 0.05, 0.075],
             'yticklabels':["0.000", "0.025", "0.050", "0.075"],
-            'ylim':[0.0, 0.09],
+            'ylim':[-0.005, 0.09],
             'alphaline':True},
         'sensitivity':{
             'plottype':'barplot',
