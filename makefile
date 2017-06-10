@@ -20,9 +20,19 @@ vim_sim_geneontology:
 
 vim_presim_geneontology:
 	vim -p \
-	src/bin/sim_geneontology.py \
-	src/pkggosim/goea_objrun_prelim.py \
-	src/pkggosim/goea_objbg.py
+	src/bin/simquick_geneontology.py \
+	src/pkggosim/goea/objrun_prelim.py \
+	src/pkggosim/goea/sim.py \
+	src/pkggosim/goea/sims.py \
+	src/pkggosim/goea/experiments.py \
+	src/pkggosim/goea/run_all.py \
+	src/pkggosim/goea/run_all_params.py \
+	src/pkggosim/goea/plot_results.py \
+	src/pkggosim/common/plot_results.py \
+	src/pkggosim/goea/utils.py \
+	src/pkggosim/goea/objassc.py \
+	src/pkggosim/goea/objbase.py \
+	src/pkggosim/common/true_positive.py
 
 vim_sim_benjamini_hochberg:
 	vim -p \
