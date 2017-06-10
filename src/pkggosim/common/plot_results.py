@@ -76,11 +76,9 @@ class PlotInfo(object):
                 # Plot text that can comfortably fit in plot.
                 if yval > 0.0001 and yval <= 0.50:
                     valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                    print "BOT", valstr
                     valstrs.append(ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom'))
                 elif yval > 0.50 and yval <= 0.99:
                     valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                    print "TOP", valstr
                     valstrs.append(ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom'))
         return valstrs
 

@@ -31,6 +31,7 @@ class ExperimentsAll(object):
         fout_log = os.path.join('doc/logs', 'fig_goea_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
+            self.prt_hms(sys.stdout, "Simulations initialized.")
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
             self.prt_summary(prt)

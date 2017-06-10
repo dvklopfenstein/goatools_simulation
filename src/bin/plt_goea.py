@@ -30,7 +30,7 @@ def run(randomseed, ntd):
         'genes_popnullmaskout':get_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
-        'num_genes_list' : [4, 16, 64],
+        'num_genes_list' : [4, 16, 64, 128],
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
@@ -49,11 +49,11 @@ def main():
     params = [
         # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50}]),
         # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60}]),
-        # nto._make([100,   20, {'fdr_actual':0.95, 'sensitivity':0.60}]),
+        nto._make([100,   30, {'fdr_actual':0.95, 'sensitivity':0.60}]),
         # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70}]),
-        # nto._make([ 50,   20, {'fdr_actual':3.00, 'sensitivity':2.00}]), # 2:50
+        # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00}]), # 4:56
         # nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 1:25
-        nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04
+        # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04
     ]
     for ntd in params:
         run(seed, ntd)

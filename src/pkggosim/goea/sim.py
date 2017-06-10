@@ -71,7 +71,6 @@ class _Init(object):
                 tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
-    #def __init__(self, num_study_genes, num_null, pobj, log=sys.stdout):
     def __init__(self, num_study_genes, num_null, pobj, log=None):
         self.pobj = pobj
         # I. Genes in two groups: Different than population AND no different than population

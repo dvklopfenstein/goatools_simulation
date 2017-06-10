@@ -3,7 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-
+import sys
 import timeit
 import datetime
 from pkggosim.goea.objbase import DataBase
@@ -43,6 +43,7 @@ class RunParams(object):
             "study_bg" : list(params['genes_study_bg'].intersection(self.objassc.pop_genes)),
             "null_bg" : list(self._init_null_bg())}
         self._chk_genes(params, self.genes)
+        self._adj_num_genes_list()
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -87,5 +88,22 @@ class RunParams(object):
         study_genes = self.params['genes_study_bg']
         #study_goids = {for g, gos in self.objassc.assc.items()}
         return self.objassc.pop_genes.difference(maskout)
+
+    def _adj_num_genes_list(self):
+        """If the number of genes in num_genes_list is less than study_bg, update num_genes_list."""
+        lst_orig = self.params['num_genes_list']
+        lst_curr = []
+        num_bg = len(self.gene_lists['study_bg'])
+        for num_genes_orig in sorted(lst_orig):
+            if num_genes_orig <= num_bg:
+                lst_curr.append(num_genes_orig)
+            else:
+                lst_curr.append(num_bg)
+                break
+        if lst_orig != lst_curr:
+            sys.stdout.write("**NOTE: num_genes_list WAS: {LIST}\n".format(LIST=lst_orig))
+            sys.stdout.write("**NOTE: num_genes_list NOW: {LIST}\n".format(LIST=lst_curr))
+            self.params['num_genes_list'] = lst_curr
+        return lst_curr
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
