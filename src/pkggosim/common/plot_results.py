@@ -71,6 +71,7 @@ class PlotInfo(object):
         valstrs = []
         if self.kws['plottype'] == 'barplot':
             ntobj = cx.namedtuple("NtValstr", "valstr x y ha va")
+            left_num = exps[0].params['num_items']
             for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
                 yval = np.mean(exp.get_means(self.attrname))
                 # Plot text that can comfortably fit in plot.
@@ -78,8 +79,9 @@ class PlotInfo(object):
                     valstr = "{VAL:2.0f}%".format(VAL=yval*100)
                     valstrs.append(ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom'))
                 elif yval > 0.50 and yval <= 0.99:
-                    valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                    valstrs.append(ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom'))
+                    if exp.params['num_items'] != left_num or yval <= 0.75:
+                        valstr = "{VAL:2.0f}%".format(VAL=yval*100)
+                        valstrs.append(ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom'))
         return valstrs
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
