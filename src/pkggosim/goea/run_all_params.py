@@ -83,7 +83,8 @@ class RunParams(object):
         prt.write("{N:6,} population genes - study buffer\n".format(N=len(self.genes['null_bg'])))
         prt.write("\n")
         prt.write("SIMULATION PARAMETERS:\n")
-        for key in ['perc_nulls', 'num_genes_list', 'num_experiments', 'num_sims']:
+        kys = ['randomize_truenull_assc', 'perc_nulls', 'num_genes_list', 'num_experiments', 'num_sims']
+        for key in kys:
             prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=prms[key]))
         prt.write("\n")
 

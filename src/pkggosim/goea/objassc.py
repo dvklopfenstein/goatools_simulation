@@ -42,9 +42,14 @@ class DataAssc(object):
 
     def get_randomized_assc(self, genes_truenull, genes_nontruenull):
         """Randomize assc. for only all "True Null" genes."""
+        # If there are no "True Nulls", return original assc wo/randomizing
+        assert not genes_truenull.intersection(genes_nontruenull), "TRUE NULL ISEC w/NON-TRUE NULL"
         if not genes_truenull:
             return self.assc
-        assc_rand = self.shuffle_associations({g:self.assc[g] for g in genes_truenull})
+        # Get the subset of the assc to randomize
+        assc_subset = {g:self.assc[g] for g in genes_truenull} if genes_nontruenull else self.assc
+        assc_rand = self.shuffle_associations(assc_subset)
+        # Add back non-randomized parts of the assc.
         for gene in genes_nontruenull:
             assc_rand[gene] = self.assc[gene]
         return assc_rand
