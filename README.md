@@ -28,8 +28,8 @@ with **alpha=0.05**.
   * [Conclusion](#conclusion)
   * [References](#references)   
 
+### Simulation Figure
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
-
 
 ### Abstract
 ### Introduction
