@@ -36,6 +36,7 @@ class ExperimentsAll(object):
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
             self.prt_summary(prt)
+            self.prt_experiments_means(sys.stdout, rpt_items)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
             #for attr, name in ['fdr_actual', 'sensitivity']:
