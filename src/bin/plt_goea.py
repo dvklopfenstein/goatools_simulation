@@ -53,7 +53,7 @@ def main():
     params = [
         # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50}]),
         # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
-        # nto._make([100,   30, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
+        # nto._make([100,   30, {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60}]),
         # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70}]),
         # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}]), # 4:56
         # nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}]), # 1:25
