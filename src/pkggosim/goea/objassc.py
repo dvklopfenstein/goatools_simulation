@@ -4,6 +4,7 @@ __cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights 
 __author__ = "DV Klopfenstein"
 
 import collections as cx
+from random import shuffle
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 
 class DataAssc(object):
@@ -11,7 +12,7 @@ class DataAssc(object):
 
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, assc_file, pop_genes):
+    def __init__(self, assc_file, pop_genes, randomize_truenull_assc=False):
         # Read the association file. Save GOs related to population genes
         assc_geneid2gos = get_assoc_data(assc_file, pop_genes)
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
@@ -20,6 +21,7 @@ class DataAssc(object):
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
         self.go2genes = self.get_go2genes()
+        self.randomize_truenull_assc = randomize_truenull_assc
 
     def prt_summary(self, prt):
         """Print summary of parameters and background data."""
@@ -37,5 +39,32 @@ class DataAssc(object):
                 for goid in goids:
                     go2genes[goid].add(gene)
         return go2genes
+
+    def get_randomized_assc(self, genes_nontruenull):
+        """Randomize assc. with all "True Null" genes."""
+        assc_rand = self.assc
+        raise RuntimeError("TIME TO IMPLEMENT get_randomized_assc")
+        return assc_rand
+
+    @staticmethod
+    def shuffle_associations(assoc_ens2gos):
+        """Randomly shuffle associations to mimic a list of genes having no significance."""
+        # Get a list of GO-list length of all genes
+        goset_lens = [len(gos) for gos in assoc_ens2gos.values()]
+        gos_all_set = set()
+        for gos_gene in assoc_ens2gos.values():
+            gos_all_set |= gos_gene
+        gos_all_lst = list(gos_all_set)
+        # Randomly shuffle GOs
+        shuffle(goset_lens)
+        shuffle(gos_all_lst)
+        # Build new randomly shuffled association
+        assc_rand = {}
+        idx_start = 0
+        for geneid, golen in zip(assoc_ens2gos.keys(), goset_lens):
+            idx_stop = idx_start + golen
+            assc_rand[geneid] = gos_all_lst[idx_start:idx_stop]
+            idx_start = idx_stop
+        return assc_rand
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

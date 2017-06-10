@@ -6,7 +6,6 @@ __author__ = "DV Klopfenstein"
 import collections as cx
 import pkgutil
 import importlib
-from random import shuffle
 from goatools_suppl.proj_data import GoatoolsDataMaker
 
 
@@ -58,25 +57,5 @@ def import_mod(modulestr, log=None):
     if log is not None:
         log.write("  None   {MOD}\n".format(MOD=modulestr))
     return None
-
-def shuffle_associations(assoc_ens2gos):
-    """Randomly shuffle associations to mimic a list of genes having no significance."""
-    # Get a list of GO-list length of all genes
-    goset_lens = [len(gos) for gos in assoc_ens2gos.values()]
-    gos_all_set = set()
-    for gos_gene in assoc_ens2gos.values():
-        gos_all_set |= gos_gene
-    gos_all_lst = list(gos_all_set)
-    # Randomly shuffle GOs
-    shuffle(goset_lens)
-    shuffle(gos_all_lst)
-    # Build new randomly shuffled association
-    assc_rand = {}
-    idx_start = 0
-    for geneid, golen in zip(assoc_ens2gos.keys(), goset_lens):
-        idx_stop = idx_start + golen
-        assc_rand[geneid] = gos_all_lst[idx_start:idx_stop]
-        idx_start = idx_stop
-    return assc_rand
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

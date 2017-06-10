@@ -15,6 +15,7 @@ class RunParams(object):
 
     expected_params = set([
         'seed',                  # randomseed
+        'randomize_truenull_assc',
         'alpha',                 # 0.05
         'method',                # 'fdr_bh'
         'association_file',      # 'gene_association.mgi'
@@ -33,7 +34,10 @@ class RunParams(object):
         self.params = params
         self.objrnd = RandomSeed32(params['seed'])
         self.objbase = DataBase(params['alpha'], params['method'])
-        self.objassc = DataAssc(params['association_file'], params['genes_population'])
+        self.objassc = DataAssc(
+            params['association_file'],
+            params['genes_population'],
+            params['randomize_truenull_assc'])
         # These study background genes have associations
         self.genes = {
             "population" : self.objassc.pop_genes,
@@ -85,8 +89,6 @@ class RunParams(object):
     def _init_null_bg(self):
         """Initialize null background, the population subset not related to study genes."""
         maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
-        study_genes = self.params['genes_study_bg']
-        #study_goids = {for g, gos in self.objassc.assc.items()}
         return self.objassc.pop_genes.difference(maskout)
 
     def _adj_num_genes_list(self):

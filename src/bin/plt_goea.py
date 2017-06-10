@@ -23,6 +23,7 @@ def run(randomseed, ntd):
     genes_mus = ensm2sym.keys()  # Population genes
     params = {
         'seed' : randomseed,
+        'randomize_truenull_assc' : False,
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,

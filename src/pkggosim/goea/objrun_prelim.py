@@ -10,7 +10,6 @@ from random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
-from pkggosim.goea.utils import shuffle_associations
 
 
 class RunPrelim(object):
@@ -94,7 +93,7 @@ class RunPrelim(object):
         genes_study = set(genes_study_arg)
         assc_desc = 'random'
         alpha = self.objbase.alpha
-        rand_assoc = shuffle_associations(self.objassc.assc)
+        rand_assoc = self.objassc.shuffle_associations(self.objassc.assc)
         goeaobj = self.objbase.get_goeaobj(self.objassc.pop_genes, rand_assoc)
         goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < alpha)
         fout_txt = "goea_{DESC}_rnd_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))
