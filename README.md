@@ -35,10 +35,12 @@ with **alpha=0.05**.
   * [**References**](#references)   
 
 ### Abstract
-Simulations of various sizes of study gene lists with various percentages of genes which
-are enriched in _Humoral response_ are simulated. The results are analyzed to determine
-the percentages the _Humoral response_ genes in the study which are correctly discovered
-by the thousands of gene ontology analyses.
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
+are run on sets of randomly generated gene lists which are various sizes and contain
+various percentages of genes enriched with _Humoral response_.
+
+The results are analyzed to determine the percentages the _Humoral response_ genes in the
+study which are correctly discovered by the thousands of gene ontology analyses.
 
 ### Introduction
 Using GOATOOLS grouping, we find over 2,000 genes having immune functions. A subset of the
