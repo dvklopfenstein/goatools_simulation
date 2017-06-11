@@ -27,7 +27,7 @@ with **alpha=0.05**.
       **GOEA Simulations with downloaded Associations**      
       [**Fig 2.**](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes)
       **GOEA Simulations with Associations randomized for true null genes**     
-      [**Fig 3.**](#figure-3-benjamninihochberg-only-simulated-fdr-values)
+      [**Fig 3.**](#figure-3-benjaminihochberg-only-simulated-fdr-values)
       **Benjamini/Hochberg-Only Simulated FDR values**      
       [**Fig 4.**](#figure-4-benjaminihochberg-only-simulated-sensitivity-values)
       **Benjamini/Hochberg-Only Simulated Sensitivity values**      
