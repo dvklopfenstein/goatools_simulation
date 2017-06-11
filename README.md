@@ -112,21 +112,22 @@ response gene (Fig 3b B2). The second case showed a sensitivity of 86% when the 
 gene-study group had 2 genes that were enriched in humoral response genes.
 
 #### Figure 3) Bejamnin/Hochberg-Only Simulated FDR values
-It is interesting to note that the simulated FDR varies by study size in a single panel.
+![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
+It is interesting to note that the simulated FDR values in GOEA simulations vary by study size in a single panel.
 For example in Fig 3b panel A2, the mean simulated FDR is 0.004, 0.01, 0.03, and 0.04 for
 study group sizes of 4 genes, 16, 64 and 124. This is interesting because in
 Benjimini/Hochberg-only simulations that contain no gene ontology or Fisher exact tests,
 the FDR stays the same for one panel across different sizes of tested hypotheses. In out
 Benjamini/Hochberg-only simulations the mean simulated FDR across the entire 75% null
 panel was 0.038 (Fig 3c, Panels A2, B2, and B3) 
-![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 
 #### Figure 4) Bejaminin/Hochberg-Only Simulated Sensitivity values
-The sensitivity in Benjamini/Hochberg-only simulations is 100% when the study group
-hypotheses test results (P-values) are 0.01 or below when the alpha is set to 0.05 (Fig 3d
-A2, B2, and B3). As the hypotheses test results are closer to 0.05, the sensitivity drops
-(Fig 3d B2-B4 and C2-C4).
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
+The sensitivity in Benjamini/Hochberg-only simulations is 100% when the study group
+hypotheses test results (P-values) are 0.01 or below when the alpha is set to 0.05
+(panels A2, B2, and B3).
+
+As the hypotheses test results come closer to the alpha of 0.05, the sensitivity drops (B2-B4 and C2-C4).
 
 
 ### Conclusion
