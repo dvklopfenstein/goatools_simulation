@@ -21,8 +21,8 @@ with **alpha=0.05**.
 
 ### Table of Contents
   * Figures:    
-    * [Simulations using original gene-GO associations](#original-associations)    
-    * [Simulations using random gene-GO associations](#random-associations)    
+    * [Simulations using **original** gene-GO associations](#original-associations)    
+    * [Simulations using **random** gene-GO associations](#random-associations)    
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
