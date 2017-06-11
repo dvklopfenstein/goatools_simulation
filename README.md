@@ -4,10 +4,12 @@ are used to generate simulated values of FDR, sensitivity, and specificity
 for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
 **There are two categories of simulations**:
-  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md) elements include:    
+  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md)
+     whose elements include:    
        * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
-     #consequent-gene-ontology-enrichment-results-goea-simulations) elements include    
+     #consequent-gene-ontology-enrichment-results-goea-simulations)
+     whose elements include    
        * Fisher's exact test    
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
