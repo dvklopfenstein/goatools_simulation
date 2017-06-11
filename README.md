@@ -43,16 +43,14 @@ the immune genes is the 124 _Humoral Response_ genes, which are used as a backgr
 from which to draw upon for the study groups in the simulations. Study group sizes in
 the simulations include 4 genes, 16, 64, and all 124 _Humoral Response_ genes.
 
-The null hypotheses is the study genes are no different that the population genes.
+The null hypotheses is that the study genes are no different that the population genes.
 The population genes in the simulations are the set of all protein-coding mouse genes
 which have gene ontology associations, which is over 18,600 genes out a total of over 22,000 Ensembl genes.
 
 The study groups are composed of various percentages of both true and false null hypotheses.
-True null hypotheses in the study group are selected from the large general group of population genes.
-False null hypotheses in the study group are selected from the small group of 124 humoral response genes.
+True null hypotheses in the study group are selected at random from a large general group of population genes.
+False null hypotheses in the study group are selected at random from the small group of 124 humoral response genes.
 
-
-Simulation-based estimates of precentage of humoral response study genes (famse nullrecovered from a GOEA
 
 ### Methods
 ### Discussion

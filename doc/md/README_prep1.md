@@ -17,6 +17,11 @@ for the simulation methodology used in both levels of simulations:
 
 
 ## Abstract
+Simulations of various sizes of study groups containing tested hypotheses with
+various percentages of true nulls are run. The results are analyzed to
+determine the percentages the false null hypotheses recovered from thousands of
+simulations.
+
 
 ## Introduction
 
@@ -40,16 +45,18 @@ with **alpha=0.05**.
 ### Simulated FDR Ratios
 ![FDR results](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 The x-axis shows two simulation parameters.
-The first parameter is the _number of tested hypotheses_ in each simulation, with values of 4, 16, and 128.
+The first parameter is the _number of tested hypotheses_ in each simulation, with group sizes of 4, 16, and 128.
 The second parameter, labeled on the figure as _**Sig.<=**_, is the _maximum P-value_,
 of randomly generated non-true null hypotheses test results.
 The y-axis shows the _percentage of "True nulls"_.
 The simulated FDR drops dramatically
 As the percentage of "True nulls" drops causing the number of "non-true nulls" to rise.
 
-The maximum P-value for "non-true null hypotheses" is seen here with values 0.01, 0.03, & 0.05
-in columns A, B, and C repectively.
-This value has no affect on the simulated FDR values.
+The maximum P-value for **false null hypotheses** is seen here with values:
+  * **0.01**; Extremely significant compared to alpha=0.05 (column A)     
+  * **0.03**; Somewhat significant compared to alpha=0.05 (column B)    
+  * **0.05**; Significance can be close to the alpha=0.05 (column C)    
+Maximum significance for false null hyotheses has no affect on the simulated FDR values.
 But it has a large affect on the sensitivity of the test.
 
 ### Simulated Sensitivity Ratios
