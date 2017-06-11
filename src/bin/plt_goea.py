@@ -39,7 +39,9 @@ def run(randomseed, ntd):
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
-    pltargs = {'dotsize':ntd.dotsize, 'title':title}
+    pltargs = {'dotsize':ntd.dotsize, 'title':title,
+               'xlabel':'Number of Genes in a Study Group',
+               'ylabel':'Percentage of General Population Genes'}
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams)
     obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
