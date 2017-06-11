@@ -28,8 +28,15 @@ with **alpha=0.05**.
   * [Conclusion](#conclusion)
   * [References](#references)   
 
-### Simulation Figure
+### Simulation Figures
+
+#### Original Associations
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
+
+#### Random Associations
+The original associations are randomized for all associations except for 
+the _Non-True Nulls_ from a randomly chosen study set of genes.    
+![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Abstract
 ### Introduction
