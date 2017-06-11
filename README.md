@@ -140,7 +140,7 @@ Gene ontology enrichment analyses can discover large proportions of
 enriched study genes, especially when the study groups contain more
 genes or when the study groups contain a higher percentage of enriched
 genes. The simulated FDR can be as high as alpha, but becomes smaller
-as the percentage of false nulls (general population unenriched genes)
+as the proportion of false nulls (general population unenriched genes)
 drops.
 
 ### References
