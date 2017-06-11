@@ -28,9 +28,9 @@ with **alpha=0.05**.
       **GOEA Simulations with downloaded Associations**      
       [**Fig 2.**](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes)
       **GOEA Simulations with Associations randomized for true null genes**     
-      [**Fig 3.**](#figure-3-bejamninhochberg-only-simulated-fdr-values)
+      [**Fig 3.**](#figure-3-benjamninihochberg-only-simulated-fdr-values)
       **Bejamnin/Hochberg-Only Simulated FDR values**      
-      [**Fig 4.**](#figure-4-bejamininhochberg-only-simulated-sensitivity-values)
+      [**Fig 4.**](#figure-4-benjaminihochberg-only-simulated-sensitivity-values)
       **Bejaminin/Hochberg-Only Simulated Sensitivity values**      
   * [**Conclusion**](#conclusion)
   * [**References**](#references)   
@@ -38,8 +38,8 @@ with **alpha=0.05**.
 ### Abstract
 Simulations of various sizes of study gene lists with various percentages of genes which
 are enriched in _Humoral response_ are simulated. The results are analyzed to determine
-the percentages the _Humoral response_ genes recovered from thousands of gene ontology
-analyses.
+the percentages the _Humoral response_ genes in the study which are correctly discovered
+by the thousands of gene ontology analyses.
 
 ### Introduction
 Using GOATOOLS grouping, we find over 2,000 genes having immune functions. A subset of the
@@ -78,60 +78,62 @@ the population).
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 The percentage of humoral genes in the study (false nulls) that were discovered by gene
-ontology analyses was high for all study gene group sizes of 64 genes or more (Fig 3a,
-Panels B2, B3, B4, and B5).  For studies containing 16 genes, discovery was high with over
+ontology analyses was high for all study gene group sizes of 64 genes or more 
+(orange and magenta bars in panels B2, B3, B4, and B5).  For studies containing 16 genes, discovery was high with over
 96% of all humoral genes in the study discovered when the study groups contained 75% or
-100% humoral genes (Fig 3a, Panels B4 and B5) . This value dipped to 69% humoral genes
-discovered for the 16 gene group had 8 humoral genes (Fig 3a B3) and was only 12%
-discovery if there were 4 humoral genes in the study.
+100% humoral genes (Green bars, panels B4 and B5) . This value dipped to 69% humoral genes
+discovered when the 16 gene group contained 8 humoral genes (green bar, panel B3) and was only 12%
+discovery if there were 4 humoral genes in the study (green bar, panel B2).
 
-When the study size was 4 genes, 0%-39% of all humoral response genes were recovered over
-thousands of simulations as the percent true null contents of the groups varied from 75%
+When the study size was 4 genes, 0%-39% of all humoral response genes in the studies were discovered over
+thousands of simulations as the percent of true null contents of the groups varied from 75%
 true null (25% of the study genes are humoral resonse genes) to 0% true null (all of the
-study genes are humoral response genes).
+study genes are humoral response genes) shown in the figure above as blue bars in panels B2-B4.
+
+The simulated FDR values, which are supposed to be guaranteed to be under the alpha value of 0.05
+used in the simulations, was nearly 0.00 for the case where all genes are from the
+population or all genes are from the set of genes enriched in humoral response (A1 and A5).
+But the FDR rises above the alpha of 0.05 in the cases where there is a mix of
+true null (genes from the population) and false null (genes enriched in humoral response),
+especially for the study groups containing 64 or more genes (panels A2-A4). 
+
+The FDRs in this simulation are artificially high because we are finding genes enriched in 
+categories other than _humoral response_. We next randomize genes with true null associations
+to remove the simulation artifact seen above.
 
 
 #### Figure 2) GOEA Simulations with Associations randomized for true null genes
-The original associations are randomized for all associations except for the _Non-True
+To simulate true FDRs, the original associations are randomized for all associations except for the _Non-True
 Nulls_ (the humoral genes that are significantly different that the population of all
 mouse genes) from a randomly chosen study set of genes.    
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
-The simulated FDR, which is supposed to be guaranteed to be under the alpha value of 0.05
-used in the simulations was nearly 0.00 for the case where all genes are from the
-population or all genes are from the set of genes enriched in humoral response (Fig 3a A1
-and A5). But the FDR rises above the alpha of 0.05 in the cases where there is a mix of
-true null (genes from the population) and false null (genes enriched in humoral response),
-especially for the study groups containing 64 or more genes. 
+The results of the randomized association simulation were all simulated FDR values stayed
+under the alpha of 0.05. Also, the sensitivity was that 99% or more of the humoral genes
+in the study were discovered for all simulations except for two cases. The first case
+found only 2% of all humoral genes over all simulations when using a 4-gene study group
+where only 1 gene was a humoral response gene (Blue bar in B2). The second case showed a
+sensitivity of 86% when the 4 gene-study group had 2 genes that were enriched in humoral
+response genes (Blue bar in B3).
 
-Considering that the simulated FDR found above 0.05 may actually be other false nulls
-(enriched genes) that were not properly marked as enriched because they were not part of
-the humoral response group, we did another simulation which randomized the associations
-for all genes that were not in our enriched study group. The results of the randomized
-association simulation were all simulated FDR values stayed under the alpha of 0.05. Also,
-the sensitivity was that 99% or more of the humoral genes in the study were discovered for
-all simulations except for two cases. The first case found only 2% of all humoral genes
-over all simulations when using a 4-gene study group where only 1 gene was a humoral
-response gene (Fig 3b B2). The second case showed a sensitivity of 86% when the 4
-gene-study group had 2 genes that were enriched in humoral response genes.
-
-#### Figure 3) Bejamnin/Hochberg-Only Simulated FDR values
+#### Figure 3) Benjamnini/Hochberg-Only Simulated FDR values
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
-It is interesting to note that the simulated FDR values in GOEA simulations vary by study size in a single panel.
-For example in Fig 3b panel A2, the mean simulated FDR is 0.004, 0.01, 0.03, and 0.04 for
-study group sizes of 4 genes, 16, 64 and 124. This is interesting because in
-Benjimini/Hochberg-only simulations that contain no gene ontology or Fisher exact tests,
-the FDR stays the same for one panel across different sizes of tested hypotheses. In out
-Benjamini/Hochberg-only simulations the mean simulated FDR across the entire 75% null
-panel was 0.038 (Fig 3c, Panels A2, B2, and B3) 
+It is interesting to note that the simulated FDR values in GOEA simulations vary by study
+size in a single panel in Figure 2.  For example in Fig 2 panel A2, the mean simulated FDR is 0.004,
+0.01, 0.03, and 0.04 for study group sizes of 4 genes, 16, 64 and 124. This is interesting
+because in the Benjimini/Hochberg-only simulations that contain no gene ontology or Fisher
+exact tests, the FDR stays the same for one set of simulations which all have the same “%
+Null” contents across different group sizes of tested hypotheses. In the Benjamini/Hochberg-only
+simulations the mean simulated FDR across the entire 75% null panel was 0.038 (Panels A2, B2, and B3) 
 
-#### Figure 4) Bejaminin/Hochberg-Only Simulated Sensitivity values
+#### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity values
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
 The sensitivity in Benjamini/Hochberg-only simulations is 100% when the study group
 hypotheses test results (P-values) are 0.01 or below when the alpha is set to 0.05
-(panels A2, B2, and B3).
+(panels A2-A4).
 
-As the hypotheses test results come closer to the alpha of 0.05, the sensitivity drops (B2-B4 and C2-C4).
+As the hypotheses test results for false nulls are randomly generated at values closer to 0.05,
+the sensitivity drops (B2-B4 and C2-C4)
 
 
 ### Conclusion
