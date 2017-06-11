@@ -24,10 +24,14 @@ with **alpha=0.05**.
   * [Introduction](#introduction)
   * [Methods](#methods)
   * [Results and Discussion](#results-and-discussion)    
-      [Fig 1.](#figure-1-goea-simulations-with-downloaded-associations) GOEA Simulations with downloaded Associations    
-      [Fig 2.](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes) GOEA Simulations with Associations randomized for true null genes    
-      [Fig 3.](#figure-3-bejamninhochberg-only-simulated-fdr-values) Bejamnin/Hochberg-Only Simulated FDR values    
-      [Fig 4.](#figure-4-bejamininhochberg-only-simulated-sensitivity-values) Bejaminin/Hochberg-Only Simulated Sensitivity values    
+      [Fig 1.](#figure-1-goea-simulations-with-downloaded-associations)
+      **GOEA Simulations with downloaded Associations**      
+      [Fig 2.](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes)
+      **GOEA Simulations with Associations randomized for true null genes**     
+      [Fig 3.](#figure-3-bejamninhochberg-only-simulated-fdr-values)
+      **Bejamnin/Hochberg-Only Simulated FDR values**      
+      [Fig 4.](#figure-4-bejamininhochberg-only-simulated-sensitivity-values)
+      **Bejaminin/Hochberg-Only Simulated Sensitivity values**      
   * [Conclusion](#conclusion)
   * [References](#references)   
 
@@ -59,15 +63,15 @@ at random from the small group of 124 humoral response genes.
 
 
 ### Results and Discussion
-Figure 1 presents the estimates of simulated FDRs, sensitivity, and specificity.
+The figures show values of simulated **FDRs**, **sensitivity**, and**specificity** over thousands of simulations.
 
-Sensitivity, also known as "true positive rate", recall, "probability of detection", is
+**Sensitivity**, also known as "true positive rate", recall, "probability of detection", is
 the proportion of false hypotheses (humoral respose genes in our study sets) which are
 correctly detected as being significant.
 
-Specificity, is the proportion of of true hypotheses (general population genes in the
+**Specificity**, is the proportion of of true hypotheses (general population genes in the
 study) which failed to reject the null (not declared as being significantly different that
-the population.
+the population).
 
 
 #### Figure 1) GOEA Simulations with downloaded Associations
