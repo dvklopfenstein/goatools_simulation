@@ -23,11 +23,11 @@ with **alpha=0.05**.
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
-  * [Results and Discussion](#results-and-discussion)
-      Fig 1. GOEA Simulations with downloaded Associations    
-      Fig 2. GOEA Simulations with Associations randomized for true null genes    
-      Fig 3. Bejamnin/Hochberg-Only Simulated FDR values    
-      Fig 4. Bejaminin/Hochberg-Only Simulated Sensitivity values    
+  * [Results and Discussion](#results-and-discussion)    
+      [Fig 1.](#figure-1-goea-simulations-with-downloaded-associations) GOEA Simulations with downloaded Associations    
+      [Fig 2.](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes) GOEA Simulations with Associations randomized for true null genes    
+      [Fig 3.](#figure-3-bejamninhochberg-only-simulated-fdr-values) Bejamnin/Hochberg-Only Simulated FDR values    
+      [Fig 4.](#figure-4-bejamininhochberg-only-simulated-sensitivity-values) Bejaminin/Hochberg-Only Simulated Sensitivity values    
   * [Conclusion](#conclusion)
   * [References](#references)   
 
