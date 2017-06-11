@@ -12,7 +12,7 @@ for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
 
-All simulations use [**Benjamini/Hochberg multiple test correction**](
+All simulations herein use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
 with **alpha=0.05**.
 
