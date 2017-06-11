@@ -20,6 +20,9 @@ with **alpha=0.05**.
 ## [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
 ### Table of Contents
+  * Figures:    
+    * [Simulations using original gene-GO associations](#original-associations)    
+    * [Simulations using random gene-GO associations](#random-associations)    
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
