@@ -61,7 +61,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
                 'is_left_column':col_idx%num_cols == 0})
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols)
-    set_tiled_txt(fig, pltobjs[0])
+    _set_tiled_txt(fig, pltobjs[0])
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
@@ -130,7 +130,7 @@ def get_gridspecs(num_rows, num_cols):
     gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=.19, top=.92)
     return gspecs
 
-def set_tiled_txt(fig, pltobj):
+def _set_tiled_txt(fig, pltobj):
     """Add text around edges of plot."""
     kws = pltobj.kws
     xysz = kws['txtsz_xy']
