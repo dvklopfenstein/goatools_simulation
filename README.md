@@ -3,7 +3,7 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
-**Two categories of simulations are in this repo**:
+**Two categories of simulations are contained herein**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md); elements include:    
        * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
@@ -12,7 +12,7 @@ for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
 
-All simulations herein use [**Benjamini/Hochberg multiple test correction**](
+All simulations shown use [**Benjamini/Hochberg multiple test correction**](
 http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
 with **alpha=0.05**.
 
@@ -20,36 +20,16 @@ with **alpha=0.05**.
 ## [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
 ### Table of Contents
-  * Figures:    
-    * [Simulations using **original** gene-GO associations](#original-associations)    
-    * [Simulations using **random** gene-GO associations](#random-associations)    
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
   * [Discussion](#discussion)
   * [Results](#results)
+  * Figures:    
+    * [Simulations using **original** gene-GO associations](#original-associations)    
+    * [Simulations using **random** gene-GO associations](#random-associations)    
   * [Conclusion](#conclusion)
   * [References](#references)   
-
-### Simulation Figures
-Figure 1 presents the estimates of simulated FDRs, sensitivity, and specificity.
-
-Sensitivity, also known as "true positive rate", recall, "probability of detection",
-is the proportion of false hypotheses (humoral respose genes in our study sets) 
-which are correctly detected as being significant.
-
-Specificity, is the proportion of of true hypotheses (general population genes in the study) 
-which failed to reject the null (not declared as being significantly different that the population.
-
-#### Original Associations
-![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
-
-#### Random Associations
-The original associations are randomized for all associations except for the
-_Non-True Nulls_ (the humoral genes that are significantly different that the population of all mouse genes)
-from a randomly chosen study set of genes.    
-
-![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 ### Abstract
 Simulations of various sizes of study gene lists with various percentages of
@@ -76,7 +56,29 @@ Simulation-based estimates of precentage of humoral response study genes (famse 
 
 ### Methods
 ### Discussion
+
+
 ### Results
+#### Simulation Figures
+Figure 1 presents the estimates of simulated FDRs, sensitivity, and specificity.
+
+Sensitivity, also known as "true positive rate", recall, "probability of detection",
+is the proportion of false hypotheses (humoral respose genes in our study sets) 
+which are correctly detected as being significant.
+
+Specificity, is the proportion of of true hypotheses (general population genes in the study) 
+which failed to reject the null (not declared as being significantly different that the population.
+
+#### Original Associations
+![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
+
+#### Random Associations
+The original associations are randomized for all associations except for the
+_Non-True Nulls_ (the humoral genes that are significantly different that the population of all mouse genes)
+from a randomly chosen study set of genes.    
+![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
+
+
 ### Conclusion
 ### References
 
