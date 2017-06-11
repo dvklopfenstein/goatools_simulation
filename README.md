@@ -1,5 +1,5 @@
 # Stochastic GOEA Simulations
-Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
@@ -23,11 +23,11 @@ with **alpha=0.05**.
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
-  * [Discussion](#discussion)
-  * [Results](#results)
-  * Figures:    
-    * [Simulations using **original** gene-GO associations](#original-associations)    
-    * [Simulations using **random** gene-GO associations](#random-associations)    
+  * [Results and Discussion](#results-and-discussion)
+      Fig 1. GOEA Simulations with downloaded Associations    
+      Fig 2. GOEA Simulations with Associations randomized for true null genes    
+      Fig 3. Bejamnin/Hochberg-Only Simulated FDR values    
+      Fig 4. Bejaminin/Hochberg-Only Simulated Sensitivity values    
   * [Conclusion](#conclusion)
   * [References](#references)   
 
@@ -70,7 +70,7 @@ study) which failed to reject the null (not declared as being significantly diff
 the population.
 
 
-#### GOEA Simulations with downloaded Associations
+#### Figure 1) GOEA Simulations with downloaded Associations
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 The percentage of humoral genes in the study (false nulls) that were discovered by gene
@@ -87,7 +87,7 @@ true null (25% of the study genes are humoral resonse genes) to 0% true null (al
 study genes are humoral response genes).
 
 
-#### GOEA Simulations with Associations randomized for true null genes
+#### Figure 2) GOEA Simulations with Associations randomized for true null genes
 The original associations are randomized for all associations except for the _Non-True
 Nulls_ (the humoral genes that are significantly different that the population of all
 mouse genes) from a randomly chosen study set of genes.    
@@ -111,7 +111,7 @@ over all simulations when using a 4-gene study group where only 1 gene was a hum
 response gene (Fig 3b B2). The second case showed a sensitivity of 86% when the 4
 gene-study group had 2 genes that were enriched in humoral response genes.
 
-#### Bejamnin/Hochberg-Only Simulations
+#### Figure 3) Bejamnin/Hochberg-Only Simulated FDR values
 It is interesting to note that the simulated FDR varies by study size in a single panel.
 For example in Fig 3b panel A2, the mean simulated FDR is 0.004, 0.01, 0.03, and 0.04 for
 study group sizes of 4 genes, 16, 64 and 124. This is interesting because in
@@ -121,6 +121,7 @@ Benjamini/Hochberg-only simulations the mean simulated FDR across the entire 75%
 panel was 0.038 (Fig 3c, Panels A2, B2, and B3) 
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 
+#### Figure 4) Bejaminin/Hochberg-Only Simulated Sensitivity values
 The sensitivity in Benjamini/Hochberg-only simulations is 100% when the study group
 hypotheses test results (P-values) are 0.01 or below when the alpha is set to 0.05 (Fig 3d
 A2, B2, and B3). As the hypotheses test results are closer to 0.05, the sensitivity drops
