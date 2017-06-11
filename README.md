@@ -41,7 +41,7 @@ The original associations are randomized for all associations except for the
 _Non-True Nulls_ (genes that are significantly different that the population of all mouse genes)
 from a randomly chosen study set of genes.    
 
-![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00020_00020_humoral_rsp.png)
+![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 ### Abstract
 ### Introduction
