@@ -38,12 +38,30 @@ with **alpha=0.05**.
 
 #### Random Associations
 The original associations are randomized for all associations except for the
-_Non-True Nulls_ (genes that are significantly different that the population of all mouse genes)
+_Non-True Nulls_ (the humoral genes that are significantly different that the population of all mouse genes)
 from a randomly chosen study set of genes.    
 
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 ### Abstract
+Using GOATOOLS grouping, we find over 2,000 genes having immune functions. A subset of
+the immune genes is the 124 _Humoral Response_ genes, which are used as a background
+set of study genes from which to draw upon in simulations using study group sizes of
+4, 16, 64, and 124 (all _Humoral Response_ genes).
+
+The null hypotheses is the study genes are no different that the population genes.
+The population genes in the simulations are the set of all protein-coding mouse genes
+which have gene ontology associations, which is over 18,600 genes out a total of over 22,000 Ensembl genes.
+
+The study groups are composed of various percentages of both true and false null hypotheses.
+True null hypotheses in the study group are selected from the large general group of population genes.
+False null hypotheses in the study group are selected from the small group of 124 humoral response genes.
+False null hypothese are the study genes which are significantly different that the population genes.
+
+
+Simulation-based estimates of precentage of humoral response study genes (famse nullrecovered from a GOEA
+
+
 ### Introduction
 ### Methods
 ### Discussion
@@ -69,6 +87,8 @@ from a randomly chosen study set of genes.
     [stats](https://docs.scipy.org/doc/scipy/reference/tutorial/stats.html) package:    
     * [Fishers exact test](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.fisher_exact.htm)
     * [multipletests](http://www.statsmodels.org/stable/generated/statsmodels.sandbox.stats.multicomp.multipletests.html)
+
+  * [Statistical power and significance testing in large-scale genetic studies](https://www.nature.com/nrg/journal/v15/n5/full/nrg3706.html)
   * [Stomp on Step One](http://www.stomponstep1.com/) for Sensitivity, Specificity, and more    
 
 
