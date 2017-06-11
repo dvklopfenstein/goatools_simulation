@@ -20,10 +20,10 @@ with **alpha=0.05**.
 ## [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations]()
 
 ### Table of Contents
-  * [Abstract](#abstract)
-  * [Introduction](#introduction)
-  * [Methods](#methods)
-  * [Results and Discussion](#results-and-discussion)    
+  * [**Abstract](#abstract)
+  * [**Introduction**](#introduction)
+  * [**Methods**](#methods)
+  * [**Results and Discussion**](#results-and-discussion)    
       [Fig 1.](#figure-1-goea-simulations-with-downloaded-associations)
       **GOEA Simulations with downloaded Associations**      
       [Fig 2.](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes)
@@ -32,8 +32,8 @@ with **alpha=0.05**.
       **Bejamnin/Hochberg-Only Simulated FDR values**      
       [Fig 4.](#figure-4-bejamininhochberg-only-simulated-sensitivity-values)
       **Bejaminin/Hochberg-Only Simulated Sensitivity values**      
-  * [Conclusion](#conclusion)
-  * [References](#references)   
+  * [**Conclusion**](#conclusion)
+  * [**References**](#references)   
 
 ### Abstract
 Simulations of various sizes of study gene lists with various percentages of genes which
