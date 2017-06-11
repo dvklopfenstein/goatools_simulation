@@ -32,6 +32,14 @@ with **alpha=0.05**.
   * [References](#references)   
 
 ### Simulation Figures
+Figure 1 presents the estimates of simulated FDRs, sensitivity, and specificity.
+
+Sensitivity, also known as "true positive rate", recall, "probability of detection",
+is the proportion of false hypotheses (humoral respose genes in our study sets) 
+which are correctly detected as being significant.
+
+Specificity, is the proportion of of true hypotheses (general population genes in the study) 
+which failed to reject the null (not declared as being significantly different that the population.
 
 #### Original Associations
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
@@ -44,10 +52,16 @@ from a randomly chosen study set of genes.
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 ### Abstract
+Simulations of various sizes of study gene lists with various percentages of
+genes which are enriched in _Humoral response_ are simulated. The results are
+analyzed to determine the percentages the _Humoral response_ genes recovered
+from thousands of gene ontology analyses.
+
+### Introduction
 Using GOATOOLS grouping, we find over 2,000 genes having immune functions. A subset of
 the immune genes is the 124 _Humoral Response_ genes, which are used as a background
-set of study genes from which to draw upon in simulations using study group sizes of
-4, 16, 64, and 124 (all _Humoral Response_ genes).
+from which to draw upon for the study groups in the simulations. Study group sizes in
+the simulations include 4 genes, 16, 64, and all 124 _Humoral Response_ genes.
 
 The null hypotheses is the study genes are no different that the population genes.
 The population genes in the simulations are the set of all protein-coding mouse genes
@@ -56,13 +70,10 @@ which have gene ontology associations, which is over 18,600 genes out a total of
 The study groups are composed of various percentages of both true and false null hypotheses.
 True null hypotheses in the study group are selected from the large general group of population genes.
 False null hypotheses in the study group are selected from the small group of 124 humoral response genes.
-False null hypothese are the study genes which are significantly different that the population genes.
 
 
 Simulation-based estimates of precentage of humoral response study genes (famse nullrecovered from a GOEA
 
-
-### Introduction
 ### Methods
 ### Discussion
 ### Results
