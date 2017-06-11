@@ -62,6 +62,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols)
     _set_tiled_txt(fig, pltobjs[0])
+    #plt.tight_layout()
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
@@ -111,31 +112,32 @@ def _plt_tile(pltobj, pvars):
     for ntval in pltobj.get_str_mean(exps):
         axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
     if pvars['is_bottom_row']:
-        axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=kws['txtsz_tile'])
+        axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:
         axes.set_ylabel("{PERCNULL}% Null".format(
             PERCNULL=pvars['perc_null']), size=kws['txtsz_tile'])
 
 def get_gridspecs(num_rows, num_cols):
     """Get gridspecs, adjusted to fit well into figure."""
+    left = .14
+    bottom = .16
     margin = 0.07
     wspc = .08
-    c0_l = .18
     cn_r = 0.99
-    col_wid = (cn_r - c0_l - margin)/num_cols
-    c0_r = c0_l + col_wid
+    col_wid = (cn_r - left - margin)/num_cols
+    c0_r = left + col_wid
     cn_l = c0_r + margin
     gspecs = [gridspec.GridSpec(num_rows, 1), gridspec.GridSpec(num_rows, num_cols-1)]
-    gspecs[0].update(hspace=.10, wspace=wspc, left=c0_l, right=c0_r, bottom=.19, top=.92)
-    gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=.19, top=.92)
+    gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.92)
+    gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
     return gspecs
 
 def _set_tiled_txt(fig, pltobj):
     """Add text around edges of plot."""
     kws = pltobj.kws
     xysz = kws['txtsz_xy']
-    fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
-    fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
-    fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
+    fig.text(0.5, 0.97, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
+    fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
+    fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
