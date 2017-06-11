@@ -115,7 +115,7 @@ where only 1 gene was a humoral response gene (Blue bar in B2). The second case 
 sensitivity of 86% when the 4 gene-study group had 2 genes that were enriched in humoral
 response genes (Blue bar in B3).
 
-#### Figure 3) Benjamnini/Hochberg-Only Simulated FDR values
+#### Figure 3) Benjamini/Hochberg-Only Simulated FDR values
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 It is interesting to note that the simulated FDR values in GOEA simulations vary by study
 size in a single panel in Figure 2.  For example in Fig 2 panel A2, the mean simulated FDR is 0.004,
