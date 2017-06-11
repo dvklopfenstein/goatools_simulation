@@ -3,11 +3,11 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
-**There are two categories of simulations**:
-  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md): elements include:    
+**Two categories of simulations are in this repo**:
+  1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_prep1.md); elements include:    
        * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](
-     #consequent-gene-ontology-enrichment-results-goea-simulations): elements include    
+     #consequent-gene-ontology-enrichment-results-goea-simulations); elements include    
        * Fisher's exact test    
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
@@ -37,12 +37,10 @@ with **alpha=0.05**.
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 #### Random Associations
-The original associations are randomized for all associations except for 
-the _Non-True Nulls_ from a randomly chosen study set of genes.    
+The original associations are randomized for all associations except for the
+_Non-True Nulls_ (genes that are significantly different that the population of all mouse genes)
+from a randomly chosen study set of genes.    
 
-This mimics the Benjamini/Hochberg preparatory simulation in column A
-where all hypothesis tests are extremely significantly (P-Value is 0.00 to 0.01)
-when the alpha is 0.05.
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Abstract
