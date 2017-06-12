@@ -78,16 +78,16 @@ The rows contain the input values of study genes and each gene's corresponding n
 
 The columns contain the results of the GOEA simuation which are the study genes and the reject value (True or False).    
 
+|                     | **Fail to reject Null**	        | **Reject Null**
+|---------------------|---------------------------------|-----------------
+| **True Null Genes**	| True Negative	                  | False Positive (Type I Error)
+| **False Null Gene**	| False Negative (Type II Error)	| True Positive
+
 Combining the input and output information, the counts of true positives, true negatives,
 false positives, and false negatives are obtained according to the table below. Many
 simulations are run, resulting in a probability of true positives, true negative, false
 positives, and false negatives. Many more simulations are completed, resulting in a
 multitiude of probabilities having a distribuition which may be plotted and analyzed.
-
-|                     | **Fail to reject Null**	        | **Reject Null**
-|---------------------|---------------------------------|-----------------
-| **True Null Genes**	| True Negative	                  | False Positive (Type I Error)
-| **False Null Gene**	| False Negative (Type II Error)	| True Positive
 
 
 
