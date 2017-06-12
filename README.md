@@ -84,7 +84,7 @@ In the table below:
 | **False Null Gene**	| False Negative (Type II Error)	| True Positive
 
 Combining the input and output information, the counts of true positives, true negatives,
-false positives, and false negatives are obtained according to the table below. Many
+false positives, and false negatives are obtained according to the table above. Many
 simulations are run, resulting in a probability of true positives, true negative, false
 positives, and false negatives. Many more simulations are completed, resulting in a
 multitiude of probabilities having a distribuition which may be plotted and analyzed.
