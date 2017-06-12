@@ -60,29 +60,29 @@ at random from the small group of 124 humoral response genes.
 
 
 ### Methods
-A randomly generated gene list used in a single GOEA simulation can contain both true null
-genes and false null genes.
+A randomly generated gene list used in a single GOEA simulation can contain both
+**true null genes** and **false null genes**.
 
-True null genes are those that are selected from the more than 18,000 genes in
+**True null genes** are those that are randomly selected from the more than 18,000 genes in
 the population which are not involved with humoral response. True null genes are intended
 to be genes which have little to no difference between the study set and the population.
 
-False null genes in these simulations are those that are selected from the 124 genes associated with humoral
-response. False null genes are intended to be genes which are enriched in a specific
-function which is in this simulation humoral response.
+**False null genes** in these simulations are those that are randomly selected from the 
+124 genes associated with humoral response. False null genes are intended to be genes
+which are enriched in a specific function which in this simulation is humoral response.
 
 GOATOOLS runs the GOEA and returns significant GO terms along with the study genes associated with
 the significant GO term. 
 
-The inputs are the randomly generated study gene list and each gene’s intended null value
-which is True or False. The outputs are the output study gene associated with significant
-GO terms. These output study genes have a reject-the-null value of True, while the
-remaining study genes have a reject-the null value of False. Combining the input and
-output information, the counts of true positives, true negatives, false positives, and
-false negatives are obtained according to the table below. Many simulations are run,
-resulting in a probability of true positives, true negative, false positives, and false
-negatives. Many more simulations are completed, resulting in a multitiude of probabilities
-having a distribuition which may be plotted and analyzed.
+The rows contain the input values of study genes and each gene's corresponding null value (True or False).    
+
+The columns contain the results of the GOEA simuation which are the study genes and the reject value (True or False).    
+
+Combining the input and output information, the counts of true positives, true negatives,
+false positives, and false negatives are obtained according to the table below. Many
+simulations are run, resulting in a probability of true positives, true negative, false
+positives, and false negatives. Many more simulations are completed, resulting in a
+multitiude of probabilities having a distribuition which may be plotted and analyzed.
 
 |                     | **Fail to reject Null**	        | **Reject Null**
 |---------------------|---------------------------------|-----------------
