@@ -75,8 +75,8 @@ GOATOOLS runs the GOEA and returns significant GO terms along with the study gen
 the significant GO term. 
 
 In the table below:
-  * The **rows** contain the input values of study genes and each gene's corresponding null value (True or False).    
-  * The **columns** contain the results of the GOEA simuation which are the study genes and the reject value (True or False).    
+  * The **rows** contain the **input** values of study genes and each gene's corresponding null value (True or False).    
+  * The **columns** contain the **output** results of the GOEA simuation which are the study genes and the reject value (True or False).    
 
 |                     | **Fail to reject Null**	        | **Reject Null**
 |---------------------|---------------------------------|-----------------
