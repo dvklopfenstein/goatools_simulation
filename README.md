@@ -84,6 +84,7 @@ resulting in a probability of true positives, true negative, false positives, an
 negatives. Many more simulations are completed, resulting in a multitiude of probabilities
 having a distribuition which may be plotted and analyzed.
 
+|                     | **Outputs**                                         
 |                     | **Fail to reject Null**	        | **Reject Null**
 |---------------------|---------------------------------|-----------------
 | **True Null Genes**	| True Negative	                  | False Positive (Type I Error)
