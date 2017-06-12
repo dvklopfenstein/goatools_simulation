@@ -35,9 +35,9 @@ with **alpha=0.05**.
   * [**References**](#references)   
 
 ### Abstract
-Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
-are run on sets of randomly generated gene lists which are various sizes and contain
-various percentages of genes enriched with _Humoral response_.
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
+run on sets of randomly generated gene lists which are various sizes and contain various
+percentages of genes enriched with _Humoral response_.
 
 The results are analyzed to determine the percentages the _Humoral response_ genes in the
 study which are correctly discovered by the thousands of gene ontology analyses.
@@ -60,6 +60,34 @@ at random from the small group of 124 humoral response genes.
 
 
 ### Methods
+A randomly generated gene list used in a single GOEA simulation can contain both true null
+genes and false null genes.
+
+True null genes are those that are selected from the more than 18,000 genes in
+the population which are not involved with humoral response. True null genes are intended
+to be genes which have little to no difference between the study set and the population.
+
+False null genes in these simulations are those that are selected from the 124 genes associated with humoral
+response. False null genes are intended to be genes which are enriched in a specific
+function which is in this simulation humoral response.
+
+GOATOOLS runs the GOEA and returns significant GO terms along with the study genes associated with
+the significant GO term. 
+
+The inputs are the randomly generated study gene list and each gene’s intended null value
+which is True or False. The outputs are the output study gene associated with significant
+GO terms. These output study genes have a reject-the-null value of True, while the
+remaining study genes have a reject-the null value of False. Combining the input and
+output information, the counts of true positives, true negatives, false positives, and
+false negatives are obtained according to the table below. Many simulations are run,
+resulting in a probability of true positives, true negative, false positives, and false
+negatives. Many more simulations are completed, resulting in a multitiude of probabilities
+having a distribuition which may be plotted and analyzed.
+
+|                     | Fail to reject Null	| Reject Null
+|---------------------|---------------------|-----------------
+| True Null Genes	    | True Negative	      | False Positive
+| False Null Genes	  | False Negative	    | True Positive
 
 
 
