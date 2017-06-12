@@ -181,7 +181,9 @@ def _get_row_means(key2exps, objplt):
     nullperc2meantxt = {}
     for nullperc, means in nullperc2means.items():
         mean = np.mean(means)
-        stderr = np.std(means)
+        stddev = np.std(means)
+        stderr = stddev/np.sqrt(len(means))
+        # print "{MEAN} {SD} {SE}".format(MEAN=mean, SD=stddev, SE=stderr)
         txt = "{NAME}={MEAN:5.3f}\nSE={SE:5.3f}".format(NAME=objplt.grpname, MEAN=mean, SE=stderr)
         nullperc2meantxt[nullperc] = txt
     return nullperc2meantxt
