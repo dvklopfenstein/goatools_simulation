@@ -92,7 +92,7 @@ multitiude of probabilities having a distribuition which may be plotted and anal
 
 
 ### Results and Discussion
-The figures show values of simulated **FDRs**, **sensitivity**, and**specificity** over thousands of simulations.
+The figures show values of simulated **FDRs**, **sensitivity**, and **specificity** over thousands of simulations.
 
 **Sensitivity**, also known as "true positive rate", recall, "probability of detection", is
 the proportion of false hypotheses (humoral respose genes in our study sets) which are
