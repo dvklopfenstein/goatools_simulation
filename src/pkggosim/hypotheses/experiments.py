@@ -26,9 +26,9 @@ class ExperimentSet(object):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
 
-    def get_stderrs(self, key):
-        """Return list of stderrs for a item like fdr_actual, frr_actual."""
-        return [e.get_stderr(key) for e in self.expset]
+    def get_stddevs(self, key):
+        """Return list of stddevs for a item like fdr_actual, frr_actual."""
+        return [e.get_stddev(key) for e in self.expset]
 
     def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval "
                            "{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {PVALQTY:4} P-Values)"):
