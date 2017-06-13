@@ -27,17 +27,23 @@ simulations.
 
 ## Methods
 
+### 1. Data is randomly generated
 A hypothesis test result is a P-value.
 
-P-values are generated randomly using a uniform distribution for each simulation:
-  * **True Null** hypothesis tests are randomly chosen from 0.0 to 1.0
-  * **False Null** hypothesis tests are randomly chosen from three sets of values:
-    * **Extreme Probability**: P-values are randomly chosen from 0.00 to 0.01
-    * **Moderate Probability**: P-values are randomly chosen from 0.00 to 0.03
-    * **Minimal Probability**: P-values are randomly chosen from 0.00 to 0.05
+P-values are generated randomly using a uniform distribution for each simulation:    
+  * **True Null** hypothesis tests are randomly chosen from 0.0 to 1.0    
+  * **False Null** hypothesis tests are randomly chosen from three sets of values:    
+    * **Extreme Probability**: P-values are randomly chosen from 0.00 to 0.01    
+    * **Moderate Probability**: P-values are randomly chosen from 0.00 to 0.03    
+    * **Minimal Probability**: P-values are randomly chosen from 0.00 to 0.05    
 
+### 2. Multiple test correction is done
+A Benjamin/Hochberg multiple test correction is run on a set of P-values.
 
-All hypotheses teset results P-values are randomly chosen from Floating-point values ranging between 0.0 and 1.0 using the uniform distribution.
+For each uncorrected P-value in the input set, a multiple test correction returns 
+**corrected P-values** and a **reject** value.
+
+### 3. Collect, report, and visualize results
 
 ## Discussion
 These simulations demonstrate that the mean False Discovery Rates (FDRs),
