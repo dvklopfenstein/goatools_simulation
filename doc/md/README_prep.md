@@ -13,7 +13,6 @@ for the simulation methodology used in both levels of simulations:
   * [Discussion](#discussion)
   * [Results](#results)
   * [Conclusion](#conclusion)
-  * [References](#references)   
 
 
 ## Abstract
@@ -22,8 +21,14 @@ various percentages of true nulls are run. The results are analyzed to
 determine the percentages the false null hypotheses recovered from thousands of
 simulations.
 
+The observations are:
+  * Simulated FDRs stay below the guaranted alpha value.    
+  * Simulated FDRs fall below the alpha as the percentage of true nulls in the study group fall    
+  * All non-true null (actually significant hypotheses tests) are discovered if 
+    their uncorrected P-Value is below 0.01 when the alpha is 0.50    
+  * The non-true null discovery rate (sensitivity) drops as the 
+    their uncorrected P-Value rises and becomes close to the alpha (0.50)    
 
-## Introduction
 
 ## Methods
 
@@ -65,7 +70,7 @@ These simulations demonstrate that the mean False Discovery Rates (FDRs),
 center around the alpha-level set by the user (0.05) when all hypotheses are true (row 1 in figure 1),
 but is smaller otherwise (rows 2-4 in figure 1).
 
-In fact, as larger percentages of the hypotheses are "Non-true null hypotheses"
+As larger percentages of the hypotheses are "Non-true null hypotheses"
 (i.e. Null should be rejected; there is a difference between the study items and the population items),
 the simulated FDR drops dramatically below alpha(0.05).
 
@@ -118,6 +123,13 @@ but only 10% for groups of 128 hypotheses tested as shown in C4.
 
 ## Conclusion
 
-## References
+The observations are:
+  * Simulated FDRs stay below the guaranted alpha value.    
+  * Simulated FDRs fall below the alpha as the percentage of true nulls in the study group fall    
+  * All non-true null (actually significant hypotheses tests) are discovered if 
+    their uncorrected P-Value is below 0.01 when the alpha is 0.50    
+  * The non-true null discovery rate (sensitivity) drops as the 
+    their uncorrected P-Value rises and becomes close to the alpha (0.50)    
+
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
