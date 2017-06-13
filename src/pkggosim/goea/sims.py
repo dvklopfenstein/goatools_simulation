@@ -25,9 +25,9 @@ class ManyGoeaSims(object):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
         return np.mean([getattr(nt, key) for nt in self.nts_tfpn])
 
-    def get_stddev(self, key):
+    def get_stderr(self, key):
         """Returns the actual stderr value for the set of P-Value simulations run in this class."""
-        return np.std([getattr(nt, key) for nt in self.nts_tfpn])
+        return np.std([getattr(nt, key) for nt in self.nts_tfpn])/np.sqrt(len(self.nts_tfpn))
 
     def get_summary_str(self):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""

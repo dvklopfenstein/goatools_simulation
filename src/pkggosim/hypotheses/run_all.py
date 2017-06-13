@@ -158,6 +158,7 @@ class ExperimentsAll(object):
         for experiment_set in self.expsets:
             # expname = experiment_set.get_desc(namefmt)
             means = [np.mean(experiment_set.get_means(a)) for a in attrs]
+            num_means = len(means)
             # mean_strs = ["{:10.4f}".format(m) for m in means]
             stderrs = [np.std(experiment_set.get_stderrs(a)) for a in attrs]
             # stderr_strs = ["{:10.4f}".format(m) for m in stderrs]
