@@ -45,6 +45,21 @@ For each uncorrected P-value in the input set, a multiple test correction return
 
 ### 3. Collect, report, and visualize results
 
+In the table below:
+  * The **rows** contain the uncorrected P-values of the tested hypotheses and each corresponding null value (True/False).    
+  * The **columns** contain the Benjamini/Hochberg reject value (True/False) for each tested hypothesis.
+
+|                     | **Fail to reject Null**	        | **Reject Null**
+|---------------------|---------------------------------|-----------------
+| **True Null Genes**	| True Negative	                  | False Positive (Type I Error)
+| **False Null Gene**	| False Negative (Type II Error)	| True Positive
+
+Combining the input and output information, the counts of true positives, true negatives,
+false positives, and false negatives are obtained according to the table above. Many
+simulations are run, resulting in a probability of true positives, true negative, false
+positives, and false negatives. Many more simulations are completed, resulting in a
+multitiude of probabilities having a distribuition which may be plotted and analyzed.
+
 ## Discussion
 These simulations demonstrate that the mean False Discovery Rates (FDRs),
 center around the alpha-level set by the user (0.05) when all hypotheses are true (row 1 in figure 1),
