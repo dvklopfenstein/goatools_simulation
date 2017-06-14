@@ -6,7 +6,7 @@ for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 **Two categories of simulations are contained herein**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_bhfdr.md); elements include:    
        * Benjamini/Hochberg FDR simulation only
-  2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](doc/md/README_goea.md); elements include
+  2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](doc/md/README_goea.md); elements include:
        * Fisher's exact test    
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
@@ -26,13 +26,6 @@ The results are analyzed to determine the percentages of study genes which are e
 _Humoral response_ and are correctly discovered by the GOEAs.
 
 ## Figures
-In all figures:
-  * **False Null** (aka **Non-True Null**) study genes are enriched in _Humoral response_
-    by randomling chosing the study genes from any of the 124 _Humoral Response_ genes.    
-  * **True Null** genes are randomly chosen from the large general population
-    genes not enriched in _Humoral Response_.
-
-**Figure List:**
   * [Figure 1) GOEA Simulations with original assocations](
     #figure-1-goea-simulations-with-original-assocations)
   * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
@@ -42,7 +35,14 @@ In all figures:
   * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
     #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
-### Figure 1) GOEA Simulations with original assocations
+### Stochastic GOEA simulations
+In Figures 1 and 2:
+  * **False Null** (aka **Non-True Null**) study genes are enriched in _Humoral response_
+    by randomling chosing the study genes from any of the 124 _Humoral Response_ genes.    
+  * **True Null** genes are randomly chosen from the large general population
+    genes not enriched in _Humoral Response_.
+
+#### Figure 1) GOEA Simulations with original assocations
 Simulated FDRs appear higher than alpha (0.05) because some study genes which are not 
 enriched in _Humoral response_ actually have real enrichment in processes other than
 _Humoral response_ in the associations, but were not tagged as _False Nulls_.
@@ -52,7 +52,7 @@ Compensating for untagged enrichments is shown in Figure 2.
   (blue bars in B2-B4, green bars in B2-B3),
   meaning study genes enriched in _Humoral Response_ in very small study gene groups may not be detected.
 
-### Figure 2) GOEA Simulations with _true null genes'_ assocations randomized
+#### Figure 2) GOEA Simulations with _true null genes'_ assocations randomized
 To ensure that all **True Null** genes are real true nulls, the associations 
 not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly shuffled.
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
