@@ -1,5 +1,9 @@
 # Stochastic GOEA Simulations
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
+  * [Figure 1) GOEA Simulations with original assocations](
+  * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
+  * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
+  * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
@@ -16,7 +20,7 @@ http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.
 with **alpha=0.05**.
 
 
-## Simulation results
+## Summary of Simulations 
 
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
 run on sets of randomly generated gene lists which are various sizes and contain various
@@ -25,17 +29,21 @@ percentages of genes enriched with _Humoral response_.
 The results are analyzed to determine the percentages the _Humoral response_ genes in the
 study which are correctly discovered by the thousands of gene ontology analyses.
 
-### GOEA Simulations with original assocations
+  * [Figure 1) GOEA Simulations with original assocations]()
+  * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized]()
+  * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs]()
+  * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity]()
+
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
-### GOEA Simulations with _true null genes'_ assocations randomized
+### Figure 2) GOEA Simulations with _true null genes'_ assocations randomized
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 ### Benjamini/Hochberg-Only Simulations
-#### Benjamini/Hochberg-Only Simulated FDRs
+#### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 
-#### Benjamini/Hochberg-Only Simulated Sensitivity
+#### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
 
 ### Methods
