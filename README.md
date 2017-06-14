@@ -16,7 +16,20 @@ http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.
 with **alpha=0.05**.
 
 
-## Summary of Simulations 
+## Figure List
+  * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
+    * [Figure 1) GOEA Simulations with original assocations](
+      #figure-1-goea-simulations-with-original-assocations)
+    * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
+      #figure-2-goea-simulations-with-true-null-genes-assocations-randomized)
+  * [**Stochastic Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
+    * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
+      #figure-3-benjaminihochberg-only-simulated-fdrs)
+    * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
+      #figure-4-benjaminihochberg-only-simulated-sensitivity)
+
+
+## Stochastic GOEA simulations
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
 run on sets of randomly generated gene lists. The study gene lists are of various sizes
 and contain various percentages of genes enriched in a particular set of biological processes.
@@ -25,20 +38,7 @@ In the simulations shown, the enrichment is _Humoral response_.
 The results are analyzed to determine the percentages of study genes which are enriched in
 _Humoral response_ and are correctly discovered by the GOEAs.
 
-## Figure List
-  * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
-    * [Figure 1) GOEA Simulations with original assocations](
-      #figure-1-goea-simulations-with-original-assocations)
-    * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
-      #figure-2-goea-simulations-with-true-null-genes-assocations-randomized)
-  * [**Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
-    * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
-      #figure-3-benjaminihochberg-only-simulated-fdrs)
-    * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
-      #figure-4-benjaminihochberg-only-simulated-sensitivity)
-
-## Stochastic GOEA simulations
-In Figures 1 and 2:
+Simulation Inputs are groups of **False nulls* and **True nulls**:
   * **False Null** (aka **Non-True Null**) study genes are enriched in _Humoral response_
     by randomling chosing the study genes from any of the 124 _Humoral Response_ genes.    
   * **True Null** genes are randomly chosen from the large general population
