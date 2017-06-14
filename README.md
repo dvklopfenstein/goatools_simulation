@@ -26,12 +26,12 @@ The results are analyzed to determine the percentages of study genes which are e
 _Humoral response_ and are correctly discovered by the GOEAs.
 
 ## Figures
-  * [Stochastic GOEA simulations](#stochastic-goea-simulations-1)
+  * [**Stochastic GOEA simulations**](#stochastic-goea-simulations-1)
     * [Figure 1) GOEA Simulations with original assocations](
       #figure-1-goea-simulations-with-original-assocations)
     * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
       #figure-2-goea-simulations-with-true-null-genes-assocations-randomized)
-  * [Benjamini/Hochberg-Only Simulations](#benjaminihochberg-only-simulations)
+  * [**Benjamini/Hochberg-Only Simulations**](#benjaminihochberg-only-simulations)
     * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
       #figure-3-benjaminihochberg-only-simulated-fdrs)
     * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
