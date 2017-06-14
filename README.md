@@ -68,11 +68,12 @@ not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly sh
   other enrichments (there are none due to randomization).    
 
 ### Benjamini/Hochberg-Only Simulations
-#### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 Simulations of the underlying Benjamini/Hochberg multiple test correction are a subset
 of the GOEA simulations.
 Study sets in these simulations contain hypotheses test results (P-values), while
 study sets in GOEA simulations contain genes with various levels of enrichments.
+
+#### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 Study sets are hypothesis test results (P-values), which are generated randomly from a
 uniform distribution:
