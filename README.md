@@ -62,7 +62,7 @@ not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly sh
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 **Observations:**    
 * Simulated FDRs are all under alpha (0.50) (A2-A4)     
-* Simulated FDRs improve (become smaller) as the study set contains more _Humoral response_ genes (A2 to A4)
+* Simulated FDRs improve (become smaller) as the study set contains more _Humoral response_ genes (from A2 to A4)
   meaning there is a smaller percentage of false positives among the discoveries of genes 
   enriched in _Humoral response_.    
 * Simulated FDRs are smaller for smaller study groups, like groups with 4 genes (A3, left boxplot),
@@ -78,33 +78,34 @@ of the GOEA simulations.
 Study sets in these simulations contain hypotheses test results (P-values), versus
 study sets in GOEA simulations which contain genes with various levels of enrichments.
 
-### Benjamini/Hochberg-Only Inputs
+### Simulation Inputs
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
 either **False nulls** and **True nulls**:
-  * _**True Null**_ P-values randomly chosen from a uniform distribution of values between 0.0 and 1.0.    
-  * _**Non-True Null**_ P-values randomly chosen from a uniform distribution of values between 0.0 and a maximum of:    
-    * **0.01** => Extremely different from the population.    
-    * **0.03** => Moderately different from the population.    
-    * **0.05** => Minimally different from the population.    
+  * _**True Null**_s are P-values randomly chosen from a uniform distribution of values between **0.0 to 1.0**.    
+  * _**Non-True Null**_s are P-values randomly chosen from a uniform distribution of values between:    
+    * **0.00 to 0.01** => Extremely different from the population.    
+    * **0.00 to 0.03** => Moderately different from the population.    
+    * **0.00 to 0.05** => Minimally different from the population.    
 
 ### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 Results show:
   * The worst (highest) simulated FDR means are equal to the alpha (0.05)
-    for all simulation sets with no _False null_s (A1, B1, and C1).    
+    for all simulation sets with no **False null** s (A1, B1, and C1).    
   * As the percentage of true nulls drops, the FDR also drops;
     row 1, with 100% Null, has the highest mean FDR (0.05), while
     row 4, with 0% Null, has the lowest mean FDR (0.012).
   * The simulated mean FDRs are the same across all study group sizes. For example, in A2
     the leftmost column with the group of 4 tested hypotheses has the same mean FDR as
-    the rightmost column with the group of 128 tested hypotheses.
+    the rightmost column in A2 with the group of 128 tested hypotheses.
 
 ### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
-* When P-values have extreme values, like below 0.01 when alpha is 0.05, 100% of _Non-true nulls_
+**Observations:**    
+* When non-true null P-values have extreme values, like below 0.01 when alpha is 0.05, 100% of _Non-true nulls_
   are discovered (A2-A4).
-* Moderate P-values (B2-B3) discover fewer _Non-true nulls_ than _Non-true nulls_ that have extreme values (A2-A3).
-* Minimal P-values (C2-C4) discover fewer _Non-true nulls_ than _Non-true nulls_ that have moderate values (B2-B4).
+* Moderate non-true null P-values (B2-B3) are discovered less frequently than extreme P-values (A2-A3).
+* Minimal non-true null P-values (C2-C4) are discovered even less frequently than moderate P-values (B2-B4).
 * Smaller groups of tested hypotheses (B3, blue bar) have more discoveries than larger groups (B3, red bar).
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
