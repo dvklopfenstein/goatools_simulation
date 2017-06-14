@@ -29,7 +29,12 @@ percentages of genes enriched with _Humoral response_.
 The results are analyzed to determine the percentages the _Humoral response_ genes in the
 study which are correctly discovered by the thousands of gene ontology analyses.
 
-**Figures:**    
+## Figures
+In all figures:
+  * **False Null** (aka **Non-True Null**) genes are enriched in any of 124 _Humoral Response_.    
+  * **True Null** genes are general population genes not enriched in _Humoral Response_.
+
+**Figure List:**
   * [Figure 1) GOEA Simulations with original assocations](
     #figure-1-goea-simulations-with-original-assocations)
   * [Figure 2) GOEA Simulations with _true null genes'_ assocations randomized](
@@ -40,10 +45,22 @@ study which are correctly discovered by the thousands of gene ontology analyses.
     #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
 ### Figure 1) GOEA Simulations with original assocations
+Simulated FDRs appear higher than alpha (0.05) because there are some real associations
+not associated with our study genes which are enriched with _Humoral Response_. (See Fig 2)
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
+* Small groups of study genes (e.g. 4 genes) show low sensitivity, meaning study gened 
+  enriched in _Humoral Response_ are likely to not be detected.
 
 ### Figure 2) GOEA Simulations with _true null genes'_ assocations randomized
+To ensure that all **True Null** genes are real true nulls, the associations 
+not associated with the _Humoral Response_ (i.e. true nulls) are randomized.
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
+* Simulated FDRs are all under alpha (0.50)    
+* Simulated FDRs improve (become smaller) as the study set contains more _Humoral response_ genes.    
+* Simulated FDRs ae smaller for smaller study group sizes.    
+* Sensitivity: Almost all _Humoral response_ are found when the difference between alpha and the 
+  P-values for _Humoral response_ are extreme. The difference is large here because the 
+  associations are all randomized, so the difference between Humoral genes and other genes is extreme.
 
 ### Benjamini/Hochberg-Only Simulations
 #### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
