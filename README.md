@@ -38,9 +38,10 @@ In the simulations shown, the enrichment is _Humoral response_.
 The results are analyzed to determine the percentages of study genes which are enriched in
 _Humoral response_ and are correctly discovered by the GOEAs.
 
+### GOEA simulation Inputs
 The simulation inputs are groups of genes tagged as either **False nulls** and **True nulls**:
   * _**False Null**_ (aka _**Non-True Null**_) study genes are enriched in _Humoral response_
-    by randomling chosing the study genes from any of the 124 _Humoral Response_ genes.    
+    by randomly chosing the study genes from any of the 124 _Humoral Response_ genes.    
   * _**True Null**_ genes are randomly chosen from the large general population
     genes not enriched in _Humoral Response_.
 
@@ -77,6 +78,7 @@ of the GOEA simulations.
 Study sets in these simulations contain hypotheses test results (P-values), versus
 study sets in GOEA simulations which contain genes with various levels of enrichments.
 
+### Benjamini/Hochberg-Only Inputs
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
 either **False nulls** and **True nulls**:
   * _**True Null**_ P-values randomly chosen from a uniform distribution of values between 0.0 and 1.0.    
