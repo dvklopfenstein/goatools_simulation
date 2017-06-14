@@ -34,6 +34,7 @@ study which are correctly discovered by the thousands of gene ontology analyses.
   * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs]()
   * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity]()
 
+### Figure 1) GOEA Simulations with original assocations
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 ### Figure 2) GOEA Simulations with _true null genes'_ assocations randomized
