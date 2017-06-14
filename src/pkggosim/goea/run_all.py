@@ -143,12 +143,13 @@ class ExperimentsAll(object):
         for experiment_set in self.expsets:
             # expname = experiment_set.get_desc(namefmt)
             means = [np.mean(experiment_set.get_means(a)) for a in attrs]
+            se_denom = np.sqrt(len(means))
             # mean_strs = ["{:10.4f}".format(m) for m in means]
-            stddevs = [np.std(experiment_set.get_stddevs(a)) for a in attrs]
+            stderrs = [np.std(m)/se_denom for m in means]
             # stderr_strs = ["{:10.4f}".format(m) for m in stderrs]
             prt.write("{EXP_DESC} ".format(EXP_DESC=experiment_set.get_desc(namefmt)))
             for mean, stderr in zip(means, stderrs):
-                prt.write("{AVG:10.4f} +/-{SE:5.3f} ".format(AVG=mean, SE=stderr))
+                prt.write("{AVG:6.4f} +/-{SE:8.6f} ".format(AVG=mean, SE=stderr))
             prt.write("\n")
             # prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
         prt.write("\n")

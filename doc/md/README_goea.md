@@ -6,7 +6,7 @@ for GOEAs run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 **Two categories of simulations are contained herein**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_bhfdr.md); elements include:    
        * Benjamini/Hochberg FDR simulation only
-  2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](doc/md/README_goea.md); elements include
+  2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](#simulation-results); elements include
        * Fisher's exact test    
        * Benjamini/Hochberg calculations    
        * Gene ontology associations    
@@ -42,10 +42,22 @@ percentages of genes enriched with _Humoral response_.
 The results are analyzed to determine the percentages the _Humoral response_ genes in the
 study which are correctly discovered by the thousands of gene ontology analyses.
 
-![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
-![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
-![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
-![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
+### Introduction
+Using GOATOOLS grouping, we find over 2,000 genes having immune functions. A subset of the
+immune genes is the 124 _Humoral Response_ genes, which are used as a background from
+which to draw upon for the study groups in the simulations. Study group sizes in the
+simulations include 4 genes, 16, 64, and all 124 _Humoral Response_ genes.
+
+The null hypotheses is that the study genes are no different that the population genes.
+The population genes in the simulations are the set of all protein-coding mouse genes
+which have gene ontology associations, which is over 18,600 genes out a total of over
+22,000 Ensembl genes.
+
+The study groups are composed of various percentages of both true and false null
+hypotheses.  True null hypotheses in the study group are selected at random from a large
+general group of population genes.  False null hypotheses in the study group are selected
+at random from the small group of 124 humoral response genes.
+
 
 ### Methods
 A randomly generated gene list used in a single GOEA simulation can contain both

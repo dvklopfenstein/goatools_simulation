@@ -201,7 +201,8 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     axes.set_yticks(kws['yticks'])
     axes.set_yticklabels(kws['yticklabels'])
     if idx >= num_cols*(num_rows-1): # bottom_row
-        axes.set_xlabel("Sig.<={MAXSIG}".format(MAXSIG=maxsig), size=kws['txtsz_tile'])
+        xlabel = "Sig.<={MAXSIG}\nExtreme".format(MAXSIG=maxsig)
+        axes.set_xlabel(xlabel, size=kws['txtsz_tile'])
     if idx%num_cols == 0:
         axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
     axes.set_ylim(kws['ylim'])
