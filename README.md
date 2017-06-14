@@ -39,9 +39,9 @@ The results are analyzed to determine the percentages of study genes which are e
 _Humoral response_ and are correctly discovered by the GOEAs.
 
 The simulation inputs are groups of genes tagged as either **False nulls** and **True nulls**:
-  * **False Null** (aka **Non-True Null**) study genes are enriched in _Humoral response_
+  * _**False Null**_ (aka _**Non-True Null**_) study genes are enriched in _Humoral response_
     by randomling chosing the study genes from any of the 124 _Humoral Response_ genes.    
-  * **True Null** genes are randomly chosen from the large general population
+  * _**True Null**_ genes are randomly chosen from the large general population
     genes not enriched in _Humoral Response_.
 
 ### Figure 1) GOEA Simulations with original associations
@@ -79,11 +79,11 @@ study sets in GOEA simulations which contain genes with various levels of enrich
 
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
 either **False nulls** and **True nulls**:
-  * _True Null_ P-values randomly chosen from a uniform distribution of values between 0.0 and 1.0.    
-  * _Non-True Null_ P-values randomly chosen from a uniform distribution of values between 0.0 and a maximum of:    
-    * **0.01** Extremely diffferent from the population.    
-    * **0.03** Moderately different from the population.    
-    * **0.05** Minimally different from the population.    
+  * _**True Null**_ P-values randomly chosen from a uniform distribution of values between 0.0 and 1.0.    
+  * _**Non-True Null**_ P-values randomly chosen from a uniform distribution of values between 0.0 and a maximum of:    
+    * **0.01** => Extremely different from the population.    
+    * **0.03** => Moderately different from the population.    
+    * **0.05** => Minimally different from the population.    
 
 ### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
