@@ -93,5 +93,10 @@ Results show:
 
 #### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
+* When P-values have extreme values, like below 0.01 when alpha is 0.05, 100% of _Non-true nulls_
+  are discovered (A2-A4).
+* Moderate P-values (B2-B3) discover fewer _Non-true nulls_ than _Non-true nulls_ that have extreme values (A2-A3).
+* Minimal P-values (C2-C4) discover fewer _Non-true nulls_ than _Non-true nulls_ that have moderate values (B2-B4).
+* Smaller groups of tested hypotheses (B3, blue bar) have more discoveries than larger groups (B3, red bar).
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
