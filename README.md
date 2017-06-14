@@ -25,9 +25,17 @@ percentages of genes enriched with _Humoral response_.
 The results are analyzed to determine the percentages the _Humoral response_ genes in the
 study which are correctly discovered by the thousands of gene ontology analyses.
 
+### GOEA Simulations with original assocations
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
+
+### GOEA Simulations with _true null genes'_ assocations randomized
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
+
+### Benjamini/Hochberg-Only Simulations
+#### Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
+
+#### Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
 
 ### Methods
