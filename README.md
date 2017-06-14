@@ -18,23 +18,6 @@ with **alpha=0.05**.
 
 ## Simulation results
 
-### Table of Contents
-  * [**Abstract**](#abstract)
-  * [**Introduction**](#introduction)
-  * [**Methods**](#methods)
-  * [**Results and Discussion**](#results-and-discussion)    
-      [**Fig 1.**](#figure-1-goea-simulations-with-downloaded-associations)
-      **GOEA Simulations with downloaded Associations**      
-      [**Fig 2.**](#figure-2-goea-simulations-with-associations-randomized-for-true-null-genes)
-      **GOEA Simulations with Associations randomized for true null genes**     
-      [**Fig 3.**](#figure-3-benjaminihochberg-only-simulated-fdr-values)
-      **Benjamini/Hochberg-Only Simulated FDR values**      
-      [**Fig 4.**](#figure-4-benjaminihochberg-only-simulated-sensitivity-values)
-      **Benjamini/Hochberg-Only Simulated Sensitivity values**      
-  * [**Conclusion**](#conclusion)
-  * [**References**](#references)   
-
-### Abstract
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
 run on sets of randomly generated gene lists which are various sizes and contain various
 percentages of genes enriched with _Humoral response_.

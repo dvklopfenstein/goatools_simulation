@@ -104,7 +104,7 @@ the population).
 
 
 #### Figure 1) GOEA Simulations with downloaded Associations
-![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
+![figure](../logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 
 The percentage of humoral genes in the study (false nulls) that were discovered by gene
 ontology analyses was high for all study gene group sizes of 64 genes or more 
@@ -135,7 +135,7 @@ to remove the simulation artifact seen above.
 To simulate true FDRs, the original associations are randomized for all associations except for the _Non-True
 Nulls_ (the humoral genes that are significantly different that the population of all
 mouse genes) from a randomly chosen study set of genes.    
-![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
+![figure](../logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 
 The results of the randomized association simulation were all simulated FDR values stayed
 under the alpha of 0.05. Also, the sensitivity was that 99% or more of the humoral genes
@@ -146,7 +146,7 @@ sensitivity of 86% when the 4 gene-study group had 2 genes that were enriched in
 response genes (Blue bar in B3).
 
 #### Figure 3) Benjamini/Hochberg-Only Simulated FDR values
-![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
+![FDR results](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
 It is interesting to note that the simulated FDR values in GOEA simulations vary by study
 size in a single panel in Figure 2.  For example in Fig 2 panel A2, the mean simulated FDR is 0.004,
 0.01, 0.03, and 0.04 for study group sizes of 4 genes, 16, 64 and 124. This is interesting
@@ -156,7 +156,7 @@ Null” contents across different group sizes of tested hypotheses. In the Benja
 simulations the mean simulated FDR across the entire 75% null panel was 0.038 (Panels A2, B2, and B3) 
 
 #### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity values
-![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
+![Sensitivity results](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
 The sensitivity in Benjamini/Hochberg-only simulations is 100% when the study group
 hypotheses test results (P-values) are 0.01 or below when the alpha is set to 0.05
 (panels A2-A4).
