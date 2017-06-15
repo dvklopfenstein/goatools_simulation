@@ -8,7 +8,8 @@ import sys
 import collections as cx
 import numpy as np
 from pkggosim.goea.experiments import ExperimentSet
-from pkggosim.goea.plot_results import plt_box_all, plt_box_tiled
+#### from pkggosim.goea.plot_results import plt_box_all
+from pkggosim.goea.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
@@ -42,7 +43,6 @@ class ExperimentsAll(object):
             #for attr, name in ['fdr_actual', 'sensitivity']:
             baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
             #fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=baseimg))
-            #self.plt_box_all(fout_pat, attrname, **pltargs)
             fout_img = os.path.join(REPO, 'doc/logs/{B}.png'.format(B=baseimg))
             self.plt_box_tiled(fout_img, plt_items, **pltargs)
             self.prt_seed(sys.stdout)
@@ -103,10 +103,10 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_all(self, fout_img, attrname, **kws):
-        """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-        key2exps = self._get_key2expsets('perc_null')
-        plt_box_all(fout_img, key2exps, attrname, **kws)
+####     def plt_box_all(self, fout_img, attrname, **kws):
+####         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
+####         key2exps = self._get_key2expsets('perc_null')
+####         plt_box_all(fout_img, key2exps, attrname, **kws)
 
     def plt_box_tiled(self, fout_img, plt_items, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""

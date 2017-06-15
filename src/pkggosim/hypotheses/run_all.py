@@ -10,7 +10,8 @@ import timeit
 import numpy as np
 from pkggosim.common.randseed import RandomSeed32
 from pkggosim.hypotheses.experiments import ExperimentSet
-from pkggosim.hypotheses.plot_results import plt_box_all, plt_box_tiled
+#### from pkggosim.hypotheses.plot_results import plt_box_all
+from pkggosim.hypotheses.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
@@ -119,10 +120,10 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_all(self, fimg_pat, attrname='fdr_actual', grpname='FDR'):
-        """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-        key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
-        plt_box_all(fimg_pat, key2exps, attrname, grpname)
+####    def plt_box_all(self, fimg_pat, attrname='fdr_actual', grpname='FDR'):
+####        """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
+####        key2exps = self._get_key2expsets('perc_null', 'max_sigpval')
+####        plt_box_all(fimg_pat, key2exps, attrname, grpname)
 
     def plt_box_tiled(self, fout_img, attrname, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
