@@ -1,6 +1,3 @@
-fig_hypoth_*_00010_fdr_actual.png
-fig_hypoth_*_00010_sensitivity.png
-
 fig_goea_100to000_004to124_N00002_00002.log
 fig_goea_100to000_004to124_N00002_00002_humoral_rsp.png
 fig_goea_rnd_100to000_004to124_N00002_00002.log
@@ -10,4 +7,8 @@ fig_goea_100to000_004to124_N00004_00004.log
 fig_goea_100to000_004to124_N00004_00004_humoral_rsp.png
 fig_goea_rnd_100to000_004to124_N00004_00004.log
 fig_goea_rnd_100to000_004to124_N00004_00004_humoral_rsp.png
+
+fig_hypoth_100to025_01to05_004to128_N00010_00010.log
+fig_hypoth_100to025_01to05_004to128_N00010_00010_fdr_actual.png
+fig_hypoth_100to025_01to05_004to128_N00010_00010_sensitivity.png
 
