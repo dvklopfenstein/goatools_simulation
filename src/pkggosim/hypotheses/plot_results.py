@@ -3,7 +3,6 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-import os
 import sys
 import collections as cx
 import numpy as np
@@ -199,8 +198,7 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     axes.set_yticks(kws['yticks'])
     axes.set_yticklabels(kws['yticklabels'])
     if idx >= num_cols*(num_rows-1): # bottom_row
-        xlabel = "Sig.<={MAXSIG}\nExtreme".format(MAXSIG=maxsig)
-        axes.set_xlabel(xlabel, size=kws['txtsz_tile'])
+        _set_xlabels(axes, maxsig, exps[0].alpha)
     if idx%num_cols == 0:
         axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
     axes.set_ylim(kws['ylim'])
@@ -208,5 +206,15 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     # Add value text above plot bars to make plot easier to read
     for ntval in objplt.get_str_mean(exps):
         axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
+
+def _set_xlabels(axes, maxsig, alpha):
+    """Set xlabels with max P-value and description."""
+    desc = "Minimal"
+    if maxsig <= alpha/5:
+        desc = 'Extreme'
+    elif maxsig <= alpha*3/5:
+        desc = 'Moderate'
+    xlabel = "{DESC}(P{LT}{MAXSIG})".format(LT=r'$\leq$', MAXSIG=maxsig, DESC=desc)
+    axes.set_xlabel(xlabel, size=15)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.154
