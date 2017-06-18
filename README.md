@@ -53,7 +53,7 @@ Compensating for untagged enrichments is shown in Figure 2.
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 **Observations:**    
 * Small groups of study genes (e.g. 4 genes and sometimes 16 genes) show low sensitivity
-  (blue bars in B2-B4, green bars in B2-B3),
+  (blue bars in B2-B5, green bars in B2-B3),
   meaning study genes enriched in _Humoral Response_ in very small study gene groups may not be detected.
 
 ### Figure 2) GOEA Simulations with _true null genes'_ associations randomized
@@ -80,16 +80,16 @@ study sets in GOEA simulations which contain genes with various levels of enrich
 
 ### Simulation Inputs
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
-either **False nulls** and **True nulls**:
-  * _**True Null**_s are P-values randomly chosen from a uniform distribution of values between **0.0 to 1.0**.    
-  * _**Non-True Null**_s are P-values randomly chosen from a uniform distribution of values between:    
-    * **0.00 to 0.01** => Extremely different from the population.    
-    * **0.00 to 0.03** => Moderately different from the population.    
-    * **0.00 to 0.05** => Minimally different from the population.    
+either **True nulls** and **Non-True nulls**:
+  * **True Null**s are P-values randomly chosen from a uniform distribution of values between **0.0 to 1.0**.    
+  * **Non-True Null**s (a.k.a **False Nulls**) are P-values randomly chosen from a uniform distribution of values between:    
+    * **0.00 to 0.01** => **Extremely** different from the population.    
+    * **0.00 to 0.03** => **Moderately** different from the population.    
+    * **0.00 to 0.05** => **Minimally** different from the population.    
 
 ### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
-Results show:
+**Results show**:
   * The worst (highest) simulated FDR means are equal to the alpha (0.05)
     for all simulation sets with no **False null** s (A1, B1, and C1).    
   * As the percentage of true nulls drops, the FDR also drops;
