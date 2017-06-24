@@ -18,14 +18,14 @@ with **alpha=0.05**.
 
 ## Figure List
   * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
-    * [Figure 1) GOEA Simulations with _true null genes'_ associations randomized](
+    * [Figure 1) GOEA Simulations with extremely significant P-values for enriched genes](
       #figure-1-goea-simulations-with-true-null-genes-associations-randomized)
-    * [Figure 2) GOEA Simulations with original associations](
+    * [Figure 2) GOEA Simulations with some _Non-True Nulls_ unmarked](
       #figure-2-goea-simulations-with-original-associations)
   * [**Stochastic Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
     * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
       #figure-3-benjaminihochberg-only-simulated-fdrs)
-    * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity](
+    * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivities](
       #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
 
@@ -34,7 +34,7 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (G
 run on sets of randomly generated gene lists. The study gene lists in the simulations shown
 range in sizes of 4 to 124 genes
 and contain percentages of genes enriched in a particular set of biological processes
-ranging from no genes are enriched (100% Null) to all genes are enriched (0% Null).
+ranging from _no genes are enriched_ (100% Null) to _all genes are enriched_ (0% Null).
 In the simulations shown, the enrichment is _Humoral response_.
 
 The results are analyzed to determine the percentages of study genes which are enriched in
