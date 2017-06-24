@@ -70,7 +70,7 @@ not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly sh
   * The sensitivity is poor (B2 left bar, mean value 2%) when the study size is 4 genes
     and 3 of the 4 genes do not differ from the population (True Nulls).
   * The mean sensitivity is about 86% when the study gene size is 4 genes and
-    half of the genes 
+    half of the genes do not differ from the population (True Nulls).
 
 ### Figure 2) GOEA Simulations with original associations
 This figure demonstrates the effect of *not* randomizing the genes intended to be _True Nulls_ 
