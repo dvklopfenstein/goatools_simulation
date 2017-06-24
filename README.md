@@ -87,7 +87,8 @@ Compensating for untagged enrichments is shown in Figure 1 above.
   (blue bars in B2-B5, green bars in B2-B3),
   meaning study genes enriched in _Humoral Response_ in very small study gene groups may not be detected.
 * The poor simulated FDR values (A2-A4 for groups of 64 and 124 genes) 
-  are an artifact of not properly marking the input genes as enriched when they are.
+  are an artifact of not properly marking the input genes as enriched when they are
+  actually enriched in something other than _Humoral response_.
 
 ## Benjamini/Hochberg-Only Simulations
 Simulations of the underlying Benjamini/Hochberg multiple test correction are a subset
