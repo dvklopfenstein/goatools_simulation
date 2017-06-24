@@ -20,7 +20,7 @@ with **alpha=0.05**.
   * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
     * [Figure 1) GOEA Simulations with extremely significant P-values for enriched genes](
       #figure-1-goea-simulations-with-true-null-genes-associations-randomized)
-    * [Figure 2) GOEA Simulations with some _Non-True Nulls_ unmarked](
+    * [Figure 2) GOEA Simulations with some truly enriched genes (_Non-True Nulls_) left unmarked](
       #figure-2-goea-simulations-with-original-associations)
   * [**Stochastic Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
     * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
@@ -79,18 +79,21 @@ This figure demonstrates the effect of *not* randomizing the genes intended to b
 Simulated FDRs appear higher than alpha (0.05) (A2-A4) because some study genes which are not 
 enriched in _Humoral response_ actually have real enrichment in processes other than
 _Humoral response_ in the associations, but were not tagged as _False Nulls_.
-Compensating for untagged enrichments is shown in Figure 1.
+Compensating for untagged enrichments is shown in Figure 1 above.
+
 ![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
 **Observations:**    
 * Small groups of study genes (e.g. 4 genes and sometimes 16 genes) show low sensitivity
   (blue bars in B2-B5, green bars in B2-B3),
   meaning study genes enriched in _Humoral Response_ in very small study gene groups may not be detected.
+* The poor simulated FDR values (A2-A4 for groups of 64 and 124 genes) 
+  are an artifact of not properly marking the input genes as enriched when they are.
 
 ## Benjamini/Hochberg-Only Simulations
 Simulations of the underlying Benjamini/Hochberg multiple test correction are a subset
 of the GOEA simulations.
 Study sets in these simulations contain hypotheses test results (P-values), versus
-study sets in GOEA simulations which contain genes with various levels of enrichments.
+study sets in GOEA simulations which contain genes with various percentages of enrichments.
 
 ### Simulation Inputs
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
