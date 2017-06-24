@@ -8,7 +8,7 @@ for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
        * Benjamini/Hochberg FDR simulation only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](doc/md/README_goea.md); elements include:
        * Fisher's exact test    
-       * Benjamini/Hochberg calculations    
+       * Benjamini/Hochberg multiple test corrections
        * Gene ontology associations    
 
 All simulations shown use [**Benjamini/Hochberg multiple test correction**](
@@ -31,8 +31,10 @@ with **alpha=0.05**.
 
 ## Stochastic GOEA simulations
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
-run on sets of randomly generated gene lists. The study gene lists are of various sizes
-and contain various percentages of genes enriched in a particular set of biological processes.
+run on sets of randomly generated gene lists. The study gene lists in the simulations shown
+range in sizes of 4 to 124 genes
+and contain percentages of genes enriched in a particular set of biological processes
+ranging from no genes are enriched (100% Null) to all genes are enriched (0% Null).
 In the simulations shown, the enrichment is _Humoral response_.
 
 The results are analyzed to determine the percentages of study genes which are enriched in
@@ -49,6 +51,8 @@ The simulation inputs are groups of genes tagged as either **False nulls** and *
 ### Figure 1) GOEA Simulations with _true null genes'_ associations randomized
 To ensure that all **True Null** genes are real true nulls, the associations 
 not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly shuffled.
+
+This simulates 
 ![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
 **Observations:**    
 * Simulated FDRs are all under alpha (0.50) (A2-A4)     
