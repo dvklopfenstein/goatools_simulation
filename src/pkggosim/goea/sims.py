@@ -16,7 +16,7 @@ class ManyGoeaSims(object):
 
     def __init__(self, params, pobj):
         self.params = params
-        self.pobj = pobj
+        self.pobj = pobj # RunParams object
         assert set(params.keys()) == self.expected_params
         simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
         self.nts_tfpn = [o.nt_tfpn for o in simobjs]

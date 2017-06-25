@@ -76,7 +76,7 @@ class _Init(object):
         return set([g for g, e in zip(self.genes_stu, self.expsig) if e])
 
     def __init__(self, num_study_genes, num_null, pobj, log=None):
-        self.pobj = pobj
+        self.pobj = pobj # RunParams object
         # I. Genes in two groups: Different than population AND no different than population
         self.genes_stu = None  # List of randomly-generated gene lists
         self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)

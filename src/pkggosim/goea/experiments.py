@@ -15,7 +15,7 @@ class ExperimentSet(object):
 
     def __init__(self, params, pobj):
         self.params = params
-        self.pobj = pobj
+        self.pobj = pobj # RunParams object
         assert set(params.keys()) == self.expected_params
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments() # returns list of ManyGoeaSims objects

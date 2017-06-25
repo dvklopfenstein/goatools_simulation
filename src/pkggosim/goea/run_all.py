@@ -13,16 +13,16 @@ from pkggosim.goea.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
-REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 
 
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
     desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
+    repo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 
     def __init__(self, pobj):
-        self.pobj = pobj
+        self.pobj = pobj # RunParams object
         self.tic = pobj.tic
         self.expsets = []
 
@@ -32,7 +32,7 @@ class ExperimentsAll(object):
         desc_str = self._get_fout_img()
         fout_log = os.path.join('doc/logs', '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
         # Report and plot simulation results
-        with open(os.path.join(REPO, fout_log), 'w') as prt:
+        with open(os.path.join(self.repo, fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
@@ -42,8 +42,7 @@ class ExperimentsAll(object):
             self.prt_experiments_stats(prt, rpt_items)
             #for attr, name in ['fdr_actual', 'sensitivity']:
             baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
-            #fout_pat = os.path.join(REPO, 'doc/logs/{B}_{{PERCNULL:03}}.png'.format(B=baseimg))
-            fout_img = os.path.join(REPO, 'doc/logs/{B}.png'.format(B=baseimg))
+            fout_img = os.path.join(self.repo, 'doc/logs/{B}.png'.format(B=baseimg))
             self.plt_box_tiled(fout_img, plt_items, **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")

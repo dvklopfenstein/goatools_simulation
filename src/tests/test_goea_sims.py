@@ -8,7 +8,7 @@ import sys
 from pkggosim.goea.sims import ManyGoeaSims
 from pkggosim.goea.utils import get_assoc_data
 from pkggosim.goea.objassc import DataAssc
-from goatools_suppl.data.ensmusg2sym import ensm2sym
+from goatools_suppl.data.ensm2nt_mus import ensm2nt
 from pkggosim.goea.utils import get_genes, get_genes_all
 
 def main(prt=sys.stdout):
@@ -18,7 +18,7 @@ def main(prt=sys.stdout):
     num_null = num_study_genes/2 # 50% Null
     # Use study genes seen in population
     study_genes_bg = get_genes('humoral_rsp')
-    genes_mus = ensm2sym.keys()  # Population genes
+    genes_mus = ensm2nt.keys()  # Population genes
     assc_geneid2gos = get_assoc_data("gene_association.mgi", genes_mus)
     objbg = DataAssc(0.05, 'fdr_bh', genes_mus, assc_geneid2gos)
 

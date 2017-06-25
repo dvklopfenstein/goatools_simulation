@@ -45,8 +45,8 @@ class RunParams(object):
             "study_bg" : params['genes_study_bg'].intersection(self.objassc.pop_genes),
             "null_bg" : self._init_null_bg()}
         self.gene_lists = {
-            "study_bg" : list(params['genes_study_bg'].intersection(self.objassc.pop_genes)),
-            "null_bg" : list(self._init_null_bg())}
+            "study_bg" : list(self.genes['study_bg']),
+            "null_bg" : list(self.genes['null_bg'])}
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
 
@@ -83,8 +83,9 @@ class RunParams(object):
         prt.write("{N:6,} population genes - study buffer\n".format(N=len(self.genes['null_bg'])))
         prt.write("\n")
         prt.write("SIMULATION PARAMETERS:\n")
-        kys = ['randomize_truenull_assc', 'perc_nulls', 'num_genes_list', 'num_experiments', 'num_sims']
-        for key in kys:
+        keys = ['randomize_truenull_assc', 'perc_nulls',
+                'num_genes_list', 'num_experiments', 'num_sims']
+        for key in keys:
             prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=prms[key]))
         prt.write("\n")
 

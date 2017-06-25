@@ -10,7 +10,7 @@ import collections as cx
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
 from pkggosim.goea.utils import get_genes, get_genes_all
-from goatools_suppl.data.ensmusg2sym import ensm2sym
+from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
@@ -22,7 +22,7 @@ def run(randomseed, ntd):
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
-    genes_mus = ensm2sym.keys()  # Population genes
+    genes_mus = ensm2nt.keys()  # Population genes
     params = {
         'prefix' : 'fig_goea{RND}'.format(RND="_rnd" if randomize_truenull_assc else ""),
         'randomize_truenull_assc' : randomize_truenull_assc,
@@ -43,7 +43,7 @@ def run(randomseed, ntd):
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes'}
     objparams = RunParams(params)
-    obj = ExperimentsAll(objparams)
+    obj = ExperimentsAll(objparams) # RunParams
     obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
     objparams.prt_summary(sys.stdout)
 

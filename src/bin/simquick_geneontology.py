@@ -138,14 +138,14 @@ import sys
 from pkggosim.common.randseed import RandomSeed32
 from pkggosim.goea.objrun_prelim import RunPrelim
 from pkggosim.goea.utils import get_study2genes
-from goatools_suppl.data.ensmusg2sym import ensm2sym
+from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(seed, prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
     objrnd = RandomSeed32(seed)
-    genes_mus = ensm2sym.keys()  # Population genes
+    genes_mus = ensm2nt.keys()  # Population genes
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
     objrun = RunPrelim(0.05, 'fdr_bh', genes_mus, os.path.join(REPO, 'gene_association.mgi'))
     study2genes = get_study2genes()
