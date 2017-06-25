@@ -17,14 +17,14 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     # User parameters
-    randomize_truenull_assc = False
+    randomize_truenull_assc = "tgt" # none all tgt
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2nt.keys()  # Population genes
     params = {
-        'prefix' : 'fig_goea{RND}'.format(RND="_rnd" if randomize_truenull_assc else ""),
+        'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
         'randomize_truenull_assc' : randomize_truenull_assc,
         'seed' : randomseed,
         'alpha' : 0.05,

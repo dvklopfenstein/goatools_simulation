@@ -12,7 +12,7 @@ class DataAssc(object):
 
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, assc_file, pop_genes, randomize_truenull_assc=False):
+    def __init__(self, assc_file, pop_genes, randomize_truenull_assc):
         # Read the association file. Save GOs related to population genes
         assc_geneid2gos = get_assoc_data(assc_file, pop_genes)
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval

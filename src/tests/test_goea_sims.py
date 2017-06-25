@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Simulate a Gene Ontology Enrichment Analysis (GOEA) on one set of study genes."""
+# TBD: REMOVE THIS TEST?
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"

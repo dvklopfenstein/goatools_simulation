@@ -17,7 +17,7 @@ class RunParams(object):
     expected_params = set([
         'seed',                  # randomseed
         'prefix',                # fig_goea_rnd
-        'randomize_truenull_assc',
+        'randomize_truenull_assc', # all none tgt
         'alpha',                 # 0.05
         'method',                # 'fdr_bh'
         'association_file',      # 'gene_association.mgi'
