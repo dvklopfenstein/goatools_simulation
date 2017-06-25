@@ -9,7 +9,7 @@ import sys
 import collections as cx
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
-from pkggosim.goea.utils import get_genes, get_genes_all
+from pkggosim.goea.utils import get_genes, get_goids, get_genes_all
 from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
@@ -31,6 +31,7 @@ def run(randomseed, ntd):
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
         'genes_study_bg':get_genes(study_bg),
+        'goids_study_bg':get_goids(study_bg),
         'genes_popnullmaskout':get_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],

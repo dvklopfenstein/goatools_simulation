@@ -9,6 +9,7 @@ import datetime
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
+from goatools.go_enrichment import get_study_items
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
@@ -22,6 +23,7 @@ class RunParams(object):
         'association_file',      # 'gene_association.mgi'
         'genes_population',      # genes_mus
         'genes_study_bg',        # 'humoral_rsp'
+        'goids_study_bg',        # 'humoral_rsp'
         'genes_popnullmaskout',  # ['immune', 'viral_bacteria']
         'perc_nulls',            # [100, 75, 50, 25]
         'num_genes_list',        # [4, 16, 128]
@@ -49,6 +51,7 @@ class RunParams(object):
             "null_bg" : list(self.genes['null_bg'])}
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
+        self._init_goea_results()
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -110,5 +113,16 @@ class RunParams(object):
             sys.stdout.write("**NOTE: num_genes_list NOW: {LIST}\n".format(LIST=lst_curr))
             self.params['num_genes_list'] = lst_curr
         return lst_curr
+
+    def _init_goea_results(self):
+        """Run Gene Ontology Analysis."""
+        attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
+        keep_if = lambda nt: getattr(nt, attrname) < self.objbase.alpha
+        objgoea = self.objbase.get_goeaobj(self.genes['population'], self.objassc.assc)
+        goea_results = objgoea.run_study(self.genes['study_bg'], keep_if=keep_if)
+        genes_signif = get_study_items(goea_results)
+        assert self.genes['study_bg'] == genes_signif
+        goids_signif = [nt.GO for nt in goea_results]
+        print "LLLL", len(goids_signif)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

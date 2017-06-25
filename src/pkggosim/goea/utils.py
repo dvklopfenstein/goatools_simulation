@@ -38,6 +38,13 @@ def get_genes(moddesc):
     assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
     return genes
 
+def get_goids(moddesc):
+    """Return GO ID list using description."""
+    modstr = 'pkggosim.goea_data.goids_{DESC}'.format(DESC=moddesc)
+    goids = import_var(modstr, "GOIDS")
+    assert goids, "NO GOIDS FOUND FOR MODULE({})".format(modstr)
+    return goids
+
 def import_var(modulestr, varname, log=None, rpterr=False):
     """Return variable inside module."""
     mod = import_mod(modulestr, log)
