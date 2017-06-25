@@ -51,7 +51,7 @@ class RunParams(object):
             "null_bg" : list(self.genes['null_bg'])}
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
-        self._init_goea_results()
+        self.goids_torand = self._init_goea_results()
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -115,14 +115,20 @@ class RunParams(object):
         return lst_curr
 
     def _init_goea_results(self):
-        """Run Gene Ontology Analysis."""
+        """Get GO IDs to randomize so all inputs are properly marked as 'Non-true null'."""
+        # Run Gene Ontology Analysis w/study genes being entire study gene background.
         attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.objbase.alpha
         objgoea = self.objbase.get_goeaobj(self.genes['population'], self.objassc.assc)
         goea_results = objgoea.run_study(self.genes['study_bg'], keep_if=keep_if)
+        # Check study background genes
         genes_signif = get_study_items(goea_results)
         assert self.genes['study_bg'] == genes_signif
-        goids_signif = [nt.GO for nt in goea_results]
-        print "LLLL", len(goids_signif)
+        # Get GO IDs to randomize
+        goids_signif = set([nt.GO for nt in goea_results])
+        goids_study_bg = self.params['goids_study_bg']
+        goids_torand = goids_signif.difference(goids_study_bg)
+        assert goids_signif.intersection(goids_study_bg) == goids_study_bg
+        return goids_torand
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
