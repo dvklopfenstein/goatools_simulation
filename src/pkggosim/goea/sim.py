@@ -102,14 +102,14 @@ class _Init(object):
         # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
         pop_genes = self.pobj.genes['population']
         assc = self.pobj.objassc.assc
+        # Randomize ALL True Null associations: Results in Extremely significant P-values
         if self.pobj.objassc.randomize_truenull_assc == "all":
             genes_nontrunull = self.get_genes_nontruenull()
             genes_trunull = pop_genes.difference(genes_nontrunull)
             assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
-        elif self.pobj.objassc.randomize_truenull_assc == "tgt":
-            genes_nontrunull = self.get_genes_nontruenull()
-            genes_trunull = pop_genes.difference(genes_nontrunull)
-            assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
+        # Randomize targeted True Null associations
+        elif self.pobj.objassc.randomize_truenull_assc == "rm":
+            assc = self.pobj.assc_pruned
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 

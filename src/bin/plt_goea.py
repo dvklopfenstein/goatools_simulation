@@ -17,7 +17,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     # User parameters
-    randomize_truenull_assc = "tgt" # none all tgt
+    randomize_truenull_assc = "rm" # none all tgt rm
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
@@ -59,9 +59,9 @@ def main():
         # nto._make([100,   30, {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60}]),
         # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70}]),
         # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}]), # 4:56
-        # nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}]), # 1:25
+        nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}]), # 1:25
         # nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04 0:05
-        nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
+        # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
     for ntd in params:
         run(seed, ntd)

@@ -51,7 +51,7 @@ class RunParams(object):
             "null_bg" : list(self.genes['null_bg'])}
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
-        self.goids_torand = self._init_goea_results()
+        self.assc_pruned = self._init_goea_results()
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -127,8 +127,8 @@ class RunParams(object):
         # Get GO IDs to randomize
         goids_signif = set([nt.GO for nt in goea_results])
         goids_study_bg = self.params['goids_study_bg']
-        goids_torand = goids_signif.difference(goids_study_bg)
+        goids_torm = goids_signif.difference(goids_study_bg)
         assert goids_signif.intersection(goids_study_bg) == goids_study_bg
-        return goids_torand
+        return self.objassc.rm_goids(goids_study_bg, goids_torm)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -40,6 +40,13 @@ class DataAssc(object):
                     go2genes[goid].add(gene)
         return go2genes
 
+    def rm_goids(self, genes_nontruenull, goids_torm):
+        """Remove specified GO IDs from all gene associations."""
+        assc_pruned = {}
+        for geneid, goids in self.assc.items():
+            assc_pruned[geneid] = goids.difference(goids_torm)
+        return assc_pruned 
+
     def get_randomized_assc(self, genes_truenull, genes_nontruenull):
         """Randomize assc. for only all "True Null" genes."""
         # If there are no "True Nulls", return original assc wo/randomizing
