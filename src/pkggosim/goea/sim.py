@@ -102,16 +102,31 @@ class _Init(object):
         # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
         pop_genes = self.pobj.genes['population']
         assc = self.pobj.objassc.assc
+        # rnd_all rm_tgtd rnd_tgtd
         # Randomize ALL True Null associations: Results in Extremely significant P-values
-        if self.pobj.objassc.randomize_truenull_assc == "all":
+        if self.pobj.objassc.randomize_truenull_assc == "rnd_all":
             genes_nontrunull = self.get_genes_nontruenull()
             genes_trunull = pop_genes.difference(genes_nontrunull)
             assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
         # Randomize targeted True Null associations
-        elif self.pobj.objassc.randomize_truenull_assc == "rm":
+        elif self.pobj.objassc.randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.assc_pruned
+        # Randomize targeted True Null associations
+        elif self.pobj.objassc.randomize_truenull_assc == "rnd_tgtd":
+            assc = self._get_assc_rndtgtd()
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
+
+    def _get_assc_rndtgtd(self):
+        """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
+        assc = {g:gos for g, gos in self.pobj.assc_pruned.items()} # copy pruned assc
+        assc_tgtd_rnd = self.pobj.objassc.shuffle_associations(self.pobj.assc_tgtd)
+        for geneid, goids_rnd in assc_tgtd_rnd.items():
+            if geneid in assc:
+                assc[geneid] |= goids_rnd
+            else:
+                assc[geneid] = goids_rnd
+        return assc
 
     def _init_study_genes(self, num_study_genes, num_null):
         """Generate 2 sets of genes: Not intended significant & intended to be significant."""
