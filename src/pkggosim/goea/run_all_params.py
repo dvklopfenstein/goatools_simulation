@@ -17,7 +17,7 @@ class RunParams(object):
     expected_params = set([
         'seed',                  # randomseed
         'prefix',                # fig_goea_rnd
-        'randomize_truenull_assc', # all none tgt
+        'randomize_truenull_assc',
         'alpha',                 # 0.05
         'method',                # 'fdr_bh'
         'association_file',      # 'gene_association.mgi'
@@ -51,7 +51,10 @@ class RunParams(object):
             "null_bg" : list(self.genes['null_bg'])}
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
-        self.assc_pruned = self._init_goea_results()
+        # self.assc_pruned = self._init_goids_tgtd()
+        # GO IDs targeted for removal or randomization: Sig GOs - background GOs
+        goids_tgtd = self._init_goids_tgtd()
+        self.assc_pruned, self.assc_tgtd = self.objassc.split_assc(goids_tgtd)
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -94,8 +97,9 @@ class RunParams(object):
 
     def _init_null_bg(self):
         """Initialize null background, the population subset not related to study genes."""
-        maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
-        return self.objassc.pop_genes.difference(maskout)
+        # maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
+        # return self.objassc.pop_genes.difference(maskout)
+        return self.objassc.pop_genes.difference(self.params['genes_study_bg'])
 
     def _adj_num_genes_list(self):
         """If the number of genes in num_genes_list is less than study_bg, update num_genes_list."""
@@ -114,7 +118,7 @@ class RunParams(object):
             self.params['num_genes_list'] = lst_curr
         return lst_curr
 
-    def _init_goea_results(self):
+    def _init_goids_tgtd(self):
         """Get GO IDs to randomize so all inputs are properly marked as 'Non-true null'."""
         # Run Gene Ontology Analysis w/study genes being entire study gene background.
         attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
@@ -124,11 +128,11 @@ class RunParams(object):
         # Check study background genes
         genes_signif = get_study_items(goea_results)
         assert self.genes['study_bg'] == genes_signif
-        # Get GO IDs to randomize
+        # Get GO IDs to randomize or remove
         goids_signif = set([nt.GO for nt in goea_results])
         goids_study_bg = self.params['goids_study_bg']
-        goids_torm = goids_signif.difference(goids_study_bg)
         assert goids_signif.intersection(goids_study_bg) == goids_study_bg
-        return self.objassc.rm_goids(goids_study_bg, goids_torm)
+        # GO IDs targeted for removal or randomization
+        return goids_signif.difference(goids_study_bg)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
