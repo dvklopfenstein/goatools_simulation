@@ -17,7 +17,10 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     # User parameters
-    randomize_truenull_assc = "rm" # none all tgt rm
+    # randomize_truenull_assc = "orig" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    # randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    # randomize_truenull_assc = "rm_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
