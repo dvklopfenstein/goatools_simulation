@@ -81,6 +81,8 @@ class _Init(object):
         assert num_study == num_study_genes, "{} {}".format(num_study, num_study_genes)
         assert num_study_genes - sum(self.expsig) == num_null
         goea_results = self._init_goea_results()
+        # for g in goea_results:
+        #     print "HHHH", g
         self.genes_sig = get_study_items(goea_results)
         num_sig = len(self.genes_sig)
         if log is not None:
@@ -97,17 +99,24 @@ class _Init(object):
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
         # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
         pop_genes = self.pobj.genes['population']
-        assc = self.pobj.objassc.assc
+        #### assc = self.pobj.objassc.assc
+        assc = self.pobj.objassc.objassc_all.assc_geneid2gos
         # rnd_all rm_tgtd rnd_tgtd
         # Randomize ALL True Null associations: Results in Extremely significant P-values
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
         if randomize_truenull_assc == "rnd_all":
             genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+            genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
+            assert not genes_nontrunull.intersection(genes_nontrunullt)
+            # print len(genes_nontrunull), len(genes_nontrunullt)
             genes_trunull = pop_genes.difference(genes_nontrunull)
             assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
+            if genes_nontrunullt:
+                tn = next(iter(genes_nontrunullt))
+                assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
         # Randomize targeted True Null associations
         elif randomize_truenull_assc == "rm_tgtd":
-            assc = self.pobj.assc_pruned
+            assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
         # Randomize targeted True Null associations
         elif randomize_truenull_assc == "rnd_tgtd":
             assc = self._get_assc_rndtgtd()
