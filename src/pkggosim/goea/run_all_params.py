@@ -37,10 +37,7 @@ class RunParams(object):
         self.params = params
         self.objrnd = RandomSeed32(params['seed'])
         self.objbase = DataBase(params['alpha'], params['method'])
-        self.objassc = DataAssc(
-            params['association_file'],
-            params['genes_population'],
-            params['randomize_truenull_assc'])
+        self.objassc = DataAssc(params['association_file'], params['genes_population'])
         # These study background genes have associations
         self.genes = {
             "population" : self.objassc.pop_genes,
@@ -53,8 +50,9 @@ class RunParams(object):
         self._adj_num_genes_list()
         # self.assc_pruned = self._init_goids_tgtd()
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
-        goids_tgtd = self._init_goids_tgtd()
-        self.assc_pruned, self.assc_tgtd = self.objassc.split_assc(goids_tgtd)
+        # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
+        self.goids_tgtd = self._init_goids_tgtd()
+        self.assc_pruned, self.assc_tgtd = self.objassc.split_assc(self.goids_tgtd)
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -97,9 +95,9 @@ class RunParams(object):
 
     def _init_null_bg(self):
         """Initialize null background, the population subset not related to study genes."""
-        # maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
-        # return self.objassc.pop_genes.difference(maskout)
-        return self.objassc.pop_genes.difference(self.params['genes_study_bg'])
+        maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
+        return self.objassc.pop_genes.difference(maskout)
+        # return self.objassc.pop_genes.difference(self.params['genes_study_bg'])
 
     def _adj_num_genes_list(self):
         """If the number of genes in num_genes_list is less than study_bg, update num_genes_list."""
