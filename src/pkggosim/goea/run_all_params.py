@@ -37,7 +37,10 @@ class RunParams(object):
         self.params = params
         self.objrnd = RandomSeed32(params['seed'])
         self.objbase = DataBase(params['alpha'], params['method'])
-        self.objassc = DataAssc(params['association_file'], params['genes_population'])
+        self.objassc = DataAssc(
+            params['association_file'],
+            params['genes_population'],
+            params['goids_study_bg'])
         # These study background genes have associations
         self.genes = {
             "population" : self.objassc.pop_genes,
@@ -51,8 +54,7 @@ class RunParams(object):
         # self.assc_pruned = self._init_goids_tgtd()
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
-        self.goids_tgtd = self._init_goids_tgtd()
-        self.assc_pruned, self.assc_tgtd = self.objassc.split_assc(self.goids_tgtd)
+        self.objassc.set_targeted(self._init_goids_tgtd())
 
     @staticmethod
     def _chk_genes(params, genes):
