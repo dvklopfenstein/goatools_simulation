@@ -15,6 +15,7 @@ vim_sim_geneontology:
 	src/pkggosim/common/plot_results.py \
 	src/pkggosim/goea/utils.py \
 	src/pkggosim/goea/objassc.py \
+	src/pkggosim/goea/assc_shuffle.py \
 	src/pkggosim/goea/objbase.py \
 	src/pkggosim/common/true_positive.py
 
@@ -31,6 +32,7 @@ vim_presim_geneontology:
 	src/pkggosim/common/plot_results.py \
 	src/pkggosim/goea/utils.py \
 	src/pkggosim/goea/objassc.py \
+	src/pkggosim/goea/assc_shuffle.py \
 	src/pkggosim/goea/objbase.py \
 	src/pkggosim/common/true_positive.py
 
