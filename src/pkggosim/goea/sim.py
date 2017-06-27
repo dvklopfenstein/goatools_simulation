@@ -4,7 +4,7 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import sys
-import collections as cx
+from collections import namedtuple, Counter
 from random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.common.true_positive import get_result_desc, calc_ratio
@@ -12,7 +12,7 @@ from pkggosim.common.true_positive import get_result_desc, calc_ratio
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
 
-    ntobj = cx.namedtuple(
+    ntobj = namedtuple(
         "NtMtAll", "num_genes num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
@@ -25,7 +25,7 @@ class GoeaSim(object):
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
-        ctr = cx.Counter([nt.tfpn for nt in self.nts_goea_res]) # Counts of TP TN FP FN
+        ctr = Counter([nt.tfpn for nt in self.nts_goea_res]) # Counts of TP TN FP FN
         #pylint: disable=invalid-name, bad-whitespace
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         # Significant(Correct) or Type I Error (Not significant)
@@ -56,7 +56,7 @@ class GoeaSim(object):
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
 
-    ntobj = cx.namedtuple("NtGoeaRes", "study_gene reject expsig tfpn")
+    ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig tfpn")
 
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
@@ -70,10 +70,6 @@ class _Init(object):
                 expsig     = expsig, # False->True Null; True->Non-true null
                 tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
-
-    def get_genes_nontruenull(self):
-        """Get the list of study genes which are non-true nulls."""
-        return set([g for g, e in zip(self.genes_stu, self.expsig) if e])
 
     def __init__(self, num_study_genes, num_null, pobj, log=None):
         self.pobj = pobj # RunParams object
@@ -104,15 +100,16 @@ class _Init(object):
         assc = self.pobj.objassc.assc
         # rnd_all rm_tgtd rnd_tgtd
         # Randomize ALL True Null associations: Results in Extremely significant P-values
-        if self.pobj.objassc.randomize_truenull_assc == "rnd_all":
-            genes_nontrunull = self.get_genes_nontruenull()
+        randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
+        if randomize_truenull_assc == "rnd_all":
+            genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
             genes_trunull = pop_genes.difference(genes_nontrunull)
             assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
         # Randomize targeted True Null associations
-        elif self.pobj.objassc.randomize_truenull_assc == "rm_tgtd":
+        elif randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.assc_pruned
         # Randomize targeted True Null associations
-        elif self.pobj.objassc.randomize_truenull_assc == "rnd_tgtd":
+        elif randomize_truenull_assc == "rnd_tgtd":
             assc = self._get_assc_rndtgtd()
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
