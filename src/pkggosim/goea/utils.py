@@ -24,21 +24,21 @@ def get_assoc_hdr(fin_assc):
     """Return associations as ens2gos."""
     return GoatoolsDataMaker.get_assoc_hdr(fin_assc)
 
-def get_genes_all(moddesc_list):
+def import_genes_all(moddesc_list):
     """Read genes in all user-provided modules. Return set of genes."""
     genes = set()
     for moddesc in moddesc_list:
-        genes |= get_genes(moddesc)
+        genes |= import_genes(moddesc)
     return genes
 
-def get_genes(moddesc):
+def import_genes(moddesc):
     """Return gene list using description."""
     modstr = 'pkggosim.goea_data.genes_{DESC}'.format(DESC=moddesc)
     genes = import_var(modstr, "GENES")
     assert genes, "NO GENES FOUND FOR MODULE({})".format(modstr)
     return genes
 
-def get_goids(moddesc):
+def import_goids(moddesc):
     """Return GO ID list using description."""
     modstr = 'pkggosim.goea_data.goids_{DESC}'.format(DESC=moddesc)
     goids = import_var(modstr, "GOIDS")

@@ -9,7 +9,7 @@ import sys
 import collections as cx
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
-from pkggosim.goea.utils import get_genes, get_goids, get_genes_all
+from pkggosim.goea.utils import import_genes, import_goids, import_genes_all
 from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
@@ -18,9 +18,9 @@ def run(randomseed, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     # User parameters
     # randomize_truenull_assc = "orig" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    # randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
     # randomize_truenull_assc = "rm_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    # randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
@@ -33,9 +33,9 @@ def run(randomseed, ntd):
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
-        'genes_study_bg':get_genes(study_bg),
-        'goids_study_bg':get_goids(study_bg),
-        'genes_popnullmaskout':get_genes_all(popnullmaskout),
+        'genes_study_bg':import_genes(study_bg),
+        'goids_study_bg':import_goids(study_bg),
+        'genes_popnullmaskout':import_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
         'num_genes_list' : [4, 16, 64, 128],
