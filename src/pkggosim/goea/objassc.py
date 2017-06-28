@@ -18,7 +18,6 @@ class DataAssc(object):
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
         self.pop_genes = set(pop_genes).intersection(set(assc_geneid2gos.keys()))
         self.goids_study_bg = goids_study_bg # 9 GO IDs for humoral response
-        print "BBBBBBBBBBBB", len(self.goids_study_bg)
         # Speed sims: Use the association subset actually in the population
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
@@ -36,22 +35,22 @@ class DataAssc(object):
         self.objassc_pruned = RandAssc(assc_pruned)
         self.objassc_tgtd = RandAssc(assc_tgtd)
 
-    def get_randomized_assc(self, genes_truenull, genes_nontruenull):
-        """Randomize association except for background GO IDs in background genes."""
-        assc_rand_all = self.objassc_all.get_shuffled_associations(genes_nontruenull)
-        assc_rand_tgt = self.objassc_tgtd.get_shuffled_associations()
-        assc_all = self.objassc_all.assc_geneid2gos
-        # print len(genes_nontruenull)
-        # for gene in list(genes_nontruenull)[:1]:
-        for gene in genes_nontruenull:
-            goids_gene3 = assc_all[gene].intersection(self.goids_study_bg)
-            # FDRs still go higher than alpha as study gene size increases
-            goids_gene2 = assc_all[gene].difference(self.goids_tgtd)
-            # FDRs go higher than alpha as study gene size increases: due to unmarked "Non-true null" inputs
-            goids_gene1 = assc_all[gene]
-            # print gene, len(goids_gene1), len(goids_gene2)
-            assc_rand_all[gene] = goids_gene3
-        return assc_rand_all
+    #### def get_randomized_assc(self, genes_truenull, genes_nontruenull):
+    ####     """Randomize association except for background GO IDs in background genes."""
+    ####     assc_rand_all = self.objassc_all.get_shuffled_associations(genes_nontruenull)
+    ####     assc_rand_tgt = self.objassc_tgtd.get_shuffled_associations()
+    ####     assc_all = self.objassc_all.assc_geneid2gos
+    ####     # print len(genes_nontruenull)
+    ####     # for gene in list(genes_nontruenull)[:1]:
+    ####     for gene in genes_nontruenull:
+    ####         goids_gene3 = assc_all[gene].intersection(self.goids_study_bg)
+    ####         # FDRs still go higher than alpha as study gene size increases
+    ####         goids_gene2 = assc_all[gene].difference(self.goids_tgtd)
+    ####         # FDRs go higher than alpha as study gene size increases: due to unmarked "Non-true null" inputs
+    ####         goids_gene1 = assc_all[gene]
+    ####         # print gene, len(goids_gene1), len(goids_gene2)
+    ####         assc_rand_all[gene] = goids_gene3
+    ####     return assc_rand_all
 
     def prt_summary(self, prt):
         """Print summary of parameters and background data."""

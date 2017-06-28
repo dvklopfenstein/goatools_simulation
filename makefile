@@ -1,5 +1,11 @@
 # Gene Ontology Enrichment Analyses Simulations
 
+run_goeas:
+	src/bin/plt_goea.py randomize_truenull_assc=rnd_all
+	src/bin/plt_goea.py randomize_truenull_assc=rnd_1
+	src/bin/plt_goea.py randomize_truenull_assc=rnd_2
+	src/bin/plt_goea.py randomize_truenull_assc=rnd_3
+
 pylint:
 	find src -name \*.py | xargs pylint -r no
 

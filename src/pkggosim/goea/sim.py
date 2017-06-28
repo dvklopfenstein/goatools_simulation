@@ -99,29 +99,51 @@ class _Init(object):
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
         # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
         pop_genes = self.pobj.genes['population']
-        #### assc = self.pobj.objassc.assc
-        assc = self.pobj.objassc.objassc_all.assc_geneid2gos
-        # rnd_all rm_tgtd rnd_tgtd
         # Randomize ALL True Null associations: Results in Extremely significant P-values
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
-        if randomize_truenull_assc == "rnd_all":
-            genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
-            genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
-            assert not genes_nontrunull.intersection(genes_nontrunullt)
-            # print len(genes_nontrunull), len(genes_nontrunullt)
-            genes_trunull = pop_genes.difference(genes_nontrunull)
-            assc = self.pobj.objassc.get_randomized_assc(genes_trunull, genes_nontrunull)
-            if genes_nontrunullt:
-                tn = next(iter(genes_nontrunullt))
-                assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
+        sys.stdout.write("randomize_truenull_assc({TN})\n".format(TN=randomize_truenull_assc))
+        assc = self.pobj.objassc.objassc_all.assc_geneid2gos
+        if randomize_truenull_assc[:4] == "rnd_":
+            assc = self._get_rnd_assc(randomize_truenull_assc)
         # Randomize targeted True Null associations
         elif randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
-        # Randomize targeted True Null associations
-        elif randomize_truenull_assc == "rnd_tgtd":
-            assc = self._get_assc_rndtgtd()
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
+
+    def _get_rnd_assc(self, randomize_truenull_assc):
+        """Return one of many flavors of randomly shuffled associations."""
+        if randomize_truenull_assc == "rnd_tgtd":
+            return self._get_assc_rndtgtd()
+        else:
+            genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+            # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
+            # assert not genes_nontrunull.intersection(genes_nontrunullt)
+            # print len(genes_nontrunull), len(genes_nontrunullt)
+            # genes_trunull = self.pobj.genes['population'].difference(genes_nontrunull)
+            # if genes_nontrunullt:
+            #     tn = next(iter(genes_nontrunullt))
+            #     assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
+            assc_all_orig = self.pobj.objassc.objassc_all.assc_geneid2gos
+            assc_all_rand = self.pobj.objassc.objassc_all.get_shuffled_associations()
+            if randomize_truenull_assc == "rnd_all":
+                return assc_all_rand
+            elif randomize_truenull_assc == "rnd_1":
+                for gene in genes_nontrunull:
+                    assc_all_rand[gene] = assc_all_orig[gene]
+                return assc_all_rand
+            elif randomize_truenull_assc == "rnd_2":
+                goids_tgtd = self.pobj.objassc.goids_tgtd
+                for gene in genes_nontrunull:
+                    assc_all_rand[gene] = assc_all_orig[gene].difference(goids_tgtd)
+                return assc_all_rand
+            elif randomize_truenull_assc == "rnd_3":
+                goids_study_bg = self.pobj.objassc.goids_study_bg
+                for gene in genes_nontrunull:
+                    assc_all_rand[gene] = assc_all_orig[gene].intersection(goids_study_bg)
+                return assc_all_rand
+        raise RuntimeError("UNEXPECTED randomize_truenull_assc({})".format(randomize_truenull_assc))
+
 
     def _get_assc_rndtgtd(self):
         """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
