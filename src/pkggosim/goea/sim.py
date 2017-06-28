@@ -101,7 +101,6 @@ class _Init(object):
         pop_genes = self.pobj.genes['population']
         # Randomize ALL True Null associations: Results in Extremely significant P-values
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
-        sys.stdout.write("randomize_truenull_assc({TN})\n".format(TN=randomize_truenull_assc))
         assc = self.pobj.objassc.objassc_all.assc_geneid2gos
         if randomize_truenull_assc[:4] == "rnd_":
             assc = self._get_rnd_assc(randomize_truenull_assc)

@@ -24,10 +24,6 @@ class ExperimentSet(object):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
 
-####    def get_stddevs(self, key):
-####        """Return list of stddevs for a item like fdr_actual, frr_actual."""
-####        return [e.get_stddev(key) for e in self.expset]
-
     def get_desc(self, fmt="{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {QTY:4} P-Values)"):
         """Return string which succinctly describes this experiment set."""
         return fmt.format(
@@ -55,8 +51,9 @@ class ExperimentSet(object):
         prt.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
         shared_param_keys = ['num_sims', 'num_items', 'perc_null']
         for idx in range(self.params['num_experiments']):
-            prt.write("{IDX:4} {DESC} HMS={HMS}\n".format(
-                IDX=idx, DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
+            prt.write("{IDX:4} {DESC} HMS={HMS} {STYLE}\n".format(
+                IDX=idx, DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic),
+                STYLE=self.pobj.params['randomize_truenull_assc']))
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
             # One ManyGoeaSims is one experiment which can return one simulated FDR value
