@@ -7,6 +7,7 @@ __author__ = "DV Klopfenstein"
 import os
 import sys
 import collections as cx
+from pkggosim.common.cli import get_args
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
 from pkggosim.goea.utils import import_genes, import_goids, import_genes_all
@@ -14,13 +15,15 @@ from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def run(randomseed, ntd):
+def run(args, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
+    randomize_truenull_assc = args.get('randomize_truenull_assc', 'orig')
     # User parameters
     # randomize_truenull_assc = "orig" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    # randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
     # randomize_truenull_assc = "rm_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
     # randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
+    
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
@@ -29,7 +32,7 @@ def run(randomseed, ntd):
     params = {
         'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
         'randomize_truenull_assc' : randomize_truenull_assc,
-        'seed' : randomseed,
+        'seed' : args.get('randomseed', None),
         'alpha' : 0.05,
         'method' : 'fdr_bh',
         'genes_population':genes_mus,
@@ -53,7 +56,7 @@ def run(randomseed, ntd):
 
 def main():
     """Arguments for running all experiments."""
-    seed = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
+    args = get_args()
     nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member, line-too-long
     params = [
@@ -67,7 +70,7 @@ def main():
         # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
     for ntd in params:
-        run(seed, ntd)
+        run(get_args(), ntd)
 
 if __name__:
     main()
