@@ -4,15 +4,15 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-import sys
 import collections as cx
+from pkggosim.common.cli import get_args
 from pkggosim.hypotheses.run_all import ExperimentsAll
 
 
-def main(randomseed, num_experiments, num_sims, dotsize):
+def main(args, num_experiments, num_sims, dotsize):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     sim_params = {
-        'seed' : randomseed,
+        'seed' : args['randomseed'],
         'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
@@ -27,17 +27,17 @@ def main(randomseed, num_experiments, num_sims, dotsize):
 
 
 if __name__:
-    SEED = int(sys.argv[1], 0) if len(sys.argv) != 1 else None
+    ARGS = get_args()
     NTOBJ = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member
     PARAMS = [
-        # NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]), # 00:NN:NN
+        NTOBJ._make([500, 2500, {'fdr_actual':0.70, 'sensitivity':0.40}]), # 00:NN:NN
         NTOBJ._make([500, 1000, {'fdr_actual':0.90, 'sensitivity':0.50}]), # 02:37:NN
-        # NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # 00:24:31
-        # NTOBJ._make([ 20,  200, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:01:00
-        # NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:00:02
+        NTOBJ._make([100, 1000, {'fdr_actual':1.20, 'sensitivity':0.65}]), # 00:24:31
+        NTOBJ._make([ 20,  200, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:01:00
+        NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:00:02
     ]
-    for ntd in PARAMS:
-        main(SEED, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
+    NTD = PARAMS[ARGS['idx']]
+    main(ARGS, NTD.num_experiments, NTD.num_sims, NTD.dotsize)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -23,7 +23,7 @@ def run(args, ntd):
     # randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
     # randomize_truenull_assc = "rm_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
     # randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    
+
     study_bg = "humoral_rsp"
     title = 'GOEA Simulations; Humoral Response Genes'
     popnullmaskout = ['immune', 'viral_bacteria']
@@ -60,17 +60,17 @@ def main():
     nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member, line-too-long
     params = [
-        # nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50}]),
-        # nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
-        # nto._make([100,   30, {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60}]),
-        # nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70}]),
-        # nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}]), # 4:56
+        nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50}]),
+        nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
+        nto._make([100,   30, {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60}]),
+        nto._make([ 50,   50, {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70}]),
+        nto._make([ 50,   20, {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}]), # 4:56
         nto._make([ 20,   20, {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}]), # 1:25
-        # nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04 0:05
-        # nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
+        nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04 0:05
+        nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
-    for ntd in params:
-        run(get_args(), ntd)
+    ntd = params[args['idx']]
+    run(args, ntd)
 
 if __name__:
     main()
