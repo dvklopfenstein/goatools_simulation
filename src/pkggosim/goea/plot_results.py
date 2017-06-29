@@ -12,32 +12,6 @@ from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
 from pkggosim.common.plot_results import fill_axes
 
 
-#### def _wrpng_boxplot_sigs_each(dfrm, alpha, **kws):
-####     """Plot one boxplot of simulated FDRs per experiment set of %true_null & MaxSigVal."""
-####     plt.clf()
-####     sns.despine(offset=10, trim=True)
-####     sns.set(style="ticks")
-####     fig, ax_boxplot = plt.subplots()
-####     fill_axes(ax_boxplot, dfrm, alpha, **kws)
-####     fout_img = kws.get("fout_img", "sim_hypotheses.png")
-####     fig.savefig(fout_img, dpi=kws.get('dpi', 200))
-####     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
-####     show = kws.get('show', False)
-####     if show:
-####         plt.show()
-#### 
-#### def plt_box_all(fimg_pat, key2exps, attrname, **args_kws):
-####     """Plot all boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-####     objplt = PlotInfo(attrname, args_kws)
-####     kws = objplt.kws
-####     title_pat = "{P:}% True Null"
-####     for perc_null, expsets in key2exps.items():
-####         assert expsets
-####         kws['fout_img'] = fimg_pat.format(PERCNULL=perc_null)
-####         kws['title'] = title_pat.format(P=perc_null)
-####         dfrm = pd.DataFrame(get_dftbl_boxplot(expsets, attrname, objplt.grpname))
-####         _wrpng_boxplot_sigs_each(dfrm, expsets[0].pobj.objbase.alpha, **kws)
-
 def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     pltobjs = [PlotInfo(a, args_kws) for a in attrs]
