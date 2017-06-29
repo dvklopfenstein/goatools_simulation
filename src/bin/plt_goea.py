@@ -8,6 +8,7 @@ import os
 import sys
 import collections as cx
 from pkggosim.common.cli import get_args
+from pkggosim.goea.sim import title
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
 from pkggosim.goea.utils import import_genes, import_goids, import_genes_all
@@ -18,14 +19,11 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def run(args, ntd):
     """Simulate Gene Ontology Enrichment Analyses."""
     randomize_truenull_assc = args.get('randomize_truenull_assc', 'orig')
-    # User parameters
-    # randomize_truenull_assc = "orig" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    # randomize_truenull_assc = "rnd_all" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    # randomize_truenull_assc = "rm_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
-    # randomize_truenull_assc = "rnd_tgtd" # orig  rnd_all  rm_tgtd  rnd_tgtd
 
     study_bg = "humoral_rsp"
-    title = 'GOEA Simulations; Humoral Response Genes'
+    title_cur = title.get(randomize_truenull_assc, 'GOEA Simulations; Humoral Response Genes')
+    print "HHHHHHHHHHHHH", randomize_truenull_assc
+    print "TTTTTTTTTTTTT", title_cur
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2nt.keys()  # Population genes
@@ -46,7 +44,7 @@ def run(args, ntd):
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
-    pltargs = {'dotsize':ntd.dotsize, 'title':title,
+    pltargs = {'dotsize':ntd.dotsize, 'title':title_cur,
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes'}
     objparams = RunParams(params)
@@ -70,6 +68,7 @@ def main():
         nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
     ntd = params[args['idx']]
+    print "NTD", ntd
     run(args, ntd)
 
 if __name__:

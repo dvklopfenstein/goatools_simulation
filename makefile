@@ -1,13 +1,21 @@
 # Gene Ontology Enrichment Analyses Simulations
 
+I = -3
+
 lst:
 	grep vim_ makefile
 
-run_goeas:
-	src/bin/plt_goea.py i=-3 randomize_truenull_assc=rnd_all
-	src/bin/plt_goea.py i=-3 randomize_truenull_assc=rnd_1
-	src/bin/plt_goea.py i=-3 randomize_truenull_assc=rnd_2
-	src/bin/plt_goea.py i=-3 randomize_truenull_assc=rnd_3
+run_goeas_orig:
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn1
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn2
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn3
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_all
+
+run_goeas_rand:
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_all
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn1
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn2
+	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn3
 
 pylint:
 	find src -name \*.py | xargs pylint -r no

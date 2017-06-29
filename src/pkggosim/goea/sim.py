@@ -101,46 +101,44 @@ class _Init(object):
         pop_genes = self.pobj.genes['population']
         # Randomize ALL True Null associations: Results in Extremely significant P-values
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
-        assc = self.pobj.objassc.objassc_all.assc_geneid2gos
-        if randomize_truenull_assc[:4] == "rnd_":
-            assc = self._get_rnd_assc(randomize_truenull_assc)
+        assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
+        if randomize_truenull_assc[:4] == "rand_tgtd":
+            assc = self._get_assc_rndtgtd()
+        elif randomize_truenull_assc[:4] == "rand_":
+            assc = self.pobj.objassc.objassc_all.get_shuffled_associations()
         # Randomize targeted True Null associations
         elif randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
+        if randomize_truenull_assc[5:8] == "ntn" and randomize_truenull_assc[8:].isdigit():
+            assc = self._fill_assc_ntn(assc, randomize_truenull_assc)
         objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
         return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
-    def _get_rnd_assc(self, randomize_truenull_assc):
+    def _fill_assc_ntn(self, assc_bg, randomize_truenull_assc):
         """Return one of many flavors of randomly shuffled associations."""
-        if randomize_truenull_assc == "rnd_tgtd":
-            return self._get_assc_rndtgtd()
-        else:
-            genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
-            # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
-            # assert not genes_nontrunull.intersection(genes_nontrunullt)
-            # print len(genes_nontrunull), len(genes_nontrunullt)
-            # genes_trunull = self.pobj.genes['population'].difference(genes_nontrunull)
-            # if genes_nontrunullt:
-            #     tn = next(iter(genes_nontrunullt))
-            #     assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
-            assc_all_orig = self.pobj.objassc.objassc_all.assc_geneid2gos
-            assc_all_rand = self.pobj.objassc.objassc_all.get_shuffled_associations()
-            if randomize_truenull_assc == "rnd_all":
-                return assc_all_rand
-            elif randomize_truenull_assc == "rnd_1":
-                for gene in genes_nontrunull:
-                    assc_all_rand[gene] = assc_all_orig[gene]
-                return assc_all_rand
-            elif randomize_truenull_assc == "rnd_2":
-                goids_tgtd = self.pobj.objassc.goids_tgtd
-                for gene in genes_nontrunull:
-                    assc_all_rand[gene] = assc_all_orig[gene].difference(goids_tgtd)
-                return assc_all_rand
-            elif randomize_truenull_assc == "rnd_3":
-                goids_study_bg = self.pobj.objassc.goids_study_bg
-                for gene in genes_nontrunull:
-                    assc_all_rand[gene] = assc_all_orig[gene].intersection(goids_study_bg)
-                return assc_all_rand
+        genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+        # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
+        # assert not genes_nontrunull.intersection(genes_nontrunullt)
+        # print len(genes_nontrunull), len(genes_nontrunullt)
+        # genes_trunull = self.pobj.genes['population'].difference(genes_nontrunull)
+        # if genes_nontrunullt:
+        #     tn = next(iter(genes_nontrunullt))
+        #     assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
+        assc_all_orig = self.pobj.objassc.objassc_all.assc_geneid2gos
+        if randomize_truenull_assc[5:] == "ntn1":
+            for gene in genes_nontrunull:
+                assc_bg[gene] = assc_all_orig[gene]
+            return assc_bg
+        elif randomize_truenull_assc[5:] == "ntn2":
+            goids_tgtd = self.pobj.objassc.goids_tgtd
+            for gene in genes_nontrunull:
+                assc_bg[gene] = assc_all_orig[gene].difference(goids_tgtd)
+            return assc_bg
+        elif randomize_truenull_assc[5:] == "ntn3":
+            goids_study_bg = self.pobj.objassc.goids_study_bg
+            for gene in genes_nontrunull:
+                assc_bg[gene] = assc_all_orig[gene].intersection(goids_study_bg)
+            return assc_bg
         raise RuntimeError("UNEXPECTED randomize_truenull_assc({})".format(randomize_truenull_assc))
 
 
@@ -172,5 +170,17 @@ class _Init(object):
             [(g, False) for g in genes_pop_bg[:num_null]]         # True Null
         # 2. Extract "genes" and "intended significance" by transposing data
         self.genes_stu, self.expsig = zip(*genes_expsig)
+
+title = {
+    'orig_all' : 'Original Associations',
+    'rand_all' : 'All Rand Assc.',
+    'rand_ntn1' : 'Rand Assc: NTN Orig',
+    'rand_ntn2' : 'Rand Assc: NTN Targeted Removed',
+    'rand_ntn3' : 'Rand Assc: NTN Only BG',
+    'orig_ntn1' : 'Orig Assc: NTN Orig',
+    'orig_ntn2' : 'Orig Assc: NTN Targeted Removed',
+    'orig_ntn3' : 'Orig Assc: NTN Only BG',
+}
+
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
