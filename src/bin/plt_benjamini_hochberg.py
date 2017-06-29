@@ -9,21 +9,21 @@ from pkggosim.common.cli import get_args
 from pkggosim.hypotheses.run_all import ExperimentsAll
 
 
-def main(args, num_experiments, num_sims, dotsize):
+def main(args, ntd, method):
     """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
     sim_params = {
         'seed' : args['randomseed'],
-        'multi_params' : {'alpha' : 0.05, 'method' : 'fdr_bh'},
+        'multi_params' : {'alpha' : 0.05, 'method' : method},
         'max_sigpvals' : [0.01, 0.03, 0.05],
         'perc_nulls' : [100, 75, 50, 25],
         'num_hypoths_list' : [4, 16, 128],
-        'num_experiments' : num_experiments, # Number of simulated FDR ratios in an experiment set
-        'num_sims' : num_sims}   # Number of sims per experiment; used to create one FDR ratio
+        'num_experiments' : ntd.num_experiments, # Number of simulated FDR ratios in an experiment set
+        'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     obj = ExperimentsAll(sim_params)
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     #obj.prt_params(sys.stdout)
     #obj.prt_num_sims(sys.stdout)
-    obj.run_all(rpt_items, dotsize)
+    obj.run_all(rpt_items, ntd.dotsize)
 
 
 if __name__:
@@ -38,6 +38,22 @@ if __name__:
         NTOBJ._make([ 10,   10, {'fdr_actual':2.00, 'sensitivity':2.00}]), # 00:00:02
     ]
     NTD = PARAMS[ARGS['idx']]
-    main(ARGS, NTD.num_experiments, NTD.num_sims, NTD.dotsize)
+    METHODS = [
+            'bonferroni',     #  0) Bonferroni one-step correction
+            'sidak',          #  1) Sidak one-step correction
+            'holm-sidak',     #  2) Holm-Sidak step-down method using Sidak adjustments
+            'holm',           #  3) Holm step-down method using Bonferroni adjustments
+            'simes-hochberg', #  4) Simes-Hochberg step-up method  (independent)
+            'hommel',         #  5) Hommel closed method based on Simes tests (non-negative)
+            'fdr_bh',         #  6) FDR Benjamini/Hochberg  (non-negative)
+            'fdr_by',         #  7) FDR Benjamini/Yekutieli (negative)
+            'fdr_tsbh',       #  8) FDR 2-stage Benjamini-Hochberg (non-negative)
+            'fdr_tsbky',      #  9) FDR 2-stage Benjamini-Krieger-Yekutieli (non-negative)
+            'fdr_gbs',        # 10) FDR adaptive Gavrilov-Benjamini-Sarkar
+    ]
+    #main(ARGS, NTD.num_experiments, NTD.num_sims, NTD.dotsize)
+    methods = METHODS
+    for method in methods:
+        main(ARGS, NTD, method)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

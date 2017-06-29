@@ -22,15 +22,30 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
 
-    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
+    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}_{M}'
 
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
                            'num_experiments', 'num_sims'])
+
+    method2name = {
+        'bonferroni':     "Bonferroni one-step correction",
+        'sidak':          "Sidak one-step correction",
+        'holm-sidak':     "Holm-Sidak step-down method using Sidak adjustments",
+        'holm':           "Holm step-down method using Bonferroni adjustments",
+        'simes-hochberg': "Simes-Hochberg step-up method  (independent)",
+        'hommel':         "Hommel closed method based on Simes tests (non-negative)",
+        'fdr_bh':         "FDR Benjamini/Hochberg  (non-negative)",
+        'fdr_by':         "FDR Benjamini/Yekutieli (negative)",
+        'fdr_tsbh':       "FDR 2-stage Benjamini-Hochberg (non-negative)",
+        'fdr_tsbky':      "FDR 2-stage Benjamini-Krieger-Yekutieli (non-negative)",
+        'fdr_gbs':        "FDR adaptive Gavrilov-Benjamini-Sarkar",
+    }
 
     def __init__(self, params):
         self.tic = timeit.default_timer()
         self.seed = RandomSeed32(params.get('seed', None))
         self.params = params
+        self.method = self.params['multi_params']['method']
         assert set(params.keys()) == self.expected_params
         self.expsets = []
 
@@ -47,8 +62,9 @@ class ExperimentsAll(object):
             self.seed.prt(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
-            title = "Benjamini/Hochberg Hypotheses Simulations"
-            for attrname in ['fdr_actual', 'sensitivity']:
+            #title = "{M} Hypotheses Simulations".format(M=self.method2name[self.method])
+            title = "{M}".format(M=self.method2name[self.method])
+            for attrname in ['fdr_actual', 'sensitivity', 'specificity']:
                 base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
                 fout_img = os.path.join(REPO, 'doc/logs', base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
@@ -80,7 +96,8 @@ class ExperimentsAll(object):
             Q0=self.params['num_hypoths_list'][0],
             QN=self.params['num_hypoths_list'][-1],
             NEXP=self.params['num_experiments'],
-            NSIM=self.params['num_sims'])
+            NSIM=self.params['num_sims'],
+            M=self.method)
 
     def get_desc(self):
         """Return str describing params used in all simulations."""
