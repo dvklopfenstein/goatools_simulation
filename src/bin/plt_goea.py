@@ -57,7 +57,7 @@ def main():
     args = get_args()
     nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
     #pylint: disable=bad-whitespace, no-member, line-too-long
-    params = [
+    experiment_cnts = [
         nto._make([500, 1000, {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50}]),
         nto._make([100, 1000, {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60}]),
         nto._make([100,   30, {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60}]),
@@ -67,7 +67,7 @@ def main():
         nto._make([  4,    4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:04 0:05
         nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
-    ntd = params[args['idx']]
+    ntd = experiment_cnts[args['idx_experiment_cnts']]
     print "NTD", ntd
     run(args, ntd)
 

@@ -4,6 +4,7 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import os
+import re
 import sys
 import collections as cx
 import timeit
@@ -22,7 +23,7 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
 
-    desc_pat = '{P0:03}to{PN:03}_{MAX0:02}to{MAXN:02}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}_{M}'
+    desc_pat = '{P0:03}to{PN:03}_{MAX0}to{MAXN}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}_{M}'
 
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
                            'num_experiments', 'num_sims'])
@@ -32,9 +33,9 @@ class ExperimentsAll(object):
         'sidak':          "Sidak one-step correction",
         'holm-sidak':     "Holm-Sidak step-down method using Sidak adjustments",
         'holm':           "Holm step-down method using Bonferroni adjustments",
-        'simes-hochberg': "Simes-Hochberg step-up method  (independent)",
+        'simes-hochberg': "Simes-Hochberg step-up method (independent)",
         'hommel':         "Hommel closed method based on Simes tests (non-negative)",
-        'fdr_bh':         "FDR Benjamini/Hochberg  (non-negative)",
+        'fdr_bh':         "FDR Benjamini/Hochberg (non-negative)",
         'fdr_by':         "FDR Benjamini/Yekutieli (negative)",
         'fdr_tsbh':       "FDR 2-stage Benjamini-Hochberg (non-negative)",
         'fdr_tsbky':      "FDR 2-stage Benjamini-Krieger-Yekutieli (non-negative)",
@@ -53,7 +54,8 @@ class ExperimentsAll(object):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         self._run_experiments()
         desc_str = self._get_fout_img()
-        fout_log = os.path.join('doc/logs', 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
+        dir_loc = 'doc/logs' if self.params['num_experiments'] > 20 else 'doc/work'
+        fout_log = os.path.join(dir_loc, 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(REPO, fout_log), 'w') as prt:
             self.prt_hms(prt, "Simulations Completed\n")
@@ -66,7 +68,7 @@ class ExperimentsAll(object):
             title = "{M}".format(M=self.method2name[self.method])
             for attrname in ['fdr_actual', 'sensitivity', 'specificity']:
                 base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
-                fout_img = os.path.join(REPO, 'doc/logs', base_img)
+                fout_img = os.path.join(REPO, dir_loc, base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
             self.prt_num_sims(sys.stdout)
             self.prt_hms(prt, "Reports and Plots Completed")
@@ -88,11 +90,12 @@ class ExperimentsAll(object):
         """Get the name of the png file for the tiled plot."""
         if img_pat is None:
             img_pat = self.desc_pat
+        print "PPPPPPPPPPP", self.params
         return img_pat.format(
             P0=self.params['perc_nulls'][0],   # True Null %
             PN=self.params['perc_nulls'][-1],  # True Null %
-            MAX0=int(self.params['max_sigpvals'][0]*100),  # 0.01 ->"01"
-            MAXN=int(self.params['max_sigpvals'][-1]*100),
+            MAX0=get_floatstr(self.params['max_sigpvals'][0]),  # 0.01 ->"01"
+            MAXN=get_floatstr(self.params['max_sigpvals'][-1]),
             Q0=self.params['num_hypoths_list'][0],
             QN=self.params['num_hypoths_list'][-1],
             NEXP=self.params['num_experiments'],
@@ -199,5 +202,13 @@ class ExperimentsAll(object):
         for expset in self.expsets:
             key2exps[(expset.params[key1], expset.params[key2])].append(expset)
         return key2exps
+
+def get_floatstr(val):
+    """Convert floating point to a string: 0.0001 -> '0001'."""
+    valstr = "{V:f}".format(V=val)
+    mtch = re.search(r'0\.(0+[1-9]+)0*$', valstr)
+    if mtch:
+        return mtch.group(1)
+    raise RuntimeError("COULD NOT CONVERT float({F:f}) TO str".format(F=val))
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

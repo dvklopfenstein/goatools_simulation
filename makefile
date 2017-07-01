@@ -1,21 +1,28 @@
 # Gene Ontology Enrichment Analyses Simulations
 
-I = -3
+# Method index for Hypotheses Simulations
+E = -3
+
+# Max Sig P-values index
+P = 0
 
 lst:
 	grep vim_ makefile
 
+run_hypo:
+	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
+
 run_goeas_orig:
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn1
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn2
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_ntn3
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=orig_all
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_all
 
 run_goeas_rand:
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_all
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn1
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn2
-	src/bin/plt_goea.py i=$(I) randomize_truenull_assc=rand_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_all
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn3
 
 pylint:
 	find src -name \*.py | xargs pylint -r no
@@ -53,7 +60,7 @@ vim_presim_geneontology:
 	src/pkggosim/goea/objbase.py \
 	src/pkggosim/common/true_positive.py
 
-vim_sim_benjamini_hochberg:
+vim_sim_hypotheses:
 	vim -p \
 	src/bin/plt_benjamini_hochberg.py \
 	src/bin/sim_fdr_benjamini_hochberg.py \

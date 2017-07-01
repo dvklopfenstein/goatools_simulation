@@ -30,7 +30,8 @@ class ExperimentsAll(object):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         pre = self.pobj.params['prefix']
         desc_str = self._get_fout_img()
-        fout_log = os.path.join('doc/logs', '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
+        dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
+        fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
         # Report and plot simulation results
         with open(os.path.join(self.repo, fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
@@ -42,7 +43,7 @@ class ExperimentsAll(object):
             self.prt_experiments_stats(prt, rpt_items)
             #for attr, name in ['fdr_actual', 'sensitivity']:
             baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
-            fout_img = os.path.join(self.repo, 'doc/logs/{B}.png'.format(B=baseimg))
+            fout_img = os.path.join(self.repo, dir_loc, '{B}.png'.format(B=baseimg))
             self.plt_box_tiled(fout_img, plt_items, **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")

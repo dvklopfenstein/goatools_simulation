@@ -10,7 +10,8 @@ def get_args():
     """Return a dictionary containing command-line arguments."""
     args = {
         'randomseed' : None, # A random seedn shall be generated
-        'idx' : -1,
+        'idx_experiment_cnts' : -1,
+        'idx_max_sigpvals' : 0,
     }
     # Get arguments from command-line
     for arg in sys.argv[1:]:
@@ -18,8 +19,10 @@ def get_args():
             args['randomseed'] = int(arg, 0)
         elif arg[:24] == "randomize_truenull_assc=":
             args['randomize_truenull_assc'] = arg[24:]
-        elif arg[:2] == 'i=':
-            args['idx'] = int(arg[2:])
+        elif arg[:2] == 'e=':
+            args['idx_experiment_cnts'] = int(arg[2:])
+        elif arg[:2] == 'p=':
+            args['idx_max_sigpvals'] = int(arg[2:])
     return args
 
 
