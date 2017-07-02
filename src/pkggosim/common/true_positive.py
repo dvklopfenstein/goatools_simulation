@@ -4,7 +4,7 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 
-def get_result_desc(reject, expsig):
+def get_tfpn(reject, expsig):
     """Assigns: true positive, true negative, false positive, or false negative."""
     # pylint: disable=multiple-statements
     #
