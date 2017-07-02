@@ -48,7 +48,7 @@ class ExperimentSet(object):
     def _init_experiments(self, prt=sys.stdout):
         """Run a set of experiments."""
         expset = []
-        prt.write("{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
+        prt.write("\n{DESC} HMS={HMS}\n".format(DESC=self.get_strhdr(), HMS=get_hms(self.pobj.tic)))
         shared_param_keys = ['num_sims', 'num_items', 'perc_null']
         for idx in range(self.params['num_experiments']):
             prt.write("{IDX:4} {DESC} HMS={HMS} {STYLE}\n".format(
