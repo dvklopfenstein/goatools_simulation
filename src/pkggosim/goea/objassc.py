@@ -35,23 +35,6 @@ class DataAssc(object):
         self.objassc_pruned = RandAssc(assc_pruned)
         self.objassc_tgtd = RandAssc(assc_tgtd)
 
-    #### def get_randomized_assc(self, genes_truenull, genes_nontruenull):
-    ####     """Randomize association except for background GO IDs in background genes."""
-    ####     assc_rand_all = self.objassc_all.get_shuffled_associations(genes_nontruenull)
-    ####     assc_rand_tgt = self.objassc_tgtd.get_shuffled_associations()
-    ####     assc_all = self.objassc_all.assc_geneid2gos
-    ####     # print len(genes_nontruenull)
-    ####     # for gene in list(genes_nontruenull)[:1]:
-    ####     for gene in genes_nontruenull:
-    ####         goids_gene3 = assc_all[gene].intersection(self.goids_study_bg)
-    ####         # FDRs still go higher than alpha as study gene size increases
-    ####         goids_gene2 = assc_all[gene].difference(self.goids_tgtd)
-    ####         # FDRs go higher than alpha as study gene size increases: due to unmarked "Non-true null" inputs
-    ####         goids_gene1 = assc_all[gene]
-    ####         # print gene, len(goids_gene1), len(goids_gene2)
-    ####         assc_rand_all[gene] = goids_gene3
-    ####     return assc_rand_all
-
     def prt_summary(self, prt):
         """Print summary of parameters and background data."""
         prt.write("\nASSOCIATION INFORMATION:\n    ")
@@ -86,21 +69,5 @@ class DataAssc(object):
             else:
                 assc_pruned[geneid] = goids_gene
         return assc_pruned, assc_tgtd
-
-    #### def get_randomized_assc(self, genes_truenull, genes_nontruenull):
-    ####     """Randomize assc. for only all "True Null" genes."""
-    ####     # If there are no "True Nulls", return original assc wo/randomizing
-    ####     # assert not genes_truenull.intersection(genes_nontruenull), "TRUE NULL ISEC w/NON-TRUE NULL"
-    ####     # if not genes_truenull:
-    ####     #     return self.objassc_all.assc_geneid2gos
-    ####     # Get the subset of the assc to randomize
-    ####     #### assc_subset = {g:self.objassc_all.assc_geneid2gos[g] for g in genes_truenull} if genes_nontruenull else self.objassc_all.assc_geneid2gos
-    ####     #### assc_rand = self.shuffle_associations(assc_subset)
-    ####     # Shuffles everything
-    ####     assc_rand_all = self.objassc_all.shuffle_associations(genes_nontruenull)
-    ####     # Add back non-randomized parts of the assc.
-    ####     for gene in genes_nontruenull:
-    ####         assc_rand_all[gene] = self.objassc_all.assc_geneid2gos[gene]
-    ####     return assc_rand_all
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
