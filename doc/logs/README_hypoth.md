@@ -69,12 +69,6 @@
 ### 51)   52.   1 of   1 ./fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_specificity.png    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_specificity.png](./fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_specificity.png)    
 
-### 16)   17.   1 of   1 ./fig_hypoth_100to025_01to05_004to016_N00020_00020_fdr_actual.png    
-![fig_hypoth_100to025_01to05_004to016_N00020_00020_fdr_actual.png](./fig_hypoth_100to025_01to05_004to016_N00020_00020_fdr_actual.png)    
-### 17)   18.   1 of   1 ./fig_hypoth_100to025_01to05_004to016_N00020_00020_sensitivity.png    
-![fig_hypoth_100to025_01to05_004to016_N00020_00020_sensitivity.png](./fig_hypoth_100to025_01to05_004to016_N00020_00020_sensitivity.png)    
-### 18)   19.   1 of   1 ./fig_hypoth_100to025_01to05_004to128_N00020_00200_fdr_actual.png    
-![fig_hypoth_100to025_01to05_004to128_N00020_00200_fdr_actual.png](./fig_hypoth_100to025_01to05_004to128_N00020_00200_fdr_actual.png)    
 ### 19)   20.   1 of   1 ./fig_hypoth_100to025_01to05_004to128_N00020_00200_sensitivity.png    
 ![fig_hypoth_100to025_01to05_004to128_N00020_00200_sensitivity.png](./fig_hypoth_100to025_01to05_004to128_N00020_00200_sensitivity.png)    
 ### 23)   24.   1 of   2 ./fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png    
