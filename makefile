@@ -3,14 +3,26 @@
 # Method index for Hypotheses Simulations
 E = -3
 
-# Max Sig P-values index
+# Max Sig P-values index for hypothese simulations
 P = 0
+
+# Remove associations with less than G genes
+G = 5
 
 lst:
 	grep vim_ makefile
 
+run:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn3
+
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
+
+run_goeas_rand_rmgene:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_all
 
 run_goeas_orig:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn1
@@ -78,9 +90,6 @@ vim_md:
 	README.md \
 	doc/md/README_prep.md \
 	doc/md/README_main.md
-
-run:
-	echo run
 
 getdata:
 	../goatools_suppl/src/bin/get_goids_by_section.py ../goatools_simulation/src/pkggosim

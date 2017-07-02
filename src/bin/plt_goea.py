@@ -8,7 +8,6 @@ import os
 import sys
 import collections as cx
 from pkggosim.common.cli import get_args
-from pkggosim.goea.sim import title
 from pkggosim.goea.run_all_params import RunParams
 from pkggosim.goea.run_all import ExperimentsAll
 from pkggosim.goea.utils import import_genes, import_goids, import_genes_all
@@ -21,9 +20,6 @@ def run(args, ntd):
     randomize_truenull_assc = args.get('randomize_truenull_assc', 'orig')
 
     study_bg = "humoral_rsp"
-    title_cur = title.get(randomize_truenull_assc, 'GOEA Simulations; Humoral Response Genes')
-    print "HHHHHHHHHHHHH", randomize_truenull_assc
-    print "TTTTTTTTTTTTT", title_cur
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
     genes_mus = ensm2nt.keys()  # Population genes
@@ -42,13 +38,18 @@ def run(args, ntd):
         'num_genes_list' : [4, 16, 64, 128],
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
+    objparams = RunParams(params)
+    obj = ExperimentsAll(objparams) # RunParams
+
+    title_cur = objparams.get_title()
+    print "HHHHHHHHHHHHH", randomize_truenull_assc
+    print "TTTTTTTTTTTTT", title_cur
+
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
     pltargs = {'dotsize':ntd.dotsize, 'title':title_cur,
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes'}
-    objparams = RunParams(params)
-    obj = ExperimentsAll(objparams) # RunParams
     obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
     objparams.prt_summary(sys.stdout)
 

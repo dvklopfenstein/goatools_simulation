@@ -22,7 +22,7 @@ class DataAssc(object):
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
         self.objassc_all = RandAssc(self.assc)
-        self._go2genes = self._get_go2genes()
+        self._go2genes = self._init_go2genes()
         # Set by set_targeted
         self.goids_tgtd = None
         self.objassc_pruned = None
@@ -60,10 +60,15 @@ class DataAssc(object):
         prt.write("{N:6,} GO IDs IN ASSOCIATION\n".format(N=len(self._go2genes.keys())))
         prt.write("{N:6,} GENES  IN POPULATION\n".format(N=len(self.pop_genes)))
 
-    def _get_go2genes(self, geneids=None):
+    def _init_go2genes(self, geneids=None):
+        """Return association (gene2gos) as go2genes."""
+        return self.get_go2genes(self.objassc_all.assc_geneid2gos, geneids)
+
+    @staticmethod
+    def get_go2genes(assc, geneids=None):
         """Return association (gene2gos) as go2genes."""
         go2genes = cx.defaultdict(set)
-        for gene, goids in self.objassc_all.assc_geneid2gos.items():
+        for gene, goids in assc.items():
             if geneids is None or gene in geneids:
                 for goid in goids:
                     go2genes[goid].add(gene)

@@ -4,6 +4,8 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import sys
+import re
+import collections as cx
 import timeit
 import datetime
 from pkggosim.goea.objbase import DataBase
@@ -32,9 +34,8 @@ class RunParams(object):
     ])
 
     def __init__(self, params):
-        assert set(params.keys()) == self.expected_params
         self.tic = timeit.default_timer()
-        self.params = params
+        self.params = self._init_params(params)
         self.objrnd = RandomSeed32(params['seed'])
         self.objbase = DataBase(params['alpha'], params['method'])
         self.objassc = DataAssc(
@@ -55,6 +56,44 @@ class RunParams(object):
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         self.objassc.set_targeted(self._init_goids_tgtd())
+
+    def get_assc_rmgenes(self, assc_curr):
+        """Remove GO IDs if they are not associated with many genes and are not in study BG."""
+        gcnt = self.params['assc_rm_if_genecnt']
+        bg_gos = self.params['goids_study_bg']
+        go2genes = self.objassc.get_go2genes(assc_curr)
+        assc_next = cx.defaultdict(set)
+        #### gos_keep = set() # TBD rm
+        for goid, go_genes in go2genes.items():
+            if len(go_genes) > gcnt:
+                for gene in go_genes:
+                    assc_next[gene].add(goid)
+                    #### gos_keep.add(goid)
+            else:
+                for gene in go_genes.intersection(bg_gos):
+                    assc_next[gene].add(goid)
+                    #### gos_keep.add(goid)
+        #### print "GO WAS", len(go2genes)
+        #### print "GO NOW", len(gos_keep)
+        return {g:gos for g, gos in assc_next.items()}
+        
+    def get_title(self):
+        randomize_truenull_assc = self.params['randomize_truenull_assc']
+        if randomize_truenull_assc == 'orig_all'  : return 'Original Associations'
+        if randomize_truenull_assc == 'rand_all'  : return 'All Rand Assc.'
+        pre = randomize_truenull_assc[:4].capitalize()
+        ntn = ""
+        if   'ntn1' in randomize_truenull_assc: ntn = 'Assc: NTN Orig'
+        elif 'ntn2' in randomize_truenull_assc: ntn = 'Assc: NTN Targeted Removed'
+        elif 'ntn3' in randomize_truenull_assc: ntn = 'Assc: NTN Only BG'
+        elif 'ntn1' in randomize_truenull_assc: ntn = 'Assc: NTN Orig'
+        elif 'ntn2' in randomize_truenull_assc: ntn = 'Assc: NTN Targeted Removed'
+        elif 'ntn3' in randomize_truenull_assc: ntn = 'Assc: NTN Only BG'
+        lst = [pre, ntn]
+        if self.params['assc_rm_if_genecnt'] is not None:
+            lst.append("(rm GOs<{N} genes)".format(N=self.params['assc_rm_if_genecnt']))
+        return " ".join(lst)
+        return 'GOEA Simulations'
 
     @staticmethod
     def _chk_genes(params, genes):
@@ -95,6 +134,7 @@ class RunParams(object):
             prt.write("    {KEY:15} {VAL}\n".format(KEY=key, VAL=prms[key]))
         prt.write("\n")
 
+    # --- Initialization --------------------------------------------------------------------------
     def _init_null_bg(self):
         """Initialize null background, the population subset not related to study genes."""
         maskout = self.params['genes_popnullmaskout'].union(self.params['genes_study_bg'])
@@ -134,5 +174,18 @@ class RunParams(object):
         assert goids_signif.intersection(goids_study_bg) == goids_study_bg
         # GO IDs targeted for removal or randomization
         return goids_signif.difference(goids_study_bg)
+
+    def _init_params(self, params_usr):
+        """Add other new parameters based on user-specfications."""
+        assert set(params_usr.keys()) == self.expected_params
+        params_sim = {k:v for k, v in params_usr.items()}
+        # Init assc_rm_if_genecnt based on randomize_truenull_assc
+        params_sim['assc_rm_if_genecnt'] = None
+        randomize_truenull_assc = params_usr['randomize_truenull_assc']
+        if 'rmgene' in randomize_truenull_assc:
+            mtch = re.search(r'rmgene(\d+)', randomize_truenull_assc)
+            if mtch:
+                params_sim['assc_rm_if_genecnt'] = int(mtch.group(1))
+        return params_sim
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
