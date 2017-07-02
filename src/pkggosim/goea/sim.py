@@ -7,7 +7,7 @@ import sys
 from collections import namedtuple, Counter
 from random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.common.true_positive import get_result_desc, calc_ratio
+from pkggosim.common.true_positive import get_tfpn, calc_ratio
 
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
@@ -17,16 +17,26 @@ class GoeaSim(object):
         "sensitivity specificity pos_pred_val neg_pred_val")
 
     def __init__(self, num_study_genes, num_null, pobj, log=sys.stdout):
+        self.pobj = pobj
         iniobj = _Init(num_study_genes, num_null, pobj, log)
         # List of info for each study gene: geneid reject expected_significance tfpn
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
+        if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
+            self.rpt_details()
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
         ctr = Counter([nt.tfpn for nt in self.nts_goea_res]) # Counts of TP TN FP FN
         #pylint: disable=invalid-name, bad-whitespace
+        #              reject ->| False         | True
+        #
+        #                       |Declared       | Declared      |
+        #                       |non-significant| significant   | Total
+        # ----------------------+---------------+---------------+--------
+        # True  null hypotheses | U TN          | V FP (Type I) |   m(0)
+        # False null hypotheses | T FN (Type II)| S TP          | m - m(0)
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         # Significant(Correct) or Type I Error (Not significant)
         tot_sig_y = sum(nt.reject for nt in self.nts_goea_res)
@@ -52,6 +62,18 @@ class GoeaSim(object):
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
             neg_pred_val   = calc_ratio(TN, (TN, FN))) # TN/(TN+FN)
 
+    def rpt_details(self, prt=sys.stdout):
+        """Report each gene's GOEA results."""
+        ntr = self.nt_tfpn
+        prt.write("\n{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
+            N=len(self.nts_goea_res),
+            TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
+            FDR=ntr.fdr_actual))
+        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene}\n"
+        for nti in sorted(self.nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
+            dct = nti._asdict()
+            dct['fp_mrk'] = "X" if nti.tfpn == "FP" else ""
+            prt.write(pat.format(**dct))
 
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
@@ -68,7 +90,7 @@ class _Init(object):
                 study_gene = study_gene,
                 reject     = reject,
                 expsig     = expsig, # False->True Null; True->Non-true null
-                tfpn       = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
+                tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
     def __init__(self, num_study_genes, num_null, pobj, log=None):
