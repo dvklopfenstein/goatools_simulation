@@ -1,6 +1,7 @@
 # Hypotheses Simulation Results
 
 ## Multiple-test methods
+3,600,000 simulations per method were run to create the plots herein:    
   * 0:22:19 [Bonferroni one-step correction](#bonferroni-one-step-correction)
   * 0:25:03 [FDR Benjamini/Hochberg (non-negative)](#fdr-benjaminihochberg-non-negative)
   * 0:26:00 [FDR Benjamini/Yekutieli (negative)](#fdr-benjaminiyekutieli-negative)
