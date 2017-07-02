@@ -13,7 +13,7 @@ lst:
 	grep vim_ makefile
 
 run:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn3
+	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
 
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
@@ -41,7 +41,7 @@ pylint:
 
 vim_sim_geneontology:
 	vim -p \
-	src/bin/plt_goea.py \
+	src/bin/plt_goea_small.py \
 	src/pkggosim/goea/sim.py \
 	src/pkggosim/goea/sims.py \
 	src/pkggosim/goea/experiments.py \
