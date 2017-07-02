@@ -1,4 +1,4 @@
-# Hypotheses Simulations
+# Hypotheses Simulation Results
 
 ## Multiple-test methods
   * [Bonferroni one-step correction](#bonferroni-one-step-correction)
