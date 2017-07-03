@@ -82,7 +82,7 @@ class GoeaSim(object):
             A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
         pat = "{P:1} {G:5,} genes {GO} {DESC}\n"
         for goid in gos_sig_bgy:
-            prt.write(pat.format(P="*", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+            prt.write(pat.format(P="", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
         for goid in gos_sig_bgn:
             prt.write(pat.format(P="X", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
 
