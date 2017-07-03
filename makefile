@@ -13,7 +13,7 @@ lst:
 	grep vim_ makefile
 
 run:
-	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
+	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=orig_ntn3 0xdeadbeef
 
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
@@ -31,17 +31,18 @@ run_goeas_orig:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_all
 
 run_goeas_rand:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_all
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_all
 
 pylint:
 	find src -name \*.py | xargs pylint -r no
 
+# src/bin/plt_goea_small.py 
 vim_sim_geneontology:
 	vim -p \
-	src/bin/plt_goea_small.py \
+	src/bin/plt_goea.py \
 	src/pkggosim/goea/sim.py \
 	src/pkggosim/goea/sims.py \
 	src/pkggosim/goea/experiments.py \
