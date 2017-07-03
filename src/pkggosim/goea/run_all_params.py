@@ -12,6 +12,7 @@ from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
 from goatools.go_enrichment import get_study_items
+from goatools_alpha.gosubdag import GoSubDag
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
@@ -41,7 +42,9 @@ class RunParams(object):
         self.objassc = DataAssc(
             params['association_file'],
             params['genes_population'],
-            params['goids_study_bg'])
+            params['goids_study_bg'],
+            self.objbase.go_dag)
+        self.params['gosubdag'] = GoSubDag(self.objassc.go2genes.keys(), self.objbase.go_dag)
         # These study background genes have associations
         self.genes = {
             "population" : self.objassc.pop_genes,
