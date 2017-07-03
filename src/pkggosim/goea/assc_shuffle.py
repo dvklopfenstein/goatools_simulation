@@ -22,7 +22,7 @@ class RandAssc(object):
         self.goids = None
         self.gocnts = None
         self._init_goidcnts()
-        print "GO({}) CNT({})".format(len(self.goids), len(self.gocnts))
+        sys.stdout.write("GO({}) CNT({})\n".format(len(self.goids), len(self.gocnts)))
 
     def _init_goidcnts(self):
         """Initialize list of all GO IDs and their counts in the association."""
@@ -41,10 +41,9 @@ class RandAssc(object):
     def shuffle_associations_3(self, maskout):
         """Randomly shuffle all associations to mimic a list of genes having no significance."""
         # Create randomly shuffled long list of all GO IDs for random assc.
-        num_gos_tot = sum(self.golens) # 275,168
         shuffle(self.gocnts)
         goctr_rand = list(cx.Counter({go:cnt for go, cnt in zip(self.goids, self.gocnts)}).elements())
-        assert num_gos_tot == len(goctr_rand)
+        assert len(goctr_rand) == sum(self.golens) # 275,168
         shuffle(goctr_rand)
         # Use long list of random GO IDs to create new random assc.
         assc_rand = {}
