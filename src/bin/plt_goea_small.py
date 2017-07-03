@@ -29,6 +29,7 @@ def main(prt=sys.stdout):
     # Gene Ontology Data
     genes_mus = ensm2nt.keys()  # Population genes
     params = {
+        'log' : sys.stdout,
         'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
         'randomize_truenull_assc' : randomize_truenull_assc,
         'seed' : args.get('randomseed', None),

@@ -19,6 +19,7 @@ class RunParams(object):
     """Runs all experiments for all sets of experiments."""
 
     expected_params = set([
+        'log',                   # None sys.stdout
         'seed',                  # randomseed
         'prefix',                # fig_goea_rnd
         'randomize_truenull_assc',

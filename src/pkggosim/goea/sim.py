@@ -16,17 +16,18 @@ class GoeaSim(object):
         "NtMtAll", "num_genes num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
-    def __init__(self, num_study_genes, num_null, pobj, log=sys.stdout):
+    def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj
-        iniobj = _Init(num_study_genes, num_null, pobj, log)
+        iniobj = _Init(num_study_genes, num_null, pobj)
         # List of info for each study gene: geneid reject expected_significance tfpn
         self.assc = iniobj.assc_geneid2gos
         self.goea_results = iniobj.goea_results
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
-        if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
-            self.rpt_details()
+        if pobj.params['log'] is not None:
+            if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
+                self.rpt_details(pobj.params['log'])
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
@@ -122,7 +123,7 @@ class _Init(object):
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
-    def __init__(self, num_study_genes, num_null, pobj, log=None):
+    def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj # RunParams object
         # I. Genes in two groups: Different than population AND no different than population
         self.genes_stu = None  # List of randomly-generated gene lists
@@ -137,6 +138,7 @@ class _Init(object):
         #     print "HHHH", g
         self.genes_sig = get_study_items(self.goea_results)
         num_sig = len(self.genes_sig)
+        log = self.pobj.params['log']
         if log is not None:
             num_exp = num_study-num_null
             mrk = ""
