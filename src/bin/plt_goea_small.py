@@ -38,7 +38,7 @@ def main(prt=sys.stdout):
         'genes_popnullmaskout':import_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         #'perc_nulls' : [100, 75, 50, 25, 0],
-        'perc_nulls' : [50], 
+        'perc_nulls' : [50, 25], 
         #'num_genes_list' : [4, 16, 64, 128],
         'num_genes_list' : [64, 128], 
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
