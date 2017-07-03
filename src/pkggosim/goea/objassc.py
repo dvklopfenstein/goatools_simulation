@@ -15,19 +15,28 @@ class DataAssc(object):
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
     def __init__(self, assc_file, pop_genes, goids_study_bg, godag):
-        assc_geneid2gos = self._init_assc(assc_file, pop_genes, godag)
+        assc_all = self._init_assc(assc_file, pop_genes, godag) # rm obsolete GO IDs
+        assc_geneid2gos = self._prune_assc(assc_all, 1000) # rm GOs with lots of genes
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
         self.pop_genes = set(pop_genes).intersection(set(assc_geneid2gos.keys()))
         self.goids_study_bg = goids_study_bg # 9 GO IDs for humoral response
         # Speed sims: Use the association subset actually in the population
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
+        self.go2genes = self.get_go2genes(self.assc)
         self.objassc_all = RandAssc(self.assc)
-        self.go2genes = self._init_go2genes()
         # Set by set_targeted
         self.goids_tgtd = None
         self.objassc_pruned = None
         self.objassc_tgtd = None
+
+    def _prune_assc(self, assc_geneid2gos, max_genecnt):
+        """Remove GO IDs which are associated with large numbers of genes."""
+        go2genes_orig = self.get_go2genes(assc_geneid2gos)
+        print "GOs WAS", len(go2genes_orig)
+        go2genes_prun = {go:gs for go, gs in go2genes_orig.items() if len(gs) <= max_genecnt}
+        print "GOs NOW", len(go2genes_prun)
+        return self.get_go2genes(go2genes_prun)
 
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
@@ -55,10 +64,6 @@ class DataAssc(object):
             prt.write("EEEEEEEEEEE {A:6,} GOs {B:6.0f}\n".format(A=aval, B=bval))
         # print "CCCCC", sum(1 for c in go_genecnts if c <= 350)
         sys.exit()
-
-    def _init_go2genes(self, geneids=None):
-        """Return association (gene2gos) as go2genes."""
-        return self.get_go2genes(self.objassc_all.assc_geneid2gos, geneids)
 
     @staticmethod
     def get_go2genes(assc, geneids=None):
