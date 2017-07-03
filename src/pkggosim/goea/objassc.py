@@ -3,7 +3,9 @@
 __cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import sys
 import collections as cx
+import numpy as np
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
 
@@ -12,9 +14,8 @@ class DataAssc(object):
 
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, assc_file, pop_genes, goids_study_bg):
-        # Read the association file. Save GOs related to population genes
-        assc_geneid2gos = get_assoc_data(assc_file, pop_genes)
+    def __init__(self, assc_file, pop_genes, goids_study_bg, godag):
+        assc_geneid2gos = self._init_assc(assc_file, pop_genes, godag)
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
         self.pop_genes = set(pop_genes).intersection(set(assc_geneid2gos.keys()))
         self.goids_study_bg = goids_study_bg # 9 GO IDs for humoral response
@@ -22,7 +23,7 @@ class DataAssc(object):
         self.assc_hdr = get_assoc_hdr(assc_file)
         self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
         self.objassc_all = RandAssc(self.assc)
-        self._go2genes = self._init_go2genes()
+        self.go2genes = self._init_go2genes()
         # Set by set_targeted
         self.goids_tgtd = None
         self.objassc_pruned = None
@@ -40,8 +41,20 @@ class DataAssc(object):
         prt.write("\nASSOCIATION INFORMATION:\n    ")
         prt.write("{ASSC}\n\n".format(ASSC="\n    ".join(self.assc_hdr.split("\n"))))
         prt.write("{N:6,} GENES  IN ASSOCIATION\n".format(N=len(self.objassc_all.assc_geneid2gos)))
-        prt.write("{N:6,} GO IDs IN ASSOCIATION\n".format(N=len(self._go2genes.keys())))
+        prt.write("{N:6,} GO IDs IN ASSOCIATION\n".format(N=len(self.go2genes.keys())))
         prt.write("{N:6,} GENES  IN POPULATION\n".format(N=len(self.pop_genes)))
+
+    def prt_go2genes_freq(self, prt=sys.stdout):
+        """Print gene count frequency among GOs in association."""
+        # Of ~17,278 GOs in mouse association for Ensembl genes:
+        #      ~5,200 GOs are assc. w/1 gene
+        #     ~17,200 GOs are assc. w/ <= 350 genes
+        go_genecnts = [len(gs) for gs in self.go2genes.values()]
+        hist, bin_edges = np.histogram(go_genecnts, 20)
+        for aval, bval in zip(hist, bin_edges):
+            prt.write("EEEEEEEEEEE {A:6,} GOs {B:6.0f}\n".format(A=aval, B=bval))
+        # print "CCCCC", sum(1 for c in go_genecnts if c <= 350)
+        sys.exit()
 
     def _init_go2genes(self, geneids=None):
         """Return association (gene2gos) as go2genes."""
@@ -69,5 +82,11 @@ class DataAssc(object):
             else:
                 assc_pruned[geneid] = goids_gene
         return assc_pruned, assc_tgtd
+
+    def _init_assc(self, assc_file, pop_genes, godag):
+        """Read the association file. Save GOs related to population genes that are not obsolete."""
+        assc = get_assoc_data(assc_file, pop_genes) # ~18,600
+        gos_obsolete = set([o.id for o in godag.values() if o.is_obsolete]) # ~2,000
+        return {g:gos.difference(gos_obsolete) for g, gos in assc.items()}
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
