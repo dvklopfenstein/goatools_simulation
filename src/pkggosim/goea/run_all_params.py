@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 import re
 import collections as cx
@@ -45,6 +46,7 @@ class RunParams(object):
             params['goids_study_bg'],
             self.objbase.go_dag)
         self.params['gosubdag'] = GoSubDag(self.objassc.go2genes.keys(), self.objbase.go_dag)
+        # self.params['cwd'] = os.getcwd()
         # These study background genes have associations
         self.genes = {
             "population" : self.objassc.pop_genes,
@@ -79,11 +81,14 @@ class RunParams(object):
         #### print "GO WAS", len(go2genes)
         #### print "GO NOW", len(gos_keep)
         return {g:gos for g, gos in assc_next.items()}
-        
+
     def get_title(self):
+        """Return a title to use in plots based on string in 'randomize_truenull_assc'."""
+        # 'GOEA Simulations'
         randomize_truenull_assc = self.params['randomize_truenull_assc']
-        if randomize_truenull_assc == 'orig_all'  : return 'Original Associations'
-        if randomize_truenull_assc == 'rand_all'  : return 'All Rand Assc.'
+        #pylint: disable=multiple-statements
+        if randomize_truenull_assc == 'orig_all': return 'Original Associations'
+        if randomize_truenull_assc == 'rand_all': return 'All Rand Assc.'
         pre = randomize_truenull_assc[:4].capitalize()
         ntn = ""
         if   'ntn1' in randomize_truenull_assc: ntn = 'Assc: NTN Orig'
@@ -96,7 +101,6 @@ class RunParams(object):
         if self.params['assc_rm_if_genecnt'] is not None:
             lst.append("(rm GOs<{N} genes)".format(N=self.params['assc_rm_if_genecnt']))
         return " ".join(lst)
-        return 'GOEA Simulations'
 
     @staticmethod
     def _chk_genes(params, genes):
