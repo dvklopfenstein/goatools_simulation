@@ -69,10 +69,12 @@ class GoeaSim(object):
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
-        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene}\n"
+        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene} {BG:1}\n"
+        genes_bg = self.pobj.params['genes_study_bg']
         for nti in sorted(self.nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
             dct = nti._asdict()
             dct['fp_mrk'] = "X" if nti.tfpn == "FP" else ""
+            dct['BG'] = "*" if nti.study_gene in genes_bg else ""
             prt.write(pat.format(**dct))
 
 class _Init(object):
