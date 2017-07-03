@@ -69,29 +69,34 @@ class GoeaSim(object):
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
-        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene} {BG:1}\n"
+        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene} {BG:1} {num_gos:3} {assc_gos:3}\n"
         genes_bg = self.pobj.params['genes_study_bg']
+        assc = self.pobj.objassc.objassc_all.assc_geneid2gos
         for nti in sorted(self.nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
             dct = nti._asdict()
             dct['fp_mrk'] = "X" if nti.tfpn == "FP" else ""
             dct['BG'] = "*" if nti.study_gene in genes_bg else ""
+            dct['assc_gos'] = len(assc[nti.study_gene])
             prt.write(pat.format(**dct))
 
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
 
-    ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig tfpn")
+    ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs num_gos tfpn")
 
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
         for study_gene, expsig in zip(self.genes_stu, self.expsig):
             reject = study_gene in self.genes_sig
+            goids = self.assc_geneid2gos[study_gene]
             #pylint: disable=bad-whitespace
             goeasim_results.append(self.ntobj(
                 study_gene = study_gene,
                 reject     = reject,
                 expsig     = expsig, # False->True Null; True->Non-true null
+                GOs        = goids,
+                num_gos    = len(goids),
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
@@ -104,6 +109,7 @@ class _Init(object):
         num_study = len(self.genes_stu)
         assert num_study == num_study_genes, "{} {}".format(num_study, num_study_genes)
         assert num_study_genes - sum(self.expsig) == num_null
+        self.assc_geneid2gos = self._init_assc()
         goea_results = self._init_goea_results()
         # for g in goea_results:
         #     print "HHHH", g
@@ -118,12 +124,14 @@ class _Init(object):
             log.write(txt.format(STU=num_study, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
     def _init_goea_results(self):
-        """Run Gene Ontology Analysis."""
+        """Run GOEA."""
+        objgoea = self.pobj.objbase.get_goeaobj(self.pobj.genes['population'], self.assc_geneid2gos)
         attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
-        # genes_pop_masked = self.pobj.genes['null_bg'].union(self.genes_stu)
-        pop_genes = self.pobj.genes['population']
-        # Randomize ALL True Null associations: Results in Extremely significant P-values
+        return objgoea.run_study(self.genes_stu, keep_if=keep_if)
+
+    def _init_assc(self):
+        """Run Gene Ontology Analysis."""
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
         assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
 
@@ -141,9 +149,8 @@ class _Init(object):
 
         if randomize_truenull_assc[-4:-1] == "ntn" and randomize_truenull_assc[-1].isdigit():
             assc = self._fill_assc_ntn(assc, randomize_truenull_assc)
+        return assc
 
-        objgoea = self.pobj.objbase.get_goeaobj(pop_genes, assc)
-        return objgoea.run_study(self.genes_stu, keep_if=keep_if)
 
     def _fill_assc_ntn(self, assc_bg, randomize_truenull_assc):
         """Return one of many flavors of randomly shuffled associations."""
