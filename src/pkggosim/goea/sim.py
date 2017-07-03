@@ -20,11 +20,13 @@ class GoeaSim(object):
         self.pobj = pobj
         iniobj = _Init(num_study_genes, num_null, pobj, log)
         # List of info for each study gene: geneid reject expected_significance tfpn
+        self.assc = iniobj.assc_geneid2gos
+        self.goea_results = iniobj.goea_results
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
-        if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
-            self.rpt_details()
+        #if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
+        #    self.rpt_details()
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
@@ -64,8 +66,22 @@ class GoeaSim(object):
 
     def rpt_details(self, prt=sys.stdout):
         """Report each gene's GOEA results."""
+        # GO IDs
+        go2genes = self.pobj.objassc.get_go2genes(self.assc)
+        gos_bg = self.pobj.params['goids_study_bg']
+        gos_sig_all = set([r.GO for r in self.goea_results])
+        gos_sig_bgy = gos_sig_all.intersection(gos_bg)
+        gos_sig_bgn = gos_sig_all.difference(gos_bg)
+        go2nt = self.pobj.params['gosubdag'].get_go2nt(gos_sig_all)
+        prt.write("\n{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
+            A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
+        for goid in gos_sig_bgy:
+            prt.write("  {G:5,} genes {GO} {DESC}\n".format(GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+        for goid in gos_sig_bgn:
+            prt.write("* {G:5,} genes {GO} {DESC}\n".format(GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+        # Genes
         ntr = self.nt_tfpn
-        prt.write("\n{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
+        prt.write("{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
@@ -110,10 +126,10 @@ class _Init(object):
         assert num_study == num_study_genes, "{} {}".format(num_study, num_study_genes)
         assert num_study_genes - sum(self.expsig) == num_null
         self.assc_geneid2gos = self._init_assc()
-        goea_results = self._init_goea_results()
-        # for g in goea_results:
+        self.goea_results = self._init_goea_results()
+        # for g in self.goea_results:
         #     print "HHHH", g
-        self.genes_sig = get_study_items(goea_results)
+        self.genes_sig = get_study_items(self.goea_results)
         num_sig = len(self.genes_sig)
         if log is not None:
             num_exp = num_study-num_null
@@ -134,10 +150,12 @@ class _Init(object):
         """Run Gene Ontology Analysis."""
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
         assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
+        # print "AAAAAAAAAAAAAAAAAAAAAAAAA", randomize_truenull_assc
 
         if randomize_truenull_assc[:4] == "rand_tgtd":
             assc = self._get_assc_rndtgtd()
-        elif randomize_truenull_assc[:4] == "rand_":
+        elif randomize_truenull_assc[:5] == "rand_":
+            # print "RRRRRRRRRRRRRRRRRRRRRRRRR", 
             assc = self.pobj.objassc.objassc_all.get_shuffled_associations()
         elif randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
