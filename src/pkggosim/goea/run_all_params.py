@@ -3,7 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-import os
+# import os
 import sys
 import re
 import collections as cx
@@ -134,6 +134,7 @@ class RunParams(object):
         prt.write("{N:6,} study genes in assc.\n".format(N=len(self.genes['study_bg'])))
         prt.write("{N:6,} population genes - study buffer\n".format(N=len(self.genes['null_bg'])))
         prt.write("\n")
+        prt.write("TITLE: {T}\n".format(T=self.get_title()))
         prt.write("SIMULATION PARAMETERS:\n")
         keys = ['randomize_truenull_assc', 'perc_nulls',
                 'num_genes_list', 'num_experiments', 'num_sims']
