@@ -12,8 +12,9 @@ G = 5
 lst:
 	grep vim_ makefile
 
+# make run E=-1
 run:
-	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=orig_ntn3 0xdeadbeef
+	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
 
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
