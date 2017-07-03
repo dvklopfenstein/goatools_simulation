@@ -60,7 +60,8 @@ def main(prt=sys.stdout):
     pltargs = {'dotsize':ntd.dotsize, 'title':title_cur,
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes',
-               'ylim':{'fdr_actual':[-0.005, 0.50]}}
+               #'ylim':{'fdr_actual':[-0.005, 0.50]}
+              }
     obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
     objparams.prt_summary(sys.stdout)
 
