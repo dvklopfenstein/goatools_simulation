@@ -18,8 +18,10 @@ REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 def main(prt=sys.stdout):
     """Simulate Gene Ontology Enrichment Analyses."""
     args = get_args()
+    #pylint: disable=no-member
     nto = cx.namedtuple("NtRunParams", "num_experiments num_sims dotsize")
-    ntd = nto._make([1, 2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]) # 0:01 0:02
+    #ntd = nto._make([1, 2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]) # 0:01
+    ntd = nto._make([4, 4, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}])
     randomize_truenull_assc = args.get('randomize_truenull_assc', 'orig')
 
     study_bg = "humoral_rsp"
@@ -37,10 +39,12 @@ def main(prt=sys.stdout):
         'goids_study_bg':import_goids(study_bg),
         'genes_popnullmaskout':import_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
-        #'perc_nulls' : [100, 75, 50, 25, 0],
-        'perc_nulls' : [50, 25], 
-        #'num_genes_list' : [4, 16, 64, 128],
-        'num_genes_list' : [64, 128], 
+
+        'perc_nulls' : [100, 75, 50, 25, 0],
+        #'perc_nulls' : [25],
+        'num_genes_list' : [4, 16, 64, 128],
+        #'num_genes_list' : [128],
+
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     objparams = RunParams(params)
