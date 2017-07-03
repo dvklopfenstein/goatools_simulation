@@ -8,35 +8,56 @@ import collections as cx
 import numpy as np
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
+from goatools_alpha.gosubdag import GoSubDag
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
 
     ntdesc = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, assc_file, pop_genes, goids_study_bg, godag):
-        assc_all = self._init_assc(assc_file, pop_genes, godag) # rm obsolete GO IDs
-        assc_geneid2gos = self._prune_assc(assc_all, 1000) # rm GOs with lots of genes
+    def __init__(self, params, godag):
+        # Associations: rm obsolete GO IDs
+        _assc_file = params['association_file']
+        _pop_genes = params['genes_population']
+        _assc_geneid2gos = self._init_assc(_assc_file, _pop_genes, godag)
+        # Associations: rm GOs with lots of genes
+        _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
-        self.pop_genes = set(pop_genes).intersection(set(assc_geneid2gos.keys()))
-        self.goids_study_bg = goids_study_bg # 9 GO IDs for humoral response
+        self.pop_genes = set(_pop_genes).intersection(set(_assc_geneid2gos.keys()))
         # Speed sims: Use the association subset actually in the population
-        self.assc_hdr = get_assoc_hdr(assc_file)
-        self.assc = {g:gos for g, gos in assc_geneid2gos.items() if g in self.pop_genes}
-        self.go2genes = self.get_go2genes(self.assc)
-        self.objassc_all = RandAssc(self.assc)
+        self.assc_hdr = get_assoc_hdr(_assc_file)
+        _assc_all = {g:gos for g, gos in _assc_geneid2gos.items() if g in self.pop_genes}
+        self.go2genes = self.get_go2genes(_assc_all)
+        self.objassc_all = RandAssc(_assc_all)
         # Set by set_targeted
         self.goids_tgtd = None
         self.objassc_pruned = None
         self.objassc_tgtd = None
 
-    def _prune_assc(self, assc_geneid2gos, max_genecnt):
+    def _prune_assc(self, assc_geneid2gos, max_genecnt, godag, prt=sys.stdout):
         """Remove GO IDs which are associated with large numbers of genes."""
         go2genes_orig = self.get_go2genes(assc_geneid2gos)
-        print "GOs WAS", len(go2genes_orig)
         go2genes_prun = {go:gs for go, gs in go2genes_orig.items() if len(gs) <= max_genecnt}
-        print "GOs NOW", len(go2genes_prun)
+        num_was = len(go2genes_orig)
+        num_now = len(go2genes_prun)
+        gos_rm = set(go2genes_orig.keys()).difference(set(go2genes_prun.keys()))
+        assert num_was-num_now == len(gos_rm)
+        prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
+            N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
+        self.prt_goids_assc(gos_rm, godag, go2genes_orig, "    ", prt)
         return self.get_go2genes(go2genes_prun)
+
+    @staticmethod
+    def prt_goids_assc(goids, go2obj, go2genes, pre="", prt=sys.stdout):
+        """Print GO terms and the number of genes associated with the GO ID."""
+        gosubdag = GoSubDag(goids, go2obj)
+        go2nt = gosubdag.get_go2nt(goids)
+        pat = "{PRE}{G:5,} genes {DESC}\n"
+        pat_go = gosubdag.get_prt_fmt()
+        sortby = gosubdag.get_sortby()
+        for goid, ntgo in sorted(go2nt.items(), key=lambda t: sortby(t[1])):
+            go_desc = pat_go.format(**ntgo._asdict())
+            prt.write(pat.format(PRE=pre, G=len(go2genes[goid]), DESC=go_desc))
 
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
@@ -88,7 +109,8 @@ class DataAssc(object):
                 assc_pruned[geneid] = goids_gene
         return assc_pruned, assc_tgtd
 
-    def _init_assc(self, assc_file, pop_genes, godag):
+    @staticmethod
+    def _init_assc(assc_file, pop_genes, godag):
         """Read the association file. Save GOs related to population genes that are not obsolete."""
         assc = get_assoc_data(assc_file, pop_genes) # ~18,600
         gos_obsolete = set([o.id for o in godag.values() if o.is_obsolete]) # ~2,000

@@ -40,11 +40,7 @@ class RunParams(object):
         self.params = self._init_params(params)
         self.objrnd = RandomSeed32(params['seed'])
         self.objbase = DataBase(params['alpha'], params['method'])
-        self.objassc = DataAssc(
-            params['association_file'],
-            params['genes_population'],
-            params['goids_study_bg'],
-            self.objbase.go_dag)
+        self.objassc = DataAssc(params, self.objbase.go_dag)
         self.params['gosubdag'] = GoSubDag(self.objassc.go2genes.keys(), self.objbase.go_dag)
         # self.params['cwd'] = os.getcwd()
         # These study background genes have associations
@@ -55,6 +51,7 @@ class RunParams(object):
         self.gene_lists = {
             "study_bg" : list(self.genes['study_bg']),
             "null_bg" : list(self.genes['null_bg'])}
+        self.params['gosubdag_bg'] = GoSubDag(params["goids_study_bg"], self.objbase.go_dag)
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
         # self.assc_pruned = self._init_goids_tgtd()
@@ -113,7 +110,7 @@ class RunParams(object):
     def get_objgoea(self, study_genes):
         """Return population genes, including study genes. But minus closely related genes."""
         genes_pop_masked = self.genes['null_bg'].union(study_genes)
-        return self.objbase.get_goeaobj(genes_pop_masked, self.objassc.assc)
+        return self.objbase.get_goeaobj(genes_pop_masked, self.objassc.objassc_all.assc_geneid2gos)
 
     def prt_summary(self, prt):
         """Print summary of simulation parameters and background data."""
@@ -171,7 +168,8 @@ class RunParams(object):
         # Run Gene Ontology Analysis w/study genes being entire study gene background.
         attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.objbase.alpha
-        objgoea = self.objbase.get_goeaobj(self.genes['population'], self.objassc.assc)
+        assc_all = self.objassc.objassc_all.assc_geneid2gos
+        objgoea = self.objbase.get_goeaobj(self.genes['population'], assc_all)
         goea_results = objgoea.run_study(self.genes['study_bg'], keep_if=keep_if)
         # Check study background genes
         genes_signif = get_study_items(goea_results)

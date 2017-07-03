@@ -77,14 +77,11 @@ class GoeaSim(object):
         gos_sig_all = set([r.GO for r in self.goea_results])
         gos_sig_bgy = gos_sig_all.intersection(gos_bg)
         gos_sig_bgn = gos_sig_all.difference(gos_bg)
-        go2nt = self.pobj.params['gosubdag'].get_go2nt(gos_sig_all)
         prt.write("{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
             A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
-        pat = "{P:1} {G:5,} genes {GO} {DESC}\n"
-        for goid in gos_sig_bgy:
-            prt.write(pat.format(P="", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
-        for goid in gos_sig_bgn:
-            prt.write(pat.format(P="X", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+        go2obj = self.pobj.params['gosubdag'].go2obj
+        self.pobj.objassc.prt_goids_assc(gos_sig_bgy, go2obj, go2genes, "", prt)
+        self.pobj.objassc.prt_goids_assc(gos_sig_bgn, go2obj, go2genes, "X", prt)
 
     def rpt_details_genes(self, prt):
         """Report genes found in GOEA results."""
@@ -200,7 +197,7 @@ class _Init(object):
                 assc_bg[gene] = assc_all_orig[gene].difference(goids_tgtd)
             return assc_bg
         elif randomize_truenull_assc[-4:] == "ntn3":
-            goids_study_bg = self.pobj.objassc.goids_study_bg
+            goids_study_bg = self.pobj.params['goids_study_bg']
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene].intersection(goids_study_bg)
             return assc_bg
