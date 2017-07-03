@@ -26,9 +26,9 @@ run_goeas_rand_rmgene:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_all
 
 run_goeas_orig:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn1
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_all
 
 run_goeas_rand:
