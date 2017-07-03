@@ -25,8 +25,8 @@ class GoeaSim(object):
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn = self.get_nt_tfpn()
-        #if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
-        #    self.rpt_details()
+        if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
+            self.rpt_details()
 
     def get_nt_tfpn(self):
         """Calculate various statistical quantities of interest, including simulated FDR."""
@@ -65,27 +65,36 @@ class GoeaSim(object):
             neg_pred_val   = calc_ratio(TN, (TN, FN))) # TN/(TN+FN)
 
     def rpt_details(self, prt=sys.stdout):
-        """Report each gene's GOEA results."""
-        # GO IDs
+        """Report genes and GO IDs found in GOEA results."""
+        prt.write("\n")
+        self.rpt_details_goids(prt)
+        self.rpt_details_genes(prt)
+
+    def rpt_details_goids(self, prt):
+        """Report GO IDs found in GOEA results."""
         go2genes = self.pobj.objassc.get_go2genes(self.assc)
         gos_bg = self.pobj.params['goids_study_bg']
         gos_sig_all = set([r.GO for r in self.goea_results])
         gos_sig_bgy = gos_sig_all.intersection(gos_bg)
         gos_sig_bgn = gos_sig_all.difference(gos_bg)
         go2nt = self.pobj.params['gosubdag'].get_go2nt(gos_sig_all)
-        prt.write("\n{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
+        prt.write("{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
             A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
+        pat = "{P:1} {G:5,} genes {GO} {DESC}\n"
         for goid in gos_sig_bgy:
-            prt.write("  {G:5,} genes {GO} {DESC}\n".format(GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+            prt.write(pat.format(P="*", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
         for goid in gos_sig_bgn:
-            prt.write("* {G:5,} genes {GO} {DESC}\n".format(GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
-        # Genes
+            prt.write(pat.format(P="X", GO=goid, G=len(go2genes[goid]), DESC=go2nt[goid]))
+
+    def rpt_details_genes(self, prt):
+        """Report genes found in GOEA results."""
         ntr = self.nt_tfpn
         prt.write("{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
-        pat = "{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) {study_gene} {BG:1} {num_gos:3} {assc_gos:3}\n"
+        pat = ("{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) "
+               "{study_gene} {BG:1} {num_gos:3} {assc_gos:3}\n")
         genes_bg = self.pobj.params['genes_study_bg']
         assc = self.pobj.objassc.objassc_all.assc_geneid2gos
         for nti in sorted(self.nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
@@ -155,7 +164,7 @@ class _Init(object):
         if randomize_truenull_assc[:4] == "rand_tgtd":
             assc = self._get_assc_rndtgtd()
         elif randomize_truenull_assc[:5] == "rand_":
-            # print "RRRRRRRRRRRRRRRRRRRRRRRRR", 
+            # print "RRRRRRRRRRRRRRRRRRRRRRRRR",
             assc = self.pobj.objassc.objassc_all.get_shuffled_associations()
         elif randomize_truenull_assc == "rm_tgtd":
             assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
