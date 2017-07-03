@@ -12,7 +12,7 @@ class DataBase(object):
     def __init__(self, alpha, method):
         self.alpha = alpha
         self.method = method
-        self.go_dag = get_godag() # GODag
+        self.go_dag = get_godag() # GODag go-basic.obo: fmt(1.2) rel(2017-06-30) 48,928 GO Terms
 
     def get_goeaobj(self, pop_genes, assoc_geneid2gos):
         """Return a GOEnrichmentStudy specific for user-provided pop_genes and associations."""
