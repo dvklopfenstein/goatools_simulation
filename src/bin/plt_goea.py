@@ -15,7 +15,7 @@ from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def run(args, ntd):
+def run(args, ntd, prt=sys.stdout):
     """Simulate Gene Ontology Enrichment Analyses."""
     randomize_truenull_assc = args.get('randomize_truenull_assc', 'orig')
 
@@ -42,8 +42,9 @@ def run(args, ntd):
     obj = ExperimentsAll(objparams) # RunParams
 
     title_cur = objparams.get_title()
-    print "HHHHHHHHHHHHH", randomize_truenull_assc
-    print "TTTTTTTTTTTTT", title_cur
+    prt.write("Title: {S}\n".format(S=title_cur))
+    prt.write("randomize_truenull_assc: {S}\n".format(S=randomize_truenull_assc))
+    prt.write("{NT}".format(NT=ntd))
 
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
@@ -69,7 +70,6 @@ def main():
         nto._make([  2,    2, {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}]), # 0:01 0:02
     ]
     ntd = experiment_cnts[args['idx_experiment_cnts']]
-    print "NTD", ntd
     run(args, ntd)
 
 if __name__:
