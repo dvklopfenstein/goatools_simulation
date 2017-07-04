@@ -19,6 +19,7 @@ with **alpha=0.05**.
 ## Simulation results
 
 ### Table of Contents
+  * [**Figures for all multiple-test corrections**](README_figs_goea.md)    
   * [**Abstract**](#abstract)
   * [**Introduction**](#introduction)
   * [**Methods**](#methods)
