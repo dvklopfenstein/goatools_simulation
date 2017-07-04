@@ -19,11 +19,18 @@ run:
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
 
-run_goeas_rand_rmgene:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_rmgene$(G)_all
+run_goeas_orig_enriched:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_all
+
+run_goeas_rand_enriched:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_enriched_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_enriched_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_enriched_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_enriched_noprune_all
+
 
 run_goeas_orig:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn3
@@ -36,6 +43,19 @@ run_goeas_rand:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn1
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_all
+
+
+run_goeas_orig_noprune:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_all
+
+run_goeas_rand_noprune:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_all
 
 pylint:
 	find src -name \*.py | xargs pylint -r no
