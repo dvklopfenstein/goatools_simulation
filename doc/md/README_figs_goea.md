@@ -1,8 +1,12 @@
 # GOEA Simulations
 
 ## Table of Contents
+* Association 
+* Randomized Association
 * [Association w/30 GOs removed](#association-w30-gos-removed)
 * [Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
+* Association, enriched GOs only 
+* Randomized Association, enriched GOs only
 
 ## Association w/30 GOs removed
 ![fig_goea_orig_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
