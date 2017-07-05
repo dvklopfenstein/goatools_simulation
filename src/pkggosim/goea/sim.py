@@ -81,8 +81,19 @@ class GoeaSim(object):
         prt.write("{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
             A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
         go2obj = self.pobj.params['gosubdag'].go2obj
-        self.pobj.objassc.prt_goids_assc(gos_sig_bgy, go2obj, go2genes, "", prt)
-        self.pobj.objassc.prt_goids_assc(gos_sig_bgn, go2obj, go2genes, "X", prt)
+
+        go2res = {r.GO:r for r in self.goea_results}
+        pat = "{PRE:1} {EP} {PVAL:8.2e} {DESC}\n"
+        attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
+
+        for goid, desc in self.pobj.objassc.get_go2desc(gos_sig_bgy, go2obj, go2genes).items():
+            res = go2res[goid]
+            prt.write(pat.format(PRE="", EP=res.enrichment, PVAL=getattr(res, attrname), DESC=desc))
+
+        for goid, desc in self.pobj.objassc.get_go2desc(gos_sig_bgn, go2obj, go2genes).items():
+            res = go2res[goid]
+            prt.write(pat.format(PRE="X", EP=res.enrichment, PVAL=getattr(res, attrname), DESC=desc))
+
 
     def rpt_details_genes(self, prt):
         """Report genes found in GOEA results."""
@@ -105,11 +116,13 @@ class GoeaSim(object):
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
 
+    #ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs go2epval num_gos tfpn")
     ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs num_gos tfpn")
 
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
+        # attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         for study_gene, expsig in zip(self.genes_stu, self.expsig):
             reject = study_gene in self.genes_sig
             goids = self.assc_geneid2gos[study_gene]
@@ -119,6 +132,7 @@ class _Init(object):
                 reject     = reject,
                 expsig     = expsig, # False->True Null; True->Non-true null
                 GOs        = goids,
+                #go2epval   = {r.GO:(r.enrichment, getattr(r, attrname)) for r in self.goea_results},
                 num_gos    = len(goids),
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
@@ -152,7 +166,10 @@ class _Init(object):
         objgoea = self.pobj.objbase.get_goeaobj(self.pobj.genes['population'], self.assc_geneid2gos)
         attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
-        return objgoea.run_study(self.genes_stu, keep_if=keep_if)
+        goea_results = objgoea.run_study(self.genes_stu, keep_if=keep_if)
+        if self.pobj.params['enriched_only']:
+            goea_results = [r for r in goea_results if r.enrichment == 'e']
+        return goea_results
 
     def _init_assc(self):
         """Run Gene Ontology Analysis."""

@@ -184,11 +184,14 @@ class RunParams(object):
 
     def _init_params(self, params_usr):
         """Add other new parameters based on user-specfications."""
+        randomize_truenull_assc = params_usr['randomize_truenull_assc']
         assert set(params_usr.keys()) == self.expected_params
         params_sim = {k:v for k, v in params_usr.items()}
+        # Init enriched_only 
+        params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
+        print "ENRICHED", params_sim['enriched_only']
         # Init assc_rm_if_genecnt based on randomize_truenull_assc
         params_sim['assc_rm_if_genecnt'] = None
-        randomize_truenull_assc = params_usr['randomize_truenull_assc']
         if 'rmgene' in randomize_truenull_assc:
             mtch = re.search(r'rmgene(\d+)', randomize_truenull_assc)
             if mtch:
