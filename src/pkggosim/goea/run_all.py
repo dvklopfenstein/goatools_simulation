@@ -8,7 +8,6 @@ import sys
 import collections as cx
 import numpy as np
 from pkggosim.goea.experiments import ExperimentSet
-#### from pkggosim.goea.plot_results import plt_box_all
 from pkggosim.goea.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
@@ -103,11 +102,6 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-####     def plt_box_all(self, fout_img, attrname, **kws):
-####         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-####         key2exps = self._get_key2expsets('perc_null')
-####         plt_box_all(fout_img, key2exps, attrname, **kws)
-
     def plt_box_tiled(self, fout_img, plt_items, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
@@ -123,7 +117,7 @@ class ExperimentsAll(object):
             prt.write("\n{ATTR} statistics:\n".format(ATTR=attrname))
             objstat = StatsDescribe("exps", "{:10.2f}" if attrname[:3] == "num" else "{:6.4f}")
             objstat.prt_hdr(prt, hdrexps)
-            for experiment_set in self.expsets:
+            for experiment_set in self.expsets: # ExperimentSet
                 expname = experiment_set.get_desc(namefmt)
                 means = experiment_set.get_means(attrname)
                 objstat.prt_data(expname, means, prt)
