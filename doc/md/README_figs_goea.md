@@ -14,24 +14,34 @@ Shows GOEA simulation results using:
 
 ## Original Association, enriched GOs only 
 ![fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Original Association, enriched GOs only 
 ![fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Original Association, enriched GOs only 
 ![fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ## Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ## Association w/30 GOs removed
 ![fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
+### Association w/30 GOs removed
 ![fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
+### Association w/30 GOs removed
 ![fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
 ## Randomized Association w/30 GOs removed
 ![fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
+### Randomized Association w/30 GOs removed
 ![fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
+### Randomized Association w/30 GOs removed
 ![fig_goea_rand_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
+### Randomized Association w/30 GOs removed
 ![fig_goea_rand_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
 Copyright (C) 2016-2017. DV Klopfenstein, Haibao Tang. All rights reserved.
