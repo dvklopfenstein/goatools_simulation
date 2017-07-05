@@ -23,7 +23,6 @@ run_goeas_orig_enriched:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn3
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_enriched_noprune_all
 
 run_goeas_rand_enriched:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_enriched_noprune_ntn3
@@ -36,7 +35,6 @@ run_goeas_orig:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn3
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_all
 
 run_goeas_rand:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_ntn3
