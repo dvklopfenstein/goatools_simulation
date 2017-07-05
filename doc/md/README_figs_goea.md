@@ -1,7 +1,7 @@
 # GOEA Simulations
 Shows GOEA simulation results using: 
   * Original/Randomized associations    
-  * Original/Randomized associations w/~30 GO IDs removed    
+  * Original/Randomized associations w/[~30 GO IDs removedi](#go-terms-removed)    
   * Original/Randomized associations. Use only enriched results    
 
 ## Table of Contents
@@ -10,7 +10,7 @@ Shows GOEA simulation results using:
 * Association is Original or Randomized; enriched GOs (not purified) only are used for calculations
   * [Original Association, enriched GOs only](#original-association-enriched-gos-only)
   * [Randomized Association, enriched GOs only](#randomized-association-enriched-gos-only)
-* Association is Original or Randomized minus any GOs associated with more than 1000 genes
+* Association is Original or Randomized minus any [GOs associated with more than 1000 genes](#go-terms-removed)
   * [Original Association w/30 GOs removed](#association-w30-gos-removed)
   * [Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
 
