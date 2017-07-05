@@ -21,7 +21,11 @@ class DataAssc(object):
         _pop_genes = params['genes_population']
         _assc_geneid2gos = self._init_assc(_assc_file, _pop_genes, godag)
         # Associations: rm GOs with lots of genes
-        _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
+        if 'noprune' not in params['randomize_truenull_assc']:
+            _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
+            print "PRUNE"
+        else:
+            print "NO PRUNE"
         # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
         self.pop_genes = set(_pop_genes).intersection(set(_assc_geneid2gos.keys()))
         # Speed sims: Use the association subset actually in the population
@@ -47,17 +51,26 @@ class DataAssc(object):
         self.prt_goids_assc(gos_rm, godag, go2genes_orig, "    ", prt)
         return self.get_go2genes(go2genes_prun)
 
-    @staticmethod
-    def prt_goids_assc(goids, go2obj, go2genes, pre="", prt=sys.stdout):
+    def prt_goids_assc(self, goids, go2obj, go2genes, pre="", prt=sys.stdout):
         """Print GO terms and the number of genes associated with the GO ID."""
+        go2desc = self.get_go2desc(goids, go2obj, go2genes)
+        pat = "{PRE}{DESC}\n"
+        for goid, desc in go2desc.items():
+            prt.write(pat.format(PRE=pre, DESC=desc))
+
+    @staticmethod
+    def get_go2desc(goids, go2obj, go2genes):
+        """Print GO terms and the number of genes associated with the GO ID."""
+        go_desc = []
         gosubdag = GoSubDag(goids, go2obj)
         go2nt = gosubdag.get_go2nt(goids)
-        pat = "{PRE}{G:5,} genes {DESC}\n"
+        pat = "{G:5,} genes {DESC}"
         pat_go = gosubdag.get_prt_fmt()
         sortby = gosubdag.get_sortby()
         for goid, ntgo in sorted(go2nt.items(), key=lambda t: sortby(t[1])):
-            go_desc = pat_go.format(**ntgo._asdict())
-            prt.write(pat.format(PRE=pre, G=len(go2genes[goid]), DESC=go_desc))
+            desc = pat_go.format(**ntgo._asdict())
+            go_desc.append((goid, pat.format(G=len(go2genes[goid]), DESC=desc)))
+        return cx.OrderedDict(go_desc)
 
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
