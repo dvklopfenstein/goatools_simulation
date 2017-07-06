@@ -5,20 +5,20 @@ Shows GOEA simulation results using:
   * Original/Randomized associations. Use only enriched results    
 
 ## Table of Contents
-* [Original Association](#original-association)
-* Randomized Association
+* [1a) Original Association](#original-association)
+* 1b) Randomized Association
 * Association is Original or Randomized; enriched GOs (not purified) only are used for calculations
-  * [Original Association, enriched GOs only](#original-association-enriched-gos-only)
-  * [Randomized Association, enriched GOs only](#randomized-association-enriched-gos-only)
+  * [2a) Original Association, enriched GOs only](#original-association-enriched-gos-only)
+  * [2b) Randomized Association, enriched GOs only](#randomized-association-enriched-gos-only)
 * Association is Original or Randomized minus any [GOs associated with more than 1000 genes](#go-terms-removed)
-  * [Original Association w/30 GOs removed](#association-w30-gos-removed)
-  * [Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
+  * [3a) Original Association w/30 GOs removed](#association-w30-gos-removed)
+  * [3b) Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
 
-## Original Association
+## 1a) Original Association
 ![fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ![fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-## Original Association, enriched GOs only 
+## 2a) Original Association, enriched GOs only 
 Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms are removed.    
 'Non-True Null' gene associations are the untouched original gene associations with GO terms    
 ![fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
@@ -27,7 +27,7 @@ Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms 
 ### Original Association, enriched GOs only 
 ![fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-## Randomized Association, enriched GOs only
+## 2b) Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
@@ -36,14 +36,14 @@ Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms 
 ### Randomized Association, enriched GOs only
 ![fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-## Association w/30 GOs removed
+## 3a) Association w/30 GOs removed
 ![fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Association w/30 GOs removed
 ![fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Association w/30 GOs removed
 ![fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
-## Randomized Association w/30 GOs removed
+## 3b) Randomized Association w/30 GOs removed
 ![fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Randomized Association w/30 GOs removed
 ![fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
