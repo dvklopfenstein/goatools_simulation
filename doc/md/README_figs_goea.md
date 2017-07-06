@@ -14,7 +14,13 @@ Shows GOEA simulation results using:
   * [Original Association w/30 GOs removed](#association-w30-gos-removed)
   * [Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
 
+## Original Association
+![fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
 ## Original Association, enriched GOs only 
+Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms are removed.    
+'Non-True Null' gene associations are the untouched original gene associations with GO terms    
 ![fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Original Association, enriched GOs only 
 ![fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
