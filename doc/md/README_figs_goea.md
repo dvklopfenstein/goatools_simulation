@@ -5,7 +5,7 @@ Shows GOEA simulation results using:
   * Original/Randomized associations. Use only enriched results    
 
 ## Table of Contents
-* Original Association 
+* [Original Association](#original-association)
 * Randomized Association
 * Association is Original or Randomized; enriched GOs (not purified) only are used for calculations
   * [Original Association, enriched GOs only](#original-association-enriched-gos-only)
