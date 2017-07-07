@@ -32,15 +32,15 @@ run_goeas_rand_enriched:
 
 
 run_goeas_orig:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_prune_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_prune_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_prune_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn1
 
 run_goeas_rand:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_prune_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_prune_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_prune_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_prune_all
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn1
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_all
 
 
 run_goeas_orig_noprune:

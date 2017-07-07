@@ -21,7 +21,7 @@ class DataAssc(object):
         _pop_genes = params['genes_population']
         _assc_geneid2gos = self._init_assc(_assc_file, _pop_genes, godag)
         # Associations: rm GOs with lots of genes
-        if 'noprune' not in params['randomize_truenull_assc']:
+        if '_pruned_' in params['randomize_truenull_assc']:
             _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
             print "PRUNE"
         else:
