@@ -21,36 +21,36 @@ Shows GOEA simulation results using:
 ## 2a) Original Association, enriched GOs only 
 Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms are removed.    
 'Non-True Null' gene associations are the untouched original gene associations with GO terms    
-![fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Original Association, enriched GOs only 
-![fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Original Association, enriched GOs only 
-![fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ## 2b) Randomized Association, enriched GOs only
-![fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_rand_noprune_enriched_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_all_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Randomized Association, enriched GOs only
-![fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Randomized Association, enriched GOs only
-![fig_goea_rand_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Randomized Association, enriched GOs only
-![fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_enriched_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ## 3a) Association w/30 GOs removed
-![fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Association w/30 GOs removed
-![fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Association w/30 GOs removed
-![fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
 ## 3b) Randomized Association w/30 GOs removed
-![fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Randomized Association w/30 GOs removed
-![fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Randomized Association w/30 GOs removed
-![fig_goea_rand_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
 ### Randomized Association w/30 GOs removed
-![fig_goea_rand_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
+![fig_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
 ## GO terms removed
 32 out of 17,276 GO terms are associated with more than 1,000 genes
