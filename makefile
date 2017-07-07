@@ -54,6 +54,36 @@ run_goeas_rand_noprune:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn1
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_all
 
+PNG := 100to000_004to124_N00020_00020_humoral_rsp.png
+CP := cp 
+cp_figs_goea:
+	rm -f doc/md/images/*.*
+	@echo Orig. FAIL. TOO MANY False Positives
+	$(CP) doc/logs/fig_goea_orig_noprune_ntn1_$(PNG)          doc/md/images/fig1a_FAIL_goea_orig_noprune_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_noprune_ntn2_$(PNG)          doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_noprune_ntn3_$(PNG)          doc/md/images/fig1c_FAIL_goea_orig_noprune_ntn3_$(PNG)
+	@echo Orig. PASS. ~30 Pruned
+	$(CP) doc/logs/fig_goea_orig_pruned_ntn1_$(PNG)           doc/md/images/fig2a_PASS_goea_orig_pruned_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_pruned_ntn2_$(PNG)           doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_pruned_ntn3_$(PNG)           doc/md/images/fig2c_PASS_goea_orig_pruned_ntn3_$(PNG)
+	@echo Orig. PASS. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
+	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn1_$(PNG) doc/md/images/fig3a_fail_goea_orig_noprune_enriched_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn2_$(PNG) doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn3_$(PNG) doc/md/images/fig3c_PASS_goea_orig_noprune_enriched_ntn3_$(PNG)
+	@echo Rand. FAIL. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_all_$(PNG)  doc/md/images/fig4a_goea_rand_noprune_enriched_all_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn1_$(PNG) doc/md/images/fig4b_goea_rand_noprune_enriched_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn2_$(PNG) doc/md/images/fig4c_goea_rand_noprune_enriched_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn3_$(PNG) doc/md/images/fig4d_goea_rand_noprune_enriched_ntn3_$(PNG)
+	@echo
+	$(CP) doc/logs/fig_goea_rand_noprune_ntn3_$(PNG)          doc/md/images/fig11_goea_rand_noprune_ntn3_$(PNG)
+	@echo
+	$(CP) doc/logs/fig_goea_rand_pruned_all_$(PNG)            doc/md/images/fig11_goea_rand_pruned_all_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn1_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn2_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn3_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn3_$(PNG)             
+
+
 pylint:
 	find src -name \*.py | xargs pylint -r no
 
