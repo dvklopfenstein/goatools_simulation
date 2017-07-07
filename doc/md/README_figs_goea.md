@@ -15,6 +15,9 @@ Shows GOEA simulation results using:
   * [3b) Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
 
 ## 1a) Original Association
+Simulated FDRs can exceed alpha(0.05) when **True Nulls** use the original association.    
+Seen in: A3 124 genes; A4 64 genes and 124 genes.    
+![fig_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ![fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ![fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
