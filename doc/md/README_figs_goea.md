@@ -7,16 +7,14 @@
      * **FAIL**: [First Simulations w/Original Associations unchanged.](#2-fail-first-simulations-using-original-associations)    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
   3. [**PASS: Modification 1**](#3-pass-modification-1):    
-     Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
+     Upon printing simulation result details, observed that **most _False Positives_ are GO terms associated with over 1,000 genes**. 
      Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
-     * **PASS**: Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
   4. [**PASS: Modification 2**](#4-pass-modification-2):
-     Upon printing simulation result details, observed that many _False Positives_ are GO terms associated with over 1,000 genes
-     are **enriched**, rather than purified. 
+     Upon printing simulation result details, observed that **many _False Positives_ are enriched**, rather than purified. 
      Therefore, use original associations, but only evaluate **enriched** GOEA results.
-  5. Random True-Null Associations w/Modification 2
-  6. Random True-Null Associations w/Modification 1
-  7. **PASS: All Associations Randomly Shuffled**     
+  5. [**FAIL: Random True-Null Associations w/Modification 2](#5-randoms-wmodification-2)
+  6. [**PASS: Random True-Null Associations w/Modification 1](#6-ramdoms-wmodification-1)
+  7. [**PASS: Nominal Case: 100% of Associations are Randomly Shuffled**](#7-fail-randomized-true-nulls)     
      These nominal cases show that when **all** gene associations are randomly shuffled,
      no significant results are correctly returned.
 
