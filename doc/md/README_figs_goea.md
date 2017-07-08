@@ -9,7 +9,7 @@
   3. [**PASS: Original True-Null Associations w/Modification 1**](#3-pass-modification-1):    
      Upon printing simulation result details, observed that **most _False Positives_ are GO terms associated with over 1,000 genes**. 
      Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
-  4. [**PASS: Original True-Null Associations w/Modification 2**](#4-pass-modification-2):
+  4. [**PASS: Original True-Null Associations w/Modification 2**](#4-pass-modification-2):    
      Upon printing simulation result details, observed that **many _False Positives_ are enriched**, rather than purified. 
      Therefore, use original associations, but only evaluate **enriched** GOEA results.
   5. [**FAIL: Random True-Null Associations w/Modification 2**](#5-randoms-wmodification-2)
@@ -38,9 +38,10 @@ Inputs gene sets are randomly chosen from either of two groups:
 ### B1) Associations for True Nulls (Population genes)    
 Input gene/GO associations in the simulations are one of:
 * **Original Associations** (~17,000)
-* **Original Associations minus ~30 GO IDs associated with over 1,000 genes**
+* **Original Associations w/Modification 1**
 * **Randomly shuffled Associations**
-* **Randomly shuffled Associations minus ~30 GO IDs associated with over 1,000 genes**
+* **Randomly shuffled Associations w/Modification 1**
+**Modification 1** is removes all GO IDs from an association if the GO ID is associated with more than 1,000 genes.    
 
 ### B2) Associations for Non-True Nulls (Humoral Response genes)
 * **Original Associations**    
