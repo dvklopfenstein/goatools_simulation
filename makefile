@@ -67,21 +67,21 @@ cp_figs_goea:
 	$(CP) doc/logs/fig_goea_orig_pruned_ntn2_$(PNG)           doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_$(PNG)
 	$(CP) doc/logs/fig_goea_orig_pruned_ntn3_$(PNG)           doc/md/images/fig2c_PASS_goea_orig_pruned_ntn3_$(PNG)
 	@echo Orig. PASS. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
-	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn1_$(PNG) doc/md/images/fig3a_fail_goea_orig_noprune_enriched_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn1_$(PNG) doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_$(PNG)
 	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn2_$(PNG) doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_$(PNG)
 	$(CP) doc/logs/fig_goea_orig_noprune_enriched_ntn3_$(PNG) doc/md/images/fig3c_PASS_goea_orig_noprune_enriched_ntn3_$(PNG)
-	@echo Rand. FAIL. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
-	$(CP) doc/logs/fig_goea_rand_noprune_enriched_all_$(PNG)  doc/md/images/fig4a_goea_rand_noprune_enriched_all_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn1_$(PNG) doc/md/images/fig4b_goea_rand_noprune_enriched_ntn1_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn2_$(PNG) doc/md/images/fig4c_goea_rand_noprune_enriched_ntn2_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn3_$(PNG) doc/md/images/fig4d_goea_rand_noprune_enriched_ntn3_$(PNG)
+	@echo Rand. PASS. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_all_$(PNG)  doc/md/images/fig9a_PASS_goea_rand_noprune_enriched_all_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn1_$(PNG) doc/md/images/fig4a_okay_goea_rand_noprune_enriched_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn2_$(PNG) doc/md/images/fig4b_okay_goea_rand_noprune_enriched_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn3_$(PNG) doc/md/images/fig4c_PASS_goea_rand_noprune_enriched_ntn3_$(PNG)
 	@echo
 	$(CP) doc/logs/fig_goea_rand_noprune_ntn3_$(PNG)          doc/md/images/fig11_goea_rand_noprune_ntn3_$(PNG)
 	@echo
-	$(CP) doc/logs/fig_goea_rand_pruned_all_$(PNG)            doc/md/images/fig11_goea_rand_pruned_all_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_pruned_ntn1_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn1_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_pruned_ntn2_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn2_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_pruned_ntn3_$(PNG)           doc/md/images/fig11_goea_rand_pruned_ntn3_$(PNG)             
+	$(CP) doc/logs/fig_goea_rand_pruned_all_$(PNG)            doc/md/images/fig9b_PASS_goea_rand_pruned_all_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn1_$(PNG)           doc/md/images/fig5a_PASS_goea_rand_pruned_ntn1_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn2_$(PNG)           doc/md/images/fig5b_PASS_goea_rand_pruned_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_pruned_ntn3_$(PNG)           doc/md/images/fig5c_PASS_goea_rand_pruned_ntn3_$(PNG)             
 
 
 pylint:

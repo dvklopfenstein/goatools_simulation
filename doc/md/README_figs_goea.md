@@ -41,7 +41,7 @@ Shows GOEA simulation results using:
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 2) PASS: Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+## 2) PASS: Attempt 1 -> Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
 **All 3 Simulations PASS**
 
 ### 2a) PASS: Non-True Nulls not marked
@@ -54,9 +54,42 @@ Very low False Positives marked.
 ![fig2c_PASS_goea_orig_pruned_ntn3](images/fig2c_PASS_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 3) PASS: Original Association. Enriched GOEA results.
-Discard the purified GOEA results.
+## 3) PASS: Attempt 2 -> Original Association. Enriched GOEA results.
+No change to Association. Retain enriched GOEA results and do not assess the purified GOEA results.    
 
+### 3a) OKAY: Non-True Nulls not marked
+![fig3a_fail_goea_orig_noprune_enriched_ntn1](images/fig3a_fail_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+![fig3b_PASS_goea_orig_noprune_enriched_ntn2](images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 3c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+![fig3c_PASS_goea_orig_noprune_enriched_ntn3](images/fig3c_PASS_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
+## 4) Okay? Using Enriched GOEAs acceptable? Try Randoms
+### 4a) Okay?
+![fig4b_goea_rand_noprune_enriched_ntn1](images/fig4a_okay_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 4b) Okay? -  Truly enriched not properly marked
+![fig4c_goea_rand_noprune_enriched_ntn2](images/fig4b_okay_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 4c) PASS
+![fig4d_goea_rand_noprune_enriched_ntn3](images/fig4c_PASS_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
+## 5) PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
+### 5a) PASS: Non-True Nulls not marked
+![fig11_goea_rand_pruned_ntn1](images/fig5a_PASS_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 5b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+![fig11_goea_rand_pruned_ntn2](images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 5c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+![fig11_goea_rand_pruned_ntn3](images/fig5c_PASS_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+## TBD
+![fig11_goea_rand_noprune_ntn3](images/fig11_goea_rand_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+# ALL RAND) PASS: Various runs of All Associations Randomized
+No change to Association. Retain enriched GOEA results and do not assess the purified GOEA results.    
+![fig4a_goea_rand_noprune_enriched_all](images/fig9a_PASS_goea_rand_noprune_enriched_all_100to000_004to124_N00020_00020_humoral_rsp.png)
+GOs with more than 1000 genes pruned
+![fig11_goea_rand_pruned_all](images/fig9b_PASS_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
 ## 2a) Original Association, enriched GOs only 
