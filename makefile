@@ -49,8 +49,8 @@ run_goeas_orig_noprune:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn1
 
 run_goeas_rand_noprune:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
+	#src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
+	#src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn1
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_all
 

@@ -14,12 +14,50 @@ Shows GOEA simulation results using:
   * [3a) Original Association w/30 GOs removed](#association-w30-gos-removed)
   * [3b) Randomized Association w/30 GOs removed](#randomized-association-w30-gos-removed)
 
-## 1a) Original Association
-Simulated FDRs exceed alpha(0.05) in the original simulation.    
-False Positives are seen in all images.    
+## Table of Contents
+  1. 1st Pass: FAIL [First Simulations w/Original Associations unchanged.]()
+  2. Attempt 1: PASS Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+  3. Attempt 2: PASS Original Assc.
+
+
+## 1) FAIL: Original Association - False Positives
+**Simulated FDRs exceed alpha(0.05) in the original simulation.**    
+**False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
+
+### 1a) FAIL: False Positives - Non-True Nulls are unchanged
+  * A2 -> 124 genes, 64 genes
+  * A3 -> 124 genes, 64 genes
+  * A4 -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+### 1b) FAIL: False Positives - None-True Nulls w/other significant discoveries marked
+  * A3 -> 124 genes, 64 genes
+  * A4 -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+### 1c) FAIL: False Positives - None-True Nulls w/ONLY Humoral Response GOs
+  * A3 -> 124 genes, 64 genes
+  * A4 -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
+## 2) PASS: Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+**All 3 Simulations PASS**
+
+### 2a) PASS: Non-True Nulls not marked
+Cause the appearance of an acceptable level of false positives.    
+![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 2b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+Very low False Positives marked.
+![fig2b_PASS_goea_orig_pruned_ntn2](images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+### 2c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+![fig2c_PASS_goea_orig_pruned_ntn3](images/fig2c_PASS_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
+## 3) PASS: Original Association. Enriched GOEA results.
+Discard the purified GOEA results.
+
+
 
 ## 2a) Original Association, enriched GOs only 
 Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms are removed.    
