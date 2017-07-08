@@ -2,30 +2,30 @@
 
 
 ## Table of Contents
-  1. **Introduction and Definitions**
+  1. [**Introduction and Definitions**](#1-introduction-and-definitions)
   2. **First Simulations**:
      * **FAIL**: [First Simulations w/Original Associations unchanged.]()    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
-  3. **Modification 1**:
-     Upon printing result details, observed most _False Positives_ are GO terms associated with over 1,000 genes.    
-     So re-run simulation after removing 30 GO terms out of > 17,000 GO terms that are assc. w/> 1,000 genes.   
-     * **PASS** Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+  3. **Modification 1**:    
+     Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes.    
+     So re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
+     * **PASS** Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
   4. Attempt 2: PASS Original Assc.
 
 
 ## 1) Introduction and Definitions
 
-  1. [**Simulation Inputs**](#simulation-inputs)    
-  2. [**Simulation Results**](#simulation-results)
+[**Simulation Inputs**](#simulation-inputs)     
+[**Simulation Results**](#simulation-results)
 
-  1. **Simulation Inputs**:    
-     Inputs are genes randomly chosen as follows:
-     * **True-Null genes**: Chosen from population of Mouse protein-coding genes.    
-     * **Non-True Null genes**: Chosen from any of 124 **Humoral Response** genes.
+1. **Simulation Inputs**:    
+   Inputs are genes randomly chosen as follows:
+   * **True-Null genes**: Chosen from population of **Mouse protein-coding genes**.    
+   * **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
 
-  2. **Simulation results** are summarized as follows: 
-     * **PASS**: Simulated FDR means are all below alpha    
-     * **FAIL**: Some simulated FDR means are above alpha
+2. **Simulation results** are summarized as follows: 
+   * **PASS**: Simulated FDR means are all **below** alpha    
+   * **FAIL**: Some simulated FDR means are **above** alpha
 
 
 
