@@ -12,8 +12,8 @@
   4. [**PASS: Modification 2**](#4-pass-modification-2):
      Upon printing simulation result details, observed that **many _False Positives_ are enriched**, rather than purified. 
      Therefore, use original associations, but only evaluate **enriched** GOEA results.
-  5. [**FAIL: Random True-Null Associations w/Modification 2](#5-randoms-wmodification-2)
-  6. [**PASS: Random True-Null Associations w/Modification 1](#6-ramdoms-wmodification-1)
+  5. [**FAIL: Random True-Null Associations w/Modification 2**](#5-randoms-wmodification-2)
+  6. [**PASS: Random True-Null Associations w/Modification 1**](#6-ramdoms-wmodification-1)
   7. [**PASS: Nominal Case: 100% of Associations are Randomly Shuffled**](#7-fail-randomized-true-nulls)     
      These nominal cases show that when **all** gene associations are randomly shuffled,
      no significant results are correctly returned.
