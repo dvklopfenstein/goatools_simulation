@@ -78,11 +78,15 @@ Input gene/GO associations in the simulations are one of:
 
 
 ## 3) PASS: Modification 1
-Attempt 1 -> Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+Upon printing the original FAILing simulation result details,
+observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
+
+Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
+
 **All 3 Simulations PASS**
-  * a) [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
-  * b) [Non-True Nulls use original associations stripped of other significant GOs](#3b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
-  * c) [Non-True Nulls only contain Humoral Response GO IDs](#3c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
+  * a) **PASS** [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
+  * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#3b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
+  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#3c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 3a) PASS: Non-True Nulls not marked
 Cause the appearance of an acceptable level of false positives.    
 ![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
@@ -94,8 +98,16 @@ Very low False Positives marked.
 
 
 ## 4) PASS: Modification 2
-Attempt 2 -> Original Association. Enriched GOEA results.
-No change to Association. Retain enriched GOEA results and do not assess the purified GOEA results.    
+Upon printing the original FAILing simulation result details,
+observed that many _False Positives_ are GO terms associated with over 1,000 genes
+are **enriched**, rather than purified. 
+
+Therefore, use original associations, but only evaluate **enriched** GOEA results.
+
+**2 Simulations PASS. One is acceptable.**
+  * a) **okay** [Non-True Nulls use original associations](#4a-fail-non-true-nulls-use-original-associations)
+  * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#4b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
+  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#4c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 4a) OKAY: Non-True Nulls not marked
 ![fig3a_fail_goea_orig_noprune_enriched_ntn1](images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 4b) PASS: Non-True Nulls assc. w/significant discoveries are marked
