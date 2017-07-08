@@ -7,25 +7,33 @@
      * **FAIL**: [First Simulations w/Original Associations unchanged.]()    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
   3. **Modification 1**:    
-     Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes.    
-     So re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
+     Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
+     Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
      * **PASS** Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
   4. Attempt 2: PASS Original Assc.
 
 
 ## 1) Introduction and Definitions
 
-1. [**Simulation Inputs**](#simulation-inputs)     
-2. [**Simulation Results**](#simulation-results)
+1. [**Simulation Inputs**](#1-simulation-inputs)
+   * **Study gene sets**    
+   * **Associations**    
+     * **Associations for True Nulls (Population genes)**    
+     * **Associations for Non-True Nulls (Humoral Response genes)**
+2. [**Simulation Associations - True Nulls**]()
+3. [**Simulation Associations - True Nulls**]()
+4. [**Simulation Results**](#2-simulation-results-are-summarized-as-follows)
 
 ### 1. **Simulation Inputs**:    
    Inputs are genes randomly chosen as follows:
-   * **True-Null genes**: Chosen from population of **Mouse protein-coding genes**.    
+   * **True-Null genes**: Chosen from the population of **Mouse protein-coding genes** having GO associations (~18,000 genes).    
    * **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
 
 ### 2. **Simulation results** are summarized as follows: 
    * **PASS**: Simulated FDR means are all **below** alpha    
    * **FAIL**: Some simulated FDR means are **above** alpha
+
+### 3. **Simulation Non-True Nulls** are a series of three plots with different sets of 
 
 
 
