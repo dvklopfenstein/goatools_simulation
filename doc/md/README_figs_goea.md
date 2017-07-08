@@ -18,14 +18,14 @@
 
 ## 1) Introduction and Definitions
 
-1. [**Simulation Inputs**](#1-simulation-inputs)
-   * **Study gene sets**    
+1. **Simulation Inputs**
+   * [**Study gene sets**](#inputs-study-gene-sets)    
    * **Associations**    
-     * **Associations for True Nulls (Population genes)**    
-     * **Associations for Non-True Nulls (Humoral Response genes)**
-2. [**Simulation Results**](#2-simulation-results-are-summarized-as-follows)
-   * **PASS**: Simulated FDR means are all **below** alpha     
-   * **FAIL**: Some simulated FDR means are **above** alpha    
+     * [**Associations for True Nulls (Population genes)**](#inputs-associations-for-true-nulls-population-genes)    
+     * [**Associations for Non-True Nulls (Humoral Response genes)**](#inputs-associations-for-non-true-nulls-humoral-response-genes)
+2. **Simulation Results**
+   * **PASS**: Simulated FDR means are all **below** alpha (0.05)     
+   * **FAIL**: Some simulated FDR means are **above** alpha (0.05)    
 
 ### Inputs: Study Gene Sets
 Inputs are sets of genes randomly chosen as follows:
