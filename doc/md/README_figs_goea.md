@@ -9,7 +9,7 @@
   3. **PASS: Modification 1**:    
      Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
      Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
-     * **PASS** Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
+     * **PASS**: Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
   4. **PASS: Modification 2**:
      Upon printing simulation result details, observed that many _False Positives_ are GO terms associated with over 1,000 genes
      are **enriched**, rather than purified. 
@@ -56,9 +56,9 @@ Input gene/GO associations in the simulations are one of:
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
 
-  * a) FAIL: Non-True Nulls use original associations
-  * b) FAIL: Non-True Nulls use original associations stripped of 
-  * c) FAIL: Non-True Nulls only contain Humoral Response GO IDs
+  * a) [Non-True Nulls use original associations](#2a-fail-non-true-nulls-use-original-associations)
+  * b) [Non-True Nulls use original associations stripped of other significant GOs](#2b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
+  * c) [Non-True Nulls only contain Humoral Response GO IDs](#2c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 
 ### 2a) FAIL: Non-True Nulls use original associations
   * **A2** -> 124 genes, 64 genes
@@ -66,12 +66,12 @@ Input gene/GO associations in the simulations are one of:
   * **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-### 2b) FAIL: False Positives - None-True Nulls w/other significant discoveries marked
+### 2b) FAIL: False Positives - Non-True Nulls w/other significant discoveries marked
   * **A3** -> 124 genes, 64 genes
   * **A4** -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-### 2c) FAIL: False Positives - None-True Nulls w/ONLY Humoral Response GOs
+### 2c) FAIL: False Positives - Non-True Nulls w/ONLY Humoral Response GOs
   * **A3** -> 124 genes, 64 genes
   * **A4** -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
