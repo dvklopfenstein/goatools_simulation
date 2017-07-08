@@ -19,22 +19,35 @@
 ## 1) Introduction and Definitions
 
 1. **Simulation Inputs**
-   * [**A) Study gene sets**](#inputs-study-gene-sets)    
+   * [**A) Study gene sets**](#a-study-gene-sets)
    * **Associations:**    
-     * [**B1) Associations for True Nulls (Population genes)**](#inputs-associations-for-true-nulls-population-genes)    
-     * [**B2) Associations for Non-True Nulls (Humoral Response genes)**](#inputs-associations-for-non-true-nulls-humoral-response-genes)
+     * [**B1) Associations for True Nulls (Population genes)**](#b1-associations-for-true-nulls-population-genes)
+     * [**B2) Associations for Non-True Nulls (Humoral Response genes)**](#b2-associations-for-non-true-nulls-humoral-response-genes)
 2. **Simulation Results**
    * **PASS**: Simulated FDR means are all **below** alpha (0.05)     
    * **FAIL**: Some simulated FDR means are **above** alpha (0.05)    
 
-### A1) Study Gene Sets
-Inputs are sets of genes randomly chosen as follows:
+### A) Study Gene Sets
+Inputs gene sets are randomly chosen from either of two groups:
 * **True-Null genes**: Chosen from the population of **Mouse protein-coding genes** having GO associations (~18,000 genes).    
 * **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
 
 ### B1) Associations for True Nulls (Population genes)    
+Input gene/GO associations in the simulations are one of:
+* **Original Associations** (~17,000)
+* **Original Associations minus ~30 GO IDs associated with over 1,000 genes**
+* **Randomly shuffled Associations**
+* **Randomly shuffled Associations minus ~30 GO IDs associated with over 1,000 genes**
 
 ### B2) Associations for Non-True Nulls (Humoral Response genes)
+* **Original Associations**    
+  Genes enriched in _Humoral Response_ can also be enriched in other processes.
+  Therefore, simulations may correctly return significant GO IDs other than _Humoral Response_ GOs.
+  The original associations will contain both _Humoral Reponse_ genes properly marked as _Non-True Null_ genes
+  and other genes correctly enriched in other functions, but not marked as _Non-True Null_.
+* **Original Associations minus signficant GO IDs that are **not** Humoral Response GOs 
+* Original Associations minus all GO IDs except Humoral Response GOs    
+  These simulations are expected to PASS    
 
 
 
@@ -43,8 +56,9 @@ Inputs are sets of genes randomly chosen as follows:
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
 
-  * 2a) FAIL: Non-True Nulls use original associations
-  * 2b) FAIL: Non-True Nulls use original associations stripped of 
+  * a) FAIL: Non-True Nulls use original associations
+  * b) FAIL: Non-True Nulls use original associations stripped of 
+  * c) FAIL: Non-True Nulls only contain Humoral Response GO IDs
 
 ### 2a) FAIL: Non-True Nulls use original associations
   * **A2** -> 124 genes, 64 genes
