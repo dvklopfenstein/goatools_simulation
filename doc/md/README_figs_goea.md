@@ -6,7 +6,7 @@
   2. **First Simulations**:
      * **FAIL**: [First Simulations w/Original Associations unchanged.]()    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
-  3. **PASS: Modification 1**:    
+  3. [**PASS: Modification 1**](:    
      Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
      Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
      * **PASS**: Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
@@ -14,6 +14,11 @@
      Upon printing simulation result details, observed that many _False Positives_ are GO terms associated with over 1,000 genes
      are **enriched**, rather than purified. 
      Therefore, use original associations, but only evaluate **enriched** GOEA results.
+  5. Random True-Null Associations w/Modification 2
+  6. Random True-Null Associations w/Modification 1
+  7. **PASS: All Associations Randomly Shuffled**     
+     These nominal cases show that when **all** gene associations are randomly shuffled,
+     no significant results are correctly returned.
 
 
 ## 1) Introduction and Definitions
@@ -51,74 +56,74 @@ Input gene/GO associations in the simulations are one of:
 
 
 
-
 ## 2) FAIL: First Simulations using Original Associations
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
-
   * a) [Non-True Nulls use original associations](#2a-fail-non-true-nulls-use-original-associations)
   * b) [Non-True Nulls use original associations stripped of other significant GOs](#2b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) [Non-True Nulls only contain Humoral Response GO IDs](#2c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
-
 ### 2a) FAIL: Non-True Nulls use original associations
   * **A2** -> 124 genes, 64 genes
   * **A3** -> 124 genes, 64 genes
   * **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-
 ### 2b) FAIL: False Positives - Non-True Nulls w/other significant discoveries marked
   * **A3** -> 124 genes, 64 genes
   * **A4** -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
 ### 2c) FAIL: False Positives - Non-True Nulls w/ONLY Humoral Response GOs
   * **A3** -> 124 genes, 64 genes
   * **A4** -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 2) PASS: Attempt 1 -> Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
+## 3) PASS: Modification 1
+Attempt 1 -> Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
 **All 3 Simulations PASS**
-
-### 2a) PASS: Non-True Nulls not marked
+  * a) [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
+  * b) [Non-True Nulls use original associations stripped of other significant GOs](#3b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
+  * c) [Non-True Nulls only contain Humoral Response GO IDs](#3c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
+### 3a) PASS: Non-True Nulls not marked
 Cause the appearance of an acceptable level of false positives.    
 ![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 2b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
 Very low False Positives marked.
 ![fig2b_PASS_goea_orig_pruned_ntn2](images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 2c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+### 3c) PASS: None-True Nulls w/ONLY Humoral Response GOs
 ![fig2c_PASS_goea_orig_pruned_ntn3](images/fig2c_PASS_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 3) PASS: Attempt 2 -> Original Association. Enriched GOEA results.
+## 4) PASS: Modification 2
+Attempt 2 -> Original Association. Enriched GOEA results.
 No change to Association. Retain enriched GOEA results and do not assess the purified GOEA results.    
-
-### 3a) OKAY: Non-True Nulls not marked
+### 4a) OKAY: Non-True Nulls not marked
 ![fig3a_fail_goea_orig_noprune_enriched_ntn1](images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+### 4b) PASS: Non-True Nulls assc. w/significant discoveries are marked
 ![fig3b_PASS_goea_orig_noprune_enriched_ntn2](images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 3c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+### 4c) PASS: None-True Nulls w/ONLY Humoral Response GOs
 ![fig3c_PASS_goea_orig_noprune_enriched_ntn3](images/fig3c_PASS_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 4) Okay? Using Enriched GOEAs acceptable? Try Randoms
-### 4a) Okay?
+## 5) Randoms w/Modification 2
+### 5a) Okay?
 ![fig4b_goea_rand_noprune_enriched_ntn1](images/fig4a_okay_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 4b) Okay? -  Truly enriched not properly marked
+### 5b) Okay? -  Truly enriched not properly marked
 ![fig4c_goea_rand_noprune_enriched_ntn2](images/fig4b_okay_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 4c) PASS
+### 5c) PASS
 ![fig4d_goea_rand_noprune_enriched_ntn3](images/fig4c_PASS_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 5) PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
-### 5a) PASS: Non-True Nulls not marked
+## 6) Ramdoms w/Modification 1
+PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
+### 6a) PASS: Non-True Nulls not marked
 ![fig5a_goea_rand_pruned_ntn1](images/fig5a_PASS_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 5b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+### 6b) PASS: Non-True Nulls assc. w/significant discoveries are marked
 ![fig5b_goea_rand_pruned_ntn2](images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### 5c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+### 6c) PASS: None-True Nulls w/ONLY Humoral Response GOs
 ![fig5c_goea_rand_pruned_ntn3](images/fig5c_PASS_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-## 1a-rand) FAIL Randomized True Nulls
+
+## 7) FAIL Randomized True Nulls
 Same as 'Original Association', but _True Nulls_ are randomized.    
 Results are FAIL and similar to [Original Association]
 ### 1a-rand) FAIL: Non-True Nulls not marked
