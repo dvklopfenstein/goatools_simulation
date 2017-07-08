@@ -20,21 +20,21 @@
 
 1. **Simulation Inputs**
    * [**A) Study gene sets**](#inputs-study-gene-sets)    
-   * **Associations**    
+   * **Associations:**    
      * [**B1) Associations for True Nulls (Population genes)**](#inputs-associations-for-true-nulls-population-genes)    
      * [**B2) Associations for Non-True Nulls (Humoral Response genes)**](#inputs-associations-for-non-true-nulls-humoral-response-genes)
 2. **Simulation Results**
    * **PASS**: Simulated FDR means are all **below** alpha (0.05)     
    * **FAIL**: Some simulated FDR means are **above** alpha (0.05)    
 
-### A1 Inputs) Study Gene Sets
+### A1) Study Gene Sets
 Inputs are sets of genes randomly chosen as follows:
-   * **True-Null genes**: Chosen from the population of **Mouse protein-coding genes** having GO associations (~18,000 genes).    
-   * **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
+* **True-Null genes**: Chosen from the population of **Mouse protein-coding genes** having GO associations (~18,000 genes).    
+* **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
 
-### B1 Inputs) Associations for True Nulls (Population genes)    
+### B1) Associations for True Nulls (Population genes)    
 
-### B2 Inputs) Associations for Non-True Nulls (Humoral Response genes)
+### B2) Associations for Non-True Nulls (Humoral Response genes)
 
 
 
