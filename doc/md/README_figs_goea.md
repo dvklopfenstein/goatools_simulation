@@ -1,26 +1,42 @@
 # GOEA Simulations
 
-Simulation results are summarized as follows: 
-  * **PASS**: Simulated FDRs are all below alpha    
-  * **FAIL**: Some simulated FDRs are above alpha
-
 
 ## Table of Contents
-  1. **First Simulations**:
+  1. **Introduction and Definitions**
+  2. **First Simulations**:
      * **FAIL**: [First Simulations w/Original Associations unchanged.]()    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
-  2. **Modification 1**:
+  3. **Modification 1**:
      Upon printing result details, observed most _False Positives_ are GO terms associated with over 1,000 genes.    
      So re-run simulation after removing 30 GO terms out of > 17,000 GO terms that are assc. w/> 1,000 genes.   
      * **PASS** Remove [~30 GO IDs assc w/>1000 genes](#go-terms-removed). Otherwise Original Associations unchanged.
-  3. Attempt 2: PASS Original Assc.
+  4. Attempt 2: PASS Original Assc.
 
 
-## 1) FAIL: Original Association - False Positives
+## 1) Introduction and Definitions
+
+  1. [**Simulation Inputs**](#simulation-inputs)    
+  2. [**Simulation Results**](#simulation-results)
+
+  1. **Simulation Inputs**:    
+     Inputs are genes randomly chosen as follows:
+     * **True-Null genes**: Chosen from population of Mouse protein-coding genes.    
+     * **Non-True Null genes**: Chosen from any of 124 **Humoral Response** genes.
+
+  2. **Simulation results** are summarized as follows: 
+     * **PASS**: Simulated FDR means are all below alpha    
+     * **FAIL**: Some simulated FDR means are above alpha
+
+
+
+## 1) FAIL: Original Associations
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
 
-### 1a) FAIL: False Positives - Non-True Nulls are unchanged
+  * 1a) FAIL: Non-True Nulls use original associations
+  * 1a) FAIL: Non-True Nulls use original associations stripped of 
+
+### 1a) FAIL: Non-True Nulls use original associations
   * A2 -> 124 genes, 64 genes
   * A3 -> 124 genes, 64 genes
   * A4 -> 124 genes    
