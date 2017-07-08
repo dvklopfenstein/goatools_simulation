@@ -37,7 +37,7 @@ Inputs gene sets are randomly chosen from either of two groups:
 
 ### B1) Associations for True Nulls (Population genes)    
 Input gene/GO associations in the simulations are one of:
-* **Original Associations** (~17,000)
+* **Original Associations** (18,000+ genes associated with 17,000+ GO IDs)
 * **Original Associations w/Modification 1**
 * **Randomly shuffled Associations**
 * **Randomly shuffled Associations w/Modification 1**
