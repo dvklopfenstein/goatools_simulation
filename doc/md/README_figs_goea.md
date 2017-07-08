@@ -6,11 +6,14 @@
   2. **First Simulations**:
      * **FAIL**: [First Simulations w/Original Associations unchanged.]()    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
-  3. **Modification 1**:    
+  3. **PASS: Modification 1**:    
      Upon printing simulation result details, observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
      Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
      * **PASS** Original Associations minus the [~30 GO IDs assc w/>1000 genes](#go-terms-removed).
-  4. Attempt 2: PASS Original Assc.
+  4. **PASS: Modification 2**:
+     Upon printing simulation result details, observed that many _False Positives_ are GO terms associated with over 1,000 genes
+     are **enriched**, rather than purified. 
+     Therefore, use original associations, but only evaluate **enriched** GOEA results.
 
 
 ## 1) Introduction and Definitions
@@ -20,44 +23,45 @@
    * **Associations**    
      * **Associations for True Nulls (Population genes)**    
      * **Associations for Non-True Nulls (Humoral Response genes)**
-2. [**Simulation Associations - True Nulls**]()
-3. [**Simulation Associations - True Nulls**]()
-4. [**Simulation Results**](#2-simulation-results-are-summarized-as-follows)
+2. [**Simulation Results**](#2-simulation-results-are-summarized-as-follows)
 
-### 1. **Simulation Inputs**:    
-   Inputs are genes randomly chosen as follows:
+### Inputs: Study Gene Sets
+   Inputs are sets of genes randomly chosen as follows:
    * **True-Null genes**: Chosen from the population of **Mouse protein-coding genes** having GO associations (~18,000 genes).    
    * **Non-True Null genes**: Chosen from any of **124 Humoral Response genes**.
 
-### 2. **Simulation results** are summarized as follows: 
+### Inputs: Associations for True Nulls (Population genes)    
+
+### Inputs: Associations for Non-True Nulls (Humoral Response genes)
+
+### Outputs: Results are PASS or FAIL
    * **PASS**: Simulated FDR means are all **below** alpha    
    * **FAIL**: Some simulated FDR means are **above** alpha
 
-### 3. **Simulation Non-True Nulls** are a series of three plots with different sets of 
 
 
 
-## 1) FAIL: First Simulations using Original Associations
+## 2) FAIL: First Simulations using Original Associations
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
 
-  * 1a) FAIL: Non-True Nulls use original associations
-  * 1a) FAIL: Non-True Nulls use original associations stripped of 
+  * 2a) FAIL: Non-True Nulls use original associations
+  * 2b) FAIL: Non-True Nulls use original associations stripped of 
 
-### 1a) FAIL: Non-True Nulls use original associations
-  * A2 -> 124 genes, 64 genes
-  * A3 -> 124 genes, 64 genes
-  * A4 -> 124 genes    
+### 2a) FAIL: Non-True Nulls use original associations
+  * **A2** -> 124 genes, 64 genes
+  * **A3** -> 124 genes, 64 genes
+  * **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-### 1b) FAIL: False Positives - None-True Nulls w/other significant discoveries marked
-  * A3 -> 124 genes, 64 genes
-  * A4 -> 124 genes    
+### 2b) FAIL: False Positives - None-True Nulls w/other significant discoveries marked
+  * **A3** -> 124 genes, 64 genes
+  * **A4** -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-### 1c) FAIL: False Positives - None-True Nulls w/ONLY Humoral Response GOs
-  * A3 -> 124 genes, 64 genes
-  * A4 -> 124 genes    
+### 2c) FAIL: False Positives - None-True Nulls w/ONLY Humoral Response GOs
+  * **A3** -> 124 genes, 64 genes
+  * **A4** -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
