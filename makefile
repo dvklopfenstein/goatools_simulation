@@ -28,19 +28,17 @@ run_goeas_rand_enriched:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn3
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_all
 
 
-run_goeas_orig:
+run_goeas_orig_pruned:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn3
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn1
 
-run_goeas_rand:
+run_goeas_rand_pruned:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn3
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn1
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_all
 
 
 run_goeas_orig_noprune:
@@ -49,10 +47,16 @@ run_goeas_orig_noprune:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn1
 
 run_goeas_rand_noprune:
-	#src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
-	#src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn1
+
+
+run_rand_all:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_all
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_all
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_all
+
 
 PNG := 100to000_004to124_N00020_00020_humoral_rsp.png
 CP := cp 
