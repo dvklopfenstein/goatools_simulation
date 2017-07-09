@@ -55,7 +55,6 @@ Input gene/GO associations in the simulations are one of:
   These simulations are expected to PASS    
 
 
-
 ## 2) FAIL: First Simulations using Original Associations
 **Simulated FDRs exceed alpha(0.05) in the original simulation.**    
 **False Positives are seen in all 3 images** showing various sets of 'Non-True Nulls' (aka Humoral Response genes)    
@@ -63,44 +62,44 @@ Input gene/GO associations in the simulations are one of:
   * b) [Non-True Nulls use original associations stripped of other significant GOs](#2b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) [Non-True Nulls only contain Humoral Response GO IDs](#2c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 2a) FAIL: Non-True Nulls use original associations
-  * FAIL @ **A2** -> 124 genes, 64 genes
-  * FAIL @ **A3** -> 124 genes, 64 genes
-  * FAIL @ **A4** -> 124 genes    
+  * FAIL in **A2** -> 124 genes, 64 genes
+  * FAIL in **A3** -> 124 genes, 64 genes
+  * FAIL in **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 2b) FAIL: False Positives - Non-True Nulls w/other significant discoveries marked
-  * FAIL @ **A3** -> 124 genes, 64 genes
-  * FAIL @ **A4** -> 124 genes    
+  * FAIL in **A3** -> 124 genes, 64 genes
+  * FAIL in **A4** -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 2c) FAIL: False Positives - Non-True Nulls w/ONLY Humoral Response GOs
-  * FAIL @ **A3** -> 124 genes, 64 genes
-  * FAIL @ **A4** -> 124 genes    
+  * FAIL in **A3** -> 124 genes, 64 genes
+  * FAIL in **A4** -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
 ## 3) PASS: Modification 1
-Upon printing the original FAILing simulation result details,
-observed that **most _False Positives_ are GO terms associated with over 1,000 genes**. 
+Printed simulation result details showed that **most _False Positives_ are GO terms associated with over 1,000 genes**.    
 
-Therefore, re-run simulation after removing ~30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
+Therefore, re-run simulation after removing [~30 from the 17,000+ Mouse GO terms](#go-terms-removed)
+that are associated with 1,000+ genes.   
 
 **All 3 Simulations PASS**
   * a) **PASS** [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#3b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#3c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 3a) PASS: Non-True Nulls not marked
-Cause the appearance of an acceptable level of false positives.    
+Unmarked Non-True Nulls can cause the appearance of an false positives.    
 ![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
-Very low False Positives marked.
+If the unmarked Non-True Nulls are removed, the simulated FDRs are very close to zero.
 ![fig2b_PASS_goea_orig_pruned_ntn2](images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 3c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+If only the Humoral Response GO IDs exist in the Non-True Null gene-to-GOs associations,
+FDRs are practically zero.
 ![fig2c_PASS_goea_orig_pruned_ntn3](images/fig2c_PASS_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
 ## 4) PASS: Modification 2
-Upon printing the original FAILing simulation result details,
-observed that many _False Positives_ are GO terms associated with over 1,000 genes
-are **enriched**, rather than purified. 
+Printed simulation result details showed that **many _False Positives_ are enriched**, rather than purified.     
 
 Therefore, use original associations, but only evaluate **enriched** GOEA results.
 
