@@ -24,7 +24,7 @@
 
 1. **Simulation Inputs**
    * [**A) Study gene sets**](#a-study-gene-sets)
-   * **Associations:**    
+   * **B) Associations:**    
      * [**B1) Associations for True Nulls (Population genes)**](#b1-associations-for-true-nulls-population-genes)
      * [**B2) Associations for Non-True Nulls (Humoral Response genes)**](#b2-associations-for-non-true-nulls-humoral-response-genes)
 2. **Simulation Results**
@@ -39,9 +39,9 @@ Inputs gene sets are randomly chosen from either of two groups:
 ### B1) Associations for True Nulls (Population genes)    
 Input gene/GO associations in the simulations are one of:
 * **Original Associations** (18,000+ genes associated with 17,000+ GO IDs)
-* **Original Associations w/Modification 1**
+* **Original Associations w/Modification 1** (Assc. minus outliers)
 * **Randomly shuffled Associations**
-* **Randomly shuffled Associations w/Modification 1**
+* **Randomly shuffled Associations w/Modification 1** (Assc. minus outliers)
 **Modification 1** is removes all GO IDs from an association if the GO ID is associated with more than 1,000 genes.    
 
 ### B2) Associations for Non-True Nulls (Humoral Response genes)
@@ -225,6 +225,12 @@ Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms 
 | 2,945 | GO:0046872 |MF|   32 | L04 | D04 | B   | metal ion binding
 | 1,050 | GO:0004984 |MF|    1 | L04 | D05 | CD  | olfactory receptor activity
 | 1,368 | GO:0005524 |MF|    0 | L05 | D08 | B   | ATP binding
+
+## How Associations are Shuffled
+The gene-GOs associations are shuffled using this method:
+1) A list of **gene to '# of GO IDs'** is created
+2) The list of **gene to '# of GO IDs'** is shuffled
+3) 
 
 
 Copyright (C) 2016-2017. DV Klopfenstein, Haibao Tang. All rights reserved.
