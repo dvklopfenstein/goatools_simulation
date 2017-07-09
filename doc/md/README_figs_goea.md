@@ -76,32 +76,33 @@ Input gene/GO associations in the simulations are one of:
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-## 3) PASS: Modification 1
-Printed simulation result details showed that **most _False Positives_ are GO terms associated with over 1,000 genes**.    
-
-Therefore, re-run simulation after removing [~30 from the 17,000+ Mouse GO terms](#go-terms-removed)
+## 3) PASS: Modification 1 (Associations minus outliers)
+**Because** printed simulation result details showed that
+**most _False Positives_ are GO terms associated with over 1,000 genes**;    
+**Re-ran simulations** after removing [~30 from the 17,000+ Mouse GO terms](#go-terms-removed)
 that are associated with 1,000+ genes.   
 
-**All 3 Simulations PASS**
+**Results: All 3 Simulations PASS**
   * a) **PASS** [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#3b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#3c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 3a) PASS: Non-True Nulls not marked
 Unmarked Non-True Nulls can cause the appearance of an false positives.    
+OBSERVATION: The false positives shown below are acceptable because they are below alpha (0.05).
 ![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
-If the unmarked Non-True Nulls are removed, the simulated FDRs are very close to zero.
+OBSERVATION: If the unmarked Non-True Nulls are removed, the simulated FDRs are very close to zero.
 ![fig2b_PASS_goea_orig_pruned_ntn2](images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 3c) PASS: None-True Nulls w/ONLY Humoral Response GOs
-If only the Humoral Response GO IDs exist in the Non-True Null gene-to-GOs associations,
-FDRs are practically zero.
+OBSERVATION: If only the Humoral Response GO IDs exist in the Non-True Null gene-to-GOs associations,
+FDRs are zero or almost zero.
 ![fig2c_PASS_goea_orig_pruned_ntn3](images/fig2c_PASS_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
 ## 4) PASS: Modification 2
-Printed simulation result details showed that **many _False Positives_ are enriched**, rather than purified.     
-
-Therefore, use original associations, but only evaluate **enriched** GOEA results.
+**Because** the printed simulation result details showed that
+**many _False Positives_ are enriched**, rather than purified;     
+**Re-ran simulations** using original associations, but only evaluating **enriched** GOEA results.
 
 **2 Simulations PASS. One is acceptable.**
   * a) **okay** [Non-True Nulls use original associations](#4a-fail-non-true-nulls-use-original-associations)
