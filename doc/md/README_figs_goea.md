@@ -3,12 +3,13 @@
 
 ## Table of Contents
   1. [**Introduction and Definitions**](#1-introduction-and-definitions)
-  2. **First Simulations**:
+  2. [**First Simulations**](#2-fail-first-simulations-using-original-associations):
      * **FAIL**: [First Simulations w/Original Associations unchanged.](#2-fail-first-simulations-using-original-associations)    
      * Simulations with Random True Null Associations look similar to those with Original Associations.    
   3. [**PASS: Original True-Null Associations w/Modification 1**](#3-pass-modification-1) (Assc. minus outliers):    
      Printed simulation result details showed that **most _False Positives_ are GO terms associated with over 1,000 genes**. 
-     Therefore, re-run simulation after removing ~30 from the 17,000+ Mouse GO terms that are associated with 1,000+ genes.   
+     Therefore, re-run simulation after removing [~30 from the 17,000+ Mouse GO terms](#go-terms-removed)
+     that are associated with 1,000+ genes.   
   4. [**PASS: Original True-Null Associations w/Modification 2**](#4-pass-modification-2): (View Enriched-Only)    
      Printed simulation result details showed that **many _False Positives_ are enriched**, rather than purified. 
      Therefore, use original associations, but only evaluate **enriched** GOEA results.
@@ -62,25 +63,25 @@ Input gene/GO associations in the simulations are one of:
   * b) [Non-True Nulls use original associations stripped of other significant GOs](#2b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) [Non-True Nulls only contain Humoral Response GO IDs](#2c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 2a) FAIL: Non-True Nulls use original associations
-  * **A2** -> 124 genes, 64 genes
-  * **A3** -> 124 genes, 64 genes
-  * **A4** -> 124 genes    
+  * FAIL @ **A2** -> 124 genes, 64 genes
+  * FAIL @ **A3** -> 124 genes, 64 genes
+  * FAIL @ **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 2b) FAIL: False Positives - Non-True Nulls w/other significant discoveries marked
-  * **A3** -> 124 genes, 64 genes
-  * **A4** -> 124 genes    
+  * FAIL @ **A3** -> 124 genes, 64 genes
+  * FAIL @ **A4** -> 124 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 2c) FAIL: False Positives - Non-True Nulls w/ONLY Humoral Response GOs
-  * **A3** -> 124 genes, 64 genes
-  * **A4** -> 124 genes    
+  * FAIL @ **A3** -> 124 genes, 64 genes
+  * FAIL @ **A4** -> 124 genes    
 ![fig1c_FAIL_goea_orig_noprune_ntn3](images/fig1c_FAIL_goea_orig_noprune_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
 ## 3) PASS: Modification 1
 Upon printing the original FAILing simulation result details,
-observed that most _False Positives_ are GO terms associated with over 1,000 genes. 
+observed that **most _False Positives_ are GO terms associated with over 1,000 genes**. 
 
-Therefore, re-run simulation after removing 30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
+Therefore, re-run simulation after removing ~30 GO terms out of > 17,000 Mouse GO terms that are assc. w/> 1,000 genes.   
 
 **All 3 Simulations PASS**
   * a) **PASS** [Non-True Nulls use original associations](#3a-fail-non-true-nulls-use-original-associations)
