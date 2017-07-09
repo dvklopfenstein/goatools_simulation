@@ -6,7 +6,7 @@ __author__ = "DV Klopfenstein"
 import sys
 import collections as cx
 import datetime
-from random import shuffle
+from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc

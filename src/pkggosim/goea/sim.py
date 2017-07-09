@@ -5,7 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 from collections import namedtuple, Counter
-from random import shuffle
+from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.common.true_positive import get_tfpn, calc_ratio
 
