@@ -106,7 +106,7 @@ FDRs are zero or almost zero.
 **2 Simulations PASS. One is acceptable.**
   * a) **okay** [Non-True Nulls use original associations](#4a-fail-non-true-nulls-use-original-associations)
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#4b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
-  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#4c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
+  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs only](#4c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 4a) okay: Non-True Nulls not marked
 ![fig3a_fail_goea_orig_noprune_enriched_ntn1](images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 4b) PASS: Non-True Nulls assc. w/significant discoveries are marked
@@ -117,7 +117,7 @@ FDRs are zero or almost zero.
 ## 5) Randoms w/Modification 2 (View Enriched Only)
   * a) **okay** [Non-True Nulls use original associations](#5a-okay-non-true-nulls-use-original-associations)
   * b) **FAIL** [Non-True Nulls use original associations stripped of other significant GOs](#5b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
-  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#5c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
+  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs only](#5c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 5a) okay: Non-True Nulls not marked
 ![fig4b_goea_rand_noprune_enriched_ntn1](images/fig4a_okay_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 5b) FAIL: Non-True Nulls assc. w/significant discoveries are marked
@@ -129,7 +129,7 @@ FDRs are zero or almost zero.
 PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
   * a) **okay** [Non-True Nulls use original associations](#6a-okay-non-true-nulls-use-original-associations)
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#6b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
-  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs](#6c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
+  * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs only](#6c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 6a) okay: Non-True Nulls not marked
 ![fig5a_goea_rand_pruned_ntn1](images/fig5a_PASS_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 6b) PASS: Non-True Nulls assc. w/significant discoveries are marked
@@ -145,40 +145,6 @@ PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
 **PASS**: GOs with more than 1000 genes pruned
 ![fig9_goea_rand_pruned_all](images/fig5R_PASS_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-
-## 2a) Original Association, enriched GOs only 
-Includes 'unmarked' Non-True Null genes found to be enriched. Purified GO terms are removed.    
-'Non-True Null' gene associations are the untouched original gene associations with GO terms    
-![fig_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### Original Association, enriched GOs only 
-![fig_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### Original Association, enriched GOs only 
-![fig_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-## 2b) Randomized Association, enriched GOs only
-![fig_goea_rand_noprune_enriched_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_all_100to000_004to124_N00020_00020_humoral_rsp.png)
-### Randomized Association, enriched GOs only
-![fig_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-### Randomized Association, enriched GOs only
-![fig_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-### Randomized Association, enriched GOs only
-![fig_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-## 3a) Association w/30 GOs removed
-![fig_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
-### Association w/30 GOs removed
-![fig_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
-### Association w/30 GOs removed
-![fig_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_orig_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
-
-## 3b) Randomized Association w/30 GOs removed
-![fig_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_all_100to000_004to124_N00020_00020_humoral_rsp.png)    
-### Randomized Association w/30 GOs removed
-![fig_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)    
-### Randomized Association w/30 GOs removed
-![fig_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)    
-### Randomized Association w/30 GOs removed
-![fig_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png](../logs/fig_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)    
 
 ## GO terms removed
 32 out of 17,276 GO terms are associated with more than 1,000 genes
