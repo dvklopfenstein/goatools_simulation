@@ -77,7 +77,7 @@ cp_figs_goea:
 	@echo Rand. PASS. Use Enriched GOEAs Only in analyses. Ignore purified GOEA results.
 	$(CP) doc/logs/fig_goea_rand_noprune_enriched_all_$(PNG)  doc/md/images/fig4R_PASS_goea_rand_noprune_enriched_all_$(PNG)
 	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn1_$(PNG) doc/md/images/fig4a_okay_goea_rand_noprune_enriched_ntn1_$(PNG)
-	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn2_$(PNG) doc/md/images/fig4b_okay_goea_rand_noprune_enriched_ntn2_$(PNG)
+	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn2_$(PNG) doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_$(PNG)
 	$(CP) doc/logs/fig_goea_rand_noprune_enriched_ntn3_$(PNG) doc/md/images/fig4c_PASS_goea_rand_noprune_enriched_ntn3_$(PNG)
 	@echo
 	$(CP) doc/logs/fig_goea_rand_noprune_all_$(PNG)           doc/md/images/fig1R_PASS_goea_rand_noprune_all_$(PNG)
