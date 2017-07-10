@@ -28,7 +28,7 @@ All simulations shown use **alpha=0.05**.
 
 ## Stochastic GOEA simulations
 
-  **Table of Contents**:
+  **Table of Contents**:    
     * Introduction
       * GOEA simulation Inputs
     * GOEA Simulations:
