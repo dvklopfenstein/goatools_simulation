@@ -29,12 +29,12 @@ All simulations shown use **alpha=0.05**.
 ## Stochastic GOEA simulations
 
   **Table of Contents**:    
-    * Introduction
-      * GOEA simulation Inputs
-    * GOEA Simulations:
-      * Simulations with randomly-generated gene lists
-        * Simulations viewing only Enriched GOEA results
-      * Simulations with randomly-generated gene lists and randomly-generated associations
+    * Introduction    
+      * GOEA simulation Inputs     
+    * GOEA Simulations:    
+      * Simulations with randomly-generated gene lists    
+        * Simulations viewing only Enriched GOEA results    
+      * Simulations with randomly-generated gene lists and randomly-generated associations    
 
 ### Introduction
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
