@@ -26,6 +26,28 @@ All simulations shown use **alpha=0.05**.
     * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivities](
       #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
+## Original Simulations
+The original stochastic GOEA simulations showed unacceptable simulated FDR values that are above alpha of 0.05.
+
+Upon investigation, the simulation details showed that most "False Positives" are either from:
+* Purified significant GOEA results or
+* GO terms associated with over 1,000 genes
+![fig1b_FAIL_goea_orig_noprune_ntn2](images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+# Simulations viewing only Enriched GOEA results
+Simulations where only enriched results are viewed still showed elevated FDRs.
+
+Genes enriched in the area of interest, **Humoral Response** (HR) can also be correctly enriched in other biological functions.
+If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
+![fig3a_fail_goea_orig_noprune_enriched_ntn1](images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+Resimulating the GOEAs, but only viewing the enriched results yeilded passing simulations
+if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
+![fig3b_PASS_goea_orig_noprune_enriched_ntn2](images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+The trend of rising FDR values as the study size increases is an artifact of GOEA results
+which are actually significant, but not marked as "Non-True Nulls" because the focus of
+the simulations was genes enriched in **Humoral Response**.
 
 ## Stochastic GOEA simulations
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
