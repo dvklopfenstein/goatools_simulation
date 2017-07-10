@@ -104,19 +104,19 @@ either **True nulls** and **Non-True nulls**:
     * **0.00 to 0.05** => **Minimally** different from the population.    
 
 ### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
-![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_actual.png)
+![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png)
 **Results show**:
   * The worst (highest) simulated FDR means are equal to the alpha (0.05)
-    for all simulation sets with no **False null** s (A1, B1, and C1).    
+    for all simulation sets with 100% **True Null** s (A1, B1, and C1).    
   * As the percentage of true nulls drops, the FDR also drops;    
     * row 1, with 100% **True Null**, has the highest mean FDR (0.05), while
     * row 4, with   0% **True Null**, has the lowest mean FDR (0.012).
   * The simulated mean FDRs are the same across all study group sizes. For example, in A2    
-    * the leftmost boxplot with blue dots showing the group of 4 tested hypotheses has the same mean FDR as
-    * the rightmost boxplot with red dots showing the group of 128 tested hypotheses.
+    * the leftmost boxplot with blue dots showing the groups of 4 tested hypotheses has the same mean FDR as
+    * the rightmost boxplot with red dots showing the groups of 128 tested hypotheses.
 
 ### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
-![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
+![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_sensitivity.png)
 **Observations:**    
 * When non-true null P-values have extreme values, like below 0.01 when alpha is 0.05, 100% of _Non-true nulls_
   are discovered (A2-A4).
