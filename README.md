@@ -91,8 +91,8 @@ Compensating for untagged enrichments is shown in Figure 1 above.
 ## Benjamini/Hochberg-Only Simulations
 Simulations of the underlying Benjamini/Hochberg multiple test correction are a subset
 of the GOEA simulations.
-Study sets in these simulations contain hypotheses test results (P-values), versus
-study sets in GOEA simulations which contain genes with various percentages of enrichments.
+Inputs to these simulations are hypotheses test results (P-values), versus the
+inputs in GOEA simulations which are gene lists containing various percentages of enrichments.
 
 ### Simulation Inputs
 The simulation inputs are groups of hypothesis test results (P-values) tagged as 
@@ -108,12 +108,12 @@ either **True nulls** and **Non-True nulls**:
 **Results show**:
   * The worst (highest) simulated FDR means are equal to the alpha (0.05)
     for all simulation sets with no **False null** s (A1, B1, and C1).    
-  * As the percentage of true nulls drops, the FDR also drops;
-    row 1, with 100% Null, has the highest mean FDR (0.05), while
-    row 4, with 0% Null, has the lowest mean FDR (0.012).
-  * The simulated mean FDRs are the same across all study group sizes. For example, in A2
-    the leftmost column with the group of 4 tested hypotheses has the same mean FDR as
-    the rightmost column in A2 with the group of 128 tested hypotheses.
+  * As the percentage of true nulls drops, the FDR also drops;    
+    * row 1, with 100% Null, has the highest mean FDR (0.05), while
+    * row 4, with 0% Null, has the lowest mean FDR (0.012).
+  * The simulated mean FDRs are the same across all study group sizes. For example, in A2    
+    * the leftmost boxplot with blue dots with the group of 4 tested hypotheses has the same mean FDR as
+    * the rightmost boxplot with red dots in A2 with the group of 128 tested hypotheses.
 
 ### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_sensitivity.png)
