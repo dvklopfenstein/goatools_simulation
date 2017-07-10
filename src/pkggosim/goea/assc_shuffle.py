@@ -1,4 +1,4 @@
-"""Holds population genes and associations."""
+"""Holds the function which randomly shuffles a gene-to-ontolgies association."""
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
@@ -6,6 +6,8 @@ __author__ = "DV Klopfenstein"
 import sys
 from collections import Counter
 from numpy.random import shuffle, randint
+
+#pylint: disable=too-few-public-methods
 
 class RandAssc(object):
     """Holds lists for random shuffling."""
@@ -20,7 +22,6 @@ class RandAssc(object):
         self.gocnts = None # List of the quantity of GO IDs for each GO ID in an association
         self._init_goidcnts()
         self.num_goids = len(self.goids)
-        # self.goids_set = set(self.goids)
         sys.stdout.write("GO({}) CNT({})\n".format(len(self.goids), len(self.gocnts)))
 
     def _init_goidcnts(self):
