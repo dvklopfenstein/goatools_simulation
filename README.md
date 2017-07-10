@@ -118,7 +118,7 @@ either **True nulls** and **Non-True nulls**:
 ### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_sensitivity.png)
 **Observations:**    
-* **100%** of **Non-True Nulls** are **discovered** if their **uncorrected P-Value is extreme** (below 0.01 when alpha is 0.05) (A2-A4)
+* **100%** of **Non-True Nulls** are **discovered** if their **uncorrected P-Value** is **extreme** (below 0.01 when alpha is 0.05) (A2-A4)
 * Moderate non-true null P-values (B2-B3) are discovered less frequently than extreme P-values (A2-A3).
 * Minimal non-true null P-values (C2-C4) are discovered even less frequently than moderate P-values (B2-B4).
 * Smaller groups of tested hypotheses (B3, blue bar) have more discoveries than larger groups (B3, red bar).
