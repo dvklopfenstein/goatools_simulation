@@ -27,26 +27,29 @@ All simulations shown use **alpha=0.05**.
       #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
 ## Original Simulations
-The original stochastic GOEA simulations showed unacceptably high simulated FDR values that are above the alpha of 0.05.
+The original stochastic GOEA simulations showed unacceptably high simulated FDR values that are above the alpha of 0.05
+(Panels A3 and A4 in the Figure).
 
-Upon investigation, the simulation details showed that most "False Positives" are either from:
-  * Purified significant GOEA results or
-  * GO terms associated with over 1,000 genes    
+Upon investigation, the simulation details showed that most "False Positives" are GO terms found significant that are:
+  * Purified rather than Enriched and/or
+  * Associated with over 1,000 genes    
 ![fig1b_FAIL_goea_orig_noprune_ntn2](
 doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 # Simulations viewing only Enriched GOEA results
-Simulations where only enriched results are viewed still showed elevated FDRs.
+Resimulating while only viewing enriched GOEA results still showed elevated FDRs (A2, A3, A4).
 
-Genes enriched in the area of interest, **Humoral Response** (HR) can also be correctly enriched in other biological functions.
+EXPLANATION: Genes enriched in the area of interest, **Humoral Response** (HR) can also be legitimately enriched in other biological functions.
 If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
 ![fig3a_fail_goea_orig_noprune_enriched_ntn1](
 doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-Resimulating the GOEAs, but only viewing the enriched results yeilded passing simulations
+SIMULATION PASSes: Resimulating the GOEAs, but only viewing the enriched results yeilded passing simulations
 if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
 ![fig3b_PASS_goea_orig_noprune_enriched_ntn2](
 doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+# Randomly-generated True-Null Associations
 
 The trend of rising FDR values as the study size increases is an artifact of GOEA results
 which are actually significant, but not marked as "Non-True Nulls" because the focus of
