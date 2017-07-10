@@ -58,10 +58,10 @@ run_rand_all:
 	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_all
 
 
+
 PNG := 100to000_004to124_N00020_00020_humoral_rsp.png
 CP := cp 
 cp_figs_goea:
-	rm -f doc/md/images/*.*
 	@echo Orig. FAIL. TOO MANY False Positives
 	$(CP) doc/logs/fig_goea_orig_noprune_ntn1_$(PNG)          doc/md/images/fig1a_FAIL_goea_orig_noprune_ntn1_$(PNG)
 	$(CP) doc/logs/fig_goea_orig_noprune_ntn2_$(PNG)          doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_$(PNG)
@@ -90,6 +90,10 @@ cp_figs_goea:
 	$(CP) doc/logs/fig_goea_rand_pruned_ntn2_$(PNG)           doc/md/images/fig5b_PASS_goea_rand_pruned_ntn2_$(PNG)
 	$(CP) doc/logs/fig_goea_rand_pruned_ntn3_$(PNG)           doc/md/images/fig5c_PASS_goea_rand_pruned_ntn3_$(PNG)             
 
+cp_goea:
+	rm -f doc/md/images/*.*
+	make cp_figs_goea PNG=100to000_004to124_N00020_00020_humoral_rsp.png
+	make cp_figs_goea PNG=100to000_004to124_N00020_00020.log
 
 pylint:
 	find src -name \*.py | xargs pylint -r no
