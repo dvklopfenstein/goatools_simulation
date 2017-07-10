@@ -40,7 +40,6 @@ class ExperimentsAll(object):
             self.prt_experiments_means(sys.stdout, rpt_items)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
-            #for attr, name in ['fdr_actual', 'sensitivity']:
             baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
             fout_img = os.path.join(self.repo, dir_loc, '{B}.png'.format(B=baseimg))
             self.plt_box_tiled(fout_img, plt_items, **pltargs)
@@ -133,19 +132,15 @@ class ExperimentsAll(object):
         prt.write(" for {N} sets of experiments\n\n".format(N=len(self.expsets)))
         prt.write("nul% #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
         prt.write("---- ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
-        namefmt = "{PERCNULL:3}% {QTY:5}"
+        namefmt = "{PERCNULL:3}% {QTY:6}"
         for experiment_set in self.expsets:
-            # expname = experiment_set.get_desc(namefmt)
             means = [np.mean(experiment_set.get_means(a)) for a in attrs]
             se_denom = np.sqrt(len(means))
-            # mean_strs = ["{:10.4f}".format(m) for m in means]
             stderrs = [np.std(m)/se_denom for m in means]
-            # stderr_strs = ["{:10.4f}".format(m) for m in stderrs]
-            prt.write("{EXP_DESC} ".format(EXP_DESC=experiment_set.get_desc(namefmt)))
+            prt.write("{EXP_DESC}".format(EXP_DESC=experiment_set.get_desc(namefmt)))
             for mean, stderr in zip(means, stderrs):
-                prt.write("{AVG:6.4f} +/-{SE:8.6f} ".format(AVG=mean, SE=stderr))
+                prt.write("  {AVG:6.4f} +/-{SE:8.6f}".format(AVG=mean, SE=stderr))
             prt.write("\n")
-            # prt.write("{HDR} {ATTRS}\n".format(HDR=expname, ATTRS=" ".join(mean_strs)))
         prt.write("\n")
 
     def prt_num_sims_w_errs(self, prt=sys.stdout):
