@@ -5,15 +5,13 @@ for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
 **Two categories of simulations are contained herein**:
   1. [**Preparatory**: Hypotheses and multiple-test simulations](doc/md/README_bhfdr.md); elements include:    
-       * Benjamini/Hochberg FDR simulation only
+       * FDR or FWER calculations only
   2. [**Consequent**: Gene Ontology Enrichment Results (GOEA) simulations](doc/md/README_goea.md); elements include:
        * Fisher's exact test    
-       * Benjamini/Hochberg multiple test corrections
+       * [Benjamini/Hochberg FDR multiple test corrections](http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
        * Gene ontology associations    
 
-All simulations shown use [**Benjamini/Hochberg multiple test correction**](
-http://www.stat.purdue.edu/~doerge/BIOINFORM.D/FALL06/Benjamini%20and%20Y%20FDR.pdf)
-with **alpha=0.05**.
+All simulations shown use **alpha=0.05**.
 
 
 ## Figure List

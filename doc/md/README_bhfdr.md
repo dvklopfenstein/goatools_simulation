@@ -7,7 +7,7 @@ for the simulation methodology used in both levels of simulations listed below:
 
 
 ## Table of Contents
-  * [Figures for all multiple-test corrections](README_figs_hypoth.md)
+  * [**Figures** for all multiple-test corrections](README_figs_hypoth.md)
   * [Abstract](#abstract)
   * [Introduction](#introduction)
   * [Methods](#methods)
