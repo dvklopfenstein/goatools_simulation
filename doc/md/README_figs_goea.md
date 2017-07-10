@@ -1,5 +1,5 @@
-# GOEA Simulations
-
+# Stochastic GOEA Simulations
+Each figure was created with 8,000 GOEA stochastic simulations.    
 
 ## Table of Contents
   1. [**Introduction and Definitions**](#1-introduction-and-definitions)
@@ -12,7 +12,7 @@
      that are associated with 1,000+ genes.   
   4. [**PASS: Original True-Null Associations w/Modification 2**](#4-pass-modification-2): (View Enriched-Only)    
      Printed simulation result details showed that **many _False Positives_ are enriched**, rather than purified.     
-     Therefore, re-rin simulations using original associations, but only evaluate **enriched** GOEA results.
+     Therefore, re-run simulations using original associations, but only evaluate **enriched** GOEA results.
   5. [**FAIL: Random True-Null Associations w/Modification 2**](#5-randoms-wmodification-2) (View Enriched-Only)
   6. [**PASS: Random True-Null Associations w/Modification 1**](#6-ramdoms-wmodification-1) (Assc. minus outliers)
   7. [**PASS: Nominal Case: 100% of Associations are Randomly Shuffled**](#7-fail-randomized-true-nulls)     
@@ -50,7 +50,7 @@ Input gene/GO associations in the simulations are one of:
   Therefore, simulations may correctly return significant GO IDs other than _Humoral Response_ GOs.
   The original associations will contain both _Humoral Reponse_ genes properly marked as _Non-True Null_ genes
   and other genes correctly enriched in other functions, but not marked as _Non-True Null_.
-* **Original Associations minus signficant GO IDs that are **not** Humoral Response GOs 
+* Original Associations minus signficant GO IDs that are **not** Humoral Response GOs 
 * Original Associations minus all GO IDs except Humoral Response GOs    
   These simulations are expected to PASS    
 
@@ -138,6 +138,9 @@ PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
 ![fig5c_goea_rand_pruned_ntn3](images/fig5c_PASS_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 # ALL RAND) PASS: Various runs of All Associations Randomized
+These nominal cases show that when **all** gene associations are randomly shuffled,
+no significant results are correctly returned.
+
 **PASS**: No change to Association.
 ![fig_goea_rand_noprune_all](images/fig1R_PASS_goea_rand_noprune_all_100to000_004to124_N00020_00020_humoral_rsp.png)
 **PASS**: No change to Association. Retain enriched GOEA results and do not assess the purified GOEA results.    
