@@ -131,10 +131,24 @@ PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#6b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
   * c) **PASS** [Non-True Nulls only contain Humoral Response GO IDs only](#6c-fail-false-positives---non-true-nulls-wonly-humoral-response-gos)
 ### 6a) okay: Non-True Nulls not marked
+These simulations are acceptable because the simulated FDRs that are greater
+than alpha are an artifact of including truly significant non-Humoral-Response
+GO IDs that are associated with study genes that have not been marked with
+'Non-True Null.'
 ![fig5a_goea_rand_pruned_ntn1](images/fig5a_PASS_goea_rand_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 6b) PASS: Non-True Nulls assc. w/significant discoveries are marked
+Randomization of associations for True Null genes can cause some GO IDs to
+appear significant, when they are not. These GO IDs cause the trend seen below
+of increasing FDRs as study size increases.    
+
+Stripping truly significant non-HR GO IDs that are associated with study genes
+that are not been marked with 'Non-True Null' removes the artifact of a
+artificially raised FDR rate. The truly significant non-HR GO IDs correctly are
+seen as a discovery.
 ![fig5b_goea_rand_pruned_ntn2](images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### 6c) PASS: None-True Nulls w/ONLY Humoral Response GOs
+Nominal test case where only HR GO IDs are retained for 'Non-True-Null' genes in the association.
+The simulations confirm the expectation that the simulated FDR is zero or nearly zero.
 ![fig5c_goea_rand_pruned_ntn3](images/fig5c_PASS_goea_rand_pruned_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 # ALL RAND) PASS: Various runs of All Associations Randomized
