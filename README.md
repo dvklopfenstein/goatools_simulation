@@ -26,47 +26,28 @@ All simulations shown use **alpha=0.05**.
     * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivities](
       #figure-4-benjaminihochberg-only-simulated-sensitivity)
 
-## Original Simulations
-The original stochastic GOEA simulations showed unacceptably high simulated FDR values that are above the alpha of 0.05
-(Panels A3 and A4 in the Figure).
-
-Upon investigation, the simulation details showed that most "False Positives" are GO terms found significant that are:
-  * Purified rather than Enriched and/or
-  * Associated with over 1,000 genes    
-![fig1b_FAIL_goea_orig_noprune_ntn2](
-doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-# Simulations viewing only Enriched GOEA results
-Resimulating while only viewing enriched GOEA results still showed elevated FDRs (A2, A3, A4).
-
-EXPLANATION: Genes enriched in the area of interest, **Humoral Response** (HR) can also be legitimately enriched in other biological functions.
-If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
-![fig3a_fail_goea_orig_noprune_enriched_ntn1](
-doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-SIMULATION PASSes: Resimulating the GOEAs, but only viewing the enriched results yeilded passing simulations
-if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
-![fig3b_PASS_goea_orig_noprune_enriched_ntn2](
-doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-# Randomly-generated True-Null Associations
-
-The trend of rising FDR values as the study size increases is an artifact of GOEA results
-which are actually significant, but not marked as "Non-True Nulls" because the focus of
-the simulations was genes enriched in **Humoral Response**.
-
 ## Stochastic GOEA simulations
+
+  **Table of Contents**:
+    * Introduction
+      * GOEA simulation Inputs
+    * GOEA Simulations:
+      * Simulations with randomly-generated gene lists
+        * Simulations viewing only Enriched GOEA results
+      * Simulations with randomly-generated gene lists and randomly-generated associations
+
+### Introduction
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
 run on sets of randomly generated gene lists. The study gene lists in the simulations shown
 range in sizes of 4 to 124 genes
 and contain percentages of genes enriched in a particular set of biological processes
 ranging from _no genes are enriched_ (100% Null) to _all genes are enriched_ (0% Null).
-In the simulations shown, the gene enrichment is _Humoral response_.
+In the simulations shown, the gene enrichment under study is _Humoral response_ (HR).
 
 The results are analyzed to determine the percentages of study genes which are enriched in
 _Humoral response_ and are correctly discovered by the GOEAs.
 
-### GOEA simulation Inputs
+#### GOEA simulation Inputs
 The simulation inputs are groups of genes tagged as either **False nulls** and **True nulls**:
   * _**False Null**_ (a.k.a. _**Non-True Null**_) study genes are enriched in _Humoral response_
     by randomly chosing the study genes from any of the
@@ -74,6 +55,52 @@ The simulation inputs are groups of genes tagged as either **False nulls** and *
   * _**True Null**_ genes are randomly chosen from the large general population
     genes not enriched in _Humoral Response_.
 
+### GOEA Simulations
+#### Simulations with randomly-generated gene lists
+The original stochastic GOEA simulations showed unacceptably high simulated FDR values that are above the alpha of 0.05
+(Panels A3 and A4 in the Figure).
+
+Upon investigation, the simulation details showed that most _False Positives_ are significant GO terms that are:
+  * Purified rather than Enriched and/or
+  * Associated with over 1,000 genes    
+![fig1b_FAIL_goea_orig_noprune_ntn2](
+doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+#### Simulations viewing only Enriched GOEA results
+Resimulating while only viewing enriched GOEA results still showed elevated FDRs (A2, A3, A4).
+
+EXPLANATION: Genes enriched in the area of interest, **Humoral Response** (HR) can also be legitimately enriched in other biological functions.
+If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
+![fig3a_fail_goea_orig_noprune_enriched_ntn1](
+doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+SIMULATION PASSes: Resimulating the GOEAs, but only viewing the enriched results yielded passing simulations
+if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
+![fig3b_PASS_goea_orig_noprune_enriched_ntn2](
+doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+#### Randomly-generated True-Null Associations
+The next step is testing the robustness of GOEA simulations using
+randomly-generated associations for genes which are _True-Nulls_ (aka HR genes).
+
+The associations for _Non-True-Nulls_ (aka Humoral Response genes) are not 
+randomized to test that the GOEAs successfully discover the randomly chosen
+Humoral Response genes in each study group.
+
+ADJUSTMENT:
+GO terms associated with large numbers of genes, when randomized in an association,
+can cause the simulated FDRs to appear to be too high. Because a real association is not mixed
+to the extent as seen in randoms, randomizing GO associations with large numbers of genes
+yields GOEA results which are unrealistically pessimistic.
+
+The GOEA simulation results using random associations are more realistic if the top ~30 GO IDs out of 17,000+
+GO IDs that are associated with > 1,000 mouse protein-coding genes are removed.
+
+The trend of rising FDR values as the study size increases is an artifact of GOEA results
+appearing to be significant due to randomization.
+![fig5b_goea_rand_pruned_ntn2](images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+## Stochastic GOEA simulations
 ### Figure 1) GOEA Simulations with _true null genes'_ associations randomized
 To ensure that all **True Null** genes are real true nulls, the associations 
 not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly shuffled.
