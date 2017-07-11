@@ -63,9 +63,9 @@ prior to simulation, the "enriched-gene" simulations FAILed, but the
 
 ![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ![FAIL_rand_pruneN_enr](doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-![PASS_rand_pruneN_pru](doc/md/images/fig5b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![PASS_rand_pruneY_pru](doc/md/images/fig5b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Introduction
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
