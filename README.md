@@ -14,14 +14,14 @@ for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 All simulations shown use **alpha=0.05**.
 
 
-## Figure List
+## Table of Contents
   * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
     * [Original Simulations](#stochastic-goea-simulations-1)
-      * [Enriched](#simulate-and-view-enriched-genes-only)
+      * [View Enriched](#simulate-and-view-enriched-genes-only)
       * [Pruned](#purge-30-gos-from-association-then-simulate)
-    * Random Simulations
-      * [Rand Enriched](#randomize-association-and-view-enriched-genes-only)
-      * [Rand Purged](#purge-30-gos-from-association-then-randomize)
+    * **Random Simulations**
+      * [Rand - View Enriched](#randomize-association-and-view-enriched-genes-only)
+      * [Rand - Purged](#purge-30-gos-from-association-then-randomize)
   * [**Stochastic Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
     * [Benjamini/Hochberg-Only Simulated FDRs](
       #benjaminihochberg-only-simulated-fdrs)
@@ -36,19 +36,19 @@ The simulation results contained unacceptably high FDRs for some gene groups con
 ![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Investigate Failures
-Upon investigation, it was found the high numbers of false positives were often from:
+High numbers of false positives were often showed:
   * GO IDs that are associated with an unusually high number of genes
   * GO IDs that are purified, rather than enriched
 
 ### Simulate and View Enriched Genes Only
 If the simulations were re-run, but only the enriched results were used in reports and figures,
-the simulations PASSED resulting in FDRs that were very close to zero.
+the simulations solidly PASSED resulting in FDRs that were very close to zero.
 
 ![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Purge 30 GOs from Association, then Simulate
 If the simulations were re-run, but with ~30 GO IDs out of 17,000+ GO IDs in the
-association stripped out of the association, the simulations also PASSED.
+association stripped out of the association, the simulations also solidly PASSED.
 The 30 GO IDs were chosen to be purged because they were associated with more than 1000 genes.
 
 ![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
