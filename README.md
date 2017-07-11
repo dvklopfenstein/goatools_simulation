@@ -58,12 +58,14 @@ The simulation inputs are groups of genes tagged as either **False nulls** and *
 
 ### GOEA Simulations
 #### Simulations with randomly-generated gene lists
-The original stochastic GOEA simulations showed unacceptably high simulated FDR values that are above the alpha of 0.05
-(Panels A3 and A4 in the Figure).
+The original GOEA simulations using randomly generated gene lists showed
+unacceptably high simulated FDR values that are above the alpha of 0.05 (Panels
+A3 and A4 in the Figure).
 
 Upon investigation, the simulation details showed that most _False Positives_ are significant GO terms that are:
   * Purified rather than Enriched and/or
   * Associated with over 1,000 genes    
+
 ![fig1b_FAIL_goea_orig_noprune_ntn2](
 doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
