@@ -45,6 +45,7 @@ All simulations shown use **alpha=0.05**.
 First, we ran simulations using randomly generated gene lists containing varying
 percentages of True Null genes. The simulation results contained unacceptably high
 FDRs for some gene groups containing 64 or 124 genes.
+![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 Upon investigation, it was found the high numbers of false positives were often from:
   * GO IDs had an unusually high number of gene associations
@@ -52,20 +53,23 @@ Upon investigation, it was found the high numbers of false positives were often 
 
 If the simulations were re-run, but only the enriched results were used in reports and figures,
 the simulations PASSED resulting in FDRs that were very close to zero.
+![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 If the simulations were re-run, but with ~30 GO IDs out of 17,000+ GO IDs in the
 association stripped out of the association, the simulations also PASSED.
 The 30 GO IDs were chosen to be purged because they were associated with more than 1000 genes.
+![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
+#### Stress tests
 Upon doing a stress test by randomizing the associations for True-Null genes
 prior to simulation, the "enriched-gene" simulations FAILed, but the
 "30-GOs-Purged" simulations PASSed.
 
-![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+#### Randomize Association and View Enriched Genes Only
 ![FAIL_rand_pruneN_enr](doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-![PASS_rand_pruneY_pru](doc/md/images/fig5b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+#### Purge 30 GOs from Association, then Randomize
+![PASS_rand_pruneY_pru](doc/md/images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
 
 ### Introduction
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
