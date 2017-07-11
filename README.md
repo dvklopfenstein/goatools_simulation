@@ -30,31 +30,81 @@ All simulations shown use **alpha=0.05**.
 
 ### Table of Contents
 
-* Introduction    
-  * GOEA simulation Inputs     
-* GOEA Simulations:    
+* [Abstract](#abstract)
+* [Introduction](#introduction)    
+  * [GOEA simulation Inputs](goea-simulation-inputs)     
+    * Randomly Generated Gene lists
+    * Associations with True-Null Genes
+    * Associations with None-True-Null Genes
+* [GOEA Simulations](#goea-simulation-inputs):    
   * Simulations with randomly-generated gene lists    
     * Simulations viewing only Enriched GOEA results    
   * Simulations with randomly-generated gene lists and randomly-generated associations    
 
+### Abstract
+First, we ran simulations using randomly generated gene lists containing varying
+percentages of True Null genes. The simulation results contained unacceptably high
+FDRs for some gene groups containing 64 or 124 genes.
+
+Upon investigation, it was found the high numbers of false positives were often from:
+  * GO IDs had an unusually high number of gene associations
+  * Purified, rather than enriched
+
+If the simulations were re-run, but only the enriched results were used in reports and figures,
+the simulations PASSED resulting in FDRs that were very close to zero.
+
+If the simulations were re-run, but with ~30 GO IDs out of 17,000+ GO IDs in the
+association stripped out of the association, the simulations also PASSED.
+The 30 GO IDs were chosen to be purged because they were associated with more than 1000 genes.
+
+Upon doing a stress test by randomizing the associations for True-Null genes
+prior to simulation, the "enriched-gene" simulations FAILed, but the
+"30-GOs-Purged" simulations PASSed.
+
+![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![FAIL_rand_pruneN_enr](doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![PASS_rand_pruneN_pru](doc/md/images/fig5b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
 ### Introduction
-Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs) are
-run on sets of randomly generated gene lists. The study gene lists in the simulations shown
-range in sizes of 4 to 124 genes
-and contain percentages of genes enriched in a particular set of biological processes
-ranging from _no genes are enriched_ (100% Null) to _all genes are enriched_ (0% Null).
-In the simulations shown, the gene enrichment under study is _Humoral response_ (HR).
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
+(GOEAs) are run on sets of randomly generated gene lists. The study gene lists
+in the simulations shown range in sizes of 4 to 124 genes and contain
+percentages of genes enriched in a particular set of biological processes
+ranging from _no genes are enriched_ (100% Null) to _all genes are enriched_ (0%
+Null).  In the simulations shown, the gene enrichment under study is _Humoral
+response_ (HR).
 
 The results are analyzed to determine the percentages of study genes which are enriched in
 _Humoral response_ and are correctly discovered by the GOEAs.
 
 #### GOEA simulation Inputs
+
+##### Inputs: Randomly Generated Gene lists
 The simulation inputs are groups of genes tagged as either **False nulls** and **True nulls**:
   * _**False Null**_ (a.k.a. _**Non-True Null**_) study genes are enriched in _Humoral response_
     by randomly chosing the study genes from any of the
     [124 _Humoral Response_ genes](/src/pkggosim/goea_data/genes_humoral_rsp.py).    
   * _**True Null**_ genes are randomly chosen from the large general population
     genes not enriched in _Humoral Response_.
+
+##### Inputs: Associations with True-Null Genes
+For each gene, there is a list of GO IDs that are associated with the gene.
+Genes can be True-Null (general population) genes or Non-True-Null 
+(Humoral Response) genes.
+
+In the first simulations, we use the associations for Non-True Nulls that are
+read from the association file downloaded from the Gene Ontology Consortium.
+
+In the second stress-test simulations, we randomly shuffle the associations for the
+True-Null genes.
+
+The nominal case of randomly shuffling all associations for both True-Null
+genes and Non-True Null genes yeilds simulations that correctly report no discoveries.
+
+##### Inputs: Associations with None-True-Null Genes
+We run three simulations for every simulation set.
 
 ### GOEA Simulations
 #### Simulations with randomly-generated gene lists
@@ -66,21 +116,18 @@ Upon investigation, the simulation details showed that most _False Positives_ ar
   * Purified rather than Enriched and/or
   * Associated with over 1,000 genes    
 
-![fig1b_FAIL_goea_orig_noprune_ntn2](
-doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1b_FAIL_goea_orig_noprune_ntn2](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 #### Simulations viewing only Enriched GOEA results
 Resimulating while only viewing enriched GOEA results still showed elevated FDRs (A2, A3, A4).
 
 EXPLANATION: Genes enriched in the area of interest, **Humoral Response** (HR) can also be legitimately enriched in other biological functions.
 If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
-![fig3a_fail_goea_orig_noprune_enriched_ntn1](
-doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig3a_fail_goea_orig_noprune_enriched_ntn1](doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 SIMULATION PASSes: Resimulating the GOEAs, but only viewing the enriched results yielded passing simulations
 if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
-![fig3b_PASS_goea_orig_noprune_enriched_ntn2](
-doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig3b_PASS_goea_orig_noprune_enriched_ntn2](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 #### Randomly-generated True-Null Associations
 The next step is testing the robustness of GOEA simulations using
