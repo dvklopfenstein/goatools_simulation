@@ -16,15 +16,17 @@ All simulations shown use **alpha=0.05**.
 
 ## Figure List
   * [**Stochastic GOEA simulations:**](#stochastic-goea-simulations-1)
-    * [Figure 1) GOEA Simulations with extremely significant P-values for enriched genes](
-      #figure-1-goea-simulations-with-true-null-genes-associations-randomized)
-    * [Figure 2) GOEA Simulations with some truly enriched genes (_Non-True Nulls_) left unmarked](
-      #figure-2-goea-simulations-with-original-associations)
+    * [Original Simulations](#stochastic-goea-simulations-1)
+      * [Enriched](#simulate-and-view-enriched-genes-only)
+      * [Pruned](#purge-30-gos-from-association-then-simulate)
+    * Random Simulations
+      * [Rand Enriched](#randomize-association-and-view-enriched-genes-only)
+      * [Rand Purged](#purge-30-gos-from-association-then-randomize)
   * [**Stochastic Benjamini/Hochberg-Only Simulations:**](#benjaminihochberg-only-simulations)
-    * [Figure 3) Benjamini/Hochberg-Only Simulated FDRs](
-      #figure-3-benjaminihochberg-only-simulated-fdrs)
-    * [Figure 4) Benjamini/Hochberg-Only Simulated Sensitivities](
-      #figure-4-benjaminihochberg-only-simulated-sensitivity)
+    * [Benjamini/Hochberg-Only Simulated FDRs](
+      #benjaminihochberg-only-simulated-fdrs)
+    * [Benjamini/Hochberg-Only Simulated Sensitivities](
+      #benjaminihochberg-only-simulated-sensitivity)
 
 ## Stochastic GOEA simulations
 First, we ran simulations using randomly generated gene lists containing varying
@@ -64,132 +66,6 @@ This simulation PASSes.
 ![PASS_rand_pruneY_pru](doc/md/images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 
-### Introduction
-Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses**
-(GOEAs) are run on sets of randomly generated gene lists. The study gene lists
-in the simulations shown range in sizes of 4 to 124 genes and contain
-percentages of genes enriched in a particular set of biological processes
-ranging from _no genes are enriched_ (100% Null) to _all genes are enriched_ (0%
-Null).  In the simulations shown, the gene enrichment under study is _Humoral
-response_ (HR).
-
-The results are analyzed to determine the percentages of study genes which are enriched in
-_Humoral response_ and are correctly discovered by the GOEAs.
-
-#### GOEA simulation Inputs
-
-##### Inputs: Randomly Generated Gene lists
-The simulation inputs are groups of genes tagged as either **False nulls** and **True nulls**:
-  * _**False Null**_ (a.k.a. _**Non-True Null**_) study genes are enriched in _Humoral response_
-    by randomly chosing the study genes from any of the
-    [124 _Humoral Response_ genes](/src/pkggosim/goea_data/genes_humoral_rsp.py).    
-  * _**True Null**_ genes are randomly chosen from the large general population
-    genes not enriched in _Humoral Response_.
-
-##### Inputs: Associations with True-Null Genes
-For each gene, there is a list of GO IDs that are associated with the gene.
-Genes can be True-Null (general population) genes or Non-True-Null 
-(Humoral Response) genes.
-
-In the first simulations, we use the associations for Non-True Nulls that are
-read from the association file downloaded from the Gene Ontology Consortium.
-
-In the second stress-test simulations, we randomly shuffle the associations for the
-True-Null genes.
-
-The nominal case of randomly shuffling all associations for both True-Null
-genes and Non-True Null genes yeilds simulations that correctly report no discoveries.
-
-##### Inputs: Associations with None-True-Null Genes
-We run three simulations for every simulation set.
-
-### GOEA Simulations
-#### Simulations with randomly-generated gene lists
-The original GOEA simulations using randomly generated gene lists showed
-unacceptably high simulated FDR values that are above the alpha of 0.05 (Panels
-A3 and A4 in the Figure).
-
-Upon investigation, the simulation details showed that most _False Positives_ are significant GO terms that are:
-  * Purified rather than Enriched and/or
-  * Associated with over 1,000 genes    
-
-![fig1b_FAIL_goea_orig_noprune_ntn2](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-#### Simulations viewing only Enriched GOEA results
-Resimulating while only viewing enriched GOEA results still showed elevated FDRs (A2, A3, A4).
-
-EXPLANATION: Genes enriched in the area of interest, **Humoral Response** (HR) can also be legitimately enriched in other biological functions.
-If the non-HR genes are not properly marked as **Non-True-Nulls**, they will appear on the plots as elevated FDRs as seen below.
-![fig3a_fail_goea_orig_noprune_enriched_ntn1](doc/md/images/fig3a_okay_goea_orig_noprune_enriched_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-SIMULATION PASSes: Resimulating the GOEAs, but only viewing the enriched results yielded passing simulations
-if the associations of the **Non-True-Null** (Humoral Response) genes are purged of GO terms significant for other biological functions.
-![fig3b_PASS_goea_orig_noprune_enriched_ntn2](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-#### Randomly-generated True-Null Associations
-The next step is testing the robustness of GOEA simulations using
-randomly-generated associations for genes which are _True-Nulls_ (aka HR genes).
-
-The associations for _Non-True-Nulls_ (aka Humoral Response genes) are not 
-randomized to test that the GOEAs successfully discover the randomly chosen
-Humoral Response genes in each study group.
-
-ADJUSTMENT:
-GO terms associated with large numbers of genes, when randomized in an association,
-can cause the simulated FDRs to appear to be too high. Because a real association is not mixed
-to the extent as seen in randoms, randomizing GO associations with large numbers of genes
-yields GOEA results which are unrealistically pessimistic.
-
-The GOEA simulation results using random associations are more realistic if the top ~30 GO IDs out of 17,000+
-GO IDs that are associated with > 1,000 mouse protein-coding genes are removed.
-
-The trend of rising FDR values as the study size increases is an artifact of GOEA results
-appearing to be significant due to randomization.
-![fig5b_goea_rand_pruned_ntn2](images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
-
-## Stochastic GOEA simulations
-### Figure 1) GOEA Simulations with _true null genes'_ associations randomized
-To ensure that all **True Null** genes are real true nulls, the associations 
-not associated with the _Humoral Response_ (i.e. non-true nulls) are randomly shuffled.
-
-![figure](doc/logs/fig_goea_rnd_100to000_004to124_N00100_00030_humoral_rsp.png)
-**Observations:**    
-* Simulated FDRs are all under alpha (0.50) (A2-A4)     
-* Simulated FDRs improve (become smaller) as the study set contains more _Humoral response_ genes (from 
-  A2 with 25% _Humoral Response_ genes to A4 with 75% _Humoral Response_ genes)
-  meaning there is a smaller percentage of false positives among the discoveries of genes 
-  enriched in _Humoral response_.    
-* Simulated FDRs are better (smaller) for smaller study groups,
-  like groups with 4 genes (A3, left boxplot),
-  than for larger study group sizes, like groups with 124 genes (A3, right boxplot).
-* **Sensitivity**:
-  * Almost all _Humoral response_ genes are found when the difference between alpha and the 
-    P-values for _Humoral response_ is extreme. The difference is extreme in this example because the 
-    associations are all randomized, so there is a large difference between Humoral gene enrichment and
-    other enrichments; which in this case there are none due to randomization.    
-  * The sensitivity is poor (B2 left bar, mean value 2%) when the study size is 4 genes
-    and 3 of the 4 genes do not differ from the population (True Nulls).
-  * The mean sensitivity is about 86% (B3 left bar) when the study gene size is 4 genes and
-    half of the genes do not differ from the population (True Nulls).
-
-### Figure 2) GOEA Simulations with original associations
-This figure demonstrates the effect of *not* randomizing the genes intended to be _True Nulls_ 
-(same as the population).
-
-Simulated FDRs appear higher than alpha (0.05) (A2-A4) because some study genes which are not 
-enriched in _Humoral response_ actually have real enrichment in processes other than
-_Humoral response_ in the associations, but were not tagged as _False Nulls_.
-Compensating for untagged enrichments is shown in Figure 1 above.
-
-![figure](doc/logs/fig_goea_100to000_004to124_N00050_00020_humoral_rsp.png)
-**Observations:**    
-* Small groups of study genes (e.g. 4 genes and sometimes 16 genes) show low sensitivity
-  (blue bars in B2-B5, green bars in B2-B3),
-  meaning study genes enriched in _Humoral Response_ in very small study gene groups may not be detected.
-* The poor simulated FDR values (A2-A4 for groups of 64 and 124 genes) 
-  are an artifact of not properly marking the input genes as enriched when they are
-  actually enriched in something other than _Humoral response_.
-
 ## Benjamini/Hochberg-Only Simulations
 Simulations of the underlying Benjamini/Hochberg multiple test correction are a subset
 of the GOEA simulations.
@@ -205,7 +81,7 @@ either **True nulls** and **Non-True nulls**:
     * **0.00 to 0.03** => **Moderately** different from the population.    
     * **0.00 to 0.05** => **Minimally** different from the population.    
 
-### Figure 3) Benjamini/Hochberg-Only Simulated FDRs
+### Benjamini/Hochberg-Only Simulated FDRs
 ![FDR results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png)
 **Results show**:
   * The worst (highest) simulated FDR means are equal to the alpha (0.05)
@@ -217,7 +93,7 @@ either **True nulls** and **Non-True nulls**:
     * the leftmost boxplot with blue dots showing the groups of 4 tested hypotheses has the same mean FDR as
     * the rightmost boxplot with red dots showing the groups of 128 tested hypotheses.
 
-### Figure 4) Benjamini/Hochberg-Only Simulated Sensitivity
+### Benjamini/Hochberg-Only Simulated Sensitivity
 ![Sensitivity results](doc/logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_sensitivity.png)
 **Observations:**    
 * **100%** of **Non-True Nulls** are **discovered** if their **uncorrected P-Value** is **Extreme** (below 0.01 when alpha is 0.05) (A2-A4)
