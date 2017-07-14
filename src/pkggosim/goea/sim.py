@@ -73,27 +73,8 @@ class GoeaSim(object):
 
     def rpt_details_goids(self, prt):
         """Report GO IDs found in GOEA results."""
-        go2genes = self.pobj.objassc.get_go2genes(self.assc)
-        gos_bg = self.pobj.params['goids_study_bg']
-        gos_sig_all = set([r.GO for r in self.goea_results])
-        gos_sig_bgy = gos_sig_all.intersection(gos_bg)
-        gos_sig_bgn = gos_sig_all.difference(gos_bg)
-        prt.write("{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
-            A=len(gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
-        go2obj = self.pobj.params['gosubdag'].go2obj
-
-        go2res = {r.GO:r for r in self.goea_results}
-        pat = "{PRE:1} {EP} {PVAL:8.2e} {DESC}\n"
-        attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
-
-        for goid, desc in self.pobj.objassc.get_go2desc(gos_sig_bgy, go2obj, go2genes).items():
-            res = go2res[goid]
-            prt.write(pat.format(PRE="", EP=res.enrichment, PVAL=getattr(res, attrname), DESC=desc))
-
-        for goid, desc in self.pobj.objassc.get_go2desc(gos_sig_bgn, go2obj, go2genes).items():
-            res = go2res[goid]
-            prt.write(pat.format(PRE="X", EP=res.enrichment, PVAL=getattr(res, attrname), DESC=desc))
-
+        objprt = _PrtGoIds(self)
+        objprt.wr_goids(prt)
 
     def rpt_details_genes(self, prt):
         """Report genes found in GOEA results."""
@@ -112,6 +93,41 @@ class GoeaSim(object):
             dct['BG'] = "*" if nti.study_gene in genes_bg else ""
             dct['assc_gos'] = len(assc[nti.study_gene])
             prt.write(pat.format(**dct))
+
+
+class _PrtGoIds(object):
+    """For printing GO IDs found significant in one simulation."""
+
+    def __init__(self, objsim):
+        self.go2genes = objsim.pobj.objassc.get_go2genes(objsim.assc)
+        self.gos_bg = objsim.pobj.params['goids_study_bg']
+        self.gos_sig_all = set([r.GO for r in objsim.goea_results])
+        self.go2obj = objsim.pobj.params['gosubdag'].go2obj
+        self.go2res = {r.GO:r for r in objsim.goea_results}
+        self.attr_pval = "p_{METHOD}".format(METHOD=objsim.pobj.objbase.method)
+        self.get_go2desc = objsim.pobj.objassc.get_go2desc
+
+    def wr_goids(self, prt):
+        """Print significant GO IDs."""
+        gos_sig_bgy = self.gos_sig_all.intersection(self.gos_bg)
+        gos_sig_bgn = self.gos_sig_all.difference(self.gos_bg)
+        self.wr_goids_tot(gos_sig_bgy, gos_sig_bgn, prt)
+        self.wr_goids_details(gos_sig_bgy, "", prt)
+        self.wr_goids_details(gos_sig_bgn, "X", prt)
+
+    def wr_goids_tot(self, gos_sig_bgy, gos_sig_bgn, prt):
+        """Print summary for significant GO IDs."""
+        prt.write("{A} Sig. GO IDs = bgY({Y}) + bgN({N})\n".format(
+            A=len(self.gos_sig_all), Y=len(gos_sig_bgy), N=len(gos_sig_bgn)))
+
+    def wr_goids_details(self, gos_sig_bg, pre, prt):
+        """Print a details line for each GO ID."""
+        pat = "{PRE:1} {EP} {PVAL:8.2e} {DESC}\n"
+        for goid, desc in self.get_go2desc(gos_sig_bg, self.go2obj, self.go2genes).items():
+            res = self.go2res[goid]
+            pval = getattr(res, self.attr_pval)
+            prt.write(pat.format(PRE=pre, EP=res.enrichment, PVAL=pval, DESC=desc))
+
 
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""

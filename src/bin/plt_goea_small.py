@@ -15,7 +15,7 @@ from goatools_suppl.data.ensm2nt_mus import ensm2nt
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
-def main(prt=sys.stdout):
+def main(run_all, prt=sys.stdout):
     """Simulate Gene Ontology Enrichment Analyses."""
     args = get_args()
     #pylint: disable=no-member
@@ -27,7 +27,6 @@ def main(prt=sys.stdout):
     study_bg = "humoral_rsp"
     popnullmaskout = ['immune', 'viral_bacteria']
     # Gene Ontology Data
-    genes_mus = ensm2nt.keys()  # Population genes
     params = {
         'log' : sys.stdout,
         'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
@@ -35,16 +34,14 @@ def main(prt=sys.stdout):
         'seed' : args.get('randomseed', None),
         'alpha' : 0.05,
         'method' : 'fdr_bh',
-        'genes_population':genes_mus,
+        'genes_population':ensm2nt.keys(), # Mouse protein-coding genes
         'genes_study_bg':import_genes(study_bg),
         'goids_study_bg':import_goids(study_bg),
         'genes_popnullmaskout':import_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
 
-        'perc_nulls' : [100, 75, 50, 25, 0],
-        #'perc_nulls' : [25],
-        'num_genes_list' : [4, 16, 64, 128],
-        #'num_genes_list' : [128],
+        'perc_nulls' : [100, 75, 50, 25, 0] if run_all else [25],
+        'num_genes_list' : [4, 16, 64, 128] if run_all else [128],
 
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
@@ -68,6 +65,8 @@ def main(prt=sys.stdout):
 
 
 if __name__:
-    main()
+    # Either run full set of sims or reduced sims where false positive genes appear
+    RUN_ALL = False if len(sys.argv) != 1 and sys.argv[1] == 'False' else True
+    main(RUN_ALL)
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

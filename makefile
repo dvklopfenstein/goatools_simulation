@@ -2,6 +2,7 @@
 
 # Method index for Hypotheses Simulations
 E = -3
+RUNALL = False
 
 # Max Sig P-values index for hypothese simulations
 P = 0
@@ -14,7 +15,7 @@ lst:
 
 # make run E=-1
 run:
-	src/bin/plt_goea_small.py e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
+	src/bin/plt_goea_small.py $(RUNALL) e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
 
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
