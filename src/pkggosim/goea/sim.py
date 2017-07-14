@@ -132,13 +132,11 @@ class _PrtGoIds(object):
 class _Init(object):
     """Run GOEA on randomly-created "True Null" gene sets and "Non-true Null" gene sets."""
 
-    #ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs go2epval num_gos tfpn")
     ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs num_gos tfpn")
 
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
-        # attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         for study_gene, expsig in zip(self.genes_stu, self.expsig):
             reject = study_gene in self.genes_sig
             goids = self.assc_geneid2gos[study_gene]
@@ -148,7 +146,6 @@ class _Init(object):
                 reject     = reject,
                 expsig     = expsig, # False->True Null; True->Non-true null
                 GOs        = goids,
-                #go2epval   = {r.GO:(r.enrichment, getattr(r, attrname)) for r in self.goea_results},
                 num_gos    = len(goids),
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
@@ -159,23 +156,24 @@ class _Init(object):
         self.genes_stu = None  # List of randomly-generated gene lists
         self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)
         self._init_study_genes(num_study_genes, num_null)
-        num_study = len(self.genes_stu)
-        assert num_study == num_study_genes, "{} {}".format(num_study, num_study_genes)
-        assert num_study_genes - sum(self.expsig) == num_null
         self.assc_geneid2gos = self._init_assc()
         self.goea_results = self._init_goea_results()
         # for g in self.goea_results:
         #     print "HHHH", g
         self.genes_sig = get_study_items(self.goea_results)
+        if self.pobj.params['log'] is not None:
+            self._wrlog_summary(num_study_genes, num_null)
+
+    def _wrlog_summary(self, num_study_genes, num_null):
+        """Write GOEA summary."""
         num_sig = len(self.genes_sig)
+        num_exp = num_study_genes-num_null
+        mrk = ""
+        if num_exp != num_sig:
+            mrk = "-" if num_sig < num_exp else "+"
+        txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
         log = self.pobj.params['log']
-        if log is not None:
-            num_exp = num_study-num_null
-            mrk = ""
-            if num_exp != num_sig:
-                mrk = "-" if num_sig < num_exp else "+"
-            txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
-            log.write(txt.format(STU=num_study, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
+        log.write(txt.format(STU=num_study_genes, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
     def _init_goea_results(self):
         """Run GOEA."""
@@ -238,7 +236,6 @@ class _Init(object):
             return assc_bg
         raise RuntimeError("UNEXPECTED randomize_truenull_assc({})".format(randomize_truenull_assc))
 
-
     def _get_assc_rndtgtd(self):
         """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
         assc = {g:gos for g, gos in self.pobj.assc_pruned.items()} # copy pruned assc
@@ -262,9 +259,11 @@ class _Init(object):
         genes_study_bg = self.pobj.gene_lists['study_bg']
         shuffle(genes_pop_bg)
         shuffle(genes_study_bg)
-        genes_expsig = \
-            [(g, True) for g in genes_study_bg[:num_ntnull]] + \
-            [(g, False) for g in genes_pop_bg[:num_null]]         # True Null
+        genes_ntn = [(g, True) for g in genes_study_bg[:num_ntnull]]
+        genes_tn = [(g, False) for g in genes_pop_bg[:num_null]]
+        assert len(genes_ntn) == num_ntnull
+        assert len(genes_tn) == num_null
+        genes_expsig = genes_ntn + genes_tn
         # 2. Extract "genes" and "intended significance" by transposing data
         self.genes_stu, self.expsig = zip(*genes_expsig)
 
