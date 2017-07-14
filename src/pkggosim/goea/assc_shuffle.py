@@ -36,13 +36,13 @@ class RandAssc(object):
 
     def get_shuffled_associations(self):
         """Randomly shuffle all associations to mimic a list of genes having no significance."""
+        assc_rand = {}
         # Create randomly shuffled long list of all GO IDs for random assc.
         shuffle(self.goids)
         goctr_rand = list(Counter({go:cnt for go, cnt in zip(self.goids, self.gocnts)}).elements())
         assert len(goctr_rand) == sum(self.golens) # 275,168
         shuffle(goctr_rand)
         # Use long list of random GO IDs to create new random assc.
-        assc_rand = {}
         start = 0
         shuffle(self.golens)
         for geneid, golen in zip(self.genes, self.golens):
