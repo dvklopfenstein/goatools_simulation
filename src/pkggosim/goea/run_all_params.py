@@ -55,13 +55,14 @@ class RunParams(object):
         self.params['gosubdag_bg'] = GoSubDag(params["goids_study_bg"], self.objbase.go_dag)
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
-        # self.assc_pruned = self._init_goids_tgtd()
+        # self.assc_pruned = self._init_get_goids_tgtd()
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
-        self.objassc.set_targeted(self._init_goids_tgtd())
+        self.objassc.set_targeted(self._init_get_goids_tgtd())
 
     def get_assc_rmgenes(self, assc_curr):
         """Remove GO IDs if they are not associated with many genes and are not in study BG."""
+        raise Exception("rm get_assc_rmgenes")
         gcnt = self.params['assc_rm_if_genecnt']
         bg_gos = self.params['goids_study_bg']
         go2genes = self.objassc.get_go2genes(assc_curr)
@@ -164,7 +165,7 @@ class RunParams(object):
             self.params['num_genes_list'] = lst_curr
         return lst_curr
 
-    def _init_goids_tgtd(self):
+    def _init_get_goids_tgtd(self):
         """Get GO IDs to randomize so all inputs are properly marked as 'Non-true null'."""
         # Run Gene Ontology Analysis w/study genes being entire study gene background.
         attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
