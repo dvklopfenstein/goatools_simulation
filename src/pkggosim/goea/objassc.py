@@ -33,7 +33,7 @@ class DataAssc(object):
         _assc_all = {g:gos for g, gos in _assc_geneid2gos.items() if g in self.pop_genes}
         self.go2genes = self.get_go2genes(_assc_all)
         self.objassc_all = RandAssc(_assc_all)
-        # Set by set_targeted
+        # Set by local set_targeted() when RunParams is initialized
         self.goids_tgtd = None
         self.objassc_pruned = None
         self.objassc_tgtd = None
@@ -76,6 +76,7 @@ class DataAssc(object):
         """Set targeted GO IDs: Significant, but not tracked."""
         self.goids_tgtd = goids_tgtd
         assc_pruned, assc_tgtd = self.split_assc(goids_tgtd)
+        print "AASSSSCC LENS PRUNED({}) TGTD({})".format(len(assc_pruned), len(assc_tgtd)) # TBD rm
         self.objassc_pruned = RandAssc(assc_pruned)
         self.objassc_tgtd = RandAssc(assc_tgtd)
 
