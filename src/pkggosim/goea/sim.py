@@ -137,7 +137,7 @@ class _Init(object):
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
-        for study_gene, expsig in zip(self.genes_stu, self.expsig):
+        for study_gene, expsig in self.genes_expsig_list:
             reject = study_gene in self.genes_sig
             goids = self.assc_geneid2gos[study_gene]
             #pylint: disable=bad-whitespace
@@ -153,9 +153,7 @@ class _Init(object):
     def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj # RunParams object
         # I. Genes in two groups: Different than population AND no different than population
-        self.genes_stu = None  # List of randomly-generated gene lists
-        self.expsig = None # List of bool/gene. True:gene is intended to be signif.(Non-true null)
-        self._init_study_genes(num_study_genes, num_null)
+        self.genes_expsig_list = self._init_study_genes(num_study_genes, num_null)
         self.assc_geneid2gos = self._init_assc()
         self.goea_results = self._init_goea_results()
         # for g in self.goea_results:
@@ -164,54 +162,52 @@ class _Init(object):
         if self.pobj.params['log'] is not None:
             self._wrlog_summary(num_study_genes, num_null)
 
-    def _wrlog_summary(self, num_study_genes, num_null):
-        """Write GOEA summary."""
-        num_sig = len(self.genes_sig)
-        num_exp = num_study_genes-num_null
-        mrk = ""
-        if num_exp != num_sig:
-            mrk = "-" if num_sig < num_exp else "+"
-        txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
-        log = self.pobj.params['log']
-        log.write(txt.format(STU=num_study_genes, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
-
     def _init_goea_results(self):
-        """Run GOEA."""
+        """Run Gene Ontology Analysis."""
         objgoea = self.pobj.objbase.get_goeaobj(self.pobj.genes['population'], self.assc_geneid2gos)
         attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
-        goea_results = objgoea.run_study(self.genes_stu, keep_if=keep_if)
+        genes_stu = [g for g, _ in self.genes_expsig_list]
+        goea_results = objgoea.run_study(genes_stu, keep_if=keep_if)
         if self.pobj.params['enriched_only']:
             goea_results = [r for r in goea_results if r.enrichment == 'e']
         return goea_results
 
     def _init_assc(self):
-        """Run Gene Ontology Analysis."""
+        """Association."""
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
-        assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
+        assc_full = self.pobj.objassc.objassc_all.assc_geneid2gos
         # print "AAAAAAAAAAAAAAAAAAAAAAAAA", randomize_truenull_assc
+        assc = None
 
-        if randomize_truenull_assc[:4] == "rand_tgtd":
-            assc = self._get_assc_rndtgtd()
-        elif randomize_truenull_assc[:5] == "rand_":
+        # Random or Original Associations
+        if randomize_truenull_assc[:5] == "rand_":
             # print "RRRRRRRRRRRRRRRRRRRRRRRRR",
-            assc = self.pobj.objassc.objassc_all.get_shuffled_associations()
+            assc = self.pobj.objassc.objassc_all.get_shuffled_associations() # ret a copy
         elif randomize_truenull_assc == "rm_tgtd":
+            raise Exception("rm_tgtd") # TBD rm
             assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
 
         if self.pobj.params['assc_rm_if_genecnt'] is not None:
+            raise Exception("assc_rm_if_genecnt") # TBD rm
             #### print "VVVV", self.pobj.params['assc_rm_if_genecnt'], len(assc)
-            assc = self.pobj.get_assc_rmgenes(assc)
+            assc = self.pobj.get_assc_rmgenes(assc if assc is not None else assc_full)
             #### print "vvvv", self.pobj.params['assc_rm_if_genecnt'], len(assc)
 
-        if randomize_truenull_assc[-4:-1] == "ntn" and randomize_truenull_assc[-1].isdigit():
-            assc = self._fill_assc_ntn(assc, randomize_truenull_assc)
+        if randomize_truenull_assc[-4:-1] == "ntn":
+            digit_str = randomize_truenull_assc[-1]
+            assert digit_str.isdigit()
+            if assc is None:
+                assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
+            assc = self._fill_assc_ntn(assc, int(digit_str))
+
         return assc
 
 
-    def _fill_assc_ntn(self, assc_bg, randomize_truenull_assc):
+    def _fill_assc_ntn(self, assc_bg, ntn_num):
         """Return one of many flavors of randomly shuffled associations."""
-        genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+        #genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
+        genes_nontrunull = set([g for g, e in self.genes_expsig_list if e])
         # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
         # assert not genes_nontrunull.intersection(genes_nontrunullt)
         # print len(genes_nontrunull), len(genes_nontrunullt)
@@ -220,32 +216,32 @@ class _Init(object):
         #     tn = next(iter(genes_nontrunullt))
         #     assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
         assc_all_orig = self.pobj.objassc.objassc_all.assc_geneid2gos
-        if randomize_truenull_assc[-4:] == "ntn1":
+        if ntn_num == 1:
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene]
             return assc_bg
-        elif randomize_truenull_assc[-4:] == "ntn2":
+        elif ntn_num == 2:
             goids_tgtd = self.pobj.objassc.goids_tgtd
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene].difference(goids_tgtd)
             return assc_bg
-        elif randomize_truenull_assc[-4:] == "ntn3":
+        elif ntn_num == 3:
             goids_study_bg = self.pobj.params['goids_study_bg']
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene].intersection(goids_study_bg)
             return assc_bg
-        raise RuntimeError("UNEXPECTED randomize_truenull_assc({})".format(randomize_truenull_assc))
+        raise RuntimeError("UNEXPECTED ntn({})".format(ntn_num))
 
-    def _get_assc_rndtgtd(self):
-        """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
-        assc = {g:gos for g, gos in self.pobj.assc_pruned.items()} # copy pruned assc
-        assc_tgtd_rnd = self.pobj.objassc.shuffle_associations(self.pobj.assc_tgtd)
-        for geneid, goids_rnd in assc_tgtd_rnd.items():
-            if geneid in assc:
-                assc[geneid] |= goids_rnd
-            else:
-                assc[geneid] = goids_rnd
-        return assc
+    #### def _get_assc_rndtgtd(self):
+    ####     """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
+    ####     assc = {g:gos for g, gos in self.pobj.assc_pruned.items()} # copy pruned assc
+    ####     assc_tgtd_rnd = self.pobj.objassc.shuffle_associations(self.pobj.assc_tgtd)
+    ####     for geneid, goids_rnd in assc_tgtd_rnd.items():
+    ####         if geneid in assc:
+    ####             assc[geneid] |= goids_rnd
+    ####         else:
+    ####             assc[geneid] = goids_rnd
+    ####     return assc
 
     def _init_study_genes(self, num_study_genes, num_null):
         """Generate 2 sets of genes: Not intended significant & intended to be significant."""
@@ -263,9 +259,17 @@ class _Init(object):
         genes_tn = [(g, False) for g in genes_pop_bg[:num_null]]
         assert len(genes_ntn) == num_ntnull
         assert len(genes_tn) == num_null
-        genes_expsig = genes_ntn + genes_tn
-        # 2. Extract "genes" and "intended significance" by transposing data
-        self.genes_stu, self.expsig = zip(*genes_expsig)
+        return genes_ntn + genes_tn # genes_expsig_list
 
+    def _wrlog_summary(self, num_study_genes, num_null):
+        """Write GOEA summary."""
+        num_sig = len(self.genes_sig)
+        num_exp = num_study_genes-num_null
+        mrk = ""
+        if num_exp != num_sig:
+            mrk = "-" if num_sig < num_exp else "+"
+        txt = "{MRK:1} NULL({NULL:3}) STUDY({STU:3}) EXP_SIG({EXP:3}) ACT_SIG({SIG:3})\n"
+        log = self.pobj.params['log']
+        log.write(txt.format(STU=num_study_genes, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
