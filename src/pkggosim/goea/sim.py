@@ -137,7 +137,7 @@ class _Init(object):
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
-        for study_gene, expsig in self.genes_expsig_list:
+        for study_gene, expsig in self.gene_expsig_list:
             reject = study_gene in self.genes_sig
             goids = self.assc_geneid2gos[study_gene]
             #pylint: disable=bad-whitespace
@@ -150,10 +150,39 @@ class _Init(object):
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
+    # Future Work?
+    # def get_nts_stugoids(self):
+    #     """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
+    #     goeasim_results = []
+    #     ntobj = namedtuple("NtGoeaGos", "GO reject expsig tfpn")
+    #     #### ntobj = namedtuple("NtGoeaGos", "GO reject expsig genes num_genes tfpn")
+    #     goids_expsig_list = self._get_goids_expsig_list()
+    #     go2res = {r.id:r for r in self.goea_results}
+    #     goids_sig = set(go2res.keys())
+    #     for study_goid, expsig in goids_expsig_list:
+    #         reject = study_goid in goids_sig
+    #         #### genes =
+    #         #pylint: disable=bad-whitespace
+    #         goeasim_results.append(ntobj(
+    #             GO        = study_goid,
+    #             reject    = reject,
+    #             expsig    = expsig, # False->True Null; True->Non-true null
+    #             #### genes     = genes,
+    #             #### num_genes = len(genes),
+    #             tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
+    #     return goeasim_results
+
+    # def _get_goids_expsig_list(self):
+    #     """Get a list of GO IDs related to study genes and their expected discovery status."""
+    #     goids_expsig_list = []
+    #     for gene, expsig in self.gene_expsig_list:
+    #         goids_gene = self.assc_geneid2gos[gene]
+    #     return goids_expsig_list
+
     def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj # RunParams object
         # I. Genes in two groups: Different than population AND no different than population
-        self.genes_expsig_list = self._init_study_genes(num_study_genes, num_null)
+        self.gene_expsig_list = self._init_study_genes(num_study_genes, num_null)
         self.assc_geneid2gos = self._init_assc()
         self.goea_results = self._init_goea_results()
         # for g in self.goea_results:
@@ -167,7 +196,7 @@ class _Init(object):
         objgoea = self.pobj.objbase.get_goeaobj(self.pobj.genes['population'], self.assc_geneid2gos)
         attrname = "p_{METHOD}".format(METHOD=self.pobj.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.pobj.objbase.alpha
-        genes_stu = [g for g, _ in self.genes_expsig_list]
+        genes_stu = [g for g, _ in self.gene_expsig_list]
         goea_results = objgoea.run_study(genes_stu, keep_if=keep_if)
         if self.pobj.params['enriched_only']:
             goea_results = [r for r in goea_results if r.enrichment == 'e']
@@ -207,7 +236,7 @@ class _Init(object):
     def _fill_assc_ntn(self, assc_bg, ntn_num):
         """Return one of many flavors of randomly shuffled associations."""
         #genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
-        genes_nontrunull = set([g for g, e in self.genes_expsig_list if e])
+        genes_nontrunull = set([g for g, e in self.gene_expsig_list if e])
         # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
         # assert not genes_nontrunull.intersection(genes_nontrunullt)
         # print len(genes_nontrunull), len(genes_nontrunullt)
@@ -259,7 +288,7 @@ class _Init(object):
         genes_tn = [(g, False) for g in genes_pop_bg[:num_null]]
         assert len(genes_ntn) == num_ntnull
         assert len(genes_tn) == num_null
-        return genes_ntn + genes_tn # genes_expsig_list
+        return genes_ntn + genes_tn # gene_expsig_list
 
     def _wrlog_summary(self, num_study_genes, num_null):
         """Write GOEA summary."""
