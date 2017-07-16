@@ -3,10 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
-# import os
 import sys
-import re
-import collections as cx
 import timeit
 import datetime
 from pkggosim.goea.objbase import DataBase
@@ -60,30 +57,31 @@ class RunParams(object):
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         self.objassc.set_targeted(self._init_get_goids_tgtd())
 
-    def get_bgname(self):
+    @staticmethod
+    def get_bgname():
         """Get the Background gene name"""
         return "HR"
 
-    def get_assc_rmgenes(self, assc_curr):
-        """Remove GO IDs if they are not associated with many genes and are not in study BG."""
-        raise Exception("rm get_assc_rmgenes")
-        gcnt = self.params['assc_rm_if_genecnt']
-        bg_gos = self.params['goids_study_bg']
-        go2genes = self.objassc.get_go2genes(assc_curr)
-        assc_next = cx.defaultdict(set)
-        #### gos_keep = set() # TBD rm
-        for goid, go_genes in go2genes.items():
-            if len(go_genes) > gcnt:
-                for gene in go_genes:
-                    assc_next[gene].add(goid)
-                    #### gos_keep.add(goid)
-            else:
-                for gene in go_genes.intersection(bg_gos):
-                    assc_next[gene].add(goid)
-                    #### gos_keep.add(goid)
-        #### print "GO WAS", len(go2genes)
-        #### print "GO NOW", len(gos_keep)
-        return {g:gos for g, gos in assc_next.items()}
+    #### def get_assc_rmgenes(self, assc_curr):
+    ####     """Remove GO IDs if they are not associated with many genes and are not in study BG."""
+    ####     raise Exception("rm get_assc_rmgenes")
+    ####     gcnt = self.params['assc_rm_if_genecnt']
+    ####     bg_gos = self.params['goids_study_bg']
+    ####     go2genes = self.objassc.get_go2genes(assc_curr)
+    ####     assc_next = cx.defaultdict(set)
+    ####     #### gos_keep = set() # TBD rm
+    ####     for goid, go_genes in go2genes.items():
+    ####         if len(go_genes) > gcnt:
+    ####             for gene in go_genes:
+    ####                 assc_next[gene].add(goid)
+    ####                 #### gos_keep.add(goid)
+    ####         else:
+    ####             for gene in go_genes.intersection(bg_gos):
+    ####                 assc_next[gene].add(goid)
+    ####                 #### gos_keep.add(goid)
+    ####     #### print "GO WAS", len(go2genes)
+    ####     #### print "GO NOW", len(gos_keep)
+    ####     return {g:gos for g, gos in assc_next.items()}
 
     # Randomized Associations
     # Assoc: TN=Rand NTN=Orig
@@ -111,14 +109,15 @@ class RunParams(object):
         if   'ntn1' in key: ntn_str = 'Orig'
         # elif 'ntn2' in key: ntn_str = 'Orig-Sig.Non{BG}'.format(BG=name)
         elif 'ntn3' in key: ntn_str = '{BG} Only'.format(BG=name)
-        lst.append("TN={TN}".format(TN=key[:4].capitalize()))
+        tn_pat = "{TN} True Nulls" if 'ntn2' in key else "TN={TN}"
+        lst.append(tn_pat.format(TN=key[:4].capitalize()))
         if ntn_str:
             lst.append("NTN={NTN}".format(NTN=ntn_str))
         if '_enriched_' in key:
             lst.append("(View Enriched)")
-        if self.params['assc_rm_if_genecnt'] is not None:
-            raise Exception("assc_rm_if_genecnt") # TBD rm
-            lst.append("(rm GOs<{N} genes)".format(N=self.params['assc_rm_if_genecnt']))
+        #### if self.params['assc_rm_if_genecnt'] is not None:
+        ####     raise Exception("assc_rm_if_genecnt") # TBD rm
+        ####     lst.append("(rm GOs<{N} genes)".format(N=self.params['assc_rm_if_genecnt']))
         return " ".join(lst)
 
     @staticmethod
@@ -208,15 +207,15 @@ class RunParams(object):
         randomize_truenull_assc = params_usr['randomize_truenull_assc']
         assert set(params_usr.keys()) == self.expected_params
         params_sim = {k:v for k, v in params_usr.items()}
-        # Init enriched_only 
+        # Init enriched_only
         params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
         print "ENRICHED", params_sim['enriched_only']
         # Init assc_rm_if_genecnt based on randomize_truenull_assc
-        params_sim['assc_rm_if_genecnt'] = None
-        if 'rmgene' in randomize_truenull_assc:
-            mtch = re.search(r'rmgene(\d+)', randomize_truenull_assc)
-            if mtch:
-                params_sim['assc_rm_if_genecnt'] = int(mtch.group(1))
+        #### params_sim['assc_rm_if_genecnt'] = None
+        #### if 'rmgene' in randomize_truenull_assc:
+        ####     mtch = re.search(r'rmgene(\d+)', randomize_truenull_assc)
+        ####     if mtch:
+        ####         params_sim['assc_rm_if_genecnt'] = int(mtch.group(1))
         return params_sim
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

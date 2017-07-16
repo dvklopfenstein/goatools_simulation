@@ -205,7 +205,6 @@ class _Init(object):
     def _init_assc(self):
         """Association."""
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
-        assc_full = self.pobj.objassc.objassc_all.assc_geneid2gos
         # print "AAAAAAAAAAAAAAAAAAAAAAAAA", randomize_truenull_assc
         assc = None
 
@@ -213,15 +212,15 @@ class _Init(object):
         if randomize_truenull_assc[:5] == "rand_":
             # print "RRRRRRRRRRRRRRRRRRRRRRRRR",
             assc = self.pobj.objassc.objassc_all.get_shuffled_associations() # ret a copy
-        elif randomize_truenull_assc == "rm_tgtd":
-            raise Exception("rm_tgtd") # TBD rm
-            assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
+        #### elif randomize_truenull_assc == "rm_tgtd":
+        ####     raise Exception("rm_tgtd") # TBD rm
+        ####     assc = self.pobj.objassc.objassc_pruned.assc_geneid2gos
 
-        if self.pobj.params['assc_rm_if_genecnt'] is not None:
-            raise Exception("assc_rm_if_genecnt") # TBD rm
-            #### print "VVVV", self.pobj.params['assc_rm_if_genecnt'], len(assc)
-            assc = self.pobj.get_assc_rmgenes(assc if assc is not None else assc_full)
-            #### print "vvvv", self.pobj.params['assc_rm_if_genecnt'], len(assc)
+        #### if self.pobj.params['assc_rm_if_genecnt'] is not None:
+        ####     raise Exception("assc_rm_if_genecnt") # TBD rm
+        ####     #### print "VVVV", self.pobj.params['assc_rm_if_genecnt'], len(assc)
+        ####     assc = self.pobj.get_assc_rmgenes(assc if assc is not None else assc_full)
+        ####     #### print "vvvv", self.pobj.params['assc_rm_if_genecnt'], len(assc)
 
         if randomize_truenull_assc[-4:-1] == "ntn":
             digit_str = randomize_truenull_assc[-1]
