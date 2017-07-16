@@ -22,7 +22,7 @@ class ExperimentSet(object):
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
-    def get_means(self, key):
+    def get_means(self, key, desc=None):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
 

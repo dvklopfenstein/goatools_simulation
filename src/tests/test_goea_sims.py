@@ -30,11 +30,11 @@ def main(prt=sys.stdout):
         'perc_null':50,
         'num_null':8,
         'study_genes_bg':study_genes_bg,
-        'genes_population':}
+        'genes_population':set(genes_mus)}
     objsim = ManyGoeaSims(params, study_genes_bg, objbg)
     objsim.prt_summary(prt)
-    for nt_tfpn in objsim.nts_tfpn:
-        print nt_tfpn
+    for nt_tfpn_genes in objsim.nts_tfpn_genes:
+        print nt_tfpn_genes
 
 if __name__ == '__main__':
     main()

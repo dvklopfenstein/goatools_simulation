@@ -42,7 +42,9 @@ class ExperimentsAll(object):
             self.prt_experiments_stats(prt, rpt_items)
             baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
             fout_img = os.path.join(self.repo, dir_loc, '{B}.png'.format(B=baseimg))
-            self.plt_box_tiled(fout_img, plt_items, **pltargs)
+            self.plt_box_tiled(fout_img, plt_items, 'genes', **pltargs)
+            #GOID fout_img = fout_img.replace('goea', 'goids')
+            #GOID self.plt_box_tiled(fout_img, plt_items, 'goids', **pltargs)
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
@@ -101,12 +103,12 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_tiled(self, fout_img, plt_items, **kws):
+    def plt_box_tiled(self, fout_img, plt_items, genes_goids, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        plt_box_tiled(fout_img, key2exps, plt_items, **kws)
+        plt_box_tiled(fout_img, key2exps, plt_items, genes_goids, **kws)
 
-    def prt_experiments_stats(self, prt=sys.stdout, attrs=None):
+    def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
@@ -118,10 +120,10 @@ class ExperimentsAll(object):
             objstat.prt_hdr(prt, hdrexps)
             for experiment_set in self.expsets: # ExperimentSet
                 expname = experiment_set.get_desc(namefmt)
-                means = experiment_set.get_means(attrname)
+                means = experiment_set.get_means(attrname, genes_goids)
                 objstat.prt_data(expname, means, prt)
 
-    def prt_experiments_means(self, prt=sys.stdout, attrs=None):
+    def prt_experiments_means(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print means and stderrs for user-specified data in experiment sets."""
         if attrs is None:
             attrs = ["fdr_actual", "frr_actual", "num_Type_I", "num_Type_II", "num_correct"]
@@ -134,7 +136,7 @@ class ExperimentsAll(object):
         prt.write("---- ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
         namefmt = "{PERCNULL:3}% {QTY:6}"
         for experiment_set in self.expsets:
-            means = [np.mean(experiment_set.get_means(a)) for a in attrs]
+            means = [np.mean(experiment_set.get_means(a, genes_goids)) for a in attrs]
             se_denom = np.sqrt(len(means))
             stderrs = [np.std(m)/se_denom for m in means]
             prt.write("{EXP_DESC}".format(EXP_DESC=experiment_set.get_desc(namefmt)))

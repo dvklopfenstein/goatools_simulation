@@ -13,7 +13,7 @@ class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
 
     ntobj = namedtuple(
-        "NtMtAll", "num_genes num_sig_actual ctr fdr_actual frr_actual "
+        "NtMtAll", "num_items num_sig_actual ctr fdr_actual frr_actual "
         "sensitivity specificity pos_pred_val neg_pred_val")
 
     def __init__(self, num_study_genes, num_null, pobj):
@@ -23,15 +23,17 @@ class GoeaSim(object):
         self.assc = iniobj.assc_geneid2gos
         self.goea_results = iniobj.goea_results
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
+        #GOID self.nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn
         # One namedtuple summarizing results of this GOEA simulation
-        self.nt_tfpn = self.get_nt_tfpn()
+        self.nt_tfpn_genes = self.get_nt_tfpn(self.nts_goea_res)
+        #GOID self.nt_tfpn_goids = self.get_nt_tfpn(self.nts_goid_res)
         if pobj.params['log'] is not None:
-            if self.nt_tfpn.fdr_actual > pobj.objbase.alpha:
+            if self.nt_tfpn_genes.fdr_actual > pobj.objbase.alpha:
                 self.rpt_details(pobj.params['log'])
 
-    def get_nt_tfpn(self):
+    def get_nt_tfpn(self, nts_goea_res):
         """Calculate various statistical quantities of interest, including simulated FDR."""
-        ctr = Counter([nt.tfpn for nt in self.nts_goea_res]) # Counts of TP TN FP FN
+        ctr = Counter([nt.tfpn for nt in nts_goea_res]) # Counts of TP TN FP FN
         #pylint: disable=invalid-name, bad-whitespace
         #              reject ->| False         | True
         #
@@ -42,15 +44,15 @@ class GoeaSim(object):
         # False null hypotheses | T FN (Type II)| S TP          | m - m(0)
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         # Significant(Correct) or Type I Error (Not significant)
-        tot_sig_y = sum(nt.reject for nt in self.nts_goea_res)
+        tot_sig_y = sum(nt.reject for nt in nts_goea_res)
         assert tot_sig_y == TP + FP
         # Not Significant(Correct) or Type II Error (significant)
-        tot_sig_n = sum(not nt.reject for nt in self.nts_goea_res)
+        tot_sig_n = sum(not nt.reject for nt in nts_goea_res)
         assert tot_sig_n == TN + FN
-        num_genes = len(self.nts_goea_res)
-        assert tot_sig_y + tot_sig_n == num_genes
+        num_items = len(nts_goea_res)
+        assert tot_sig_y + tot_sig_n == num_items
         return self.ntobj(
-            num_genes      = len(self.nts_goea_res),
+            num_items      = len(nts_goea_res),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
@@ -78,7 +80,7 @@ class GoeaSim(object):
 
     def rpt_details_genes(self, prt):
         """Report genes found in GOEA results."""
-        ntr = self.nt_tfpn
+        ntr = self.nt_tfpn_genes
         prt.write("{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
@@ -155,7 +157,7 @@ class _Init(object):
         goeasim_results = []
         ntobj = namedtuple("NtGoeaGos", "GO reject expsig tfpn")
         goids_expsig_list = self._get_goids_expsig_list()
-        go2res = {r.id:r for r in self.goea_results}
+        go2res = {r.GO:r for r in self.goea_results}
         goids_sig = set(go2res.keys())
         for study_goid, expsig in goids_expsig_list:
             reject = study_goid in goids_sig
@@ -263,17 +265,6 @@ class _Init(object):
                 assc_bg[gene] = assc_all_orig[gene].intersection(goids_study_bg)
             return assc_bg
         raise RuntimeError("UNEXPECTED ntn({})".format(ntn_num))
-
-    #### def _get_assc_rndtgtd(self):
-    ####     """rnd_tgtd: Concatenate pruned assc and targeted randomized assc."""
-    ####     assc = {g:gos for g, gos in self.pobj.assc_pruned.items()} # copy pruned assc
-    ####     assc_tgtd_rnd = self.pobj.objassc.shuffle_associations(self.pobj.assc_tgtd)
-    ####     for geneid, goids_rnd in assc_tgtd_rnd.items():
-    ####         if geneid in assc:
-    ####             assc[geneid] |= goids_rnd
-    ####         else:
-    ####             assc[geneid] = goids_rnd
-    ####     return assc
 
     def _init_study_genes(self, num_study_genes, num_null):
         """Generate 2 sets of genes: Not intended significant & intended to be significant."""

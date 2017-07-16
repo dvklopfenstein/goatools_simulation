@@ -19,15 +19,19 @@ class ManyGoeaSims(object):
         self.pobj = pobj # RunParams object
         assert set(params.keys()) == self.expected_params
         simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
-        self.nts_tfpn = [o.nt_tfpn for o in simobjs]
+        self.nts_tfpn = {
+            'genes' : [o.nt_tfpn_genes for o in simobjs],
+            #'goids' : [o.nt_tfpn_goids for o in simobjs],
+        }
 
-    def get_mean(self, key):
+    def get_mean(self, key, genes_goids='genes'):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
-        return np.mean([getattr(nt, key) for nt in self.nts_tfpn])
+        return np.mean([getattr(nt, key) for nt in self.nts_tfpn[genes_goids]])
 
-    def get_stderr(self, key):
-        """Returns the actual stderr value for the set of P-Value simulations run in this class."""
-        return np.std([getattr(nt, key) for nt in self.nts_tfpn])/np.sqrt(len(self.nts_tfpn))
+    #### def get_stderr(self, key, genes_goids='genes'):
+    ####     """Returns the stderr value for the set of P-Value simulations run in this class."""
+    ####     nts_tfpn = self.nts_tfpn[genes_goids]
+    ####     return np.std([getattr(nt, key) for nt in nts_tfpn])/np.sqrt(len(nts_tfpn))
 
     def get_summary_str(self):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
@@ -41,28 +45,36 @@ class ManyGoeaSims(object):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
         prt.write("{MSG}\n".format(MSG=self.get_summary_str()))
 
-    def get_percentile_vals(self, attr, percentiles):
+    def get_percentile_vals(self, attr, percentiles, genes_goids='genes'):
         """Return percentile values for 'attr' list."""
-        return [np.percentile([getattr(nt, attr) for nt in self.nts_tfpn], p) for p in percentiles]
+        nts_tfpn = self.nts_tfpn[genes_goids]
+        return [np.percentile([getattr(nt, attr) for nt in nts_tfpn], p) for p in percentiles]
 
-    def prt_num_sims_w_errs(self, prt=sys.stdout, desc=""):
+    def prt_num_sims_w_errs(self, prt=sys.stdout, desc="", genes_goids='genes'):
         """Return the number of simulations that have errors."""
         msgpat = "{N} sims ({P:3} pvals/sim, {PERCNULL:3.0f}% True Null.) " \
                  "{E:5} had errs ({ERR_CNTS}) {DESC}\n"
+        nts_tfpn = self.nts_tfpn[genes_goids]
         errpat = "{I:5} I, {II:5} II"
-        err_cnts = [(nt.num_Type_I, nt.num_Type_II, nt.num_Type_I_II) for nt in self.nts_tfpn]
-        t1s, t2s, t12s = zip(*err_cnts)
-        num_errsims = sum([n != 0 for n in t12s])
-        num_errsimst1 = sum([n != 0 for n in t1s])
-        num_errsimst2 = sum([n != 0 for n in t2s])
+        num_errsims, num_errsimst1, num_errsimst2 = self._get_num_errsims(nts_tfpn)
         prt.write(msgpat.format(
-            N=len(self.nts_tfpn), P=self.params['num_items'],
+            N=len(nts_tfpn), P=self.params['num_items'],
             PERCNULL=self.params['perc_null'],
             E=num_errsims, ERR_CNTS=errpat.format(I=num_errsimst1, II=num_errsimst2), DESC=desc))
 
-    def get_percentile_strs(self, attr, percentiles):
+    @staticmethod
+    def _get_num_errsims(nts_tfpn):
+        """Get error counts for Type I, Type II, and both."""
+        err_cnts = [(nt.num_Type_I, nt.num_Type_II, nt.num_Type_I_II) for nt in nts_tfpn]
+        t1s, t2s, t12s = zip(*err_cnts)
+        return [
+            sum([n != 0 for n in t12s]), # num_errsims
+            sum([n != 0 for n in t1s]), # num_errsimst1
+            sum([n != 0 for n in t2s])] # num_errsimst2
+
+    def get_percentile_strs(self, attr, percentiles, genes_goids='genes'):
         """Return percentile strings suitable for printing for 'attr' list."""
-        vals = self.get_percentile_vals(attr, percentiles)
+        vals = self.get_percentile_vals(attr, percentiles, genes_goids)
         fmt = "{:6.2f}" if attr[:3] == "per" else "{:4}"
         return [fmt.format(v) for v in vals]
 

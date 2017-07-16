@@ -66,22 +66,24 @@ class PlotInfo(object):
             self.kws['ylabel'] = self.kws['ylabel'].format(GRP=self.grpname)
         self._init_axes_params(args_kws)
 
-    def get_str_mean(self, exps):
+    def get_str_mean(self, exps, desc=None):
         """Get value with x and y location to be printing inside plot."""
         valstrs = []
         if self.kws['plottype'] == 'barplot':
             ntobj = cx.namedtuple("NtValstr", "valstr x y ha va")
             left_num = exps[0].params['num_items']
             for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
-                yval = np.mean(exp.get_means(self.attrname))
+                yval = np.mean(exp.get_means(self.attrname, desc))
                 # Plot text that can comfortably fit in plot.
                 if yval > 0.0001 and yval <= 0.50:
                     valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                    valstrs.append(ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom'))
+                    ntplt = ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom')
+                    valstrs.append(ntplt)
                 elif yval > 0.50 and yval <= 0.99:
                     if exp.params['num_items'] != left_num or yval <= 0.75:
                         valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                        valstrs.append(ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom'))
+                        ntplt = ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom')
+                        valstrs.append(ntplt)
         return valstrs
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
@@ -154,13 +156,13 @@ def get_num_rows_cols(key2exps):
     perc_nulls, max_sigpval = zip(*key2exps.keys())
     return len(set(perc_nulls)), len(set(max_sigpval))
 
-def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR'):
+def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR', desc='genes'):
     """Get plotting data suitable for a single plot of boxplots."""
     tbl = []
     for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_null
         tot_h = exps.params['num_items'] # Number of hypotheses
         # Make one dictionary line for each value of fdr_actual
-        dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]
+        dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr, desc)]
         tbl.extend(dcts)
     return tbl
 

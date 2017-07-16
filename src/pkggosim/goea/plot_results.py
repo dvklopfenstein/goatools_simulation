@@ -12,7 +12,7 @@ from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
 from pkggosim.common.plot_results import fill_axes
 
 
-def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
+def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     pltobjs = [PlotInfo(a, args_kws) for a in attrs]
     num_rows = len(key2exps)
@@ -20,8 +20,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
-    gspecs = get_gridspecs(num_rows, num_cols)
-    axes_all = _get_tiled_axes(fig, gspecs, num_rows, num_cols)
+    axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
@@ -32,7 +31,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, **args_kws):
                 'exps':exps,
                 'letter':"{C}{R}".format(R=row_idx+1, C=chr(65+col_idx)),
                 'is_bottom_row':row_idx == num_rows-1,
-                'is_left_column':col_idx%num_cols == 0})
+                'is_left_column':col_idx%num_cols == 0}, genes_goids)
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols)
     _set_tiled_txt(fig, pltobjs[0])
@@ -68,7 +67,7 @@ def _tiled_xyticklabels_off(axes, num_cols):
             for label in yaxis.get_yticklabels():
                 label.set_visible(False)
 
-def _plt_tile(pltobj, pvars):
+def _plt_tile(pltobj, pvars, genes_goids):
     """Plot one tile of a multi-tiled plot."""
     axes = pvars['axes']
     exps = pvars['exps']
@@ -83,7 +82,7 @@ def _plt_tile(pltobj, pvars):
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
     # Add value text above plot bars to make plot easier to read
-    for ntval in pltobj.get_str_mean(exps):
+    for ntval in pltobj.get_str_mean(exps, genes_goids):
         axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)

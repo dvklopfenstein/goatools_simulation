@@ -20,9 +20,9 @@ class ExperimentSet(object):
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments() # returns list of ManyGoeaSims objects
 
-    def get_means(self, key):
+    def get_means(self, key, genes_goids='genes'):
         """Return list of means for a item like fdr_actual, frr_actual."""
-        return [e.get_mean(key) for e in self.expset]
+        return [e.get_mean(key, genes_goids) for e in self.expset]
 
     def get_desc(self, fmt="{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {QTY:4} P-Values)"):
         """Return string which succinctly describes this experiment set."""
