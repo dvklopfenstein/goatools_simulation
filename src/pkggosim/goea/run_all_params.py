@@ -50,12 +50,21 @@ class RunParams(object):
             "study_bg" : list(self.genes['study_bg']),
             "null_bg" : list(self.genes['null_bg'])}
         self.params['gosubdag_bg'] = GoSubDag(params["goids_study_bg"], self.objbase.go_dag)
+        self.params['ntn'] = self._init_ntn()
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
         # self.assc_pruned = self._init_get_goids_tgtd()
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         self.objassc.set_targeted(self._init_get_goids_tgtd())
+
+    def _init_ntn(self):
+        """Initialize param ntn with a digit or None."""
+        randomize_truenull_assc = self.params['randomize_truenull_assc']
+        if randomize_truenull_assc[-4:-1] == "ntn":
+            digit_str = randomize_truenull_assc[-1]
+            assert digit_str.isdigit()
+            return int(digit_str)
 
     @staticmethod
     def get_bgname():

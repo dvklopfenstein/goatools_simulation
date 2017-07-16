@@ -150,34 +150,39 @@ class _Init(object):
                 tfpn       = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return goeasim_results
 
-    # Future Work?
-    # def get_nts_stugoids(self):
-    #     """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
-    #     goeasim_results = []
-    #     ntobj = namedtuple("NtGoeaGos", "GO reject expsig tfpn")
-    #     #### ntobj = namedtuple("NtGoeaGos", "GO reject expsig genes num_genes tfpn")
-    #     goids_expsig_list = self._get_goids_expsig_list()
-    #     go2res = {r.id:r for r in self.goea_results}
-    #     goids_sig = set(go2res.keys())
-    #     for study_goid, expsig in goids_expsig_list:
-    #         reject = study_goid in goids_sig
-    #         #### genes =
-    #         #pylint: disable=bad-whitespace
-    #         goeasim_results.append(ntobj(
-    #             GO        = study_goid,
-    #             reject    = reject,
-    #             expsig    = expsig, # False->True Null; True->Non-true null
-    #             #### genes     = genes,
-    #             #### num_genes = len(genes),
-    #             tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
-    #     return goeasim_results
+    def get_nts_stugoids(self):
+        """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
+        goeasim_results = []
+        ntobj = namedtuple("NtGoeaGos", "GO reject expsig tfpn")
+        goids_expsig_list = self._get_goids_expsig_list()
+        go2res = {r.id:r for r in self.goea_results}
+        goids_sig = set(go2res.keys())
+        for study_goid, expsig in goids_expsig_list:
+            reject = study_goid in goids_sig
+            #pylint: disable=bad-whitespace
+            goeasim_results.append(ntobj(
+                GO     = study_goid,
+                reject = reject,
+                expsig = expsig, # False->True Null; True->Non-true null
+                tfpn   = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
+        return goeasim_results
 
-    # def _get_goids_expsig_list(self):
-    #     """Get a list of GO IDs related to study genes and their expected discovery status."""
-    #     goids_expsig_list = []
-    #     for gene, expsig in self.gene_expsig_list:
-    #         goids_gene = self.assc_geneid2gos[gene]
-    #     return goids_expsig_list
+    def _get_goids_expsig_list(self):
+        """Get a list of GO IDs related to study genes and their expected discovery status."""
+        goids_all = set()
+        goids_sig_all = set()
+        goids_sigbg_all = self.pobj.params['goids_study_bg']
+        goids_sigtgt_all = self.pobj.objassc.goids_tgtd
+        for gene, expsig in self.gene_expsig_list:
+            goids_gene = self.assc_geneid2gos[gene]
+            goids_all |= goids_gene
+            if expsig:
+                # Humoral Response GO IDs associated with this gene:
+                goids_sigbg = goids_gene.intersection(goids_sigbg_all)
+                # GO IDs seen in large quantities for this gene:
+                goids_sigtgt = goids_gene.intersection(goids_sigtgt_all)
+                goids_sig_all |= goids_sigbg.union(goids_sigtgt)
+        return [(go, go in goids_sig_all) for go in goids_all]
 
     def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj # RunParams object
@@ -205,6 +210,7 @@ class _Init(object):
     def _init_assc(self):
         """Association."""
         randomize_truenull_assc = self.pobj.params['randomize_truenull_assc']
+        ntn = self.pobj.params['ntn']
         # print "AAAAAAAAAAAAAAAAAAAAAAAAA", randomize_truenull_assc
         assc = None
 
@@ -222,12 +228,10 @@ class _Init(object):
         ####     assc = self.pobj.get_assc_rmgenes(assc if assc is not None else assc_full)
         ####     #### print "vvvv", self.pobj.params['assc_rm_if_genecnt'], len(assc)
 
-        if randomize_truenull_assc[-4:-1] == "ntn":
-            digit_str = randomize_truenull_assc[-1]
-            assert digit_str.isdigit()
+        if ntn is not None:
             if assc is None:
                 assc = {g:gos for g, gos in self.pobj.objassc.objassc_all.assc_geneid2gos.items()}
-            assc = self._fill_assc_ntn(assc, int(digit_str))
+            assc = self._fill_assc_ntn(assc, ntn)
 
         return assc
 
