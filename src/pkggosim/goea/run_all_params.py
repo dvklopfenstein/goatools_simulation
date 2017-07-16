@@ -60,6 +60,10 @@ class RunParams(object):
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         self.objassc.set_targeted(self._init_get_goids_tgtd())
 
+    def get_bgname(self):
+        """Get the Background gene name"""
+        return "HR"
+
     def get_assc_rmgenes(self, assc_curr):
         """Remove GO IDs if they are not associated with many genes and are not in study BG."""
         raise Exception("rm get_assc_rmgenes")
@@ -81,23 +85,39 @@ class RunParams(object):
         #### print "GO NOW", len(gos_keep)
         return {g:gos for g, gos in assc_next.items()}
 
+    # Randomized Associations
+    # Assoc: TN=Rand NTN=Orig
+    # Assoc: TN=Rand NTN=Orig - non-HR
+    # Assoc: TN=Rand NTN=HR Only
+    #
+    # Original Associations (Enriched Shown)
+    # Assoc: TN=Orig NTN=Orig-nonHR
+    # Assoc: TN=Orig NTN=HR Only
     def get_title(self):
         """Return a title to use in plots based on string in 'randomize_truenull_assc'."""
         # 'GOEA Simulations'
-        randomize_truenull_assc = self.params['randomize_truenull_assc']
+        key = self.params['randomize_truenull_assc']
+        print "GGGGGGGGGGGGGGGGGGGGGGGGGG KEY", key
         #pylint: disable=multiple-statements
-        if randomize_truenull_assc == 'orig_all': return 'Original Associations'
-        if randomize_truenull_assc == 'rand_all': return 'All Rand Assc.'
-        pre = randomize_truenull_assc[:4].capitalize()
-        ntn = ""
-        if   'ntn1' in randomize_truenull_assc: ntn = 'Assc: NTN Orig'
-        elif 'ntn2' in randomize_truenull_assc: ntn = 'Assc: NTN Targeted Removed'
-        elif 'ntn3' in randomize_truenull_assc: ntn = 'Assc: NTN Only BG'
-        elif 'ntn1' in randomize_truenull_assc: ntn = 'Assc: NTN Orig'
-        elif 'ntn2' in randomize_truenull_assc: ntn = 'Assc: NTN Targeted Removed'
-        elif 'ntn3' in randomize_truenull_assc: ntn = 'Assc: NTN Only BG'
-        lst = [pre, ntn]
+        if key == 'orig_noprune_ntn1': return 'Original Associations'
+        if key == 'orig_pruned_ntn1': return 'Original Associations, Pruned'
+        if key == 'orig_noprune_enriched_ntn1': return 'Original Associations (View Enriched)'
+        lst = []
+        if "_pruned_" in key:
+            lst.append("Pruned")
+        lst.append("Assc:")
+        ntn_str = ""
+        name = self.get_bgname()
+        if   'ntn1' in key: ntn_str = 'Orig'
+        # elif 'ntn2' in key: ntn_str = 'Orig-Sig.Non{BG}'.format(BG=name)
+        elif 'ntn3' in key: ntn_str = '{BG} Only'.format(BG=name)
+        lst.append("TN={TN}".format(TN=key[:4].capitalize()))
+        if ntn_str:
+            lst.append("NTN={NTN}".format(NTN=ntn_str))
+        if '_enriched_' in key:
+            lst.append("(View Enriched)")
         if self.params['assc_rm_if_genecnt'] is not None:
+            raise Exception("assc_rm_if_genecnt") # TBD rm
             lst.append("(rm GOs<{N} genes)".format(N=self.params['assc_rm_if_genecnt']))
         return " ".join(lst)
 
