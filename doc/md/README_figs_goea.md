@@ -66,6 +66,7 @@ Input gene/GO associations in the simulations are one of:
   * FAIL in **A3** -> 124 genes, 64 genes
   * FAIL in **A4** -> 124 genes    
 ![fig1a_FAIL_goea_orig_noprune_ntn1](images/fig1a_FAIL_goea_orig_noprune_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+Presents simulated values for FDR, sensitivity, and specificity when gene group sizes are varied from 4 genes to 124 genes and percentage of humoral response genes are varied from 0% to 100%. The gene groups are composed of 100% general population genes on row 1 and 100% enriched humoral response genes in row 5.
 ### 2b) FAIL: False Positives - Non-True Nulls w/other significant discoveries marked
   * FAIL in **A3** -> 124 genes, 64 genes
   * FAIL in **A4** -> 124 genes    
@@ -90,6 +91,7 @@ that are associated with 1,000+ genes.
 Unmarked Non-True Nulls can cause the appearance of an false positives.    
 OBSERVATION: The false positives shown below are acceptable because they are below alpha (0.05).
 ![fig2a_PASS_goea_orig_pruned_ntn1](images/fig2a_PASS_goea_orig_pruned_ntn1_100to000_004to124_N00020_00020_humoral_rsp.png)
+Presents the same simulation as in Figure 3a, but with associations randomly shuffled for all genes that are not false nulls, i.e. the study genes enriched in humoral response. With true nulls now set to be random, the simulated FDR always falls under the 0.05 alpha setting. The sensitivity now shows nearly all false null genes (humoral response genes) to be discovered except in panel B2 for the 4 gene case where the sensitivity is ~2% and in panel B3 where the sensitivity for the 4 gene case is ~86% of all humoral response genes in the study are discovered.
 ### 3b) PASS: Non-True Nulls assc. w/significant discoveries are marked
 OBSERVATION: If the unmarked Non-True Nulls are removed, the simulated FDRs are very close to zero.
 ![fig2b_PASS_goea_orig_pruned_ntn2](images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
