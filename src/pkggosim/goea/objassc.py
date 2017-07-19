@@ -21,7 +21,8 @@ class DataAssc(object):
         _pop_genes = params['genes_population']
         _assc_geneid2gos = self._init_assc(_assc_file, _pop_genes, godag)
         # Associations: rm GOs with lots of genes
-        if '_pruned_' in params['randomize_truenull_assc']:
+        _randomize_truenull_assc = params.get('randomize_truenull_assc', None)
+        if _randomize_truenull_assc is not None and '_pruned_' in _randomize_truenull_assc:
             _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
             print "PRUNE"
         else:
@@ -55,7 +56,7 @@ class DataAssc(object):
         """Print GO terms and the number of genes associated with the GO ID."""
         go2desc = self.get_go2desc(goids, go2obj, go2genes)
         pat = "{PRE}{DESC}\n"
-        for goid, desc in go2desc.items():
+        for desc in go2desc.values():
             prt.write(pat.format(PRE=pre, DESC=desc))
 
     @staticmethod
