@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""GOEA association stats."""
+"""Statistics for the protein-coding mouse gene association."""
 
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
@@ -15,7 +15,7 @@ from goatools.statsdescribe import StatsDescribe
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(prt=sys.stdout):
-    """Return a list of all GO IDs associated with protein-coding mouse genes."""
+    """Statistics for the protein-coding mouse gene association."""
     godag = get_godag()
     params = {
         'association_file' : os.path.join(REPO, 'gene_association.mgi'),
