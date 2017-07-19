@@ -1,6 +1,6 @@
 """Holds population genes and associations."""
 
-__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -38,6 +38,10 @@ class DataAssc(object):
         self.goids_tgtd = None
         self.objassc_pruned = None
         self.objassc_tgtd = None
+
+    def get_assc(self):
+        """Return full association."""
+        return self.objassc_all.assc_geneid2gos
 
     def _prune_assc(self, assc_geneid2gos, max_genecnt, godag, prt=sys.stdout):
         """Remove GO IDs which are associated with large numbers of genes."""

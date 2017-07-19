@@ -1,6 +1,6 @@
 """Holds population genes and associations."""
 
-__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -10,6 +10,7 @@ from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
+from pkggosim.goea.assc_shuffle import RandAssc
 
 
 class RunPrelim(object):
@@ -75,7 +76,7 @@ class RunPrelim(object):
         assc_desc = 'actual'
         alpha = self.objbase.alpha
         genes_pop_masked = self.get_pop_genes_masked(genes_study)
-        goeaobj = self.objbase.get_goeaobj(genes_pop_masked, self.objassc.assc)
+        goeaobj = self.objbase.get_goeaobj(genes_pop_masked, self.objassc.get_assc())
         goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < alpha)
         fout_txt = "goea_{DESC}_sig_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))
         goeaobj.wr_txt(fout_txt, goea_results)
@@ -93,7 +94,7 @@ class RunPrelim(object):
         genes_study = set(genes_study_arg)
         assc_desc = 'random'
         alpha = self.objbase.alpha
-        rand_assoc = self.objassc.shuffle_associations(self.objassc.assc)
+        rand_assoc = RandAssc(self.objassc.get_assc()).get_shuffled_associations()
         goeaobj = self.objbase.get_goeaobj(self.objassc.pop_genes, rand_assoc)
         goea_results = goeaobj.run_study(genes_study, keep_if=lambda nt: nt.p_fdr_bh < alpha)
         fout_txt = "goea_{DESC}_rnd_{N:04}.txt".format(DESC=ntdesc.name, N=len(genes_study))

@@ -129,7 +129,7 @@ Sig. GOs Study genes % True Null   assc Max Genes Study Name
 
 """
 
-__cright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
