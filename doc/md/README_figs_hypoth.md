@@ -18,13 +18,18 @@
     * 0:23:36 [Simes-Hochberg step-up method (independent)](#simes-hochberg-step-up-method-independent)
     * N:NN:NN Holm step-down method using Bonferroni adjustments
 
-## FDR vs FWER
-### FDR Benjamini/Hochberg (non-negative) vs Bonferroni one-step correction
+## Benjamini/Hochberg (non-negative) vs Bonferroni one-step correction
+  * FDR vs FWER: Corrected P-Values
+  * FDR vs FWER: Sensitivity
+  * FDR vs FWER: Specificity
+### FDR vs FWER: Corrected P-Values
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png)    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_fdr_actual.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_fdr_actual.png)    
+### FDR vs FWER: Sensitivity
 The x-axis shows two simulation parameters. The first parameter is the number of tested hypotheses in each simulation, which are 4, 16, and 128. The second x-axis parameter, labeled on the figure as Sig.<=, is the maximum P-value of randomly generated non-true null hypotheses test results. The y-axis shows the percentage of "True nulls". The simulated FDR values, as seen in the right-most text, drop dramatically from FDR=0.05 (SE=0.007) (row 1) to FDR=0.012 (SE=0.001) (row 4) as the percentage of "True nulls" drops.
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_sensitivity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_sensitivity.png)    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_sensitivity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_sensitivity.png)    
+### FDR vs FWER: Specificity
 The x-axis and y-axis parameters are the same as in Figure 3. The values shown in the panels are sensitivity ratios. Sensitivity is defined as the probability of detection of all non-true nulls. This figure shows that as the maximum P-values of non-true nulls gets closer to the user-specified alpha of 0.05, the sensitivity decreases. For example, 100% of all non-true nulls are discovered for all simulations that contain non-true nulls if they are 0.01 are less when the alpha is set to 0.05 (column A). As the maximum P-values of non-true nulls approaches alpha, fewer non-true nulls are detected (column B and C).
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_specificity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_specificity.png)    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_specificity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_specificity.png)    
