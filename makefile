@@ -1,6 +1,7 @@
 # Gene Ontology Enrichment Analyses Simulations
 
 # Method index for Hypotheses Simulations
+NTN = 2
 E = -3
 RUNALL = False
 
@@ -20,13 +21,13 @@ run:
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
 
-run_goeas_ntn2:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
+run_goeas_ntn:
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn$(NTN)
 
 
 run_goeas_orig_enriched:
