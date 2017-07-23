@@ -2,7 +2,7 @@
 
 ## Multiple-test methods
 3,600,000 simulations per multiple-test simulation method were run to create each figure:    
-* [**FDR vs FWER**](#fdr-vs-fwer)    
+* [**FDR vs FWER**](#benjaminihochberg-non-negative-vs-bonferroni-one-step-correction)
   Contrast the simulation results **False Discovery Rate** (FDR) vs **Family-wise Error Rate**
   * 0:25:03 FDR Benjamini/Hochberg (non-negative)
   * 0:22:19 Bonferroni one-step correction
@@ -19,9 +19,9 @@
     * N:NN:NN Holm step-down method using Bonferroni adjustments
 
 ## Benjamini/Hochberg (non-negative) vs Bonferroni one-step correction
-  * FDR vs FWER: Corrected P-Values
-  * FDR vs FWER: Sensitivity
-  * FDR vs FWER: Specificity
+  * [**FDR vs FWER: Corrected P-Values**](#fdr-vs-fwer-corrected-p-values)
+  * [**FDR vs FWER: Sensitivity**](#fdr-vs-fwer-sensitivity)
+  * [**FDR vs FWER: Specificity**](#fdr-vs-fwer-specificity)
 ### FDR vs FWER: Corrected P-Values
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_fdr_bh_fdr_actual.png)    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_fdr_actual.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_bonferroni_fdr_actual.png)    
