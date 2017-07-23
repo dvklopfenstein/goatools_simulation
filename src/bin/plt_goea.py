@@ -45,7 +45,7 @@ def run(args, ntd, prt=sys.stdout):
     title_cur = objparams.get_title()
     prt.write("Title: {S}\n".format(S=title_cur))
     prt.write("randomize_truenull_assc: {S}\n".format(S=randomize_truenull_assc))
-    prt.write("{NT}".format(NT=ntd))
+    prt.write("{NT}\n".format(NT=ntd))
 
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
