@@ -23,10 +23,10 @@ class GoeaSim(object):
         self.assc = iniobj.assc_geneid2gos
         self.goea_results = iniobj.goea_results
         self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
-        #GOID self.nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn
+        self.nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn GOIDS
         # One namedtuple summarizing results of this GOEA simulation
         self.nt_tfpn_genes = self.get_nt_tfpn(self.nts_goea_res)
-        #GOID self.nt_tfpn_goids = self.get_nt_tfpn(self.nts_goid_res)
+        self.nt_tfpn_goids = self.get_nt_tfpn(self.nts_goid_res) # GOIDS
         if pobj.params['log'] is not None:
             if self.nt_tfpn_genes.fdr_actual > pobj.objbase.alpha:
                 self.rpt_details(pobj.params['log'])

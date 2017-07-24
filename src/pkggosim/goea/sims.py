@@ -21,7 +21,7 @@ class ManyGoeaSims(object):
         simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
         self.nts_tfpn = {
             'genes' : [o.nt_tfpn_genes for o in simobjs],
-            #'goids' : [o.nt_tfpn_goids for o in simobjs],
+            'goids' : [o.nt_tfpn_goids for o in simobjs], # GOIDs
         }
 
     def get_mean(self, key, genes_goids='genes'):

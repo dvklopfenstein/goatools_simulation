@@ -27,28 +27,34 @@ class ExperimentsAll(object):
 
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
-        pre = self.pobj.params['prefix']
-        desc_str = self._get_fout_img()
-        dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
-        fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
         # Report and plot simulation results
+        fout_log, fout_img_genes, fout_img_goids = self._get_fouts(simname)
         with open(os.path.join(self.repo, fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
             self.prt_summary(prt)
-            self.prt_experiments_means(sys.stdout, rpt_items)
-            self.prt_experiments_means(prt, rpt_items)
+            self.prt_experiments_means(sys.stdout, rpt_items, 'genes')
+            self.prt_experiments_means(prt, rpt_items, 'genes')
+            self.prt_experiments_means(prt, rpt_items, 'goids')
             self.prt_experiments_stats(prt, rpt_items)
-            baseimg = '{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)
-            fout_img = os.path.join(self.repo, dir_loc, '{B}.png'.format(B=baseimg))
-            self.plt_box_tiled(fout_img, plt_items, 'genes', **pltargs)
-            #GOID fout_img = fout_img.replace('goea', 'goids')
-            #GOID self.plt_box_tiled(fout_img, plt_items, 'goids', **pltargs)
+            self.plt_box_tiled(fout_img_genes, plt_items, 'genes', **pltargs)
+            self.plt_box_tiled(fout_img_goids, plt_items, 'goids', **pltargs) # GOIDS
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
+
+    def _get_fouts(self, simname):
+        """Return output filenames for the logfile and two png files."""
+        pre = self.pobj.params['prefix']
+        dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
+        desc_str = self._get_fout_img()
+        fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
+        fout_img_genes = os.path.join(dir_loc, '{B}.png'.format(
+            B='{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)))
+        fout_img_goids = fout_img_genes.replace('goea', 'goids')          # GOIDS
+        return fout_log, fout_img_genes, fout_img_goids
 
     def prt_seed(self, prt):
         """Print random seed."""
@@ -106,7 +112,7 @@ class ExperimentsAll(object):
     def plt_box_tiled(self, fout_img, plt_items, genes_goids, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        plt_box_tiled(fout_img, key2exps, plt_items, genes_goids, **kws)
+        plt_box_tiled(os.path.join(self.repo, fout_img), key2exps, plt_items, genes_goids, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""
@@ -130,8 +136,8 @@ class ExperimentsAll(object):
         sys.stdout.write("\n{TITLE}\n".format(TITLE=self.get_desc()))
         num_attrs = len(attrs)
         attrstrs = ["{:>19}".format(a) for a in attrs]
-        prt.write("\nSummary of mean values and standard errors ")
-        prt.write(" for {N} sets of experiments\n\n".format(N=len(self.expsets)))
+        prt.write("\nSummary of {DESC} mean values and standard errors ".format(DESC=genes_goids))
+        prt.write("for {N} sets of experiments\n\n".format(N=len(self.expsets)))
         prt.write("nul% #tests {ATTRS}\n".format(ATTRS=" ".join(attrstrs)))
         prt.write("---- ------ {ATTRS}\n".format(ATTRS=" ".join(["-"*19]*num_attrs)))
         namefmt = "{PERCNULL:3}% {QTY:6}"
