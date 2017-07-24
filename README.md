@@ -29,9 +29,11 @@ All simulations shown use **alpha=0.05**.
       #benjaminihochberg-only-simulated-sensitivity)
 
 ## Stochastic GOEA simulations
-First, we ran simulations using randomly generated gene lists containing varying
+The first simulation results contained **unacceptably high FDRs** for
+3 out of 20 gene groups containing 64 or 124 genes. (Panels A3 and A4).
+
+The simulations used randomly generated gene lists containing varying
 percentages of True Null (general population) genes and Non-True-Null (Humoral Response) genes.
-The simulation results contained unacceptably high FDRs for some gene groups containing 64 or 124 genes. (Panels A3 and A4)
 
 ![FAIL_orig_pruneN_all](doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
@@ -40,13 +42,13 @@ High numbers of false positives were often showed:
   * GO IDs that are associated with an unusually high number of genes
   * GO IDs that are purified, rather than enriched
 
-### Simulate and View Enriched Genes Only
+### Simulate. Then View Enriched Genes Only
 If the simulations were re-run, but only the enriched results were used in reports and figures,
 the simulations solidly PASSED resulting in FDRs that were very close to zero.
 
 ![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-### Purge 30 GOs from Association, then Simulate
+### Purge 30 GOs from Association. Then Simulate
 If the simulations were re-run, but with ~30 GO IDs out of 17,000+ GO IDs in the
 association stripped out of the association, the simulations also solidly PASSED.
 The 30 GO IDs were chosen to be purged because they were associated with more than 1000 genes.
@@ -58,8 +60,8 @@ Upon doing a stress tests by randomizing the associations for True-Null genes
 prior to simulation, the "enriched-gene" simulations FAILed, but the
 "30-GOs-Purged" simulations PASSed.
 
-### Randomize Association and View Enriched Genes Only
-This simulation FAILs, but is close to passing.
+### Randomize Association. Simulate. Then View Enriched Genes Only
+This simulation FAILs due to FDRs>0.05 (A2: 64, 124 genes; A3: 124 genes), but is close to passing.
 ![FAIL_rand_pruneN_enr](doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 ### Purge 30 GOs from Association, then Randomize
 This simulation PASSes.
