@@ -9,6 +9,7 @@ import numpy as np
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
 from goatools_alpha.gosubdag import GoSubDag
+from goatools.associations import get_b2aset
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
@@ -32,7 +33,7 @@ class DataAssc(object):
         # Speed sims: Use the association subset actually in the population
         self.assc_hdr = get_assoc_hdr(_assc_file)
         _assc_all = {g:gos for g, gos in _assc_geneid2gos.items() if g in self.pop_genes}
-        self.go2genes = self.get_go2genes(_assc_all)
+        self.go2genes = get_b2aset(_assc_all)
         self.objassc_all = RandAssc(_assc_all)
         # Set by local set_targeted() when RunParams is initialized
         self.goids_tgtd = None
@@ -45,7 +46,7 @@ class DataAssc(object):
 
     def _prune_assc(self, assc_geneid2gos, max_genecnt, godag, prt=sys.stdout):
         """Remove GO IDs which are associated with large numbers of genes."""
-        go2genes_orig = self.get_go2genes(assc_geneid2gos)
+        go2genes_orig = get_b2aset(assc_geneid2gos)
         go2genes_prun = {go:gs for go, gs in go2genes_orig.items() if len(gs) <= max_genecnt}
         num_was = len(go2genes_orig)
         num_now = len(go2genes_prun)
@@ -54,7 +55,7 @@ class DataAssc(object):
         prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
             N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
         self.prt_goids_assc(gos_rm, godag, go2genes_orig, "    ", prt)
-        return self.get_go2genes(go2genes_prun)
+        return get_b2aset(go2genes_prun)
 
     def prt_goids_assc(self, goids, go2obj, go2genes, pre="", prt=sys.stdout):
         """Print GO terms and the number of genes associated with the GO ID."""
@@ -105,15 +106,15 @@ class DataAssc(object):
         # print "CCCCC", sum(1 for c in go_genecnts if c <= 350)
         sys.exit()
 
-    @staticmethod
-    def get_go2genes(assc, geneids=None):
-        """Return association (gene2gos) as go2genes."""
-        go2genes = cx.defaultdict(set)
-        for gene, goids in assc.items():
-            if geneids is None or gene in geneids:
-                for goid in goids:
-                    go2genes[goid].add(gene)
-        return go2genes
+    #### @staticmethod
+    #### def get_go2genes(assc, geneids=None):
+    ####     """Return association (gene2gos) as go2genes."""
+    ####     go2genes = cx.defaultdict(set)
+    ####     for gene, goids in assc.items():
+    ####         if geneids is None or gene in geneids:
+    ####             for goid in goids:
+    ####                 go2genes[goid].add(gene)
+    ####     return go2genes
 
     def split_assc(self, goids_tgtd_all):
         """Remove targeted GO IDs from all gene associations. Place in new sub-assc."""

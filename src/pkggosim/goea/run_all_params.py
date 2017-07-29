@@ -11,6 +11,7 @@ from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
 from goatools.go_enrichment import get_study_items
 from goatools_alpha.gosubdag import GoSubDag
+####from goatools.associations import get_b2aset
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
@@ -76,7 +77,7 @@ class RunParams(object):
     ####     raise Exception("rm get_assc_rmgenes")
     ####     gcnt = self.params['assc_rm_if_genecnt']
     ####     bg_gos = self.params['goids_study_bg']
-    ####     go2genes = self.objassc.get_go2genes(assc_curr)
+    ####     go2genes = get_b2aset(assc_curr)
     ####     assc_next = cx.defaultdict(set)
     ####     #### gos_keep = set() # TBD rm
     ####     for goid, go_genes in go2genes.items():

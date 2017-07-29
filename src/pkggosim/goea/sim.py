@@ -8,6 +8,7 @@ from collections import namedtuple, Counter
 from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
 from pkggosim.common.true_positive import get_tfpn, calc_ratio
+from goatools.associations import get_b2aset
 
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
@@ -101,7 +102,7 @@ class _PrtGoIds(object):
     """For printing GO IDs found significant in one simulation."""
 
     def __init__(self, objsim):
-        self.go2genes = objsim.pobj.objassc.get_go2genes(objsim.assc)
+        self.go2genes = get_b2aset(objsim.assc)
         self.gos_bg = objsim.pobj.params['goids_study_bg']
         self.gos_sig_all = set([r.GO for r in objsim.goea_results])
         self.go2obj = objsim.pobj.params['gosubdag'].go2obj
