@@ -105,7 +105,7 @@ class PlotInfo(object):
             self.kws[key] = val
 
 def fill_axes(axes, dfrm, alpha, **kws):
-    """Fills axes axes with one set of boxplots of simulated FDRs."""
+    """Fills axes with one set of boxplots of simulated FDRs."""
     lwd = kws.get('linewidth', 0.7)
     dotsz = kws.get('dotsize', 5)
     plottype = kws.get('plottype', "boxplot")
