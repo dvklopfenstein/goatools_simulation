@@ -18,7 +18,6 @@ class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
     desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
-    repo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
 
     def __init__(self, pobj):
         self.pobj = pobj # RunParams object
@@ -29,7 +28,7 @@ class ExperimentsAll(object):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         # Report and plot simulation results
         fout_log, fout_img_genes, fout_img_goids = self._get_fouts(simname)
-        with open(os.path.join(self.repo, fout_log), 'w') as prt:
+        with open(os.path.join(self.pobj.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
@@ -112,7 +111,7 @@ class ExperimentsAll(object):
     def plt_box_tiled(self, fout_img, plt_items, genes_goids, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        plt_box_tiled(os.path.join(self.repo, fout_img), key2exps, plt_items, genes_goids, **kws)
+        plt_box_tiled(os.path.join(self.pobj.params['repo'], fout_img), key2exps, plt_items, genes_goids, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""

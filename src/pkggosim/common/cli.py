@@ -9,7 +9,8 @@ import sys
 def get_args():
     """Return a dictionary containing command-line arguments."""
     args = {
-        'randomseed' : None, # A random seedn shall be generated
+        'randomseed' : None, # A random seed shall be generated
+        'randomize_truenull_assc' : 'orig_noprune_ntn2',
         'idx_experiment_cnts' : -1,
         'idx_max_sigpvals' : 0,
     }

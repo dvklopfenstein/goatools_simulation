@@ -17,9 +17,6 @@ from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 
-REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
-
-
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_hypoths_list."""
 
@@ -45,10 +42,16 @@ class ExperimentsAll(object):
     def __init__(self, params):
         self.tic = timeit.default_timer()
         self.seed = RandomSeed32(params.get('seed', None))
-        self.params = params
+        self.params = self._init_params(params)
         self.method = self.params['multi_params']['method']
         assert set(params.keys()) == self.expected_params
         self.expsets = []
+
+    def _init_params(self, params):
+        """Initialize params."""
+        if 'repo' not in params:
+            params['repo'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
+        return params
 
     def run_all(self, rpt_items, dotsize=None):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
@@ -57,7 +60,7 @@ class ExperimentsAll(object):
         dir_loc = 'doc/logs' if self.params['num_experiments'] > 20 else 'doc/work'
         fout_log = os.path.join(dir_loc, 'fig_hypoth_{DESC}.log'.format(DESC=desc_str))
         # Report and plot simulation results
-        with open(os.path.join(REPO, fout_log), 'w') as prt:
+        with open(os.path.join(self.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(prt, "Simulations Completed\n")
             self.prt_params(prt)
             self.prt_num_sims(prt)
@@ -68,7 +71,7 @@ class ExperimentsAll(object):
             title = "{M}".format(M=self.method2name[self.method])
             for attrname in ['fdr_actual', 'sensitivity', 'specificity']:
                 base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
-                fout_img = os.path.join(REPO, dir_loc, base_img)
+                fout_img = os.path.join(self.params['repo'], dir_loc, base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
             self.prt_num_sims(sys.stdout)
             self.prt_hms(prt, "Reports and Plots Completed")

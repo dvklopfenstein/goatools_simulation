@@ -17,6 +17,7 @@ class RunParams(object):
     """Runs all experiments for all sets of experiments."""
 
     expected_params = set([
+        'repo',
         'log',                   # None sys.stdout
         'seed',                  # randomseed
         'prefix',                # fig_goea_rnd
@@ -217,6 +218,8 @@ class RunParams(object):
         randomize_truenull_assc = params_usr['randomize_truenull_assc']
         assert set(params_usr.keys()) == self.expected_params
         params_sim = {k:v for k, v in params_usr.items()}
+        if 'repo' not in params_usr:
+            params_sim['repo'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
         # Init enriched_only
         params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
         print "ENRICHED", params_sim['enriched_only']
@@ -226,6 +229,9 @@ class RunParams(object):
         ####     mtch = re.search(r'rmgene(\d+)', randomize_truenull_assc)
         ####     if mtch:
         ####         params_sim['assc_rm_if_genecnt'] = int(mtch.group(1))
+        assert params_sim['genes_population']
+        assert params_sim['genes_study_bg']
+        assert params_sim['goids_study_bg']
         return params_sim
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
