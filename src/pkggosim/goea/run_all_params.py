@@ -10,7 +10,7 @@ from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
 from goatools.go_enrichment import get_study_items
-from goatools_alpha.gosubdag import GoSubDag
+from goatools_alpha.godag.gosubdag import GoSubDag
 ####from goatools.associations import get_b2aset
 
 class RunParams(object):

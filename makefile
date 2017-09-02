@@ -5,11 +5,8 @@ NTN = 2
 E = -3
 RUNALL = False
 
-# Max Sig P-values index for hypothese simulations
+# Max Sig P-values index for hypotheses simulations
 P = 0
-
-# Remove associations with less than G genes
-G = 5
 
 lst:
 	grep vim_ makefile

@@ -8,8 +8,8 @@ import collections as cx
 import numpy as np
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
-from goatools_alpha.gosubdag import GoSubDag
-from goatools.associations import get_b2aset
+from goatools_alpha.godag.gosubdag import GoSubDag
+from goatools.associations import get_b2aset, get_assc_pruned
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
@@ -46,14 +46,16 @@ class DataAssc(object):
 
     def _prune_assc(self, assc_geneid2gos, max_genecnt, godag, prt=sys.stdout):
         """Remove GO IDs which are associated with large numbers of genes."""
-        go2genes_orig = get_b2aset(assc_geneid2gos)
-        go2genes_prun = {go:gs for go, gs in go2genes_orig.items() if len(gs) <= max_genecnt}
-        num_was = len(go2genes_orig)
-        num_now = len(go2genes_prun)
-        gos_rm = set(go2genes_orig.keys()).difference(set(go2genes_prun.keys()))
-        assert num_was-num_now == len(gos_rm)
-        prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
-            N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
+        #### # DEPRECATED: Now in GOATOOLS
+        #### go2genes_orig = get_b2aset(assc_geneid2gos)
+        #### go2genes_prun = {go:gs for go, gs in go2genes_orig.items() if len(gs) <= max_genecnt}
+        #### num_was = len(go2genes_orig)
+        #### num_now = len(go2genes_prun)
+        #### gos_rm = set(go2genes_orig.keys()).difference(set(go2genes_prun.keys()))
+        #### assert num_was-num_now == len(gos_rm)
+        #### prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
+        ####     N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
+        assc_geneid2gos_pruned, goids_rm = get_assc_pruned(assc_geneid2gos, max_genecnt, prt)
         self.prt_goids_assc(gos_rm, godag, go2genes_orig, "    ", prt)
         return get_b2aset(go2genes_prun)
 
