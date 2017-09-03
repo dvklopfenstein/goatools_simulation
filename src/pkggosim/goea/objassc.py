@@ -36,7 +36,7 @@ class DataAssc(object):
         self.go2genes = get_b2aset(_assc_all)
         self.objassc_all = RandAssc(_assc_all)
         # Set by local set_targeted() when RunParams is initialized
-        self.goids_tgtd = None
+        self.goids_tgtd = None     # GO IDs found to be also truly significant
         self.objassc_pruned = None
         self.objassc_tgtd = None
 
@@ -83,7 +83,7 @@ class DataAssc(object):
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
         self.goids_tgtd = goids_tgtd
-        assc_pruned, assc_tgtd = self.split_assc(goids_tgtd)
+        assc_pruned, assc_tgtd = self._split_assc(goids_tgtd)
         print "AASSSSCC LENS PRUNED({}) TGTD({})".format(len(assc_pruned), len(assc_tgtd)) # TBD rm
         self.objassc_pruned = RandAssc(assc_pruned)
         self.objassc_tgtd = RandAssc(assc_tgtd)
@@ -118,7 +118,7 @@ class DataAssc(object):
     ####                 go2genes[goid].add(gene)
     ####     return go2genes
 
-    def split_assc(self, goids_tgtd_all):
+    def _split_assc(self, goids_tgtd_all):
         """Remove targeted GO IDs from all gene associations. Place in new sub-assc."""
         assc_pruned = {}
         assc_tgtd = {}
