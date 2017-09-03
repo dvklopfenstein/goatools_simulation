@@ -14,7 +14,7 @@ Each figure was created with 8,000 GOEA stochastic simulations.
      Printed simulation result details showed that **many _False Positives_ are enriched**, rather than purified.     
      Therefore, re-run simulations using original associations, but only evaluate **enriched** GOEA results.
   5. [**FAIL: Random True-Null Associations w/Modification 2**](#5-randoms-wmodification-2) (View Enriched-Only)
-  6. [**PASS: Random True-Null Associations w/Modification 1**](#6-ramdoms-wmodification-1) (Assc. minus outliers)
+  6. [**PASS: Random True-Null Associations w/Modification 1**](#6-randoms-wmodification-1) (Assc. minus outliers)
   7. [**PASS: Nominal Case: 100% of Associations are Randomly Shuffled**](#7-fail-randomized-true-nulls)     
      These nominal cases show that when **all** gene associations are randomly shuffled,
      no significant results are correctly returned.
@@ -127,7 +127,7 @@ FDRs are zero or almost zero.
 ### 5c) PASS: None-True Nulls w/ONLY Humoral Response GOs
 ![fig4d_goea_rand_noprune_enriched_ntn3](images/fig4c_PASS_goea_rand_noprune_enriched_ntn3_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-## 6) Ramdoms w/Modification 1 (Associations minus outliers)
+## 6) Randoms w/Modification 1 (Associations minus outliers)
 PASS: Prune GOs w/>1000 genes from Association acceptable? Try Randoms
   * a) **okay** [Non-True Nulls use original associations](#6a-okay-non-true-nulls-use-original-associations)
   * b) **PASS** [Non-True Nulls use original associations stripped of other significant GOs](#6b-fail-false-positives---non-true-nulls-wother-significant-discoveries-marked)
