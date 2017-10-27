@@ -36,7 +36,7 @@ class DataAssc(object):
         self.go2genes = get_b2aset(_assc_all)
         self.objassc_all = RandAssc(_assc_all)
         # Set by local set_targeted() when RunParams is initialized
-        self.goids_tgtd = None     # GO IDs found to be also truly significant
+        self.goids_tgtd = None     # Artifact GO IDs found to be also truly significant
         self.objassc_pruned = None
         self.objassc_tgtd = None
 
@@ -73,9 +73,8 @@ class DataAssc(object):
         gosubdag = GoSubDag(goids, go2obj)
         go2nt = gosubdag.get_go2nt(goids)
         pat = "{G:5,} genes {DESC}"
-        pat_go = gosubdag.get_prt_fmt()
-        sortby = gosubdag.get_sortby()
-        for goid, ntgo in sorted(go2nt.items(), key=lambda t: sortby(t[1])):
+        pat_go = gosubdag.prt_attr['fmt']
+        for goid, ntgo in sorted(go2nt.items(), key=lambda t: [t[1].NS, t[1].depth, -1*t[1].dcnt]):
             desc = pat_go.format(**ntgo._asdict())
             go_desc.append((goid, pat.format(G=len(go2genes[goid]), DESC=desc)))
         return cx.OrderedDict(go_desc)
@@ -83,8 +82,10 @@ class DataAssc(object):
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
         self.goids_tgtd = goids_tgtd
+        genes = get_b2aset({go:self.go2genes[go] for go in goids_tgtd})
+        print("TARGETED GENES({Gs})".format(Gs=len(genes)))
         assc_pruned, assc_tgtd = self._split_assc(goids_tgtd)
-        print "AASSSSCC LENS PRUNED({}) TGTD({})".format(len(assc_pruned), len(assc_tgtd)) # TBD rm
+        print("AASSSSCC LENS PRUNED({}) TGTD({})".format(len(assc_pruned), len(assc_tgtd))) # TBD rm
         self.objassc_pruned = RandAssc(assc_pruned)
         self.objassc_tgtd = RandAssc(assc_tgtd)
 
