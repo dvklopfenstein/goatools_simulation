@@ -3,6 +3,7 @@
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 import timeit
 import datetime
@@ -11,19 +12,20 @@ from pkggosim.goea.objassc import DataAssc
 from pkggosim.common.randseed import RandomSeed32
 from goatools.go_enrichment import get_study_items
 from goatools_alpha.godag.gosubdag import GoSubDag
-####from goatools.associations import get_b2aset
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
 
     expected_params = set([
-        'repo',
-        'log',                   # None sys.stdout
-        'seed',                  # randomseed
-        'prefix',                # fig_goea_rnd
-        'randomize_truenull_assc',
+        'repo',                    # directory of repository where script is run
+        'py_dir_genes',            # src/pkgdavid/input/
+        'log',                     # None sys.stdout
+        'seed',                    # randomseed
+        'prefix',                  # fig_goea_rnd
+        'randomize_truenull_assc', # orig_noprune_ntn2
         'alpha',                 # 0.05
         'method',                # 'fdr_bh'
+        'propagate_counts',      # False
         'association_file',      # 'gene_association.mgi'
         'genes_population',      # genes_mus
         'genes_study_bg',        # 'humoral_rsp'
@@ -39,7 +41,9 @@ class RunParams(object):
         self.tic = timeit.default_timer()
         self.params = self._init_params(params)
         self.objrnd = RandomSeed32(params['seed'])
-        self.objbase = DataBase(params['alpha'], params['method'])
+        # PROPAGATE_COUNTS HANDLED IN objassc, NOT REDONE FOR EACH AND EVERY SIMULATION
+        # self.objbase = DataBase(params['alpha'], params['method'], params['propagate_counts'])
+        self.objbase = DataBase(params['alpha'], params['method'], False)
         self.objassc = DataAssc(params, self.objbase.go_dag)
         self.params['gosubdag'] = GoSubDag(self.objassc.go2genes.keys(), self.objbase.go_dag)
         # self.params['cwd'] = os.getcwd()
@@ -52,13 +56,14 @@ class RunParams(object):
             "study_bg" : list(self.genes['study_bg']),
             "null_bg" : list(self.genes['null_bg'])}
         self.params['gosubdag_bg'] = GoSubDag(params["goids_study_bg"], self.objbase.go_dag)
-        self.params['ntn'] = self._init_ntn()
+        self.params['ntn'] = self._init_ntn() # 1, 2, or 3
         self._chk_genes(params, self.genes)
         self._adj_num_genes_list()
         # self.assc_pruned = self._init_get_goids_tgtd()
         # GO IDs targeted for removal or randomization: Sig GOs - background GOs
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
-        self.objassc.set_targeted(self._init_get_goids_tgtd())
+        _gos_targeted = self._init_get_goids_tgtd()
+        self.objassc.set_targeted(_gos_targeted)
 
     def _init_ntn(self):
         """Initialize param ntn with a digit or None."""
@@ -106,7 +111,6 @@ class RunParams(object):
         """Return a title to use in plots based on string in 'randomize_truenull_assc'."""
         # 'GOEA Simulations'
         key = self.params['randomize_truenull_assc']
-        print "GGGGGGGGGGGGGGGGGGGGGGGGGG KEY", key
         #pylint: disable=multiple-statements
         if key == 'orig_noprune_ntn1': return 'Original Associations'
         if key == 'orig_pruned_ntn1': return 'Original Associations, Pruned'
@@ -196,10 +200,11 @@ class RunParams(object):
         return lst_curr
 
     def _init_get_goids_tgtd(self):
-        """Get GO IDs to randomize so all inputs are properly marked as 'Non-true null'."""
+        """Run baseline GOEA to obtain list of 'other' GO IDs which are truly significant."""
         # Run Gene Ontology Analysis w/study genes being entire study gene background.
         attrname = "p_{METHOD}".format(METHOD=self.objbase.method)
         keep_if = lambda nt: getattr(nt, attrname) < self.objbase.alpha
+        # Association subset containing only population genes
         assc_all = self.objassc.objassc_all.assc_geneid2gos
         objgoea = self.objbase.get_goeaobj(self.genes['population'], assc_all)
         goea_results = objgoea.run_study(self.genes['study_bg'], keep_if=keep_if)
@@ -211,15 +216,36 @@ class RunParams(object):
         goids_study_bg = self.params['goids_study_bg']
         assert goids_signif.intersection(goids_study_bg) == goids_study_bg
         # GO IDs targeted for removal or randomization
-        return goids_signif.difference(goids_study_bg)
+        goids_artifacts = goids_signif.difference(goids_study_bg)
+        log = self.params['log']
+        if log is not None and goea_results:
+            self._prt_significant_artifacts(goea_results, goids_artifacts, log)
+        return goids_artifacts
+
+    @staticmethod
+    def _prt_significant_artifacts(goea_results, goids_artifacts, log):
+        """Print significant GO IDs that are artifacts of choosing from a set of candidate genes."""
+        res = next(iter(goea_results))
+        log.write("{S} study genes. {P} population genes:\n".format(S=res.study_n, P=res.pop_n))
+        pat = "ALSO SIG: {NS} {GO} {EP} {FDR:8.2e} S({N:>2}:{S:6.4f}) P({P:6.4f}) {NM}\n"
+        for res in sorted(goea_results, key=lambda r: [r.NS, r.p_fdr_bh]):
+            if res.GO in goids_artifacts:
+                ratio_stu = float(res.study_count)/res.study_n
+                ratio_pop = float(res.pop_count)/res.pop_n
+                log.write(pat.format(
+                    NS=res.NS, GO=res.GO, EP=res.enrichment, FDR=res.p_fdr_bh,
+                    N=res.study_count, S=ratio_stu, P=ratio_pop, NM=res.name))
 
     def _init_params(self, params_usr):
         """Add other new parameters based on user-specfications."""
         randomize_truenull_assc = params_usr['randomize_truenull_assc']
-        assert set(params_usr.keys()) == self.expected_params
         params_sim = {k:v for k, v in params_usr.items()}
         if 'repo' not in params_usr:
-            params_sim['repo'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
+            params_sim['repo'] = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "../../..")
+        if 'py_dir_genes' not in params_usr:
+            params_sim['py_dir_genes'] = None
+        assert set(params_sim.keys()) == self.expected_params
         # Init enriched_only
         params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
         print "ENRICHED", params_sim['enriched_only']

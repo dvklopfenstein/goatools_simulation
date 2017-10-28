@@ -1,5 +1,7 @@
 """Holds population genes and associations."""
 
+from __future__ import print_function
+
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
@@ -8,8 +10,10 @@ import collections as cx
 import numpy as np
 from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
-from goatools_alpha.godag.gosubdag import GoSubDag
 from goatools.associations import get_b2aset, get_assc_pruned
+from PyBiocode.Utils.stats import prt_percentiles
+from goatools_alpha.godag.gosubdag import GoSubDag
+from goatools_alpha.godag.go_tasks import update_association
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
@@ -20,25 +24,62 @@ class DataAssc(object):
         # Associations: rm obsolete GO IDs
         _assc_file = params['association_file']
         _pop_genes = params['genes_population']
-        _assc_geneid2gos = self._init_assc(_assc_file, _pop_genes, godag)
-        # Associations: rm GOs with lots of genes
-        _randomize_truenull_assc = params.get('randomize_truenull_assc', None)
-        if _randomize_truenull_assc is not None and '_pruned_' in _randomize_truenull_assc:
-            _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
-            print "PRUNE"
-        else:
-            print "NO PRUNE"
-        # Simplify sim analysis: Use population genes found in association for GOEA Sim eval
+        self.assc_hdr = get_assoc_hdr(_assc_file)
+        # Remove obsolete GO IDs from association if needed
+        _assc_geneid2gos_orig = self._init_assc(_assc_file, _pop_genes, godag)
+        # Associations: Add parent all GO IDs if propagate_counts is True
+        # DO propagate_counts before pruning because this step adds created higly associated GO IDs
+        _assc_geneid2gos = _assc_geneid2gos_orig
+        sys.stdout.write("PROPAGATE_COUNTS({VAL})\n".format(VAL=params['propagate_counts']))
+        if params['propagate_counts']:
+            _assc_geneid2gos = {g:set(gos) for g, gos in _assc_geneid2gos.items()}
+            update_association(_assc_geneid2gos, godag)
+            # _go2genes = get_b2aset(_assc_geneid2gos)
+            # vals = [len(genes) for genes in _go2genes.values()]
+            # # Associations MUST be pruned if using propagate counts
+            # max_genes = int(round(np.percentile(vals, 97.5)))
+            # _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, max_genes, godag)
+        # Associations: rm GOs with lots of genes if specified by user
+        # DO prune before getting population gene list so all pop genes have associations
+        _assc_geneid2gos = self._possibly_prune_assc(_assc_geneid2gos, 1000, godag, params)
+        ##### Associations: rm GOs with lots of genes if specified by user
+        ####_assc_geneid2gos = _possibly_prune_assc(_assc_geneid2gos, 1000, godag)
+        #### _randomize_truenull_assc = params.get('randomize_truenull_assc', None)
+        #### if _randomize_truenull_assc is not None and '_pruned_' in _randomize_truenull_assc:
+        ####     _assc_geneid2gos = self._prune_assc(_assc_geneid2gos, 1000, godag)
+        ####     print "PRUNE"
+        #### else:
+        ####     print "NO PRUNE"
+        #### For sim analysis: Use population genes found in association for GOEA Sim eval
         self.pop_genes = set(_pop_genes).intersection(set(_assc_geneid2gos.keys()))
         # Speed sims: Use the association subset actually in the population
-        self.assc_hdr = get_assoc_hdr(_assc_file)
         _assc_all = {g:gos for g, gos in _assc_geneid2gos.items() if g in self.pop_genes}
+        # Get all GO IDs in association
+        self.pop_gos = self._init_assc_pop(_assc_all)
         self.go2genes = get_b2aset(_assc_all)
-        self.objassc_all = RandAssc(_assc_all)
+        self.objassc_all = RandAssc(_assc_all)  # Holds assc as well as providing shuffled version
         # Set by local set_targeted() when RunParams is initialized
         self.goids_tgtd = None     # Artifact GO IDs found to be also truly significant
         self.objassc_pruned = None
         self.objassc_tgtd = None
+
+    def _possibly_prune_assc(self, assc_geneid2gos, max_genes, godag, params):
+        """Prune association of GOs that are associated with many genes if specified by the user."""
+        _randomize_truenull_assc = params.get('randomize_truenull_assc', None)
+        if _randomize_truenull_assc is not None and '_pruned_' in _randomize_truenull_assc:
+            print("PRUNE")
+            return self._prune_assc(assc_geneid2gos, max_genes, godag)
+        else:
+            print("NO PRUNE")
+            return assc_geneid2gos
+
+    @staticmethod
+    def _init_assc_pop(assc_geneid2gos):
+        """Keep GO IDs that are associated with the population genes."""
+        gos_pop = set()
+        for gos_cur in assc_geneid2gos.values():
+            gos_pop |= gos_cur
+        return gos_pop
 
     def get_assc(self):
         """Return full association."""
@@ -56,15 +97,17 @@ class DataAssc(object):
         #### prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
         ####     N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
         assc_geneid2gos_pruned, goids_rm = get_assc_pruned(assc_geneid2gos, max_genecnt, prt)
-        self.prt_goids_assc(gos_rm, godag, go2genes_orig, "    ", prt)
-        return get_b2aset(go2genes_prun)
+        go2genes_orig = get_b2aset(assc_geneid2gos)
 
-    def prt_goids_assc(self, goids, go2obj, go2genes, pre="", prt=sys.stdout):
-        """Print GO terms and the number of genes associated with the GO ID."""
-        go2desc = self.get_go2desc(goids, go2obj, go2genes)
-        pat = "{PRE}{DESC}\n"
-        for desc in go2desc.values():
-            prt.write(pat.format(PRE=pre, DESC=desc))
+        for desc in self.get_go2desc(goids_rm, godag, go2genes_orig).values():
+            prt.write("    {DESC}\n".format(DESC=desc))
+        cnts_genes = [len(gs) for gs in go2genes_orig.values()]
+        # print sorted(cnts_genes)
+        prt_percentiles("Number of genes associated with GO IDs.", cnts_genes, "{:6.0f}", prt)
+
+        #### self.prt_goids_assc(goids_rm, godag, go2genes_orig, "    ", prt)
+        #### return get_b2aset(go2genes_prun)
+        return assc_geneid2gos_pruned
 
     @staticmethod
     def get_go2desc(goids, go2obj, go2genes):
@@ -72,7 +115,7 @@ class DataAssc(object):
         go_desc = []
         gosubdag = GoSubDag(goids, go2obj)
         go2nt = gosubdag.get_go2nt(goids)
-        pat = "{G:5,} genes {DESC}"
+        pat = "{G:6,} genes {DESC}"
         pat_go = gosubdag.prt_attr['fmt']
         for goid, ntgo in sorted(go2nt.items(), key=lambda t: [t[1].NS, t[1].depth, -1*t[1].dcnt]):
             desc = pat_go.format(**ntgo._asdict())
@@ -82,7 +125,9 @@ class DataAssc(object):
     def set_targeted(self, goids_tgtd):
         """Set targeted GO IDs: Significant, but not tracked."""
         self.goids_tgtd = goids_tgtd
-        genes = get_b2aset({go:self.go2genes[go] for go in goids_tgtd})
+        # go:self.go2genes contains only GO IDs related to the population genes
+        go2genes = {go:self.go2genes[go] for go in goids_tgtd}
+        genes = get_b2aset(go2genes)
         print("TARGETED GENES({Gs})".format(Gs=len(genes)))
         assc_pruned, assc_tgtd = self._split_assc(goids_tgtd)
         print("AASSSSCC LENS PRUNED({}) TGTD({})".format(len(assc_pruned), len(assc_tgtd))) # TBD rm
@@ -136,7 +181,7 @@ class DataAssc(object):
     def _init_assc(assc_file, pop_genes, godag):
         """Read the association file. Save GOs related to population genes that are not obsolete."""
         assc = get_assoc_data(assc_file, pop_genes) # ~18,600
-        gos_obsolete = set([o.id for o in godag.values() if o.is_obsolete]) # ~2,000
-        return {g:gos.difference(gos_obsolete) for g, gos in assc.items()}
+        gos_active = set([go for go, o in godag.items() if not o.is_obsolete]) # ~2,000 obsolete GOs
+        return {g:gos.intersection(gos_active) for g, gos in assc.items()}
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

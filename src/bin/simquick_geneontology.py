@@ -138,16 +138,18 @@ import sys
 from pkggosim.common.randseed import RandomSeed32
 from pkggosim.goea.objrun_prelim import RunPrelim
 from pkggosim.goea.utils import get_study2genes
+from pkggosim.goea.objbase import DataBase
+from pkggosim.goea.objassc import DataAssc
 from goatools_suppl.data.ensm2nt_mus import ensm2nt
+# from goatools.base import get_godag
 
 REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../..")
 
 def main(seed, prt=sys.stdout):
     """Return a list of all GO IDs associated with protein-coding mouse genes."""
     objrnd = RandomSeed32(seed)
-    genes_mus = ensm2nt.keys()  # Population genes
     # 1. Get objects needed for a gene-ontology simulation: pop_genes, assc, GO-DAG
-    objrun = RunPrelim(0.05, 'fdr_bh', genes_mus, os.path.join(REPO, 'gene_association.mgi'))
+    objrun = get_objrun(alpha=0.05, method='fdr_bh', propagate_counts=False)
     study2genes = get_study2genes()
     objrun.set_maskout(study2genes['immune'].union(study2genes['viral_bacteria']))
     # 2. GET STUDY GENE LENGTHES (Study genes will be chosen randomly, but user specifies length)
@@ -165,6 +167,14 @@ def main(seed, prt=sys.stdout):
     objrun.prt_summary(prt)
     objrun.prt_results(results_list)
     objrnd.prt(prt)
+
+def get_objrun(alpha=0.05, method='fdr_bh', propagate_counts=False):
+    """Get run object."""
+    params = {
+        'association_file': os.path.join(REPO, 'gene_association.mgi'),
+        'genes_population': ensm2nt.keys()}   # Population genes
+    objbase = DataBase(alpha, method, propagate_counts)
+    return RunPrelim(objbase, DataAssc(params, objbase.go_dag))
 
 
 if __name__ == '__main__':

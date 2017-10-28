@@ -17,7 +17,7 @@ from goatools.statsdescribe import StatsDescribe
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
-    desc_pat = '{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
+    desc_pat = 'p{PCNT}_{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
 
     def __init__(self, pobj):
         self.pobj = pobj # RunParams object
@@ -28,12 +28,15 @@ class ExperimentsAll(object):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         # Report and plot simulation results
         fout_log, fout_img_genes, fout_img_goids = self._get_fouts(simname)
+        log = self.pobj.params['log']
         with open(os.path.join(self.pobj.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
             self.run(prt) # Runs simulations and loads self.expsets (Lists of Experiment Sets)
             self.prt_hms(sys.stdout, "Simulations complete.")
             self.prt_summary(prt)
             self.prt_experiments_means(sys.stdout, rpt_items, 'genes')
+            if log is not None:
+                self.prt_experiments_means(log, rpt_items, 'genes')
             self.prt_experiments_means(prt, rpt_items, 'genes')
             self.prt_experiments_means(prt, rpt_items, 'goids')
             self.prt_experiments_stats(prt, rpt_items)
@@ -42,6 +45,8 @@ class ExperimentsAll(object):
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
+            if log is not None:
+                self.prt_hms(log, "Simulations complete. Reports and plots generated.")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
     def _get_fouts(self, simname):
@@ -59,12 +64,11 @@ class ExperimentsAll(object):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
-    def _get_fout_img(self, img_pat=None):
+    def _get_fout_img(self):
         """Get the name of the png file for the tiled plot."""
-        if img_pat is None:
-            img_pat = self.desc_pat
         params = self.pobj.params
-        return img_pat.format(
+        return self.desc_pat.format(
+            PCNT=int(params['propagate_counts']),
             P0=params['perc_nulls'][0],   # True Null %
             PN=params['perc_nulls'][-1],  # True Null %
             Q0=params['num_genes_list'][0],
@@ -78,6 +82,7 @@ class ExperimentsAll(object):
         params = self.pobj.params
         return " ".join([
             "Alpha({A}) Method({M})".format(A=params['alpha'], M=params['method']),
+            "PropagateCounts({P})".format(P=params['propagate_counts']),
             "{E}=Experiments/Set".format(E=params['num_experiments']),
             "{P}=P-Value simulations/Experiment".format(P=params['num_sims'])])
 
@@ -111,7 +116,8 @@ class ExperimentsAll(object):
     def plt_box_tiled(self, fout_img, plt_items, genes_goids, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        plt_box_tiled(os.path.join(self.pobj.params['repo'], fout_img), key2exps, plt_items, genes_goids, **kws)
+        fout_img_full = os.path.join(self.pobj.params['repo'], fout_img)
+        plt_box_tiled(fout_img_full, key2exps, plt_items, genes_goids, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""

@@ -47,7 +47,8 @@ class ExperimentsAll(object):
         assert set(params.keys()) == self.expected_params
         self.expsets = []
 
-    def _init_params(self, params):
+    @staticmethod
+    def _init_params(params):
         """Initialize params."""
         if 'repo' not in params:
             params['repo'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
@@ -67,6 +68,7 @@ class ExperimentsAll(object):
             self.seed.prt(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
+            self.prt_hms(prt, "Simulations Completed\n")
             #title = "{M} Hypotheses Simulations".format(M=self.method2name[self.method])
             title = "{M}".format(M=self.method2name[self.method])
             for attrname in ['fdr_actual', 'sensitivity', 'specificity']:

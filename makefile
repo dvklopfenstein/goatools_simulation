@@ -2,7 +2,8 @@
 
 # Method index for Hypotheses Simulations
 NTN = 2
-E = -3
+E = -3           # 20 x 20
+P = False        # Propagate Counts
 RUNALL = False
 
 # Max Sig P-values index for hypotheses simulations
@@ -12,58 +13,67 @@ lst:
 	grep vim_ makefile
 
 # make run E=-1
+# RUNALL False means only 4 simulations will be run to create one P-value
+# RUNALL True  means only 4 simulations will be run to create one P-value
 run:
-	src/bin/plt_goea_small.py $(RUNALL) e=$(E) randomize_truenull_assc=rand_ntn3 0xdeadbeef
+	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef
+
+run_small:
+	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef
+	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2 0xdeadbeef
+	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef
 
 run_hypo:
 	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
 
+# make run_goeas_ntn P=True E=-1    # Fast sim
+# make run_goeas_ntn P=True         # Full sim
 run_goeas_ntn:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn$(NTN)
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn$(NTN)
 
 
 run_goeas_orig_enriched:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_enriched_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn1
 
 run_goeas_rand_enriched:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn1
 
 
 run_goeas_orig_pruned:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_pruned_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn1
 
 run_goeas_rand_pruned:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn1
 
 
 run_goeas_orig_noprune:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=orig_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn1
 
 run_goeas_rand_noprune:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn3
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn2
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_ntn1
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn3
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn2
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn1
 
 
 run_rand_all:
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_all
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_pruned_all
-	src/bin/plt_goea.py e=$(E) randomize_truenull_assc=rand_noprune_enriched_all
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_all
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_all
+	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_all
 
 
 cp_goea:

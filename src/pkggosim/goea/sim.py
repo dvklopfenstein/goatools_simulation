@@ -7,8 +7,8 @@ import sys
 from collections import namedtuple, Counter
 from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.common.true_positive import get_tfpn, calc_ratio
 from goatools.associations import get_b2aset
+from pkggosim.common.true_positive import get_tfpn, calc_ratio
 
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
@@ -31,6 +31,16 @@ class GoeaSim(object):
         if pobj.params['log'] is not None:
             if self.nt_tfpn_genes.fdr_actual > pobj.objbase.alpha:
                 self.rpt_details(pobj.params['log'])
+
+    def wrpy_genes(self, fout_local):
+        """Write randomly generated study study group into a Python module."""
+        fout_py = "{REPO}/{PY}".format(REPO=self.pobj.params['repo'], PY=fout_local)
+        with open(fout_py, 'w') as prt:
+            prt.write("genes = [ \n")
+            for ntd in self.nts_goea_res:
+                prt.write("    {NT},\n".format(NT=ntd))
+            prt.write("]\n")
+        sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_local))
 
     def get_nt_tfpn(self, nts_goea_res):
         """Calculate various statistical quantities of interest, including simulated FDR."""
@@ -86,7 +96,9 @@ class GoeaSim(object):
             N=len(self.nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
-        pat = ("{fp_mrk:1} {tfpn} REJ({reject:1}) EXP({expsig:1}) "
+        prt.write(" Res Reject Signific. Gene     is_sig_gene stu pop GO count\n")
+        prt.write(" --- ------ --------- ------------------ - --- ------------\n")
+        pat = ("{fp_mrk:1} {tfpn} REJ({reject:1}) EXPSIG({expsig:1}) "
                "{study_gene} {BG:1} {num_gos:3} {assc_gos:3}\n")
         genes_bg = self.pobj.params['genes_study_bg']
         assc = self.pobj.objassc.objassc_all.assc_geneid2gos
@@ -137,6 +149,18 @@ class _Init(object):
 
     ntobj = namedtuple("NtGoeaRes", "study_gene reject expsig GOs num_gos tfpn")
 
+    def __init__(self, num_study_genes, num_null, pobj):
+        self.pobj = pobj # RunParams object
+        # I. Genes in two groups: Different than population AND no different than population
+        self.gene_expsig_list = self._init_study_genes(num_study_genes, num_null) # [(gene, expsig),
+        self.assc_geneid2gos = self._init_assc()
+        self.goea_results = self._init_goea_results()
+        # for g in self.goea_results:
+        #     print "HHHH", g
+        self.genes_sig = get_study_items(self.goea_results)
+        if self.pobj.params['log'] is not None:
+            self._wrlog_summary(num_study_genes, num_null)
+
     def get_nts_stugenes(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
@@ -157,10 +181,9 @@ class _Init(object):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         goeasim_results = []
         ntobj = namedtuple("NtGoeaGos", "GO reject expsig tfpn")
-        goids_expsig_list = self._get_goids_expsig_list()
         go2res = {r.GO:r for r in self.goea_results}
         goids_sig = set(go2res.keys())
-        for study_goid, expsig in goids_expsig_list:
+        for study_goid, expsig in self._get_goids_expsig_list():
             reject = study_goid in goids_sig
             #pylint: disable=bad-whitespace
             goeasim_results.append(ntobj(
@@ -186,18 +209,6 @@ class _Init(object):
                 goids_sigtgt = goids_gene.intersection(goids_sigtgt_all)
                 goids_sig_all |= goids_sigbg.union(goids_sigtgt)
         return [(go, go in goids_sig_all) for go in goids_all]
-
-    def __init__(self, num_study_genes, num_null, pobj):
-        self.pobj = pobj # RunParams object
-        # I. Genes in two groups: Different than population AND no different than population
-        self.gene_expsig_list = self._init_study_genes(num_study_genes, num_null)
-        self.assc_geneid2gos = self._init_assc()
-        self.goea_results = self._init_goea_results()
-        # for g in self.goea_results:
-        #     print "HHHH", g
-        self.genes_sig = get_study_items(self.goea_results)
-        if self.pobj.params['log'] is not None:
-            self._wrlog_summary(num_study_genes, num_null)
 
     def _init_goea_results(self):
         """Run Gene Ontology Analysis."""
@@ -240,9 +251,10 @@ class _Init(object):
 
 
     def _fill_assc_ntn(self, assc_bg, ntn_num):
-        """Return one of many flavors of randomly shuffled associations."""
+        """Given non-true null study genes (ie HR or TARGET): Possibly edit genes' associations."""
         #genes_nontrunull = set([g for g, e in zip(self.genes_stu, self.expsig) if e])
-        genes_nontrunull = set([g for g, e in self.gene_expsig_list if e])
+        # Study genes expected to be significant (nontruenull OR target OR truly-significant)
+        genes_nontrunull = set([gene for gene, expsig in self.gene_expsig_list if expsig])
         # genes_nontrunullt = set([g for g, e in zip(self.genes_stu, self.expsig) if not e])
         # assert not genes_nontrunull.intersection(genes_nontrunullt)
         # print len(genes_nontrunull), len(genes_nontrunullt)
@@ -251,15 +263,18 @@ class _Init(object):
         #     tn = next(iter(genes_nontrunullt))
         #     assert assc[tn] != self.pobj.objassc.objassc_all.assc_geneid2gos[tn]
         assc_all_orig = self.pobj.objassc.objassc_all.assc_geneid2gos
+        # NTN1: Original association remains untouched
         if ntn_num == 1:
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene]
             return assc_bg
+        # NTN2: Remove 'other' truly significant GO IDs from study gene's GO associations
         elif ntn_num == 2:
             goids_tgtd = self.pobj.objassc.goids_tgtd
             for gene in genes_nontrunull:
                 assc_bg[gene] = assc_all_orig[gene].difference(goids_tgtd)
             return assc_bg
+        # NTN3: Rm all GOs from stu gene's GO assc EXCEPT specific GO IDs used to define ntn genes
         elif ntn_num == 3:
             goids_study_bg = self.pobj.params['goids_study_bg']
             for gene in genes_nontrunull:

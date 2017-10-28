@@ -8,8 +8,6 @@ import collections as cx
 import datetime
 from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
-from pkggosim.goea.objbase import DataBase
-from pkggosim.goea.objassc import DataAssc
 from pkggosim.goea.assc_shuffle import RandAssc
 
 
@@ -18,9 +16,9 @@ class RunPrelim(object):
 
     ntobj = cx.namedtuple("results", "name perc_null tot_study")
 
-    def __init__(self, alpha, method, pop_genes, assc_file):
-        self.objbase = DataBase(alpha, method)
-        self.objassc = DataAssc(assc_file, pop_genes)
+    def __init__(self, objbase, objassc):
+        self.objbase = objbase  # DataBase(alpha, method, propagate_counts)
+        self.objassc = objassc  # DataAssc(assc_file, pop_genes)
         self.maskout = None
 
     def prt_summary(self, prt):

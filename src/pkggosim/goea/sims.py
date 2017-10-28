@@ -15,7 +15,7 @@ class ManyGoeaSims(object):
     expected_params = set(['num_sims', 'num_items', 'perc_null', 'num_null'])
 
     def __init__(self, params, pobj):
-        self.params = params
+        self.params = params # num_sims num_items perc_null num_null
         self.pobj = pobj # RunParams object
         assert set(params.keys()) == self.expected_params
         simobjs = self._init_simobjs() # List of N=num_sims GoeaSim objects
@@ -23,15 +23,30 @@ class ManyGoeaSims(object):
             'genes' : [o.nt_tfpn_genes for o in simobjs],
             'goids' : [o.nt_tfpn_goids for o in simobjs], # GOIDs
         }
+        if self.pobj.params['py_dir_genes'] is not None:
+            self.wrpy_genes(simobjs)
+
+    def wrpy_genes(self, simobjs):
+        """Write randomly generated study study group into a Python module."""
+        # prt = sys.stdout
+        # seedstr = "0x{S:08x}".format(S=self.pobj.objrnd.seed)
+        fpat = "{DIR}/genes_{NM}_pn{PERCNULL:03}_g{G:05}"
+        base = fpat.format(
+            DIR=self.pobj.params['py_dir_genes'],
+            PERCNULL=self.params['perc_null'], G=self.params['num_items'],
+            NM=self.pobj.params['randomize_truenull_assc'])
+        #### prt.write("NNNNNNNNNNNNNNNNNNNNN {SEED} {P} {NM}\n".format(
+        ####     SEED=seedstr, P=self.pobj.params['prefix'],
+        ####     NM=self.pobj.params['randomize_truenull_assc']))
+        #### for k, v in self.params.items():
+        ####     prt.write("NNNNNNNNNNNNNNNNNNNNN {K} {V}\n".format(K=k, V=v))
+        for simnum, simobj in enumerate(simobjs):
+            fout_py = "{BASE}_sim{N:05}.py".format(BASE=base, N=simnum)
+            simobj.wrpy_genes(fout_py)
 
     def get_mean(self, key, genes_goids='genes'):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
         return np.mean([getattr(nt, key) for nt in self.nts_tfpn[genes_goids]])
-
-    #### def get_stderr(self, key, genes_goids='genes'):
-    ####     """Returns the stderr value for the set of P-Value simulations run in this class."""
-    ####     nts_tfpn = self.nts_tfpn[genes_goids]
-    ####     return np.std([getattr(nt, key) for nt in nts_tfpn])/np.sqrt(len(nts_tfpn))
 
     def get_summary_str(self):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""

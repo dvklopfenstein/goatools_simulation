@@ -30,6 +30,7 @@ def run(args, ntd, prt=sys.stdout):
         'seed' : args.get('randomseed', None),
         'alpha' : 0.05,
         'method' : 'fdr_bh',
+        'propagate_counts' : args.get('propagate_counts', False),
         'genes_population':genes_mus,
         'genes_study_bg':import_genes(study_bg),
         'goids_study_bg':import_goids(study_bg),

@@ -9,9 +9,10 @@ from goatools.go_enrichment import GOEnrichmentStudy
 class DataBase(object):
     """Holds paramaters and data used in every GOEA Simulation."""
 
-    def __init__(self, alpha, method):
+    def __init__(self, alpha, method, propagate_counts):
         self.alpha = alpha
         self.method = method
+        self.propagate_counts = propagate_counts
         self.go_dag = get_godag() # GODag go-basic.obo: fmt(1.2) rel(2017-06-30) 48,928 GO Terms
 
     def get_goeaobj(self, pop_genes, assoc_geneid2gos):
@@ -20,7 +21,7 @@ class DataBase(object):
             pop_genes,
             assoc_geneid2gos,
             self.go_dag,
-            propagate_counts=False,
+            propagate_counts=self.propagate_counts,
             alpha=self.alpha,
             methods=[self.method],
             log=None)
@@ -32,7 +33,8 @@ class DataBase(object):
 
     def get_str_mcorr(self):
         """Print parameters and versions of GO-DAG used in this simulation."""
-        return "alpha({A}) method({M})".format(A=self.alpha, M=self.method)
+        return "alpha({A}) method({M}) propagate_counts({P})".format(
+            A=self.alpha, M=self.method, P=self.propagate_counts)
 
     def prt_versions(self, prt):
         """Report results GOEAs on actual associations and randon associations."""
