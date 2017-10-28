@@ -19,7 +19,7 @@ All simulations shown use **alpha=0.05**.
     * [Original Simulations](#stochastic-goea-simulations-1)
       * [View Enriched](#simulate-and-view-enriched-genes-only)
       * [Pruned](#purge-30-gos-from-association-then-simulate)
-      * [View Enriched with Propagate Counts]()
+      * [View Enriched with Propagate Counts](#view-enriched-goeas-only-with-propagate-countstrue)
     * **Random Simulations**
       * [Rand - View Enriched](#randomize-association-and-view-enriched-genes-only)
       * [Rand - Purged](#purge-30-gos-from-association-then-randomize)
