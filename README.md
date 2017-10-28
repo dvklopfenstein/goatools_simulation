@@ -19,6 +19,7 @@ All simulations shown use **alpha=0.05**.
     * [Original Simulations](#stochastic-goea-simulations-1)
       * [View Enriched](#simulate-and-view-enriched-genes-only)
       * [Pruned](#purge-30-gos-from-association-then-simulate)
+      * [View Enriched with Propagate Counts]()
     * **Random Simulations**
       * [Rand - View Enriched](#randomize-association-and-view-enriched-genes-only)
       * [Rand - Purged](#purge-30-gos-from-association-then-randomize)
@@ -54,6 +55,10 @@ association stripped out of the association, the simulations also solidly PASSED
 The 30 GO IDs were chosen to be purged because they were associated with more than 1000 genes.
 
 ![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+### View enriched GOEAs only with propagate counts=True
+
+![Enriched. PropoagateCounts=True](doc/md/images/fig_goea_orig_noprune_enriched_ntn2_p1_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Stress tests
 Upon doing a stress tests by randomizing the associations for True-Null genes
