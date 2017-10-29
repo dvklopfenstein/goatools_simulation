@@ -8,6 +8,7 @@ __author__ = "DV Klopfenstein"
 import collections as cx
 import seaborn as sns
 import numpy as np
+#import matplotlib as mpl
 
 #pylint: disable=too-few-public-methods
 class PlotInfo(object):
@@ -70,9 +71,10 @@ class PlotInfo(object):
         self._init_axes_params(args_kws)
 
     def get_str_mean(self, exps, desc=None):
-        """Get value with x and y location to be printing inside plot."""
+        """Get bar height text and location for one tile."""
         valstrs = []
         if self.kws['plottype'] == 'barplot':
+            qty = len(exps)  # Number of gene sets. Ex; [4, 8, 16, 64] -> 4 gene sets
             ntobj = cx.namedtuple("NtValstr", "valstr x y ha va")
             left_num = exps[0].params['num_items']
             for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
@@ -81,13 +83,30 @@ class PlotInfo(object):
                 if yval > 0.0001 and yval <= 0.50:
                     valstr = "{VAL:2.0f}%".format(VAL=yval*100)
                     ntplt = ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom')
-                    valstrs.append(ntplt)
+                    if qty > 4 and self._b_bartext(valstrs, ntplt):
+                        valstrs.append(ntplt)
                 elif yval > 0.50 and yval <= 0.99:
                     if exp.params['num_items'] != left_num or yval <= 0.75:
                         valstr = "{VAL:2.0f}%".format(VAL=yval*100)
                         ntplt = ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom')
-                        valstrs.append(ntplt)
+                        if qty > 4 and self._b_bartext(valstrs, ntplt):
+                            valstrs.append(ntplt)
         return valstrs
+
+    @staticmethod
+    def _b_bartext(valstrs, ntcurr):
+        """For readablity, decide to print this text in bar plots or not."""
+        # PRINT if this is the first text printed
+        if not valstrs:
+            return True
+        ntprev = valstrs[-1]
+        # PRINT If this text is not next to the last test
+        if ntprev.x != ntcurr.x - 1:
+            return True
+        # PRINT if this text
+        if abs(ntprev.y - ntcurr.y) > 10:
+            return True
+        return False
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
         """Return plotting parameters that differ for various plotting values; dostsize, ylim."""
@@ -131,11 +150,12 @@ def fill_axes(axes, dfrm, alpha, **kws):
         axes.set_title(kws['title'], size=25)
     axes.set_xlabel(kws.get('xlabel', ""), size=20)
     axes.set_ylabel(kws.get('ylabel', ""), size=20)
+    #print("RC PARAMS({})".format(mpl.rcParams))
     if 'letter' in kws and 'ylim' in kws:
         #xpos = 0.96*axes.get_xlim()[1]
         #ypos = 0.85*kws['ylim'][1]
         #axes.text(xpos, ypos, kws['letter'], ha='right', va='center')
-        print("COMMON LETTER({})".format(kws['letter']))
+        # print("COMMON LETTER({})".format(kws['letter']))
         xpos = axes.get_xlim()[0] + 0.05
         ypos = 0.85*kws['ylim'][1]
         axes.text(xpos, ypos, kws['letter'], ha='left', va='center')

@@ -74,6 +74,7 @@ def _plt_tile(pltobj, pvars, genes_goids):
     """Plot one tile of a multi-tiled plot."""
     axes = pvars['axes']
     exps = pvars['exps']
+    # qty = len(exps) # Number of gene sets in each tile. Ex: [4, 8, 16, 64] -> 4 sets
     kws = pltobj.kws
     dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname))
     alpha = exps[0].pobj.objbase.alpha if kws['alphaline'] else None
@@ -84,9 +85,11 @@ def _plt_tile(pltobj, pvars, genes_goids):
     axes.set_yticklabels(kws['yticklabels'])
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
+    print("PVARS EXPS({})".format(exps))
     # Add value text above plot bars to make plot easier to read
+    siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
     for ntval in pltobj.get_str_mean(exps, genes_goids):
-        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
+        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:

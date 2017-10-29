@@ -17,7 +17,7 @@ lst:
 # RUNALL True  
 run:
 	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
-		title="Test Run" genes=4,124
+		title="Test Run" genes=4,8,16,18,20,22,24,32,64,124
 
 prop:
 	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
