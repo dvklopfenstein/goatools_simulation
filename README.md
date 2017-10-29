@@ -66,7 +66,7 @@ The 30 GO IDs were chosen to be purged because they were associated with more th
 #### Enriched GOEAs only with counts propagated: 4-64 genes
 ![Enriched ProagateCounte=True](doc/md/images/fig_goea_orig_noprune_enriched_ntn2_p1_100to000_004to024_N00020_00020_humoral_rsp.png)
 
-### Stress tests
+## GOEA Stress tests
 Upon doing a stress tests by randomizing the associations for True-Null genes
 prior to simulation, the "enriched-gene" simulations FAILed, but the
 "30-GOs-Purged" simulations PASSed.
