@@ -171,6 +171,7 @@ def main(seed, prt=sys.stdout):
 def get_objrun(alpha=0.05, method='fdr_bh', propagate_counts=False):
     """Get run object."""
     params = {
+        'title': "Quick Simunation",
         'association_file': os.path.join(REPO, 'gene_association.mgi'),
         'genes_population': ensm2nt.keys()}   # Population genes
     objbase = DataBase(alpha, method, propagate_counts)

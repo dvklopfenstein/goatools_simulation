@@ -13,10 +13,15 @@ lst:
 	grep vim_ makefile
 
 # make run E=-1
-# RUNALL False means only 4 simulations will be run to create one P-value
-# RUNALL True  means only 4 simulations will be run to create one P-value
+# RUNALL False: Only 4 simulations will be run to create one P-value
+# RUNALL True  
 run:
-	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef
+	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
+		title="Test Run" genes=4,124
+
+prop:
+	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+		title="Annotations include all Parent GO IDs" genes=4,16,20,24
 
 run_small:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef

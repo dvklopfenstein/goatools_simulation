@@ -30,6 +30,7 @@ def main(run_all, prt=sys.stdout):
     # Gene Ontology Data
     with open(os.path.join(REPO, fout_log), 'w') as log:
         params = {
+            'title': args['title'],
             'log' : log,
             'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
             'randomize_truenull_assc' : randomize_truenull_assc,
@@ -44,7 +45,7 @@ def main(run_all, prt=sys.stdout):
             'association_file':'gene_association.mgi',
 
             'perc_nulls' : [100, 75, 50, 25, 0] if run_all else [25],
-            'num_genes_list' : [4, 16, 64, 128] if run_all else [128],
+            'num_genes_list' : args['genes'], # [4, 16, 64, 128] if run_all else [128],
 
             'num_experiments' : ntd.num_experiments, # Num. simulated FDR ratios per experiment set
             'num_sims' : ntd.num_sims}   # Number sims per experiment; used to create one FDR ratio
@@ -52,7 +53,8 @@ def main(run_all, prt=sys.stdout):
         sys.stdout.write("  propagate_counts={P}\n".format(P=obj.pobj.params['propagate_counts']))
 
         title_cur = obj.pobj.get_title()
-        prt.write("Title: {S}\n".format(S=title_cur))
+        prt.write("TITLE: {S}\n".format(S=title_cur))
+        prt.write("GENES: {S}\n".format(S=params['num_genes_list']))
         prt.write("randomize_truenull_assc: {S}\n".format(S=randomize_truenull_assc))
         prt.write("{NT}\n".format(NT=ntd))
 

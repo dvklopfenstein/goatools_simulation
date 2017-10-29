@@ -9,6 +9,8 @@ import sys
 def get_args():
     """Return a dictionary containing command-line arguments."""
     args = {
+        'title': None,
+        'genes': [4, 16, 64, 128],
         'randomseed' : None, # A random seed shall be generated
         'randomize_truenull_assc' : 'orig_noprune_ntn2',
         'idx_experiment_cnts' : -1,
@@ -19,6 +21,10 @@ def get_args():
     for arg in sys.argv[1:]:
         if arg.isdigit() or arg[:2] == "0x":
             args['randomseed'] = int(arg, 0)
+        elif arg[:6] == "genes=":
+            args['genes'] = [int(n) for n in arg[6:].split(',')]
+        elif arg[:6] == "title=":
+            args['title'] = arg[6:]
         elif arg[:24] == "randomize_truenull_assc=":
             args['randomize_truenull_assc'] = arg[24:]
         elif arg[:9] == "propcnts=":

@@ -1,5 +1,7 @@
 """Plotting code for filling one tile of a tiled plot."""
 
+from __future__ import print_function
+
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
@@ -7,6 +9,7 @@ import collections as cx
 import seaborn as sns
 import numpy as np
 
+#pylint: disable=too-few-public-methods
 class PlotInfo(object):
     """Plot information for tiled plots in general and for one of various stats attributes."""
 
@@ -132,6 +135,7 @@ def fill_axes(axes, dfrm, alpha, **kws):
         #xpos = 0.96*axes.get_xlim()[1]
         #ypos = 0.85*kws['ylim'][1]
         #axes.text(xpos, ypos, kws['letter'], ha='right', va='center')
+        print("COMMON LETTER({})".format(kws['letter']))
         xpos = axes.get_xlim()[0] + 0.05
         ypos = 0.85*kws['ylim'][1]
         axes.text(xpos, ypos, kws['letter'], ha='left', va='center')

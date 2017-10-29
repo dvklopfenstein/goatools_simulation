@@ -1,5 +1,7 @@
 """Plot GOEA simulation results."""
 
+from __future__ import print_function
+
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
@@ -14,6 +16,7 @@ from pkggosim.common.plot_results import fill_axes
 
 def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    # pylint: disable=too-many-locals
     pltobjs = [PlotInfo(a, args_kws) for a in attrs]
     num_rows = len(key2exps)
     num_cols = len(attrs)
@@ -36,7 +39,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
     _tiled_xyticklabels_off(axes_all, num_cols)
     _set_tiled_txt(fig, pltobjs[0])
     #plt.tight_layout()
-    plt.savefig(fout_img, dpi=args_kws.get('dpi', 200))
+    plt.savefig(fout_img, dpi=args_kws.get('dpi', 300))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
         plt.show()

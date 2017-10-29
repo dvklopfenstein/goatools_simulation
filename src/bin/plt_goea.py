@@ -24,6 +24,7 @@ def run(args, ntd, prt=sys.stdout):
     # Gene Ontology Data
     genes_mus = ensm2nt.keys()  # Population genes
     params = {
+        'title': args['title'],
         'log' : None if ntd.num_experiments > 4 else sys.stdout,
         'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),
         'randomize_truenull_assc' : randomize_truenull_assc,
@@ -38,14 +39,16 @@ def run(args, ntd, prt=sys.stdout):
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
         #'num_genes_list' : [4, 16, 64, 128],
-        'num_genes_list' : [4, 8, 16, 24, 32, 40, 48, 56, 64],
+        #'num_genes_list' : [4, 8, 16, 24, 32, 40, 48, 56, 64],
+        'num_genes_list' : args['genes'],
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     objparams = RunParams(params)
     obj = ExperimentsAll(objparams) # RunParams
 
     title_cur = objparams.get_title()
-    prt.write("Title: {S}\n".format(S=title_cur))
+    prt.write("TITLE: {S}\n".format(S=title_cur))
+    prt.write("GENES: {S}\n".format(S=params['num_genes_list']))
     prt.write("randomize_truenull_assc: {S}\n".format(S=randomize_truenull_assc))
     prt.write("{NT}\n".format(NT=ntd))
 

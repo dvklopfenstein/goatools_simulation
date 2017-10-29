@@ -1,5 +1,7 @@
 """Runs all experiments for all sets of experiments."""
 
+from __future__ import print_function
+
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
@@ -17,6 +19,7 @@ class RunParams(object):
     """Runs all experiments for all sets of experiments."""
 
     expected_params = set([
+        'title',                   # Title to print on Figure w/FDR/Sensitivity/Specificty
         'repo',                    # directory of repository where script is run
         'py_dir_genes',            # src/pkgdavid/input/
         'log',                     # None sys.stdout
@@ -40,6 +43,7 @@ class RunParams(object):
     def __init__(self, params):
         self.tic = timeit.default_timer()
         self.params = self._init_params(params)
+        print("TITLE({T})".format(T=self.params['title']))
         self.objrnd = RandomSeed32(params['seed'])
         # PROPAGATE_COUNTS HANDLED IN objassc, NOT REDONE FOR EACH AND EVERY SIMULATION
         # self.objbase = DataBase(params['alpha'], params['method'], params['propagate_counts'])
@@ -78,27 +82,6 @@ class RunParams(object):
         """Get the Background gene name"""
         return "HR"
 
-    #### def get_assc_rmgenes(self, assc_curr):
-    ####     """Remove GO IDs if they are not associated with many genes and are not in study BG."""
-    ####     raise Exception("rm get_assc_rmgenes")
-    ####     gcnt = self.params['assc_rm_if_genecnt']
-    ####     bg_gos = self.params['goids_study_bg']
-    ####     go2genes = get_b2aset(assc_curr)
-    ####     assc_next = cx.defaultdict(set)
-    ####     #### gos_keep = set() # TBD rm
-    ####     for goid, go_genes in go2genes.items():
-    ####         if len(go_genes) > gcnt:
-    ####             for gene in go_genes:
-    ####                 assc_next[gene].add(goid)
-    ####                 #### gos_keep.add(goid)
-    ####         else:
-    ####             for gene in go_genes.intersection(bg_gos):
-    ####                 assc_next[gene].add(goid)
-    ####                 #### gos_keep.add(goid)
-    ####     #### print "GO WAS", len(go2genes)
-    ####     #### print "GO NOW", len(gos_keep)
-    ####     return {g:gos for g, gos in assc_next.items()}
-
     # Randomized Associations
     # Assoc: TN=Rand NTN=Orig
     # Assoc: TN=Rand NTN=Orig - non-HR
@@ -109,6 +92,8 @@ class RunParams(object):
     # Assoc: TN=Orig NTN=HR Only
     def get_title(self):
         """Return a title to use in plots based on string in 'randomize_truenull_assc'."""
+        if self.params['title'] is not None:
+            return self.params['title']
         # 'GOEA Simulations'
         key = self.params['randomize_truenull_assc']
         #pylint: disable=multiple-statements
@@ -248,7 +233,7 @@ class RunParams(object):
         assert set(params_sim.keys()) == self.expected_params
         # Init enriched_only
         params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
-        print "ENRICHED", params_sim['enriched_only']
+        print("ENRICHED({})".format(params_sim['enriched_only']))
         # Init assc_rm_if_genecnt based on randomize_truenull_assc
         #### params_sim['assc_rm_if_genecnt'] = None
         #### if 'rmgene' in randomize_truenull_assc:

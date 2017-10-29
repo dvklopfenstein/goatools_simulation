@@ -15,6 +15,7 @@ from PyBiocode.Utils.stats import prt_percentiles
 from goatools_alpha.gosubdag.gosubdag import GoSubDag
 from goatools_alpha.gosubdag.go_tasks import update_association
 
+#pylint: disable=too-many-instance-attributes
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
 
@@ -30,8 +31,9 @@ class DataAssc(object):
         # Associations: Add parent all GO IDs if propagate_counts is True
         # DO propagate_counts before pruning because this step adds created higly associated GO IDs
         _assc_geneid2gos = _assc_geneid2gos_orig
-        sys.stdout.write("PROPAGATE_COUNTS({VAL})\n".format(VAL=params['propagate_counts']))
-        if params['propagate_counts']:
+        sys.stdout.write("PROPAGATE_COUNTS({VAL})\n".format(
+            VAL=params.get('propagate_counts', False)))
+        if params.get('propagate_counts', False):
             _assc_geneid2gos = {g:set(gos) for g, gos in _assc_geneid2gos.items()}
             update_association(_assc_geneid2gos, godag)
             # _go2genes = get_b2aset(_assc_geneid2gos)
