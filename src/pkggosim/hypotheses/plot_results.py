@@ -141,7 +141,7 @@ def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
     fig.text(0.5, 0.96, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
     fig.text(0.5, 0.06, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.06, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
-    plt.savefig(fout_img, dpi=kws.get('dpi', 200))
+    plt.savefig(fout_img, dpi=kws.get('dpi', 300))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if kws.get('show', False):
         plt.show()
