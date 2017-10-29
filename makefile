@@ -19,9 +19,13 @@ run:
 	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
 		title="Test Run" genes=4,8,16,18,20,22,24,32,64,124
 
-prop:
+prop1:
 	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="Annotations include all Parent GO IDs" genes=4,16,20,24
+		title="Annotations with all parent GO IDs added" genes=4,16,20,24
+
+prop0:
+	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+		title="HR genes returned in GOEA enrichments" genes=4,16,20,24
 
 run_small:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef
