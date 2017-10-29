@@ -37,7 +37,8 @@ def run(args, ntd, prt=sys.stdout):
         'genes_popnullmaskout':import_genes_all(popnullmaskout),
         'association_file':'gene_association.mgi',
         'perc_nulls' : [100, 75, 50, 25, 0],
-        'num_genes_list' : [4, 16, 64, 128],
+        #'num_genes_list' : [4, 16, 64, 128],
+        'num_genes_list' : [4, 8, 16, 24, 32, 40, 48, 56, 64],
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     objparams = RunParams(params)

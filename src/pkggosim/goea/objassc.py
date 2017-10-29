@@ -12,8 +12,8 @@ from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
 from pkggosim.goea.assc_shuffle import RandAssc
 from goatools.associations import get_b2aset, get_assc_pruned
 from PyBiocode.Utils.stats import prt_percentiles
-from goatools_alpha.godag.gosubdag import GoSubDag
-from goatools_alpha.godag.go_tasks import update_association
+from goatools_alpha.gosubdag.gosubdag import GoSubDag
+from goatools_alpha.gosubdag.go_tasks import update_association
 
 class DataAssc(object):
     """Holds GOEA information. Runs sets of GOEAs."""
