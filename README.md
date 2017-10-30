@@ -48,6 +48,8 @@ If the simulations were re-run, but only the enriched results were used in repor
 the simulations solidly PASSED resulting in FDRs that were very close to zero.
 
 ![PASS_orig_pruneN_enr](doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+#### GOEAs for various gene sizes
+![HR](doc/md/images/fig_goea_orig_noprune_enriched_ntn2_p0_100to000_004to024_N00020_00020_humoral_rsp.png)
 
 ### Purge 30 GOs from 17,000+ GO Association. Then Simulate
 If the simulations were re-run, but with ~30 GO IDs out of 17,000+ GO IDs in the

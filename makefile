@@ -25,7 +25,7 @@ prop1:
 
 prop0:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="HR genes returned in GOEA enrichments" genes=4,16,20,24
+		title="HR genes returned in GOEA enrichments" genes=28,32,36,40,44,48,52,56,60
 
 run_small:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef
