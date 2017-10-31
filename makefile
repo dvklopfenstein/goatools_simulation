@@ -19,14 +19,18 @@ run:
 	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
 		title="Test Run" genes=4,8,16,18,20,22,24,32,64,124
 
+# -----------------------------------------------------------------------------------------------------
+#  For supplemental information: Compare Humoral Response gene recovery over a wide range
+#  of stochasticly chosen gene groups with gene group sizes ranging from 4 genes to 124 genes
 prop1:
 	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="Annotations with all parent GO IDs added" genes=4,16,20,24
+		title="Annotations with all parent GO IDs added" genes=4,8,16,20,48,64,96,124
 
 prop0:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="HR genes returned in GOEA enrichments" genes=28,32,36,40,44,48,52,56,60
+		title="HR genes returned in GOEA enrichments" genes=4,8,16,20,48,64,96,124
 
+# -----------------------------------------------------------------------------------------------------
 run_small:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2 0xdeadbeef

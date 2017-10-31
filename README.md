@@ -59,9 +59,6 @@ The 30 GO IDs were chosen to be purged because they were associated with more th
 ![PASS_orig_pruneY_pru](doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Enriched GOEAs with propagate counts True
-#### Enriched GOEAs only with counts propagated: 4-124 genes
-![Enriched PropagateCounts=True](doc/md/images/fig_goea_orig_noprune_enriched_ntn2_p1_100to000_004to124_N00020_00020_humoral_rsp.png)
-
 #### Enriched GOEAs only with counts propagated: 4-64 genes
 ![Enriched PropagateCounts=True](doc/md/images/fig_goea_orig_noprune_enriched_ntn2_p1_100to000_004to064_N00020_00020_humoral_rsp.png)
 
