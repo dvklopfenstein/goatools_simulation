@@ -9,8 +9,11 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
-from pkggosim.common.plot_results import get_num_rows_cols, fill_axes
+from pkggosim.common.plot_results import PlotInfo
+from pkggosim.common.plot_results import BarText
+from pkggosim.common.plot_results import get_dftbl_boxplot
+from pkggosim.common.plot_results import get_num_rows_cols
+from pkggosim.common.plot_results import fill_axes
 
 
 #### def plot_results_all(objsim, params):
@@ -204,8 +207,11 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
     # Add value text above plot bars to make plot easier to read
-    for ntval in objplt.get_str_mean(exps):
-        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
+    #### for ntval in objplt.get_str_mean(exps):
+    if kws['plottype'] == 'barplot':
+        means = [np.mean(exp.get_means(objplt.attrname)) for exp in exps]
+        for ntval in BarText(means).get_bar_text():
+            axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom')
 
 def _set_xlabels(axes, maxsig, alpha):
     """Set xlabels with max P-value and description."""

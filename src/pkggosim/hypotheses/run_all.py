@@ -23,7 +23,7 @@ class ExperimentsAll(object):
     desc_pat = '{P0:03}to{PN:03}_{MAX0}to{MAXN}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}_{M}'
 
     expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
-                           'num_experiments', 'num_sims'])
+                           'num_experiments', 'num_sims', 'repo'])
 
     method2name = {
         'bonferroni':     "Bonferroni one-step correction",
@@ -44,7 +44,8 @@ class ExperimentsAll(object):
         self.seed = RandomSeed32(params.get('seed', None))
         self.params = self._init_params(params)
         self.method = self.params['multi_params']['method']
-        assert set(params.keys()) == self.expected_params
+        assert set(self.params.keys()) == self.expected_params, \
+            set(params.keys()).symmetric_difference(self.expected_params)
         self.expsets = []
 
     @staticmethod

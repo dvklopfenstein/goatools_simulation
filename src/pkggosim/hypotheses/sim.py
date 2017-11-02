@@ -18,7 +18,7 @@ import sys
 import collections as cx
 import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
-from pkggosim.common.true_positive import get_result_desc, calc_ratio
+from pkggosim.common.true_positive import get_tfpn, calc_ratio
 
 class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""
@@ -126,9 +126,9 @@ class HypothesesSim(object):
             perc_Type_II   = 100.0*ctr[2]/num_pvals,
             perc_Type_I_II = 100.0*tot_errors/num_pvals)
 
-
 class _Init(object):
     """Create random hypotheses test results(pvals), run multipletest correction."""
+    #pylint: disable=too-few-public-methods
 
     # Multiple test correction results:
     #   1. statsmodels multiple test results for each P-value
@@ -146,7 +146,7 @@ class _Init(object):
                 pval_corr = pval_corr,
                 reject    = reject,
                 expsig    = expsig, # False->True Null; True->Non-true null
-                tfpn      = get_result_desc(reject, expsig))) # Ex: TP, TN, FP, or FN
+                tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
     def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):

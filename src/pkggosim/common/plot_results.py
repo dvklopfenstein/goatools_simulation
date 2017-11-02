@@ -7,7 +7,6 @@ __author__ = "DV Klopfenstein"
 
 import collections as cx
 import seaborn as sns
-import numpy as np
 #import matplotlib as mpl
 
 #pylint: disable=too-few-public-methods
@@ -61,7 +60,7 @@ class PlotInfo(object):
     }
 
     def __init__(self, attrname, args_kws):
-        self.attrname = attrname
+        self.attrname = attrname  # 'genes' or 'goids'
         self.kws = {key:args_kws.get(key, dfltval) for key, dfltval in self.dflts_plt.items()}
         _grpname = self.kws['grpname']
         self.grpname = _grpname if _grpname is not None else self.attr2grp[self.attrname]
@@ -69,44 +68,6 @@ class PlotInfo(object):
         if 'ylabel' not in args_kws:
             self.kws['ylabel'] = self.kws['ylabel'].format(GRP=self.grpname)
         self._init_axes_params(args_kws)
-
-    def get_str_mean(self, exps, desc=None):
-        """Get bar height text and location for one tile."""
-        valstrs = []
-        if self.kws['plottype'] == 'barplot':
-            qty = len(exps)  # Number of gene sets. Ex; [4, 8, 16, 64] -> 4 gene sets
-            ntobj = cx.namedtuple("NtValstr", "valstr x y ha va")
-            left_num = exps[0].params['num_items']
-            for xval, exp in enumerate(exps): # ManyHypothesesSims or ManyGoeaSims
-                yval = np.mean(exp.get_means(self.attrname, desc))
-                # Plot text that can comfortably fit in plot.
-                if yval > 0.0001 and yval <= 0.50:
-                    valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                    ntplt = ntobj(valstr=valstr, x=xval, y=yval+0.05, ha='center', va='bottom')
-                    if qty > 4 and self._b_bartext(valstrs, ntplt):
-                        valstrs.append(ntplt)
-                elif yval > 0.50 and yval <= 0.99:
-                    if exp.params['num_items'] != left_num or yval <= 0.75:
-                        valstr = "{VAL:2.0f}%".format(VAL=yval*100)
-                        ntplt = ntobj(valstr=valstr, x=xval, y=yval-0.30, ha='center', va='bottom')
-                        if qty > 4 and self._b_bartext(valstrs, ntplt):
-                            valstrs.append(ntplt)
-        return valstrs
-
-    @staticmethod
-    def _b_bartext(valstrs, ntcurr):
-        """For readablity, decide to print this text in bar plots or not."""
-        # PRINT if this is the first text printed
-        if not valstrs:
-            return True
-        ntprev = valstrs[-1]
-        # PRINT If this text is not next to the last test
-        if ntprev.x != ntcurr.x - 1:
-            return True
-        # PRINT if this text
-        if abs(ntprev.y - ntcurr.y) > 10:
-            return True
-        return False
 
     def _init_axes_params(self, usr_pltattr2pltnm2val):
         """Return plotting parameters that differ for various plotting values; dostsize, ylim."""
@@ -189,5 +150,74 @@ def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR', desc='genes'
         dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr, desc)]
         tbl.extend(dcts)
     return tbl
+
+
+class BarText(object):
+    """Creates bar-height text and it's x & y coordinates."""
+
+    def __init__(self, means):
+        self.means = means
+        self.qty = len(means) # Number of gene sets. Ex; [4, 8, 16, 64] -> 4 gene sets
+        self.prt_every = 2 if self.qty <= 16 else 3
+        assert means
+
+    def get_bar_text(self):
+        """Get printed bar height text and location for one tile."""
+        ntplts = self._get_str_mean_all()
+        # If there are less than 4 bars, print bar-height text above all bars
+        if self.qty <= 4:
+            return ntplts
+        return self._get_str_mean_prt(ntplts)
+
+    def _get_str_mean_prt(self, ntplts):
+        """Get printed bar height text and location for one tile."""
+        ntprts = []
+        last_idx = self.qty - 1
+        for ntplt in ntplts:
+            # Don't print text over the first bar or the last bar
+            if ntplt.x == 0 or ntplt.x == last_idx:
+                continue
+            if self._b_bartext(ntplt, ntprts):
+                ntprts.append(ntplt)
+            # if exp.params['num_items'] != left_num or yval <= 0.75:
+            # if num_items != num_items or yval <= 0.75:
+            # if yval <= 0.75:
+        return ntprts
+
+    def _b_bartext(self, ntcurr, ntprts):
+        """For readablity, decide to print this text in bar plots or not."""
+        # PRINT if this is the first text printed
+        if not ntprts:
+            return True
+        ntprev = ntprts[-1]
+        # DO NOT PRINT If this text too close to the last printed text
+        if ntcurr.x - ntprev.x < self.prt_every:
+            return False
+        # PRINT this text
+        return True
+
+    def _get_str_mean_all(self):
+        """Get all bar height text and location for one tile."""
+        ntplts = []
+        ntobj = cx.namedtuple("NtValstr", "valstr x y ha va val")
+        for xval, yval in enumerate(self.means):
+            valstr = "{VAL:2.0f}%".format(VAL=yval*100)
+            ypos = self._ypos_bar_text(yval)
+            if ypos is not None:
+                ntplt = ntobj(valstr=valstr, x=xval, y=ypos, ha='center', va='bottom', val=yval)
+                ntplts.append(ntplt)
+        return ntplts
+
+    @staticmethod
+    def _ypos_bar_text(yval):
+        """Return bar height text for bar height text between 0 < bar_height < 100."""
+        # Print text above bar height
+        if yval > 0.005 and yval <= 0.50:
+            return yval+0.05
+        # Print text below bar height
+        if yval > 0.50 and yval <= 0.99:
+            return yval-0.30
+        # Don't print text for bar height
+
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

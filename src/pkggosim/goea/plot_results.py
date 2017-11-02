@@ -7,10 +7,13 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import pandas as pd
-from pkggosim.common.plot_results import PlotInfo, get_dftbl_boxplot
+from pkggosim.common.plot_results import get_dftbl_boxplot
+from pkggosim.common.plot_results import PlotInfo
+from pkggosim.common.plot_results import BarText
 from pkggosim.common.plot_results import fill_axes
 
 
@@ -88,8 +91,13 @@ def _plt_tile(pltobj, pvars, genes_goids):
     print("PVARS EXPS({})".format(exps))
     # Add value text above plot bars to make plot easier to read
     siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
-    for ntval in pltobj.get_str_mean(exps, genes_goids):
-        axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
+    if kws['plottype'] == 'barplot':
+        # exps: ManyHypothesesSims or ManyGoeaSims
+        # attrname(sensitivity|specificity)
+        means = [np.mean(exp.get_means(pltobj.attrname, genes_goids)) for exp in exps]
+        #### for ntval in pltobj.get_str_mean(exps, genes_goids):
+        for ntval in BarText(means).get_bar_text():
+            axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:
