@@ -40,7 +40,7 @@ def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
                 'is_left_column':col_idx%num_cols == 0}, genes_goids)
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols)
-    _set_tiled_txt(fig, pltobjs[0])
+    _set_tiled_txt(fig, pltobjs[0], genes_goids)
     #plt.tight_layout()
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 300))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
@@ -79,7 +79,7 @@ def _plt_tile(pltobj, pvars, genes_goids):
     exps = pvars['exps']
     # qty = len(exps) # Number of gene sets in each tile. Ex: [4, 8, 16, 64] -> 4 sets
     kws = pltobj.kws
-    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname))
+    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname, genes_goids))
     alpha = exps[0].pobj.objbase.alpha if kws['alphaline'] else None
     fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
               plottype=kws['plottype'], letter=pvars['letter'], ylim=kws['ylim'])
@@ -88,14 +88,12 @@ def _plt_tile(pltobj, pvars, genes_goids):
     axes.set_yticklabels(kws['yticklabels'])
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
-    print("PVARS EXPS({})".format(exps))
     # Add value text above plot bars to make plot easier to read
     siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
     if kws['plottype'] == 'barplot':
         # exps: ManyHypothesesSims or ManyGoeaSims
         # attrname(sensitivity|specificity)
         means = [np.mean(exp.get_means(pltobj.attrname, genes_goids)) for exp in exps]
-        #### for ntval in pltobj.get_str_mean(exps, genes_goids):
         for ntval in BarText(means).get_bar_text():
             axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
     if pvars['is_bottom_row']:
@@ -119,11 +117,18 @@ def get_gridspecs(num_rows, num_cols):
     gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
     return gspecs
 
-def _set_tiled_txt(fig, pltobj):
+def _set_tiled_txt(fig, pltobj, genes_goids):
     """Add text around edges of plot."""
     kws = pltobj.kws
     xysz = kws['txtsz_xy']
-    fig.text(0.5, 0.97, kws['title'], size=kws['txtsz_title'], ha='center', va='center')
+    # Simulations in this repo were done from the perspective of genes recovered.
+    # However, the simulations also contain GO ID recovery in the same simulation.
+    # Both gene and GO ID recovery are plotted using the same title.
+    # But for the GO ID recovery plots, replace 'gene' in the title with 'GO ID'
+    title = kws['title']
+    if genes_goids == 'goids':
+        title = title.replace('genes', 'GO IDs')
+    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='center')
     fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 

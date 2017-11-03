@@ -22,13 +22,15 @@ run:
 # -----------------------------------------------------------------------------------------------------
 #  For supplemental information: Compare Humoral Response gene recovery over a wide range
 #  of stochasticly chosen gene groups with gene group sizes ranging from 4 genes to 124 genes
-prop1:
-	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="Annotations with all parent GO IDs added" genes=4,8,16,20,48,64,80,96,112,124
-
 prop0:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
-		title="HR genes returned in GOEA enrichments" genes=4,8,16,20,48,64,80,96,112,124
+		title="GOEAs recovering Humoral Response (HR) genes" \
+		genes=4,8,16,20,48,64,80,96,112,124
+
+prop1:
+	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+		title="GOEAs recovering HR genes; propagate_counts=True" \
+		genes=4,8,16,20,48,64,80,96,112,124
 
 # -----------------------------------------------------------------------------------------------------
 run_small:
