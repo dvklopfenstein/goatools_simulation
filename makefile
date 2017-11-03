@@ -17,7 +17,7 @@ lst:
 # RUNALL True  
 run:
 	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
-		title="Test Run" genes=4,8
+		title="Test Run genes" genes=4,8
 
 # -----------------------------------------------------------------------------------------------------
 #  For supplemental information: Compare Humoral Response gene recovery over a wide range

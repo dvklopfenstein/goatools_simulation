@@ -87,19 +87,9 @@ class PlotInfo(object):
         for key, val in kws.items():
             self.kws[key] = val
 
-def fill_axes(axes, dfrm, alpha, **kws):
+def fill_axes(axes, alpha, **kws):
     """Fills axes with one set of boxplots of simulated FDRs."""
     lwd = kws.get('linewidth', 0.7)
-    dotsz = kws.get('dotsize', 5)
-    plottype = kws.get('plottype', "boxplot")
-    pal = 'dark' # Seaborn color palette
-    plt_data = {'x':"xval", 'y':"yval", 'data':dfrm, 'ax':axes}
-    sns.stripplot(jitter=True, size=dotsz, palette=pal, **plt_data)
-    if plottype == 'boxplot':
-        sns.boxplot(hue="group", linewidth=lwd, color='black', saturation=1, **plt_data)
-        axes.legend_.remove()
-    elif plottype == 'barplot':
-        sns.barplot(palette=pal, alpha=.3, saturation=1, ci=None, **plt_data)
     _set_color_whiskers(axes, lwd, 'black', 'red')
     _set_color_boxes(axes, 'black')
     if alpha is not None:
@@ -121,6 +111,20 @@ def fill_axes(axes, dfrm, alpha, **kws):
         ypos = 0.85*kws['ylim'][1]
         axes.text(xpos, ypos, kws['letter'], ha='left', va='center')
     return axes
+
+def fill_axes_data(axes, dfrm, **kws):
+    """Fills axes with DATA from one set of boxplots of simulated FDRs."""
+    lwd = kws.get('linewidth', 0.7)
+    dotsz = kws.get('dotsize', 5)
+    plottype = kws.get('plottype', "boxplot")
+    pal = 'dark' # Seaborn color palette
+    plt_data = {'x':"xval", 'y':"yval", 'data':dfrm, 'ax':axes}
+    sns.stripplot(jitter=True, size=dotsz, palette=pal, **plt_data)
+    if plottype == 'boxplot':
+        sns.boxplot(hue="group", linewidth=lwd, color='black', saturation=1, **plt_data)
+        axes.legend_.remove()
+    elif plottype == 'barplot':
+        sns.barplot(palette=pal, alpha=.3, saturation=1, ci=None, **plt_data)
 
 def _set_color_whiskers(axes, lwd, col_end, col_mid):
     """Set boxplot whisker line color and thinkness."""
