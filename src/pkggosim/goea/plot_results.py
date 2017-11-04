@@ -18,16 +18,18 @@ from pkggosim.common.plot_results import fill_axes
 from pkggosim.common.plot_results import fill_axes_data
 
 
+#pylint: disable=line-too-long
 def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     # pylint: disable=too-many-locals
     pltobjs = [PlotInfo(a, args_kws) for a in attrs]
-    num_rows = len(key2exps)
-    num_cols = len(attrs)
+    num_rows = len(key2exps)  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
+    num_cols = len(attrs)     # FDR Sensitivity Specificity
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
-    axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols), num_rows, num_cols)
+    rot_xtick = _get_rot_xticklabels(key2exps)
+    axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
@@ -40,13 +42,33 @@ def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
                 'is_bottom_row':row_idx == num_rows-1,
                 'is_left_column':col_idx%num_cols == 0}, genes_goids)
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
-    _tiled_xyticklabels_off(axes_all, num_cols)
+    _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
     _set_tiled_txt(fig, pltobjs[0], genes_goids)
     #plt.tight_layout()
     plt.savefig(fout_img, dpi=args_kws.get('dpi', 300))
     sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
     if args_kws.get('show', False):
         plt.show()
+
+def _get_rot_xticklabels(key2exps):
+    """Rotate xticklabels if there are a large number of gene sets."""
+    runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
+    return len(runparams['num_genes_list']) > 8 # Ex: 2 = len([4, 8])
+
+def _set_tiled_txt(fig, pltobj, genes_goids):
+    """Add text around edges of plot."""
+    kws = pltobj.kws
+    xysz = kws['txtsz_xy']
+    # Simulations in this repo were done from the perspective of genes recovered.
+    # However, the simulations also contain GO ID recovery in the same simulation.
+    # Both gene and GO ID recovery are plotted using the same title.
+    # But for the GO ID recovery plots, replace 'gene' in the title with 'GO ID'
+    title = kws['title']
+    if genes_goids == 'goids':
+        title = title.replace('genes', 'GO IDs')
+    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='center')
+    fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
+    fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
 def _get_tiled_axes(fig, gspecs, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
@@ -63,10 +85,18 @@ def _get_tiled_axes(fig, gspecs, n_rows, n_cols):
             axes.append(fig.add_subplot(gs_cn[idx/n_cols, colidx-1], sharex=ax_cn, sharey=ax_cn))
     return axes
 
-def _tiled_xyticklabels_off(axes, num_cols):
+def _tiled_xyticklabels_off(axes, num_cols, rot_xtick):
     """Turn off xticklabels and yticklabels on the inside plot edges of the tiled boxplots."""
+    # If there are many gene sets, rotate the gene size xtick labels
+    for xaxis in axes:
+        if rot_xtick:
+            for label in xaxis.get_xmajorticklabels():
+                label.set_rotation(90)
+                # label.set_horizontalalignment("right")
+    # Turn most xticklabels off except for bottom row
     for xaxis in axes[:-1*num_cols]:
-        for label in xaxis.get_xticklabels():
+        xticklabels = xaxis.get_xticklabels()
+        for label in xticklabels:
             label.set_visible(False)
     for idx, yaxis in enumerate(axes):
         col_idx = idx%num_cols
@@ -103,34 +133,21 @@ def _plt_tile(pltobj, pvars, genes_goids):
         axes.set_ylabel("{PERCNULL}% Null".format(
             PERCNULL=pvars['perc_null']), size=kws['txtsz_tile'])
 
-def get_gridspecs(num_rows, num_cols):
+def get_gridspecs(num_rows, num_cols, rot_xticklabels):
     """Get gridspecs, adjusted to fit well into figure."""
     left = .14
-    bottom = .16
+    bottom = .18 if rot_xticklabels else .16
     margin = 0.07
     wspc = .08
     cn_r = 0.99
     col_wid = (cn_r - left - margin)/num_cols
     c0_r = left + col_wid
     cn_l = c0_r + margin
+    # [GridSpec(Boxplot:FDR),   GridSpec(Barplots:Sensitivity, Specificity, ...)]
     gspecs = [gridspec.GridSpec(num_rows, 1), gridspec.GridSpec(num_rows, num_cols-1)]
+    # Add enough space between Boxplots and barplots to add bar yticklabels
     gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.92)
     gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
     return gspecs
-
-def _set_tiled_txt(fig, pltobj, genes_goids):
-    """Add text around edges of plot."""
-    kws = pltobj.kws
-    xysz = kws['txtsz_xy']
-    # Simulations in this repo were done from the perspective of genes recovered.
-    # However, the simulations also contain GO ID recovery in the same simulation.
-    # Both gene and GO ID recovery are plotted using the same title.
-    # But for the GO ID recovery plots, replace 'gene' in the title with 'GO ID'
-    title = kws['title']
-    if genes_goids == 'goids':
-        title = title.replace('genes', 'GO IDs')
-    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='center')
-    fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
-    fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -20,9 +20,9 @@ class ExperimentsAll(object):
     desc_pat = 'p{PCNT}_{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
 
     def __init__(self, pobj):
-        self.pobj = pobj # RunParams object
+        self.pobj = pobj    # RunParams object
         self.tic = pobj.tic
-        self.expsets = []
+        self.expsets = []   # ExperimentSet
 
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""

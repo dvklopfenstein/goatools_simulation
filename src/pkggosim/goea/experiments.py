@@ -14,7 +14,7 @@ class ExperimentSet(object):
     expected_params = set(['perc_null', 'num_items', 'num_experiments', 'num_sims'])
 
     def __init__(self, params, pobj):
-        self.params = params
+        self.params = params  # Ex: {perc_null:25, num_items:4, num_experiments:4, num_sims:4}
         self.pobj = pobj # RunParams object
         assert set(params.keys()) == self.expected_params
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
