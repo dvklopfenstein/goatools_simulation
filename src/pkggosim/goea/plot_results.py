@@ -119,19 +119,29 @@ def _plt_tile(pltobj, pvars, genes_goids):
     axes.set_yticklabels(kws['yticklabels'])
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
-    # Add value text above plot bars to make plot easier to read
-    siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
-    if kws['plottype'] == 'barplot':
-        # exps: ManyHypothesesSims or ManyGoeaSims
-        # attrname(sensitivity|specificity)
-        means = [np.mean(exp.get_means(pltobj.attrname, genes_goids)) for exp in exps]
-        for ntval in BarText(means).get_bar_text():
-            axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
+    _add_text(axes, exps, kws['plottype'], (pltobj.attrname, genes_goids))
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:
         axes.set_ylabel("{PERCNULL}% Null".format(
             PERCNULL=pvars['perc_null']), size=kws['txtsz_tile'])
+
+def _add_text(axes, exps, plottype, attrs):
+    """Add value text above plot bars and in failing boxplots to make plot easier to read."""
+    siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
+    # exps: ManyHypothesesSims or ManyGoeaSims
+    # attrs: [attrname(sensitivity|specificity), genes_goids]
+    if plottype == 'barplot':
+        means = [np.mean(exp.get_means(*attrs)) for exp in exps]
+        for ntval in BarText(means).get_bar_text():
+            axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
+    # Print BOXPLOT MEDIAN VALUES for failing FDRs
+    elif plottype == 'boxplot':
+        medians = [np.median(exp.get_medians(*attrs)) for exp in exps]
+        for xval, fdr_median in enumerate(medians):
+            if fdr_median > 0.080:
+                axes.text(xval, 0.037, "{V:5.03f}".format(V=fdr_median),
+                          ha='center', va='center', size=siz, rotation=90, color='red')
 
 def get_gridspecs(num_rows, num_cols, rot_xticklabels):
     """Get gridspecs, adjusted to fit well into figure."""
