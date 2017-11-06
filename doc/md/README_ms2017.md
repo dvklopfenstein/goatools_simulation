@@ -1,10 +1,11 @@
 # Stochastic Simulation figures for GOATOOLS manuscript
 
 * [Manuscript Figures](#manuscript-figures)    
-  * [propagate_counts=False **Original annotations**](#goeas-recovering-humoral-response-hr-genes)    
-  * [propagate_counts=True **Augmented annotations**](#goeas-recovering-hr-genes-propagate_countstrue)    
+  * [**Original annotations** (propagate_counts=False)](#goeas-recovering-humoral-response-hr-genes)    
+  * [**Augmented annotations** (propagate_counts=True)](#goeas-recovering-hr-genes-propagate_countstrue)    
 * [Supplemental Figures](#supplemental-figures)     
-  * [View over/under-enrichments](#view-overunder-enrichments)    
+  * [Original Annotations; View over/under-enrichments](#original-annotations-view-overunder-enrichments)
+  * [Randomly Shuffled Annotations; View enriched results](#randomly-shuffled-annotations-view-enriched-results-only)
 
 ## Manuscript Figures
 **Figure 3**. Results for 20,000 GOATOOLS GOEA stochastic simulations per figure showed **varying sensitivity and consistently high specificity**, performing **better on large gene groups than on small gene groups (e.g., 4 genes)**.
