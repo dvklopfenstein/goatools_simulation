@@ -31,6 +31,11 @@ def main(prt=sys.stdout):
     objdesc = StatsDescribe("genes", "{:>5.0f}")
     objdesc.prt_hdr(prt, name="\nname      ")
     objdesc.prt_data("# GOs/gene", gene2numgos.values(), prt)
+    # Percentage of Ensembl mouse genes covered by GO annotations
+    num_pc = len(params['genes_population'])
+    num_assc = len(objassc.objassc_all.assc_geneid2gos)
+    prt.write("{PERC:2.0f}% of {A} of {P} Mouse protein-coding genes are annotated by GO IDs.\n".format(
+        PERC=100.0*num_assc/num_pc, P=num_pc, A=num_assc))
 
 
 if __name__ == '__main__':
