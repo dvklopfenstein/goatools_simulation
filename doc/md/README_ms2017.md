@@ -1,6 +1,6 @@
 # Stochastic Simulation figures for GOATOOLS manuscript
 
-## Manuscript
+## Manuscript Figures
 **Figure 3**. Results for 20,000 GOATOOLS GOEA stochastic simulations per figure showed **varying sensitivity and consistently high specificity**, performing **better on large gene groups than on small gene groups (e.g., 4 genes)**.
 
 GOEAs performed **well on study groups of 8+ genes** if the GOATOOLS GOEA option, **propagate_counts is set to True**.
@@ -18,5 +18,11 @@ The content ranged in percentage of targeted genes versus background genes (“T
 ### GOEAs recovering HR genes; propagate_counts=True
 (B) Setting the GOATOOLS GOEA option, propagate_counts, to True, causing GO term gene annotations to be added to the GO parents up through the GO hierarchy, greatly improves the GOEA sensitivity with no degradation of the specificity, even for small gene groups.
 ![propcnts=T](images/fig_goea_orig_noprune_enriched_ntn2_p1_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
+## Supplemental Figures
+
+### View over/under-enrichments
+![random](images/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
