@@ -1,8 +1,8 @@
 # Stochastic Simulation figures for GOATOOLS manuscript
 
 * [Manuscript Figures](#manuscript-figures)    
-  * [propagate_counts=False](#goeas-recovering-humoral-response-hr-genes)    
-  * [propagate_counts=True](#goeas-recovering-hr-genes-propagate_countstrue)    
+  * [propagate_counts=False **Original annotations**](#goeas-recovering-humoral-response-hr-genes)    
+  * [propagate_counts=True **Augmented annotations**](#goeas-recovering-hr-genes-propagate_countstrue)    
 * [Supplemental Figures](#supplemental-figures)     
   * [View over/under-enrichments](#view-overunder-enrichments)    
 
