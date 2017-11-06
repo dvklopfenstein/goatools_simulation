@@ -31,12 +31,15 @@ The content ranged in percentage of targeted genes versus background genes (“T
 ## Supplemental Figures
 
 ### Original Annotations: View over/under-enrichments
+Supplemental Figure 1. The first GOATOOLS GOEA simulations fail in panels A3 and A4 with FDRs above the alpha cut-off of 0.05. The values of failing FDRs are shown using red text.
 ![orig](images/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Randomly shuffled Annotations: View enriched results only
+Supplemental Figure 2. GOATOOLS GOEAs stress tests with randomly shuffled associations nearly pass if only enriched GO terms are viewed. The associations are randomly shuffled while still maintaining the distribution number of GO terms per gene. The failing FDRs (above 0.05) are seen in panels A2 and A3 for gene groups having 96, 112, or 124 genes.
 ![rand enriched](images/fig_goea_rand_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 ### Randomly shuffled Pruned Annotations
+Supplemental Figure 3. GOATOOLS GOEAs stress tests with randomly shuffled associations pass for all cases if only 30 out of over 17k+ GO terms associated with more than 1000 genes are removed. The median number of genes per GO term in the mouse associations is 3 genes/GO. Genes per GO term range from 1 gene to ~7k genes per GO term. (mean=16 genes/GO, SD=128)
 ![rand pruner](images/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
