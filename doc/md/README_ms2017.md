@@ -28,7 +28,10 @@ The content ranged in percentage of targeted genes versus background genes (“T
 
 ## Supplemental Figures
 
-### View over/under-enrichments
-![random](images/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
+### Original Annotations: View over/under-enrichments
+![orig](images/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+### Randomly shuffled Annotations: View enriched results only
+![rand enriched](images/fig_goea_rand_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
