@@ -6,6 +6,7 @@
 * [Supplemental Figures](#supplemental-figures)     
   * [Original Annotations; View over/under-enrichments](#original-annotations-view-overunder-enrichments)
   * [Randomly Shuffled Annotations; View enriched results](#randomly-shuffled-annotations-view-enriched-results-only)
+  * [Randomly Shuffled Annotations (Pruned)]()
 
 ## Manuscript Figures
 **Figure 3**. Results for 20,000 GOATOOLS GOEA stochastic simulations per figure showed **varying sensitivity and consistently high specificity**, performing **better on large gene groups than on small gene groups (e.g., 4 genes)**.
@@ -34,5 +35,8 @@ The content ranged in percentage of targeted genes versus background genes (“T
 
 ### Randomly shuffled Annotations: View enriched results only
 ![rand enriched](images/fig_goea_rand_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+### Randomly shuffled Pruned Annotations
+![rand pruner](images/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
 Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
