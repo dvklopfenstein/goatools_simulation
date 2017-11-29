@@ -19,7 +19,7 @@ from pkggosim.common.plot_results import fill_axes_data
 
 
 #pylint: disable=line-too-long
-def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
+def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **args_kws):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     # pylint: disable=too-many-locals
     pltobjs = [PlotInfo(a, args_kws) for a in attrs]
@@ -45,8 +45,14 @@ def plt_box_tiled(fout_img, key2exps, attrs, genes_goids, **args_kws):
     _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
     _set_tiled_txt(fig, pltobjs[0], genes_goids)
     #plt.tight_layout()
-    plt.savefig(fout_img, dpi=args_kws.get('dpi', 300))
-    sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
+    dpi = args_kws.get('dpi', 600)
+    base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
+    img_ext = args_kws['img']
+    img_exts = ['tiff', 'jpg', 'png', 'pdf'] if img_ext == 'all' else [img_ext]
+    for ext in img_exts:
+        fout_img = "{IMG}.{EXT}".format(IMG=base_img, EXT=ext)
+        plt.savefig(fout_img, dpi=dpi)
+        sys.stdout.write("  DPI={DPI} WROTE: {IMG}\n".format(DPI=dpi, IMG=fout_img))
     if args_kws.get('show', False):
         plt.show()
 

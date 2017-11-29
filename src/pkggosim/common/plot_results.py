@@ -21,7 +21,7 @@ class PlotInfo(object):
 
     dflts_plt = {
         'grpname':None,
-        'dpi':400,
+        'dpi':600,
         'title':'Hypotheses Simulations',
         'xlabel':'Number of Tested Hypotheses',
         'ylabel':'Simulated {GRP} Ratios',

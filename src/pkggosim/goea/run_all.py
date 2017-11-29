@@ -27,7 +27,7 @@ class ExperimentsAll(object):
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         # Report and plot simulation results
-        fout_log, fout_img_genes, fout_img_goids = self._get_fouts(simname)
+        fout_log, base_img_genes, base_img_goids = self._get_fouts(simname)
         log = self.pobj.params['log']
         with open(os.path.join(self.pobj.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
@@ -40,8 +40,8 @@ class ExperimentsAll(object):
             self.prt_experiments_means(prt, rpt_items, 'genes')
             self.prt_experiments_means(prt, rpt_items, 'goids')
             self.prt_experiments_stats(prt, rpt_items)
-            self.plt_box_tiled(fout_img_genes, plt_items, 'genes', **pltargs)
-            self.plt_box_tiled(fout_img_goids, plt_items, 'goids', **pltargs) # GOIDS
+            self.plt_box_tiled(base_img_genes, plt_items, 'genes', **pltargs)
+            self.plt_box_tiled(base_img_goids, plt_items, 'goids', **pltargs) # GOIDS
             self.prt_seed(sys.stdout)
             self.prt_hms(prt, "Simulations complete. Reports and plots generated.")
             self.prt_hms(sys.stdout, "Simulations complete. Reports and plots generated.")
@@ -50,22 +50,22 @@ class ExperimentsAll(object):
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
 
     def _get_fouts(self, simname):
-        """Return output filenames for the logfile and two png files."""
+        """Return output filenames for the logfile and two plot files."""
         pre = self.pobj.params['prefix']
         dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
         desc_str = self._get_fout_img()
         fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
-        fout_img_genes = os.path.join(dir_loc, '{B}.png'.format(
+        base_img_genes = os.path.join(dir_loc, '{B}'.format(
             B='{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)))
-        fout_img_goids = fout_img_genes.replace('goea', 'goids')          # GOIDS
-        return fout_log, fout_img_genes, fout_img_goids
+        base_img_goids = base_img_genes.replace('goea', 'goids')          # GOIDS
+        return fout_log, base_img_genes, base_img_goids
 
     def prt_seed(self, prt):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
     def _get_fout_img(self):
-        """Get the name of the png file for the tiled plot."""
+        """Get the name of the plot file for the tiled plot."""
         params = self.pobj.params
         return self.desc_pat.format(
             PCNT=int(params['propagate_counts']),
@@ -113,11 +113,11 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_tiled(self, fout_img, plt_items, genes_goids, **kws):
+    def plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        fout_img_full = os.path.join(self.pobj.params['repo'], fout_img)
-        plt_box_tiled(fout_img_full, key2exps, plt_items, genes_goids, **kws)
+        base_img_full = os.path.join(self.pobj.params['repo'], base_img)
+        plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
 
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""

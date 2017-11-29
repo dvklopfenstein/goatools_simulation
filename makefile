@@ -24,6 +24,7 @@ run:
 # -----------------------------------------------------------------------------------------------------
 #  Manuscript Figures: Compare Humoral Response gene recovery over a wide range
 #  of stochasticly chosen gene groups with gene group sizes ranging from 4 genes to 124 genes
+#  5:30 HMS
 prop0:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering Humoral Response (HR) genes" \

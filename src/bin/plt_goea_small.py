@@ -30,6 +30,7 @@ def main(run_all, prt=sys.stdout):
     # Gene Ontology Data
     with open(os.path.join(REPO, fout_log), 'w') as log:
         params = {
+            'img' : 'pdf',  # png or pdf
             'title': args['title'],
             'log' : log,
             'prefix' : 'fig_goea_{RND}'.format(RND=randomize_truenull_assc),

@@ -20,10 +20,6 @@ def get_assoc_data(fin_assc, genes_pop):
     """Return associations as ens2gos."""
     return GoatoolsDataMaker.get_assoc_data(fin_assc, genes_pop)
 
-def get_assoc_hdr(fin_assc):
-    """Return associations as ens2gos."""
-    return GoatoolsDataMaker.get_assoc_hdr(fin_assc)
-
 def import_genes_all(moddesc_list):
     """Read genes in all user-provided modules. Return set of genes."""
     genes = set()

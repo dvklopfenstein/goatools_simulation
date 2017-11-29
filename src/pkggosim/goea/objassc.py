@@ -8,9 +8,12 @@ __author__ = "DV Klopfenstein"
 import sys
 import collections as cx
 import numpy as np
-from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
+# from pkggosim.goea.utils import get_assoc_data, get_assoc_hdr
+from pkggosim.goea.utils import get_assoc_data
 from pkggosim.goea.assc_shuffle import RandAssc
-from goatools.associations import get_b2aset, get_assc_pruned
+from goatools.associations import get_gaf_hdr
+from goatools.associations import get_b2aset
+from goatools.associations import get_assc_pruned
 from PyBiocode.Utils.stats import prt_percentiles
 from goatools_alpha.gosubdag.gosubdag import GoSubDag
 from goatools_alpha.gosubdag.go_tasks import update_association
@@ -25,7 +28,7 @@ class DataAssc(object):
         # Associations: rm obsolete GO IDs
         _assc_file = params['association_file']
         _pop_genes = params['genes_population']
-        self.assc_hdr = get_assoc_hdr(_assc_file)
+        self.assc_hdr = get_gaf_hdr(_assc_file)
         # Remove obsolete GO IDs from association if needed
         _assc_geneid2gos_orig = self._init_assc(_assc_file, _pop_genes, godag)
         # Associations: Add parent all GO IDs if propagate_counts is True

@@ -55,6 +55,7 @@ def run(args, ntd, prt=sys.stdout):
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     plt_items = ['fdr_actual', 'sensitivity', 'specificity']
     pltargs = {'dotsize':ntd.dotsize, 'title':title_cur,
+               'dpi':600, 'img':'all',
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes'}
     obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
