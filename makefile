@@ -30,6 +30,7 @@ prop0:
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
+# 13 hours
 prop1:
 	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering HR genes; propagate_counts=True" \
