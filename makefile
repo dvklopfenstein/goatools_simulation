@@ -18,7 +18,7 @@ run:
 		genes=4,124
 
 plt:
-	src/bin/dat_goea_plot.py e=-1 propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+	src/bin/dat_goea_plot.py \
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,124
 

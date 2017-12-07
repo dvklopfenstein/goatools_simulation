@@ -69,6 +69,7 @@ class ExperimentsAll(object):
         # Get experimentset data
         key2exps = cx.OrderedDict([(k, []) for k in keys])
         for expset in self.expsets:
+            print('EEEEE', expset)
             key2exps[expset.params[key1]].append(expset)
         return key2exps
 

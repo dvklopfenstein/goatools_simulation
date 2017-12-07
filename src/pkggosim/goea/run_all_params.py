@@ -230,7 +230,8 @@ class RunParams(object):
                 os.path.dirname(os.path.abspath(__file__)), "../../..")
         if 'py_dir_genes' not in params_usr:
             params_sim['py_dir_genes'] = None
-        assert set(params_sim.keys()) == self.expected_params
+        assert set(params_sim.keys()) == self.expected_params, \
+            set(params_sim.keys()).symmetric_difference(self.expected_params)
         # Init enriched_only
         params_sim['enriched_only'] = 'enriched' in randomize_truenull_assc
         print("ENRICHED({})".format(params_sim['enriched_only']))

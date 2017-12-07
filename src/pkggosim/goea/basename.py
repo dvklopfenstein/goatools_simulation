@@ -6,51 +6,48 @@ __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All righ
 __author__ = "DV Klopfenstein"
 
 import os
+import re
+import importlib
+from pkggosim.goea.plot_results import plt_box_tiled
 # import sys
 
 class Basename(object):
     """Runs all experiments for all sets of experiments."""
 
-    # expected_params = set([
-    #     'title',                   # Title to print on Figure w/FDR/Sensitivity/Specificty
-    #     'repo',                    # directory of repository where script is run
-    #     'py_dir_genes',            # src/pkgdavid/input/
-    #     'log',                     # None sys.stdout
-    #     'seed',                    # randomseed
-    #     'prefix',                  # fig_goea_rnd
-    #     'randomize_truenull_assc', # orig_noprune_ntn2
-    #     'alpha',                 # 0.05
-    #     'method',                # 'fdr_bh'
-    #     'propagate_counts',      # False
-    #     'association_file',      # 'gene_association.mgi'
-    #     'genes_population',      # genes_mus
-    #     'genes_study_bg',        # 'humoral_rsp'
-    #     'goids_study_bg',        # 'humoral_rsp'
-    #     'genes_popnullmaskout',  # ['immune', 'viral_bacteria']
-    #     'perc_nulls',            # [100, 75, 50, 25]
-    #     'num_genes_list',        # [4, 16, 128]
-    #     'num_experiments',       # Number of simulated FDR ratios in an experiment set
-    #     'num_sims',              # Number of sims per experiment; used to create one FDR ratio
-    # ])
+    # pylint: disable=bad-whitespace
+    n2dotsize = {
+        (500, 1000): {'fdr_actual':0.70, 'sensitivity':0.50, 'specificity':0.50},
+        (100, 1000): {'fdr_actual':0.95, 'sensitivity':0.60, 'specificity':0.60},
+        (100,   30): {'fdr_actual':1.30, 'sensitivity':0.60, 'specificity':0.60},
+        ( 50,   50): {'fdr_actual':2.00, 'sensitivity':0.70, 'specificity':0.70},
+        ( 50,   20): {'fdr_actual':2.00, 'sensitivity':1.00, 'specificity':1.00}, # 4:56
+        ( 20,   20): {'fdr_actual':2.00, 'sensitivity':2.00, 'specificity':2.00}, # 1:25
+        (  4,    4): {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}, # 0:04 0:05
+        (  2,    2): {'fdr_actual':4.00, 'sensitivity':3.00, 'specificity':3.00}, # 0:01 0:02
+    }
 
+    repo = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
     desc_pat = 'p{PCNT}_{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
 
     def __init__(self):
         pass
 
-    # def plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
-    #     """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-    #     #key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-    #     fout_log, base_img_genes, base_img_goids = self.get_fouts(simname)
-    #     base_img_full = os.path.join(self.pobj.params['repo'], base_img)
-    #     #plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+    def plt_mod(self, dirloc, modulestr, plt_items, pltargs):
+        """Plot one set of experiments."""
+        genes_goids = modulestr[-5:]
+        assert genes_goids in set(['genes', 'goids'])
+        assert modulestr[:14] == 'pkggosim.data.'
+        base_img_rel = "{DIRLOC}/{BASE}.img".format(DIRLOC=dirloc, BASE=modulestr[14:])
+        base_img_abs = os.path.join(self.repo, base_img_rel)
+        kws = pltargs.copy()
+        kws['dotsize'] = self._get_dotsize(modulestr)
+        key2exps = importlib.import_module(modulestr).percnull2expsets
+        # plt_box_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
 
-    # def _plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
-    #     """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-    #     #key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-    #     fout_log, base_img_genes, base_img_goids = self.get_fouts(simname)
-    #     base_img_full = os.path.join(self.pobj.params['repo'], base_img)
-    #     #plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+    def _get_dotsize(self, modulestr):
+        """Return tuple containing NEXP and NSIM."""
+        mtch = re.search(r'_N(\d{5})_(\d{5})', modulestr)
+        return self.n2dotsize[(int(mtch.group(1)), int(mtch.group(2)))]
 
     def get_fouts(self, simname, params):
         """Return output filenames for the logfile and two plot files."""

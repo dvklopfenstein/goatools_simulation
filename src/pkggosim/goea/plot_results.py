@@ -58,8 +58,11 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **args_kws):
 
 def _get_rot_xticklabels(key2exps):
     """Rotate xticklabels if there are a large number of gene sets."""
+    print("VVVVVV", next(iter(key2exps.items()))[1][0])
+    #num_genes_list = set([nt.num_items for nt in next(iter(key2exps.items()))[1]])
     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
-    return len(runparams['num_genes_list']) > 8 # Ex: 2 = len([4, 8])
+    num_genes_list = runparams['num_genes_list']
+    return len(num_genes_list) > 8 # Ex: 2 = len([4, 8])
 
 def _set_tiled_txt(fig, pltobj, genes_goids):
     """Add text around edges of plot."""
