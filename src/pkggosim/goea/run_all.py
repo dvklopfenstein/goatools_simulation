@@ -7,10 +7,11 @@ import os
 import sys
 import collections as cx
 import numpy as np
+from pkggosim.goea.basename import Basename
 from pkggosim.goea.experiments import ExperimentSet
 from pkggosim.goea.plot_results import plt_box_tiled
-from pkggosim.common.utils import get_hms
 from pkggosim.goea.sim import GoeaSim
+from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
 
 
@@ -20,13 +21,14 @@ class ExperimentsAll(object):
 
     def __init__(self, pobj):
         self.pobj = pobj    # RunParams object
+        self.bname = Basename()
         self.tic = pobj.tic
         self.expsets = []   # ExperimentSet contains (expset: list of ManyGoeaSims)
 
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         # Report and plot simulation results
-        fout_log, base_img_genes, base_img_goids = self.pobj.get_fouts(simname)
+        fout_log, base_img_genes, base_img_goids = self.bname.get_fouts(simname, self.pobj.params)
         log = self.pobj.params['log']
         with open(os.path.join(self.pobj.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
@@ -74,7 +76,7 @@ class ExperimentsAll(object):
         """Save data to Python file."""
         fout_py = 'src/pkggosim/data/{A}_{B}_{G}.py'.format(
             A=self.pobj.params['randomize_truenull_assc'],
-            B=self.pobj.get_desc_str(), G=genes_goids)
+            B=self.bname.get_desc_str(self.pobj.params), G=genes_goids)
         with open(os.path.join(self.pobj.params['repo'], fout_py), 'w') as prt:
             prt.write('"""Simulation data."""\n\n')
             prt.write('__copyright__ = "{C}"\n\n'.format(C=__copyright__))

@@ -171,6 +171,7 @@ vim_sim_geneontology:
 	src/pkggosim/goea/experiments.py \
 	src/pkggosim/goea/run_all.py \
 	src/pkggosim/goea/run_all_params.py \
+	src/pkggosim/goea/basename.py \
 	src/pkggosim/goea/plot_results.py \
 	src/pkggosim/common/plot_results.py \
 	src/pkggosim/goea/utils.py \
@@ -188,6 +189,7 @@ vim_presim_geneontology:
 	src/pkggosim/goea/experiments.py \
 	src/pkggosim/goea/run_all.py \
 	src/pkggosim/goea/run_all_params.py \
+	src/pkggosim/goea/basename.py \
 	src/pkggosim/goea/plot_results.py \
 	src/pkggosim/common/plot_results.py \
 	src/pkggosim/goea/utils.py \
