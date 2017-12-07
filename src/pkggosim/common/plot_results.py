@@ -147,9 +147,16 @@ def get_num_rows_cols(key2exps):
 
 def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR', desc='genes'):
     """Get plotting data suitable for a single plot of boxplots."""
+    # attr        |grp
+    # ------------|------------
+    # fdr_actual  |FDR
+    # sensitivity |Sensitivity
+    # specificity |Specificity
     tbl = []
     for exps in experimentsets: # Each expset has the same (X)max_sigpval and (Y)perc_null
-        tot_h = exps.params['num_items'] # Number of hypotheses
+        # exps is ExperimentSet
+        # print("# HYPO", exps.params['num_items'], attr, grp, desc)
+        tot_h = exps.params['num_items'] # Number of genes in study set
         # Make one dictionary line for each value of fdr_actual
         dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr, desc)]
         tbl.extend(dcts)

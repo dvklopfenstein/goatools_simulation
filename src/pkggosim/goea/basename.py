@@ -42,7 +42,7 @@ class Basename(object):
         kws = pltargs.copy()
         kws['dotsize'] = self._get_dotsize(modulestr)
         key2exps = importlib.import_module(modulestr).percnull2expsets
-        # plt_box_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
+        plt_box_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
 
     def _get_dotsize(self, modulestr):
         """Return tuple containing NEXP and NSIM."""

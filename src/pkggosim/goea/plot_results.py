@@ -120,7 +120,7 @@ def _plt_tile(pltobj, pvars, genes_goids):
     # qty = len(exps) # Number of gene sets in each tile. Ex: [4, 8, 16, 64] -> 4 sets
     kws = pltobj.kws
     dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname, genes_goids))
-    alpha = exps[0].pobj.objbase.alpha if kws['alphaline'] else None
+    alpha = 0.05  # exps[0].pobj.objbase.alpha if kws['alphaline'] else None
     fill_axes_data(axes, dfrm, dotsize=kws['dotsize'], plottype=kws['plottype'])
     fill_axes(axes, alpha, letter=pvars['letter'], ylim=kws['ylim'])
     axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])

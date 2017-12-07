@@ -68,8 +68,7 @@ class ExperimentsAll(object):
                 keys.append(key)
         # Get experimentset data
         key2exps = cx.OrderedDict([(k, []) for k in keys])
-        for expset in self.expsets:
-            print('EEEEE', expset)
+        for expset in self.expsets:  # expset is ExperimentSet
             key2exps[expset.params[key1]].append(expset)
         return key2exps
 
@@ -87,14 +86,34 @@ class ExperimentsAll(object):
             prt.write('ntobj = namedtuple("Nt", "{F}")\n\n'.format(F=" ".join(GoeaSim.ntobj._fields)))
             prt.write('num_expsets = {N}\n'.format(N=len(self.expsets)))
             prt.write('num_simsets = {N}\n\n'.format(N=len(self.expsets[0].expset)))
-            prt.write('percnull2expsets = OrderedDict([\n')
-            for percnull, expsets in self._get_key2expsets('perc_null').items():
-                prt.write('    ({PNULL}, [\n'.format(PNULL=percnull))
-                for expset in expsets:
-                    for simset in expset.expset:  # simset = ManyGoeaSims
-                        name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
-                        for nt_tfpn in simset.nts_tfpn[genes_goids]:
-                            prt.write('        ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
+            prt.write('key2val = {\n')
+            prt.write('    "alpha": {A:4.2f},\n'.format(A=self.pobj.params['alpha']))
+            prt.write('    "perc_nulls": {N},\n'.format(N=self.pobj.params['perc_nulls']))
+            prt.write('    "num_genes_list": {N},\n'.format(N=self.pobj.params['num_genes_list']))
+            prt.write('    "propagate_counts": {N},\n'.format(N=self.pobj.params['propagate_counts']))
+            prt.write('}\n\n')
+            prt.write('percnull2expsets = OrderedDict([  # {N} ExperimentSet\n\n'.format(N=len(self.expsets)))
+            for aval, expset in enumerate(self.expsets):
+                # assert len(expset.expset) == expset.params['
+                # expset.params: perc_null num_items num_experiments num_sims
+                # prt.write('# ==================== {} \n'.format(expset.params))
+                prt.write('    (({PNULL}, {NGENES}), [  # {N} ManyGoeaSims; ExperimentSet({A})\n'.format(
+                    A=aval, N=len(expset.expset),
+                    PNULL=expset.params['perc_null'], NGENES=expset.params['num_items']))
+                assert len(expset.expset) == expset.params['num_experiments']
+                for bval, simset in enumerate(expset.expset):  # simset = ManyGoeaSims
+                    assert simset.params['num_items'] == expset.params['num_items']
+                    assert simset.params['num_sims'] == expset.params['num_sims']
+                    # simset params: num_sims num_items perc_null num_null
+                    name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
+                    # prt.write('# -------------------- {} \n'.format(simset.params))
+                    prt.write('        [  #  {N} nts; ManyGoeaSims({B})\n'.format(
+                        N=len(simset.nts_tfpn[genes_goids]), B=bval))
+                    assert len(simset.nts_tfpn[genes_goids]) == expset.params['num_sims']
+                    for nt_tfpn in simset.nts_tfpn[genes_goids]:
+                        # assert nt_tfpn.num_items == expset.params['num_items']  # num stu genes
+                        prt.write('            ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
+                    prt.write('        ],\n')
                 prt.write('    ]),\n')
             prt.write('])\n')
             prt.write('\n# {C}\n'.format(C=__copyright__))
