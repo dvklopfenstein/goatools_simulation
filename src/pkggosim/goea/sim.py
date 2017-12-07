@@ -21,13 +21,13 @@ class GoeaSim(object):
         self.pobj = pobj
         iniobj = _Init(num_study_genes, num_null, pobj)
         # List of info for each study gene: geneid reject expected_significance tfpn
-        self.assc = iniobj.assc_geneid2gos
-        self.goea_results = iniobj.goea_results
-        self.nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
-        self.nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn GOIDS
+        self._assc = iniobj.assc_geneid2gos
+        self._goea_results = iniobj.goea_results        # Full data
+        self._nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
+        self._nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn GOIDS
         # One namedtuple summarizing results of this GOEA simulation
-        self.nt_tfpn_genes = self.get_nt_tfpn(self.nts_goea_res)
-        self.nt_tfpn_goids = self.get_nt_tfpn(self.nts_goid_res) # GOIDS
+        self.nt_tfpn_genes = self.get_nt_tfpn(self._nts_goea_res)
+        self.nt_tfpn_goids = self.get_nt_tfpn(self._nts_goid_res) # GOIDS
         if pobj.params['log'] is not None:
             if self.nt_tfpn_genes.fdr_actual > pobj.objbase.alpha:
                 self.rpt_details(pobj.params['log'])
@@ -37,7 +37,7 @@ class GoeaSim(object):
         fout_py = "{REPO}/{PY}".format(REPO=self.pobj.params['repo'], PY=fout_local)
         with open(fout_py, 'w') as prt:
             prt.write("genes = [ \n")
-            for ntd in self.nts_goea_res:
+            for ntd in self._nts_goea_res:
                 prt.write("    {NT},\n".format(NT=ntd))
             prt.write("]\n")
         sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_local))
@@ -93,7 +93,7 @@ class GoeaSim(object):
         """Report genes found in GOEA results."""
         ntr = self.nt_tfpn_genes
         prt.write("{N} = TP({TP}) + FP({FP}) + TN({TN}) + FN({FN}); FDR={FDR:6.4f}\n".format(
-            N=len(self.nts_goea_res),
+            N=len(self._nts_goea_res),
             TP=ntr.ctr['TP'], TN=ntr.ctr['TN'], FP=ntr.ctr['FP'], FN=ntr.ctr['FN'],
             FDR=ntr.fdr_actual))
         prt.write(" Res Reject Signific. Gene     is_sig_gene stu pop GO count\n")
@@ -102,7 +102,7 @@ class GoeaSim(object):
                "{study_gene} {BG:1} {num_gos:3} {assc_gos:3}\n")
         genes_bg = self.pobj.params['genes_study_bg']
         assc = self.pobj.objassc.objassc_all.assc_geneid2gos
-        for nti in sorted(self.nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
+        for nti in sorted(self._nts_goea_res, key=lambda nt: [-1*nt.reject, -1*nt.expsig]):
             dct = nti._asdict()
             dct['fp_mrk'] = "X" if nti.tfpn == "FP" else ""
             dct['BG'] = "*" if nti.study_gene in genes_bg else ""
