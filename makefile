@@ -65,7 +65,7 @@ s2:
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # -----------------------------------------------------------------------------------------------------
-run_small:
+run_smalls:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2 0xdeadbeef
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2 0xdeadbeef
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef

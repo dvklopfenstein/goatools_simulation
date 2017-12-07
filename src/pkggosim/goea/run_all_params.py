@@ -40,6 +40,8 @@ class RunParams(object):
         'num_sims',              # Number of sims per experiment; used to create one FDR ratio
     ])
 
+    desc_pat = 'p{PCNT}_{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
+
     def __init__(self, params):
         self.tic = timeit.default_timer()
         self.params = self._init_params(params)
@@ -68,6 +70,43 @@ class RunParams(object):
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         _gos_targeted = self._init_get_goids_tgtd()
         self.objassc.set_targeted(_gos_targeted)
+
+    # def plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
+    #     """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
+    #     #key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
+    #     fout_log, base_img_genes, base_img_goids = self.get_fouts(simname)
+    #     base_img_full = os.path.join(self.pobj.params['repo'], base_img)
+    #     #plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+
+    # def _plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
+    #     """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
+    #     #key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
+    #     fout_log, base_img_genes, base_img_goids = self.get_fouts(simname)
+    #     base_img_full = os.path.join(self.pobj.params['repo'], base_img)
+    #     #plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+
+    def get_fouts(self, simname):
+        """Return output filenames for the logfile and two plot files."""
+        pre = self.params['prefix']
+        dir_loc = 'doc/logs' if self.params['num_experiments'] >= 20 else 'doc/work'
+        desc_str = self.get_desc_str()
+        fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
+        base_img_genes = os.path.join(dir_loc, '{B}'.format(
+            B='{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)))
+        base_img_goids = base_img_genes.replace('goea', 'goids')          # GOIDS
+        return fout_log, base_img_genes, base_img_goids
+
+    def get_desc_str(self):
+        """Get the name of the plot file for the tiled plot."""
+        params = self.params
+        return self.desc_pat.format(
+            PCNT=int(params['propagate_counts']),
+            P0=params['perc_nulls'][0],   # True Null %
+            PN=params['perc_nulls'][-1],  # True Null %
+            Q0=params['num_genes_list'][0],
+            QN=params['num_genes_list'][-1],
+            NEXP=params['num_experiments'],
+            NSIM=params['num_sims'])
 
     def _init_ntn(self):
         """Initialize param ntn with a digit or None."""

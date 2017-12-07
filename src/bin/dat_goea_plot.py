@@ -44,7 +44,7 @@ def run(args, ntd, prt=sys.stdout):
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios per experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     objparams = RunParams(params)
-    obj = ExperimentsAll(objparams) # RunParams
+    #### obj = ExperimentsAll(objparams) # RunParams
 
     title_cur = objparams.get_title()
     prt.write("TITLE: {S}\n".format(S=title_cur))
@@ -58,8 +58,10 @@ def run(args, ntd, prt=sys.stdout):
                'dpi':600, 'img':'all',
                'xlabel':'Number of Genes in a Study Group',
                'ylabel':'Percentage of General Population Genes'}
-    # obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
-    # objparams.prt_summary(sys.stdout)
+    #### plt_box_tiled(base_img_genes, plt_items, 'genes', **pltargs)
+    #### plt_box_tiled(base_img_goids, plt_items, 'goids', **pltargs) # GOIDS
+    #### obj.run_all(study_bg, rpt_items, plt_items, **pltargs)
+    #### objparams.prt_summary(sys.stdout)
 
 def main():
     """Arguments for running all experiments."""

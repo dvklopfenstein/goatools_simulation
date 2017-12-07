@@ -18,8 +18,6 @@ from goatools.statsdescribe import StatsDescribe
 class ExperimentsAll(object):
     """Run all experiments having various: max_sigvals, perc_nulls, num_genes_list."""
 
-    desc_pat = 'p{PCNT}_{P0:03}to{PN:03}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}'
-
     def __init__(self, pobj):
         self.pobj = pobj    # RunParams object
         self.tic = pobj.tic
@@ -28,7 +26,7 @@ class ExperimentsAll(object):
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         # Report and plot simulation results
-        fout_log, base_img_genes, base_img_goids = self._get_fouts(simname)
+        fout_log, base_img_genes, base_img_goids = self.pobj.get_fouts(simname)
         log = self.pobj.params['log']
         with open(os.path.join(self.pobj.params['repo'], fout_log), 'w') as prt:
             self.prt_hms(sys.stdout, "Simulations initialized.")
@@ -76,7 +74,7 @@ class ExperimentsAll(object):
         """Save data to Python file."""
         fout_py = 'src/pkggosim/data/{A}_{B}_{G}.py'.format(
             A=self.pobj.params['randomize_truenull_assc'],
-            B=self._get_desc_str(), G=genes_goids)
+            B=self.pobj.get_desc_str(), G=genes_goids)
         with open(os.path.join(self.pobj.params['repo'], fout_py), 'w') as prt:
             prt.write('"""Simulation data."""\n\n')
             prt.write('__copyright__ = "{C}"\n\n'.format(C=__copyright__))
@@ -99,32 +97,9 @@ class ExperimentsAll(object):
             prt.write('\n# {C}\n'.format(C=__copyright__))
         sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_py))
 
-    def _get_fouts(self, simname):
-        """Return output filenames for the logfile and two plot files."""
-        pre = self.pobj.params['prefix']
-        dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
-        desc_str = self._get_desc_str()
-        fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
-        base_img_genes = os.path.join(dir_loc, '{B}'.format(
-            B='{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)))
-        base_img_goids = base_img_genes.replace('goea', 'goids')          # GOIDS
-        return fout_log, base_img_genes, base_img_goids
-
     def prt_seed(self, prt):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
-
-    def _get_desc_str(self):
-        """Get the name of the plot file for the tiled plot."""
-        params = self.pobj.params
-        return self.desc_pat.format(
-            PCNT=int(params['propagate_counts']),
-            P0=params['perc_nulls'][0],   # True Null %
-            PN=params['perc_nulls'][-1],  # True Null %
-            Q0=params['num_genes_list'][0],
-            QN=params['num_genes_list'][-1],
-            NEXP=params['num_experiments'],
-            NSIM=params['num_sims'])
 
     def get_desc(self):
         """Return str describing params used in all simulations."""
