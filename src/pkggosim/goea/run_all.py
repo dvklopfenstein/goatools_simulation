@@ -10,6 +10,7 @@ import numpy as np
 from pkggosim.goea.experiments import ExperimentSet
 from pkggosim.goea.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
+from pkggosim.goea.sim import GoeaSim
 from goatools.statsdescribe import StatsDescribe
 
 
@@ -22,7 +23,7 @@ class ExperimentsAll(object):
     def __init__(self, pobj):
         self.pobj = pobj    # RunParams object
         self.tic = pobj.tic
-        self.expsets = []   # ExperimentSet
+        self.expsets = []   # ExperimentSet contains (expset: list of ManyGoeaSims)
 
     def run_all(self, simname, rpt_items, plt_items, **pltargs):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
@@ -48,12 +49,53 @@ class ExperimentsAll(object):
             if log is not None:
                 self.prt_hms(log, "Simulations complete. Reports and plots generated.")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
+            self.wrpy_expsets('genes')
+            self.wrpy_expsets('goids')
+
+    def plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
+        """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
+        key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
+        base_img_full = os.path.join(self.pobj.params['repo'], base_img)
+        plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+
+    def _get_key2expsets(self, key1='perc_null'):
+        """Separate experiment sets into sub-lists for plotting."""
+        # Get experimentset data
+        key2exps = cx.defaultdict(list)
+        for expset in self.expsets:
+            key2exps[expset.params[key1]].append(expset)
+        return key2exps
+
+    def wrpy_expsets(self, genes_goids='genes'):
+        """Save data to Python file."""
+        fout_py = 'src/pkggosim/data/{A}_{B}_{G}.py'.format(
+            A=self.pobj.params['randomize_truenull_assc'],
+            B=self._get_desc_str(), G=genes_goids)
+        with open(os.path.join(self.pobj.params['repo'], fout_py), 'w') as prt:
+            prt.write('"""Simulation data."""\n\n')
+            prt.write('__copyright__ = "{C}"\n\n'.format(C=__copyright__))
+            prt.write('from collections import namedtuple\n\n')
+            prt.write('from collections import Counter\n\n')
+            prt.write('ntobj = namedtuple("Nt", "{F}")\n\n'.format(F=" ".join(GoeaSim.ntobj._fields)))
+            prt.write('num_expsets = {N}\n'.format(N=len(self.expsets)))
+            prt.write('num_simsets = {N}\n\n'.format(N=len(self.expsets[0].expset)))
+            prt.write('expsets = [\n')
+            for expset in self.expsets:  # expset = ExperimentSet(...)
+                prt.write('    [\n')
+                for simset in expset.expset:  # simset = ManyGoeaSims
+                    name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
+                    for nt_tfpn in simset.nts_tfpn[genes_goids]:
+                        prt.write('        ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
+                prt.write('    ],\n')
+            prt.write(']\n')
+            prt.write('\n# {C}\n'.format(C=__copyright__))
+        sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_py))
 
     def _get_fouts(self, simname):
         """Return output filenames for the logfile and two plot files."""
         pre = self.pobj.params['prefix']
         dir_loc = 'doc/logs' if self.pobj.params['num_experiments'] >= 20 else 'doc/work'
-        desc_str = self._get_fout_img()
+        desc_str = self._get_desc_str()
         fout_log = os.path.join(dir_loc, '{PRE}_{DESC}.log'.format(PRE=pre, DESC=desc_str))
         base_img_genes = os.path.join(dir_loc, '{B}'.format(
             B='{PRE}_{DESC}_{NAME}'.format(PRE=pre, DESC=desc_str, NAME=simname)))
@@ -64,7 +106,7 @@ class ExperimentsAll(object):
         """Print random seed."""
         self.pobj.objrnd.prt(prt)
 
-    def _get_fout_img(self):
+    def _get_desc_str(self):
         """Get the name of the plot file for the tiled plot."""
         params = self.pobj.params
         return self.desc_pat.format(
@@ -113,12 +155,6 @@ class ExperimentsAll(object):
         """Print the elapsed time."""
         prt.write("  ELAPSED TIME: {HMS} {MSG}\n".format(HMS=get_hms(self.tic), MSG=msg))
 
-    def plt_box_tiled(self, base_img, plt_items, genes_goids, **kws):
-        """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
-        key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
-        base_img_full = os.path.join(self.pobj.params['repo'], base_img)
-        plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
-
     def prt_experiments_stats(self, prt=sys.stdout, attrs=None, genes_goids='genes'):
         """Print stats for user-specified data in experiment sets."""
         if attrs is None:
@@ -160,13 +196,5 @@ class ExperimentsAll(object):
         """Print if errors were seen in sims."""
         for experiment_set in self.expsets:
             experiment_set.prt_num_sims_w_errs(prt)
-
-    def _get_key2expsets(self, key1='perc_null'):
-        """Separate experiment sets into sub-lists for plotting."""
-        # Get experimentset data
-        key2exps = cx.defaultdict(list)
-        for expset in self.expsets:
-            key2exps[expset.params[key1]].append(expset)
-        return key2exps
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

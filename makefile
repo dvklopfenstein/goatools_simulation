@@ -12,10 +12,15 @@ P = 0
 lst:
 	grep vim_ makefile
 
+run:
+	src/bin/plt_goea.py e=-1 propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+		title="GOEAs recovering Humoral Response (HR) genes" \
+		genes=4,124
+
 # make run E=-1
 # RUNALL False: Only 4 simulations will be run to create one P-value
 # RUNALL True  
-run:
+run_small:
 	src/bin/plt_goea_small.py $(RUNALL) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef \
 		title="Test Run genes" genes=4,124
 
@@ -37,12 +42,13 @@ prop1:
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # Supplemental Figures: Compare Humoral Response gene recovery over a wide range
-# FAIL
+# 5 hours FAIL
 s0:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_ntn$(NTN) \
 		title="Viewing both over/under-represented enrichments" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
+# 7 hours
 s1:
 	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN) \
 		title="Stress Tests: Random Annotations; View Enriched" \

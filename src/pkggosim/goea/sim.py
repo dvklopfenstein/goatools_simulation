@@ -21,8 +21,9 @@ class GoeaSim(object):
         self.pobj = pobj
         iniobj = _Init(num_study_genes, num_null, pobj)
         # List of info for each study gene: geneid reject expected_significance tfpn
-        self._assc = iniobj.assc_geneid2gos
-        self._goea_results = iniobj.goea_results        # Full data
+        self.goeasim_assc = iniobj.assc_geneid2gos
+        #self._goea_results = iniobj.goea_results        # Full data
+        self.goeasim_res = iniobj.goea_results        # Full data
         self._nts_goea_res = iniobj.get_nts_stugenes()  # study_gene reject expsig tfpn
         self._nts_goid_res = iniobj.get_nts_stugoids()  # GO         reject expsig tfpn GOIDS
         # One namedtuple summarizing results of this GOEA simulation
@@ -114,11 +115,11 @@ class _PrtGoIds(object):
     """For printing GO IDs found significant in one simulation."""
 
     def __init__(self, objsim):
-        self.go2genes = get_b2aset(objsim.assc)
+        self.go2genes = get_b2aset(objsim.goeasim_assc)
         self.gos_bg = objsim.pobj.params['goids_study_bg']
-        self.gos_sig_all = set([r.GO for r in objsim.goea_results])
+        self.gos_sig_all = set([r.GO for r in objsim.goeasim_res])
         self.go2obj = objsim.pobj.params['gosubdag'].go2obj
-        self.go2res = {r.GO:r for r in objsim.goea_results}
+        self.go2res = {r.GO:r for r in objsim.goeasim_res}
         self.attr_pval = "p_{METHOD}".format(METHOD=objsim.pobj.objbase.method)
         self.get_go2desc = objsim.pobj.objassc.get_go2desc
 
