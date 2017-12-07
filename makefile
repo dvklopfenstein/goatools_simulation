@@ -17,6 +17,11 @@ run:
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,124
 
+plt:
+	src/bin/dat_goea_plot.py e=-1 propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+		title="GOEAs recovering Humoral Response (HR) genes" \
+		genes=4,124
+
 # make run E=-1
 # RUNALL False: Only 4 simulations will be run to create one P-value
 # RUNALL True  

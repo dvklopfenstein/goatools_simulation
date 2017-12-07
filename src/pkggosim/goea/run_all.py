@@ -60,8 +60,14 @@ class ExperimentsAll(object):
 
     def _get_key2expsets(self, key1='perc_null'):
         """Separate experiment sets into sub-lists for plotting."""
+        # Get ordered perc_null values from experimentset data
+        keys = []
+        for expset in self.expsets:
+            key = expset.params[key1]
+            if key not in keys:
+                keys.append(key)
         # Get experimentset data
-        key2exps = cx.defaultdict(list)
+        key2exps = cx.OrderedDict([(k, []) for k in keys])
         for expset in self.expsets:
             key2exps[expset.params[key1]].append(expset)
         return key2exps
@@ -74,20 +80,22 @@ class ExperimentsAll(object):
         with open(os.path.join(self.pobj.params['repo'], fout_py), 'w') as prt:
             prt.write('"""Simulation data."""\n\n')
             prt.write('__copyright__ = "{C}"\n\n'.format(C=__copyright__))
-            prt.write('from collections import namedtuple\n\n')
-            prt.write('from collections import Counter\n\n')
+            prt.write('from collections import namedtuple\n')
+            prt.write('from collections import Counter\n')
+            prt.write('from collections import OrderedDict\n\n')
             prt.write('ntobj = namedtuple("Nt", "{F}")\n\n'.format(F=" ".join(GoeaSim.ntobj._fields)))
             prt.write('num_expsets = {N}\n'.format(N=len(self.expsets)))
             prt.write('num_simsets = {N}\n\n'.format(N=len(self.expsets[0].expset)))
-            prt.write('expsets = [\n')
-            for expset in self.expsets:  # expset = ExperimentSet(...)
-                prt.write('    [\n')
-                for simset in expset.expset:  # simset = ManyGoeaSims
-                    name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
-                    for nt_tfpn in simset.nts_tfpn[genes_goids]:
-                        prt.write('        ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
-                prt.write('    ],\n')
-            prt.write(']\n')
+            prt.write('percnull2expsets = OrderedDict([\n')
+            for percnull, expsets in self._get_key2expsets('perc_null').items():
+                prt.write('    ({PNULL}, [\n'.format(PNULL=percnull))
+                for expset in expsets:
+                    for simset in expset.expset:  # simset = ManyGoeaSims
+                        name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
+                        for nt_tfpn in simset.nts_tfpn[genes_goids]:
+                            prt.write('        ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
+                prt.write('    ]),\n')
+            prt.write('])\n')
             prt.write('\n# {C}\n'.format(C=__copyright__))
         sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_py))
 
