@@ -9,6 +9,7 @@ import os
 import sys
 import seaborn as sns
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import pandas as pd
@@ -22,10 +23,15 @@ from pkggosim.common.plot_results import fill_axes_data
 #pylint: disable=line-too-long
 def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     """Plot all detailed boxplots for all experiments. X->'# study genes', Y->FDR or %"""
+    # KEYS:  [100, 75, 50, 25, 0]
+    # ATTRS: 
     # pylint: disable=too-many-locals
+    print("QQQQQQQQQQQQQQQQQQQQQ", key2exps.keys())
+    print("AAAAAAAAAAAAAAAAAAAAA", attrs)
     plt.close('all')
     sns.set(style="ticks")
-    fig = plt.figure()
+    dpi = kws.get('dpi', 600)
+    fig = plt.figure(dpi=dpi)
     # kws -> 'title': 'GOEAs recovering Humoral Response (HR) genes'
     # kws -> 'xlabel': 'Number of Genes in a Study Group'
     # kws -> 'ylabel': 'Percentage of General Population Genes'
@@ -35,7 +41,6 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     # kws -> 'dpi': 600
     _plt_box_tiled(fig, key2exps, pltobjs, genes_goids)
     #plt.tight_layout()
-    dpi = kws.get('dpi', 600)
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
 
