@@ -160,12 +160,13 @@ cp_figs_goea:
 	$(CP) doc/logs/fig_goea_rand_pruned_ntn3_$(PNG)           doc/md/images/fig5c_PASS_goea_rand_pruned_ntn3_$(PNG)             
 
 pylint:
-	find src -name \*.py | xargs pylint -r no
+	find src -name \*.py | grep -v pkggosim.data | xargs pylint -r no
 
 # src/bin/plt_goea_small.py 
-vim_sim_geneontology:
+vim_fig:
 	vim -p \
-	src/bin/plt_goea.py \
+	src/bin/plt_goea_fig3ab.py \
+	src/pkggosim/goea/fig_tiled.py \
 	src/pkggosim/goea/sim.py \
 	src/pkggosim/goea/sims.py \
 	src/pkggosim/goea/experiments.py \

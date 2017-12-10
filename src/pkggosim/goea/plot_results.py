@@ -5,6 +5,7 @@ from __future__ import print_function
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
+import os
 import sys
 import seaborn as sns
 import numpy as np
@@ -47,14 +48,22 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **args_kws):
     #plt.tight_layout()
     dpi = args_kws.get('dpi', 600)
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
-    img_ext = args_kws['img']
+    _savefig(base_img, args_kws['img'], dpi, args_kws.get('show', False))
+
+def _savefig(img_base, img_ext, dpi, show):
+    """Save figure in various formats."""
     img_exts = ['tiff', 'jpg', 'png', 'pdf'] if img_ext == 'all' else [img_ext]
     for ext in img_exts:
-        fout_img = "{IMG}.{EXT}".format(IMG=base_img, EXT=ext)
+        fout_img = "{IMG}.{EXT}".format(IMG=img_base, EXT=ext)
         plt.savefig(fout_img, dpi=dpi)
         sys.stdout.write("  DPI={DPI} WROTE: {IMG}\n".format(DPI=dpi, IMG=fout_img))
-    if args_kws.get('show', False):
+    if show:
         plt.show()
+
+def savefig(fout_img, dpi, show):
+    """Save figure in various formats."""
+    base, ext = os.path.splitext(fout_img)
+    _savefig(base, ext[1:], dpi, show)
 
 def _get_rot_xticklabels(key2exps):
     """Rotate xticklabels if there are a large number of gene sets."""
