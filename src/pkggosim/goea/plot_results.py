@@ -7,6 +7,7 @@ __author__ = "DV Klopfenstein"
 
 import os
 import sys
+import collections as cx
 import seaborn as sns
 import numpy as np
 import matplotlib as mpl
@@ -29,9 +30,7 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     sns.set(style="ticks")
     dpi = kws.get('dpi', 600)
     fig = plt.figure(dpi=dpi)
-    for key, exps in key2exps.items():
-        for exp in exps:
-            print("LLLLLLLLLLLL KEY({K}) ".format(K=key), exp)
+    percnull2expsets = _get_percnull2expsets(key2exps, genes_goids)
     # kws -> 'title': 'GOEAs recovering Humoral Response (HR) genes'
     # kws -> 'xlabel': 'Number of Genes in a Study Group'
     # kws -> 'ylabel': 'Percentage of General Population Genes'
@@ -44,6 +43,21 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
+
+def _get_percnull2expsets(key2exps, genes_goids):
+    """Convert key2exps containing classes to percnull2expsets containing namedtuples."""
+    percnull_expsets = []
+    for percnull, experimentsets in key2exps.items():
+        for experimentset in experimentsets:
+            for manygoeasims in experimentset.expset:
+                num_items = manygoeasims.params['num_items']
+                nts_tfpn = manygoeasims.nts_tfpn[genes_goids]
+                key_nts = ((percnull, num_items), nts_tfpn)
+                percnull_expsets.append(key_nts)
+                # for nt_tfpn in nts_tfpn:
+                #     print("(percnull, ngenes) = ({}, {}) nt_tfpn({})".format(
+                #         percnull, manygoeasims.params['num_items'], nt_tfpn))
+    return cx.OrderedDict(percnull_expsets)
 
 def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
