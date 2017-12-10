@@ -18,7 +18,7 @@ class FigTiled(object):
         # key2val(alpha, perc_nulls, num_genes_list, propagate_counts), percnull2expsets
         self.mods = [importlib.import_module(m) for m in modulestrs]
 
-    def plt_twotiled(self, fout_img, dpi, show):
+    def plt_twotiled(self, fout_img, dpi, show, **kws):
         """Plot two simulation images in one figure."""
         fig = plt.figure(dpi=dpi)
         gspec = gridspec.GridSpec(2, 1)

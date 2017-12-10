@@ -20,15 +20,29 @@ from pkggosim.common.plot_results import fill_axes_data
 
 
 #pylint: disable=line-too-long
-def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **args_kws):
-    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
+    """Plot all detailed boxplots for all experiments. X->'# study genes', Y->FDR or %"""
     # pylint: disable=too-many-locals
-    pltobjs = [PlotInfo(a, args_kws) for a in attrs]
-    num_rows = len(key2exps)  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
-    num_cols = len(attrs)     # FDR Sensitivity Specificity
     plt.close('all')
     sns.set(style="ticks")
     fig = plt.figure()
+    # kws -> 'title': 'GOEAs recovering Humoral Response (HR) genes'
+    # kws -> 'xlabel': 'Number of Genes in a Study Group'
+    # kws -> 'ylabel': 'Percentage of General Population Genes'
+    # kws -> 'dotsize': {'sensitivity': 3.0, 'specificity': 3.0, 'fdr_actual': 4.0}
+    pltobjs = [PlotInfo(a, kws) for a in attrs]
+    # kws -> 'img': 'all'
+    # kws -> 'dpi': 600
+    _plt_box_tiled(fig, key2exps, pltobjs, genes_goids)
+    #plt.tight_layout()
+    dpi = kws.get('dpi', 600)
+    base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
+    _savefig(base_img, kws['img'], dpi, kws.get('show', False))
+
+def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids):
+    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    num_rows = len(key2exps)  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
+    num_cols = len(pltobjs)     # FDR Sensitivity Specificity
     rot_xtick = _get_rot_xticklabels(key2exps)
     axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
@@ -45,10 +59,6 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **args_kws):
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
     _set_tiled_txt(fig, pltobjs[0], genes_goids)
-    #plt.tight_layout()
-    dpi = args_kws.get('dpi', 600)
-    base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
-    _savefig(base_img, args_kws['img'], dpi, args_kws.get('show', False))
 
 def _savefig(img_base, img_ext, dpi, show):
     """Save figure in various formats."""
