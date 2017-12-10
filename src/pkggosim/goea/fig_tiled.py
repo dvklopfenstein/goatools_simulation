@@ -30,7 +30,7 @@ class FigTiled(object):
         savefig(fout_img, dpi, show)
         sys.stdout.write("      WROTE: {IMG}\n".format(IMG=fout_img))
 
-    def plt_one(self, fout_img, dpi, show, **kws):
+    def plt_one(self, fout_img, mod_idx, dpi, show, **kws):
         """Plot two simulation images in one figure."""
         plt.close('all')
         fig = plt.figure(dpi=dpi)

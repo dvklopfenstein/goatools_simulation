@@ -24,10 +24,8 @@ from pkggosim.common.plot_results import fill_axes_data
 def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     """Plot all detailed boxplots for all experiments. X->'# study genes', Y->FDR or %"""
     # KEYS:  [100, 75, 50, 25, 0]
-    # ATTRS: 
+    # ATTRS: ['fdr_actual', 'sensitivity', 'specificity']
     # pylint: disable=too-many-locals
-    print("QQQQQQQQQQQQQQQQQQQQQ", key2exps.keys())
-    print("AAAAAAAAAAAAAAAAAAAAA", attrs)
     plt.close('all')
     sns.set(style="ticks")
     dpi = kws.get('dpi', 600)
@@ -39,21 +37,23 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     pltobjs = [PlotInfo(a, kws) for a in attrs]
     # kws -> 'img': 'all'
     # kws -> 'dpi': 600
-    _plt_box_tiled(fig, key2exps, pltobjs, genes_goids)
+    runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
+    _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams)
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
 
-def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids):
+def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
-    num_rows = len(key2exps)  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
+    num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
-    rot_xtick = _get_rot_xticklabels(key2exps)  # True/False
+    rot_xtick = runparams['num_genes_list'] > 8
     axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
+            print("DDDDDDDDDDDDD R{R} C{C} {I}".format(R=row_idx, C=col_idx, I=(row_idx*num_cols + col_idx)))
             _plt_tile_barorboxplot(pltobj, {
                 'axes':axes_all[row_idx*num_cols + col_idx],
                 'perc_null':perc_null,
@@ -80,13 +80,13 @@ def savefig(fout_img, dpi, show):
     base, ext = os.path.splitext(fout_img)
     _savefig(base, ext[1:], dpi, show)
 
-def _get_rot_xticklabels(key2exps):
-    """Rotate xticklabels if there are a large number of gene sets."""
-    print("VVVVVV", next(iter(key2exps.items()))[1][0])
-    #num_genes_list = set([nt.num_items for nt in next(iter(key2exps.items()))[1]])
-    runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
-    num_genes_list = runparams['num_genes_list']
-    return len(num_genes_list) > 8 # Ex: 2 = len([4, 8])
+#### def _get_rot_xticklabels(key2exps):
+####     """Rotate xticklabels if there are a large number of gene sets."""
+####     print("VVVVVV", next(iter(key2exps.items()))[1][0])
+####     #num_genes_list = set([nt.num_items for nt in next(iter(key2exps.items()))[1]])
+####     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
+####     num_genes_list = runparams['num_genes_list']
+####     return len(num_genes_list) > 8 # Ex: 2 = len([4, 8])
 
 def _set_tiled_txt(fig, pltobj, genes_goids):
     """Add text around edges of plot."""
