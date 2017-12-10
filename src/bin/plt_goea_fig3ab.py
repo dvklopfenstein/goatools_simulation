@@ -23,7 +23,9 @@ def main(show):
         'dotsize': {'sensitivity': 3.0, 'specificity': 3.0, 'fdr_actual': 4.0}}
     fig = FigTiled(data)
     #fig.plt_twotiled(fout_img, dpi, show, **kws_plt)
+    kws_plt['title'] = "GOEAs recovering Humoral Response (HR) genes"
     fig.plt_one("fig3a.all", 0, dpi, show, **kws_plt)
+    kws_plt['title'] = "GOEAs recovering HR genes; propagate_counts=True"
     fig.plt_one("fig3b.all", 1, dpi, show, **kws_plt)
 
 

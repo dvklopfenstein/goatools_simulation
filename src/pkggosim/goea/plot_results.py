@@ -20,7 +20,6 @@ from pkggosim.common.plot_results import fill_axes
 from pkggosim.common.plot_results import fill_axes_data
 
 
-#pylint: disable=line-too-long
 def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     """Plot all detailed boxplots for all experiments. X->'# study genes', Y->FDR or %"""
     # KEYS:  [100, 75, 50, 25, 0]
@@ -30,6 +29,9 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     sns.set(style="ticks")
     dpi = kws.get('dpi', 600)
     fig = plt.figure(dpi=dpi)
+    for key, exps in key2exps.items():
+        for exp in exps:
+            print("LLLLLLLLLLLL KEY({K}) ".format(K=key), exp)
     # kws -> 'title': 'GOEAs recovering Humoral Response (HR) genes'
     # kws -> 'xlabel': 'Number of Genes in a Study Group'
     # kws -> 'ylabel': 'Percentage of General Population Genes'
@@ -48,12 +50,14 @@ def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
     rot_xtick = runparams['num_genes_list'] > 8
+    # axes returned in 'reading order': left-to-right and top-to-bottom
+    # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2 
     axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
+    print("SSSSS", sorted_dat)
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
-            print("DDDDDDDDDDDDD R{R} C{C} {I}".format(R=row_idx, C=col_idx, I=(row_idx*num_cols + col_idx)))
             _plt_tile_barorboxplot(pltobj, {
                 'axes':axes_all[row_idx*num_cols + col_idx],
                 'perc_null':perc_null,
