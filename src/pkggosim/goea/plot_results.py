@@ -48,13 +48,13 @@ def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     num_rows = len(key2exps)  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
-    rot_xtick = _get_rot_xticklabels(key2exps)
+    rot_xtick = _get_rot_xticklabels(key2exps)  # True/False
     axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
     sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     for row_idx in range(num_rows):
         perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
-            _plt_tile(pltobj, {
+            _plt_tile_barorboxplot(pltobj, {
                 'axes':axes_all[row_idx*num_cols + col_idx],
                 'perc_null':perc_null,
                 'exps':exps,
@@ -137,7 +137,7 @@ def _tiled_xyticklabels_off(axes, num_cols, rot_xtick):
             for label in yaxis.get_yticklabels():
                 label.set_visible(False)
 
-def _plt_tile(pltobj, pvars, genes_goids):
+def _plt_tile_barorboxplot(pltobj, pvars, genes_goids):
     """Plot one tile of a multi-tiled plot."""
     axes = pvars['axes']
     exps = pvars['exps']
