@@ -105,16 +105,18 @@ class ExperimentsAll(object):
                     assert simset.params['num_items'] == expset.params['num_items']
                     assert simset.params['num_sims'] == expset.params['num_sims']
                     # simset params: num_sims num_items perc_null num_null
-                    name_tfpn = 'nt_tfpn_{G}'.format(G=genes_goids)
                     # prt.write('# -------------------- {} \n'.format(simset.params))
-                    prt.write('        [  #  {N} nts; ManyGoeaSims({B})\n'.format(
-                        N=len(simset.nts_tfpn[genes_goids]), B=bval))
+                    prt.write('        [  #  {N} nts percnull({P}) #genes({G}); ManyGoeaSims({B})\n'.format(
+                        N=len(simset.nts_tfpn[genes_goids]),
+                        P=expset.params['perc_null'],
+                        G=expset.params['num_items'],
+                        B=bval))
                     assert len(simset.nts_tfpn[genes_goids]) == expset.params['num_sims']
                     for nt_tfpn in simset.nts_tfpn[genes_goids]:
                         # assert nt_tfpn.num_items == expset.params['num_items']  # num stu genes
                         prt.write('            ntobj._make({NT}),\n'.format(NT=list(nt_tfpn)))
                     prt.write('        ],\n')
-                prt.write('    ]),\n')
+                prt.write('    ]),\n\n')
             prt.write('])\n')
             prt.write('\n# {C}\n'.format(C=__copyright__))
         sys.stdout.write("  WROTE: {PY}\n".format(PY=fout_py))
