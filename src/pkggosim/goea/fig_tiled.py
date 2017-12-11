@@ -84,13 +84,18 @@ class FigTiled(object):
 class TwoSets(object):
     """Holds layout information for TWO SETs of simululations."""
 
+    num_sets = 2.00
+    ymargin = 0.03 # margin between box/barplots
+    topmargin = .04     # top margin
+
     def __init__(self, num_rows, num_cols, rot_xticklabels):
         self.num_rows = num_rows
         self.num_cols = num_cols
-        self.rot_xticklabels = rot_xticklabels
+        self.bottom = .09 if rot_xticklabels else .08
         self.gspecs = self._init_gspecs()
         self.xms = get_left_right(num_cols)
-        self.yms = self._init_top_bottom(rot_xticklabels)
+        self.yms = self._init_top_bottom()
+        print("YMS", self.yms)
         self._update_gspecs()
 
     def add_figtext2(self, fig, genes_goids_list, kws):
@@ -106,13 +111,17 @@ class TwoSets(object):
                 titles[idx] = titles[idx].replace('genes', 'GO IDs')
         # title:
         fig.text(0.50, 0.97, titles[0], size=kws['txtsz_title'], ha='center', va='bottom')
-        fig.text(0.50, 0.47, titles[1], size=kws['txtsz_title'], ha='center', va='bottom')
+        ytitle = self.yms[1] + 0.01  # WAS 0.47, va=bottom
+        fig.text(0.50, ytitle, titles[1], size=kws['txtsz_title'], ha='center', va='bottom')
         # xlabel: Number of Genes in a Study Group
-        fig.text(0.50, 0.52, kws['xlabel'], size=xysz, ha='center', va='top')
+        y_xlabel = self.yms[1] + self.topmargin + self.ymargin + 0.02
+        fig.text(0.50, y_xlabel, kws['xlabel'], size=xysz, ha='center', va='top')
         fig.text(0.50, 0.02, kws['xlabel'], size=xysz, ha='center', va='top')
         # ylabel: Percentage of General Population Genes
-        fig.text(0.02, 0.75, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
-        fig.text(0.02, 0.25, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
+        ylab_top = -0.010 + 1.00 - self.topmargin - (self.yms[3] - self.yms[2])/2.0
+        ylab_bot = -0.010 + (self.yms[1] - self.yms[0])/2.0 + self.bottom
+        fig.text(0.02, ylab_top, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
+        fig.text(0.02, ylab_bot, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
     def get_tiled_axes2(self, fig):
         """Get TWO SETS of axes for TWO SETS of experiments."""
@@ -141,19 +150,13 @@ class TwoSets(object):
             gridspec.GridSpec(self.num_rows, self.num_cols-1),  # Sensitivity, Specificity
         ]
 
-    @staticmethod
-    def _init_top_bottom(rot_xticklabels):
+    def _init_top_bottom(self):
         """Get the left-right values for two plots."""
-        num_sets = 2.00
-        bottom = .09 if rot_xticklabels else .08
-        ymargin = 0.07 # margin between box/barplots
-        y3_r = .04     # right margin
-        row_hi = .50 - y3_r - bottom - ymargin/num_sets
-        row_hi = (1.00 - num_sets*y3_r - num_sets*bottom - ymargin)/num_sets
-        y1_r = bottom + row_hi
-        y2_l = y1_r + y3_r + ymargin + bottom
-        return [bottom, y1_r, y2_l, 1.00 - y3_r]
-
+        row_hi = .50 - self.topmargin - self.bottom - self.ymargin/self.num_sets
+        row_hi = (1.00 - self.num_sets*self.topmargin - self.num_sets*self.bottom - self.ymargin)/self.num_sets
+        y1_r = self.bottom + row_hi
+        y2_l = y1_r + self.topmargin + self.ymargin + self.bottom
+        return [self.bottom, y1_r, y2_l, 1.00 - self.topmargin]
 
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -17,8 +17,8 @@ def main(show):
     ]
     kws_plt = {
         'titles': [
-            'GOEAs recovering Humoral Response (HR) genes',
-            'GOEAs recovering HR genes; propagate_counts=True'],
+            'A. GOEAs recovering Humoral Response (HR) genes',
+            'B. GOEAs recovering HR genes; propagate_counts=True'],
         'xlabel': 'Number of Genes in a Study Group',
         'ylabel': 'Percentage of General Population Genes',
         'dotsize': {'sensitivity': 2.0, 'specificity': 2.0, 'fdr_actual': 2.0}}
