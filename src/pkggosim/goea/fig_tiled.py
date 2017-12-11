@@ -46,23 +46,11 @@ class FigTiled(object):
         plt.close('all')
         fig = plt.figure(dpi=dpi)
         mod = self.mods[mod_idx]
-        #### key2exps = self.get_key2exps(mod)
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
         _plt_box_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
+        print("FFFIIIGGG", fig.get_size_inches())
         savefig(fout_img, dpi, show)
         sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
         # plt_box_tiled(os.path.basename(fout_img), key2exps, attrs, genes_goids, **kws):
-
-    #### def get_key2exps(self, mod):
-    ####     """Get key2exps for plotting."""
-    ####     key2exps = {}
-    ####     for perc_null in mod.key2val['perc_nulls']:
-    ####         experimentset = []
-    ####         for num_genes in mod.key2val['num_genes_list']:
-    ####            print "perc_null({}) num_genes({})".format(perc_null, num_genes)
-    ####            manygoeasims = mod.percnull2expsets[(perc_null, num_genes)]
-    ####            experimentset.append(manygoeasims)
-    ####         key2exps[perc_null] = experimentset
-    ####     return key2exps
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
