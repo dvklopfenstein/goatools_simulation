@@ -69,7 +69,7 @@ def get_axes_1plot(fig, pltobjs, runparams):
     gridspecs = _get_gridspecs(num_rows, num_cols, rot_xtick)
     # axes returned in 'reading order': left-to-right and top-to-bottom
     # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
-    return _get_tiled_axes(fig, gridspecs, num_rows, num_cols)
+    return get_tiled_axes1(fig, gridspecs, num_rows, num_cols)
 
 def plt1_axes_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
@@ -81,7 +81,7 @@ def plt1_axes_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams)
     #### figgrid = _get_gridspecs(num_rows, num_cols, rot_xtick)
     #### # axes returned in 'reading order': left-to-right and top-to-bottom
     #### # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
-    #### axes_all = _get_tiled_axes(fig, figgrid, num_rows, num_cols)
+    #### axes_all = get_tiled_axes1(fig, figgrid, num_rows, num_cols)
     #### #### sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
     #### #### print("SSSSS", sorted_dat)
     #### #### for row_idx in range(num_rows):
@@ -142,7 +142,7 @@ def add_figtext1(fig, pltobj, genes_goids):
     fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
-def _get_tiled_axes(fig, gspecs, n_rows, n_cols):
+def get_tiled_axes1(fig, gspecs, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
     gs_c0 = gspecs[0]
     gs_cn = gspecs[1]

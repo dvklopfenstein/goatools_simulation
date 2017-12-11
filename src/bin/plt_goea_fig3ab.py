@@ -10,7 +10,6 @@ from pkggosim.goea.fig_tiled import FigTiled
 
 def main(show):
     """Two-tiled simulation plot show typical user-experienve w/propagate_counts=T/F."""
-    fout_img = "fig3.all"
     dpi = 600
     data = [
         "pkggosim.data.orig_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_genes",
@@ -22,7 +21,7 @@ def main(show):
         'ylabel': 'Percentage of General Population Genes',
         'dotsize': {'sensitivity': 2.0, 'specificity': 2.0, 'fdr_actual': 2.0}}
     figobj = FigTiled(data)
-    # figobj.plt_twotiled("fig3.all", dpi, show, **kws_plt)
+    figobj.plt_twotiled("fig3.all", dpi, show, **kws_plt)
     kws_plt['title'] = "GOEAs recovering Humoral Response (HR) genes"
     figobj.plt_one("fig3a.all", 0, dpi, show, **kws_plt)
     kws_plt['title'] = "GOEAs recovering HR genes; propagate_counts=True"

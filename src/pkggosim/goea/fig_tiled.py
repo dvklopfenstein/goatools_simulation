@@ -1,5 +1,7 @@
 """Read simulation data. Plot in a two-tiled plot."""
 
+from __future__ import print_function
+
 __copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
@@ -15,6 +17,7 @@ from pkggosim.goea.plot_results import savefig
 from pkggosim.goea.plot_results import get_axes_1plot
 from pkggosim.goea.plot_results import plt1_axes_tiled
 from pkggosim.goea.plot_results import add_figtext1
+from pkggosim.goea.plot_results import get_tiled_axes1
 
 
 class FigTiled(object):
@@ -36,7 +39,15 @@ class FigTiled(object):
 
     def plt_twotiled(self, fout_img, dpi, show, **kws):
         """Plot two simulation images in one figure."""
-        fig = plt.figure(dpi=dpi)
+        genes_goids = 'goids'
+        fig = plt.figure(figsize=(8.0, 11.0), dpi=dpi)
+        print("FIGSIZE({})".format(fig.get_size_inches()))
+        pltobjs = [PlotInfo(a, kws) for a in self.attrs]
+        runparams = self.mods[0].key2val
+
+        axes_top, axes_bot = self._get_tiled_axes2(pltobjs, fig)
+        plt1_axes_tiled(axes_top, self.mods[0].percnull2expsets, pltobjs, genes_goids, runparams)
+        plt1_axes_tiled(axes_bot, self.mods[1].percnull2expsets, pltobjs, genes_goids, runparams)
 
         # gspec = gridspec.GridSpec(2, 1)
         # axes_top = plt.subplot(gspec[0])
@@ -50,11 +61,13 @@ class FigTiled(object):
         genes_goids = 'goids'
         plt.close('all')
         fig = plt.figure(dpi=dpi)
+        print("FIGSIZE({})".format(fig.get_size_inches()))
         mod = self.mods[mod_idx]
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
+        runparams = mod.key2val
 
-        axes_1plot = get_axes_1plot(fig, pltobjs, runparams=mod.key2val)
-        plt1_axes_tiled(axes_1plot, mod.percnull2expsets, pltobjs, genes_goids, runparams=mod.key2val)
+        axes_1plot = get_axes_1plot(fig, pltobjs, runparams)
+        plt1_axes_tiled(axes_1plot, mod.percnull2expsets, pltobjs, genes_goids, runparams)
         add_figtext1(fig, pltobjs[0], genes_goids)
 
         #### plt1_axes_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
@@ -63,11 +76,19 @@ class FigTiled(object):
         savefig(fout_img, dpi, show)
         sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
 
-    def _get_gridspecs_2(self, pltobjs, runparams):
-        """Get gridspecs, adjusted to fit well into figure."""
+    def _get_tiled_axes2(self, pltobjs, fig):
+        """Get TWO SETS of axes for TWO SETS of experiments."""
+        rot_xticklabels = len(self.mods[0].key2val['num_genes_list']) > 8
         num_rows = len(self.mods[0].key2val['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
         num_cols = len(pltobjs)     # FDR Sensitivity Specificity
-        rot_xticklabels = runparams['num_genes_list'] > 8
+        gridspecs = self._get_gridspecs_2(num_rows, num_cols, rot_xticklabels)
+        axes_top = get_tiled_axes1(fig, gridspecs[:2], num_rows, num_cols)
+        axes_bot = get_tiled_axes1(fig, gridspecs[2:], num_rows, num_cols)
+        return axes_top, axes_bot
+
+    @staticmethod
+    def _get_gridspecs_2(num_rows, num_cols, rot_xticklabels):
+        """Get gridspecs, adjusted to fit well into figure."""
         left = .14
         bottom = .18 if rot_xticklabels else .16
         margin = 0.07
