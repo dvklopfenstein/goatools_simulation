@@ -5,7 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 import importlib
-import matplotlib as mpl
+# import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import seaborn as sns
@@ -13,8 +13,8 @@ import seaborn as sns
 from pkggosim.common.plot_results import PlotInfo
 from pkggosim.goea.plot_results import savefig
 from pkggosim.goea.plot_results import get_axes_1plot
-from pkggosim.goea.plot_results import _plt_box_tiled
-from pkggosim.goea.plot_results import _set_tiled_txt
+from pkggosim.goea.plot_results import plt1_axes_tiled
+from pkggosim.goea.plot_results import add_figtext1
 
 
 class FigTiled(object):
@@ -41,6 +41,7 @@ class FigTiled(object):
         # gspec = gridspec.GridSpec(2, 1)
         # axes_top = plt.subplot(gspec[0])
         # axes_bot = plt.subplot(gspec[1])
+
         savefig(fout_img, dpi, show)
         sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
 
@@ -53,24 +54,20 @@ class FigTiled(object):
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
 
         axes_1plot = get_axes_1plot(fig, pltobjs, runparams=mod.key2val)
-        _plt_box_tiled(axes_1plot, mod.percnull2expsets, pltobjs, genes_goids, runparams=mod.key2val)
-        _set_tiled_txt(fig, pltobjs[0], genes_goids)
+        plt1_axes_tiled(axes_1plot, mod.percnull2expsets, pltobjs, genes_goids, runparams=mod.key2val)
+        add_figtext1(fig, pltobjs[0], genes_goids)
 
-        #### _plt_box_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
+        #### plt1_axes_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
         #### print("FFFIIIGGG", fig.get_size_inches())
 
         savefig(fout_img, dpi, show)
         sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
-        # plt_box_tiled(os.path.basename(fout_img), key2exps, attrs, genes_goids, **kws):
 
-    @staticmethod
-    def _get_gridspecs_2():
+    def _get_gridspecs_2(self, pltobjs, runparams):
         """Get gridspecs, adjusted to fit well into figure."""
-        mod = self.mods[0]
-        num_rows = len(mod.key2val['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
-        num_cols = len(self.pltobjs)     # FDR Sensitivity Specificity
-        num_genes_list = runparams['num_genes_list']
-        rot_xticklabels = num_genes_list > 8
+        num_rows = len(self.mods[0].key2val['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
+        num_cols = len(pltobjs)     # FDR Sensitivity Specificity
+        rot_xticklabels = runparams['num_genes_list'] > 8
         left = .14
         bottom = .18 if rot_xticklabels else .16
         margin = 0.07
@@ -84,10 +81,10 @@ class FigTiled(object):
         #    gridspec.GridSpec(5, 2),  # Sensitivity, Specificity
         gspecs = [
             # Top plot
-            gridspec.GridSpec(num_rows,          1),  # FDR
+            gridspec.GridSpec(num_rows, 1),  # FDR
             gridspec.GridSpec(num_rows, num_cols-1),  # Sensitivity, Specificity
             # Bottom plot
-            gridspec.GridSpec(num_rows,          1),  # FDR
+            gridspec.GridSpec(num_rows, 1),  # FDR
             gridspec.GridSpec(num_rows, num_cols-1),  # Sensitivity, Specificity
         ]
         # Add enough space between Boxplots and barplots to add bar yticklabels

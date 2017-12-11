@@ -9,7 +9,7 @@ import collections as cx
 import numpy as np
 from pkggosim.goea.basename import Basename
 from pkggosim.goea.experiments import ExperimentSet
-from pkggosim.goea.plot_results import plt_box_tiled
+from pkggosim.goea.plot_results import plt1_fig_tiled
 from pkggosim.goea.sim import GoeaSim
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
@@ -56,7 +56,7 @@ class ExperimentsAll(object):
         """Plot all boxplots for all experiments. X->(maxsigval, #tests), Y->%sig"""
         key2exps = self._get_key2expsets('perc_null') # Keys are '% True Null'
         base_img_full = os.path.join(self.pobj.params['repo'], base_img)
-        plt_box_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
+        plt1_fig_tiled(base_img_full, key2exps, plt_items, genes_goids, **kws)
 
     def _get_key2expsets(self, key1='perc_null'):
         """Separate experiment sets into sub-lists for plotting."""

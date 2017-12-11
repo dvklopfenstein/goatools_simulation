@@ -21,8 +21,8 @@ from pkggosim.common.plot_results import fill_axes
 from pkggosim.common.plot_results import fill_axes_data
 
 
-def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
-    """Plot all detailed boxplots for all experiments. X->'# study genes', Y->FDR or %"""
+def plt1_fig_tiled(base_img, key2exps, attrs, genes_goids, **kws):
+    """Plot all detailed boxplots for ONE SET of all experiments. X->'# study genes', Y->FDR or %"""
     # KEYS:  [100, 75, 50, 25, 0]
     # ATTRS: ['fdr_actual', 'sensitivity', 'specificity']
     # pylint: disable=too-many-locals
@@ -41,8 +41,8 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     # kws -> 'dpi': 600
     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
     axes_1plot = get_axes_1plot(fig, pltobjs, runparams)
-    _plt_box_tiled(axes_1plot, percnull2expsets, pltobjs, genes_goids, runparams)
-    _set_tiled_txt(fig, pltobjs[0], genes_goids)
+    plt1_axes_tiled(axes_1plot, percnull2expsets, pltobjs, genes_goids, runparams)
+    add_figtext1(fig, pltobjs[0], genes_goids)
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
@@ -60,6 +60,7 @@ def _get_percnull2expsets(key2exps, genes_goids):
     return cx.OrderedDict(percnull_expsets)
 
 def get_axes_1plot(fig, pltobjs, runparams):
+    """For ONE SET of experiments, get ALL AXES (one per box/bar plot)."""
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
     num_genes_list = runparams['num_genes_list']
@@ -70,7 +71,7 @@ def get_axes_1plot(fig, pltobjs, runparams):
     # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
     return _get_tiled_axes(fig, gridspecs, num_rows, num_cols)
 
-def _plt_box_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams):
+def plt1_axes_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
@@ -101,7 +102,7 @@ def _plt_box_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams):
                 'genes_goids':genes_goids})
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
-    #### _set_tiled_txt(fig, pltobjs[0], genes_goids)
+    #### add_figtext1(fig, pltobjs[0], genes_goids)
 
 def _savefig(img_base, img_ext, dpi, show):
     """Save figure in various formats."""
@@ -126,7 +127,7 @@ def savefig(fout_img, dpi, show):
 ####     num_genes_list = runparams['num_genes_list']
 ####     return len(num_genes_list) > 8 # Ex: 2 = len([4, 8])
 
-def _set_tiled_txt(fig, pltobj, genes_goids):
+def add_figtext1(fig, pltobj, genes_goids):
     """Add text around edges of plot."""
     kws = pltobj.kws
     xysz = kws['txtsz_xy']
@@ -181,7 +182,6 @@ def _plt_tile_barorboxplot(pltobj, pvars):
     perc_null = pvars['perc_null']
     num_genes_list = pvars['num_genes_list']
     percnull2expsets = pvars['percnull2expsets']
-    genes_goids = pvars['genes_goids']
     # qty = len(exps) # Number of gene sets in each tile. Ex: [4, 8, 16, 64] -> 4 sets
     kws = pltobj.kws
     dfrm = pd.DataFrame(_get_dftbl_boxplot(percnull2expsets, perc_null, num_genes_list, pltobj.attrname, pltobj.grpname))
@@ -194,7 +194,7 @@ def _plt_tile_barorboxplot(pltobj, pvars):
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
     mean_2d = _get_mean_2d(percnull2expsets, perc_null, num_genes_list, pltobj.attrname)
-    _add_text(axes, mean_2d, kws['plottype'], (pltobj.attrname, genes_goids))
+    _add_text(axes, mean_2d, kws['plottype'])  #### , (pltobj.attrname, pvars['genes_goids']))
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:
@@ -215,7 +215,7 @@ def _get_dftbl_boxplot(percnull2expsets, perc_null, num_genes_list, attr='fdr_ac
             tbl.append({'xval':num_genes, 'yval':mean, 'group':label})
     return tbl
 
-def _add_text(axes, mean_2d, plottype, attrs):
+def _add_text(axes, mean_2d, plottype):  #### , attrs):
     """Add value text above plot bars and in failing boxplots to make plot easier to read."""
     siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
     # exps: ManyHypothesesSims or ManyGoeaSims
@@ -234,7 +234,6 @@ def _add_text(axes, mean_2d, plottype, attrs):
                 axes.text(xval, 0.037, "{V:5.03f}".format(V=fdr_median),
                           ha='center', va='center', size=siz, rotation=90, color='red')
 
-#### def _get_mean_or_median(mean_or_median, percnull2expsets, perc_null, num_genes_list, attr):
 def _get_mean_2d(percnull2expsets, perc_null, num_genes_list, attr):
     """Get plotting data suitable for a single plot of boxplots."""
     vals = []
@@ -258,7 +257,7 @@ def _get_gridspecs(num_rows, num_cols, rot_xticklabels):
     cn_l = c0_r + margin
     # [GridSpec(Boxplot:FDR),   GridSpec(Barplots:Sensitivity, Specificity, ...)]
     gspecs = [
-        gridspec.GridSpec(num_rows,          1),  # FDR
+        gridspec.GridSpec(num_rows, 1),  # FDR
         gridspec.GridSpec(num_rows, num_cols-1),  # Sensitivity, Specificity
     ]
     # Add enough space between Boxplots and barplots to add bar yticklabels
