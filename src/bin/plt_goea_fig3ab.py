@@ -16,7 +16,9 @@ def main(show):
         "pkggosim.data.orig_noprune_enriched_ntn2_p1_100to000_004to124_N00020_00020_genes",
     ]
     kws_plt = {
-        'title': 'GOEAs recovering Humoral Response (HR) genes',
+        'titles': [
+            'GOEAs recovering Humoral Response (HR) genes',
+            'GOEAs recovering HR genes; propagate_counts=True'],
         'xlabel': 'Number of Genes in a Study Group',
         'ylabel': 'Percentage of General Population Genes',
         'dotsize': {'sensitivity': 2.0, 'specificity': 2.0, 'fdr_actual': 2.0}}

@@ -138,7 +138,7 @@ def add_figtext1(fig, pltobj, genes_goids):
     title = kws['title']
     if genes_goids == 'goids':
         title = title.replace('genes', 'GO IDs')
-    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='center')
+    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='bottom')
     fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
