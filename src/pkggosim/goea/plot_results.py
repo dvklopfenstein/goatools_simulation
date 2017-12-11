@@ -40,7 +40,9 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     # kws -> 'img': 'all'
     # kws -> 'dpi': 600
     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
-    _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams)
+    axes_1plot = get_axes_1plot(fig, pltobjs, runparams)
+    _plt_box_tiled(axes_1plot, percnull2expsets, pltobjs, genes_goids, runparams)
+    _set_tiled_txt(fig, pltobjs[0], genes_goids)
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
@@ -57,20 +59,31 @@ def _get_percnull2expsets(key2exps, genes_goids):
             percnull_expsets.append(key_nts)
     return cx.OrderedDict(percnull_expsets)
 
-def _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams):
-    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+def get_axes_1plot(fig, pltobjs, runparams):
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
     num_genes_list = runparams['num_genes_list']
     rot_xtick = num_genes_list > 8
     # GridSpec for a single figure
-    figgrid = _get_gridspecs(num_rows, num_cols, rot_xtick)
+    gridspecs = _get_gridspecs(num_rows, num_cols, rot_xtick)
     # axes returned in 'reading order': left-to-right and top-to-bottom
     # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
-    axes_all = _get_tiled_axes(fig, figgrid, num_rows, num_cols)
-    #### sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
-    #### print("SSSSS", sorted_dat)
-    #### for row_idx in range(num_rows):
+    return _get_tiled_axes(fig, gridspecs, num_rows, num_cols)
+
+def _plt_box_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams):
+    """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
+    num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
+    num_cols = len(pltobjs)     # FDR Sensitivity Specificity
+    num_genes_list = runparams['num_genes_list']
+    rot_xtick = num_genes_list > 8
+    #### # GridSpec for a single figure
+    #### figgrid = _get_gridspecs(num_rows, num_cols, rot_xtick)
+    #### # axes returned in 'reading order': left-to-right and top-to-bottom
+    #### # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
+    #### axes_all = _get_tiled_axes(fig, figgrid, num_rows, num_cols)
+    #### #### sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
+    #### #### print("SSSSS", sorted_dat)
+    #### #### for row_idx in range(num_rows):
     for row_idx, perc_null in enumerate(sorted(runparams['perc_nulls'], reverse=True)):
         #### perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
@@ -88,7 +101,7 @@ def _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams):
                 'genes_goids':genes_goids})
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
-    _set_tiled_txt(fig, pltobjs[0], genes_goids)
+    #### _set_tiled_txt(fig, pltobjs[0], genes_goids)
 
 def _savefig(img_base, img_ext, dpi, show):
     """Save figure in various formats."""
