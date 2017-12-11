@@ -106,7 +106,7 @@ def plt1_axes_tiled(axes_all, percnull2expsets, pltobjs, genes_goids, runparams)
 
 def _savefig(img_base, img_ext, dpi, show):
     """Save figure in various formats."""
-    img_exts = ['tiff', 'jpg', 'png', 'pdf'] if img_ext == 'all' else [img_ext]
+    img_exts = ['png', 'tiff', 'jpg', 'pdf'] if img_ext == 'all' else [img_ext]
     for ext in img_exts:
         fout_img = "{IMG}.{EXT}".format(IMG=img_base, EXT=ext)
         plt.savefig(fout_img, dpi=dpi)
@@ -138,7 +138,7 @@ def add_figtext1(fig, pltobj, genes_goids):
     title = kws['title']
     if genes_goids == 'goids':
         title = title.replace('genes', 'GO IDs')
-    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='bottom')
+    fig.text(0.5, 0.97, title, size=kws['txtsz_title'], ha='center', va='center')
     fig.text(0.5, 0.02, kws['xlabel'], size=xysz, ha='center', va='center')
     fig.text(0.02, 0.5, kws['ylabel'], size=xysz, ha='center', va='center', rotation='vertical')
 
@@ -247,22 +247,27 @@ def _get_mean_2d(percnull2expsets, perc_null, num_genes_list, attr):
 
 def _get_gridspecs(num_rows, num_cols, rot_xticklabels):
     """Get gridspecs, adjusted to fit well into figure."""
-    left = .14
     bottom = .18 if rot_xticklabels else .16
-    margin = 0.07
     wspc = .08
-    cn_r = 0.99
-    col_wid = (cn_r - left - margin)/num_cols
-    c0_r = left + col_wid
-    cn_l = c0_r + margin
     # [GridSpec(Boxplot:FDR),   GridSpec(Barplots:Sensitivity, Specificity, ...)]
+    xms = get_left_right(num_cols)
     gspecs = [
         gridspec.GridSpec(num_rows, 1),  # FDR
         gridspec.GridSpec(num_rows, num_cols-1),  # Sensitivity, Specificity
     ]
     # Add enough space between Boxplots and barplots to add bar yticklabels
-    gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.92)
-    gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
+    gspecs[0].update(hspace=.10, wspace=wspc, left=xms[0], right=xms[1], bottom=bottom, top=.92)
+    gspecs[1].update(hspace=.10, wspace=wspc, left=xms[2], right=xms[3], bottom=bottom, top=.92)
     return gspecs
+
+def get_left_right(num_cols):
+    """Get the left-right values for two plots."""
+    x0_l = .14     # left margin
+    xmargin = 0.07 # margin between box/barplots
+    x3_r = 0.99    # right margin
+    col_wid = (x3_r - x0_l - xmargin)/num_cols
+    x1_r = x0_l + col_wid
+    x2_l = x1_r + xmargin
+    return [x0_l, x1_r, x2_l, x3_r]
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

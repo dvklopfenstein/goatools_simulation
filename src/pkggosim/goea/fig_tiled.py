@@ -18,6 +18,7 @@ from pkggosim.goea.plot_results import get_axes_1plot
 from pkggosim.goea.plot_results import plt1_axes_tiled
 from pkggosim.goea.plot_results import add_figtext1
 from pkggosim.goea.plot_results import get_tiled_axes1
+from pkggosim.goea.plot_results import get_left_right
 
 
 class FigTiled(object):
@@ -40,6 +41,7 @@ class FigTiled(object):
 
     def plt_twotiled(self, fout_img, dpi, show, **kws):
         """Plot two simulation images in one figure."""
+        plt.close('all')
         fig = plt.figure(figsize=(8.00, 11.00), dpi=dpi)
         print("FIGSIZE({})".format(fig.get_size_inches()))
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
@@ -107,14 +109,9 @@ class FigTiled(object):
     @staticmethod
     def _get_gridspecs_2(num_rows, num_cols, rot_xticklabels):
         """Get gridspecs for TWO SETS of experiments, adjusted to fit well into figure."""
-        left = .14
         bottom = .09 if rot_xticklabels else .08
-        margin = 0.07
         wspc = .08
-        cn_r = 0.99
-        col_wid = (cn_r - left - margin)/num_cols
-        c0_r = left + col_wid
-        cn_l = c0_r + margin
+        xms = get_left_right(num_cols)
         # [GridSpec(Boxplot:FDR),   GridSpec(Barplots:Sensitivity, Specificity, ...)]
         #    gridspec.GridSpec(5, 1),  # FDR
         #    gridspec.GridSpec(5, 2),  # Sensitivity, Specificity
@@ -128,11 +125,12 @@ class FigTiled(object):
         ]
         # Add enough space between Boxplots and barplots to add bar yticklabels
         # Top plot
-        gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom+0.50, top=.96)
-        gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom+0.50, top=.96)
+        gspecs[0].update(hspace=.10, wspace=wspc, left=xms[0], right=xms[1], bottom=bottom+0.50, top=.96)
+        gspecs[1].update(hspace=.10, wspace=wspc, left=xms[2], right=xms[3], bottom=bottom+0.50, top=.96)
         # Bottom plot
-        gspecs[2].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.46)
-        gspecs[3].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.46)
+        gspecs[2].update(hspace=.10, wspace=wspc, left=xms[0], right=xms[1], bottom=bottom, top=.46)
+        gspecs[3].update(hspace=.10, wspace=wspc, left=xms[2], right=xms[3], bottom=bottom, top=.46)
         return gspecs
+
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
