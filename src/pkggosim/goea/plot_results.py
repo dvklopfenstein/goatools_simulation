@@ -31,6 +31,7 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     dpi = kws.get('dpi', 600)
     # fig = plt.figure(figsize=(8.0, 5.5), dpi=dpi)
     fig = plt.figure(dpi=dpi)
+    outergrid = gridspec.GridSpec(1, 1)
     percnull2expsets = _get_percnull2expsets(key2exps, genes_goids)
     # kws -> 'title': 'GOEAs recovering Humoral Response (HR) genes'
     # kws -> 'xlabel': 'Number of Genes in a Study Group'
@@ -40,8 +41,7 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     # kws -> 'img': 'all'
     # kws -> 'dpi': 600
     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
-    #### _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams)
-    _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams)
+    _plt_box_tiled(fig, outergrid[0], percnull2expsets, pltobjs, genes_goids, runparams)
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
@@ -58,15 +58,14 @@ def _get_percnull2expsets(key2exps, genes_goids):
             percnull_expsets.append(key_nts)
     return cx.OrderedDict(percnull_expsets)
 
-#### def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
-def _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams):
+def _plt_box_tiled(fig, outergrid, percnull2expsets, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
     num_genes_list = runparams['num_genes_list']
     rot_xtick = num_genes_list > 8
     # GridSpec for a single figure
-    figgrid = _get_gridspecs(num_rows, num_cols, rot_xtick)
+    figgrid = _get_gridspecs(outergrid, num_rows, num_cols, rot_xtick)
     # axes returned in 'reading order': left-to-right and top-to-bottom
     # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
     axes_all = _get_tiled_axes(fig, figgrid, num_rows, num_cols)
@@ -134,8 +133,10 @@ def _get_tiled_axes(fig, gspecs, n_rows, n_cols):
     """Create empty axes to be filled and used in tiled boxplot image."""
     gs_c0 = gspecs[0]
     gs_cn = gspecs[1]
-    ax_c0 = fig.add_subplot(gs_c0[0, 0])  # Row 0, col 0 of GridSpec(4, 1)
-    ax_cn = fig.add_subplot(gs_cn[0, 0])  # Row 0, col 0 of GridSpec(4, 3)
+    #### ax_c0 = fig.add_subplot(gs_c0[0, 0])  # Row 0, col 0 of GridSpec(4, 1)
+    #### ax_cn = fig.add_subplot(gs_cn[0, 0])  # Row 0, col 0 of GridSpec(4, 3)
+    ax_c0 = plt.Subplot(fig, (gs_c0[0, 0]))  # Row 0, col 0 of GridSpec(4, 1)
+    ax_cn = plt.Subplot(fig, (gs_cn[0, 0]))  # Row 0, col 0 of GridSpec(4, 3)
     axes = [ax_c0, ax_cn]
     for idx in range(2, n_rows*n_cols):
         colidx = idx%n_cols
@@ -239,7 +240,7 @@ def _get_mean_2d(percnull2expsets, perc_null, num_genes_list, attr):
         vals.append(mean_2d)
     return vals
 
-def _get_gridspecs(num_rows, num_cols, rot_xticklabels):
+def _get_gridspecs(outergrid, num_rows, num_cols, rot_xticklabels):
     """Get gridspecs, adjusted to fit well into figure."""
     left = .14
     bottom = .18 if rot_xticklabels else .16
@@ -252,13 +253,19 @@ def _get_gridspecs(num_rows, num_cols, rot_xticklabels):
     # [GridSpec(Boxplot:FDR),   GridSpec(Barplots:Sensitivity, Specificity, ...)]
     gspecs = [
         # FDR
-        gridspec.GridSpec(num_rows, 1),
+        gridspec.GridSpecFromSubplotSpec(
+            num_rows, 1,
+            subplot_spec=outergrid,
+            hspace=.10, wspace=wspc),  # , left=left, right=c0_r, bottom=bottom, top=.92),
         # Sensitivity, Specificity
-        gridspec.GridSpec(num_rows, num_cols-1),
+        gridspec.GridSpecFromSubplotSpec(
+            num_rows, num_cols-1,
+            subplot_spec=outergrid,
+            hspace=.10, wspace=wspc),  # , left=cn_l, right=cn_r, bottom=bottom, top=.92),
     ]
-    # Add enough space between Boxplots and barplots to add bar yticklabels
-    gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.92)
-    gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
+    #### Add enough space between Boxplots and barplots to add bar yticklabels
+    #### gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.92)
+    #### gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.92)
     return gspecs
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
