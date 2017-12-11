@@ -90,7 +90,8 @@ class FigTiled(object):
     def _get_gridspecs_2(num_rows, num_cols, rot_xticklabels):
         """Get gridspecs, adjusted to fit well into figure."""
         left = .14
-        bottom = .18 if rot_xticklabels else .16
+        #### bottom = .18 if rot_xticklabels else .16
+        bottom = .09 if rot_xticklabels else .08
         margin = 0.07
         wspc = .08
         cn_r = 0.99
@@ -110,11 +111,11 @@ class FigTiled(object):
         ]
         # Add enough space between Boxplots and barplots to add bar yticklabels
         # Top plot
-        gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom+0.50, top=.92)
-        gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom+0.50, top=.92)
+        gspecs[0].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom+0.50, top=.96)
+        gspecs[1].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom+0.50, top=.96)
         # Bottom plot
-        gspecs[2].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.42)
-        gspecs[3].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.42)
+        gspecs[2].update(hspace=.10, wspace=wspc, left=left, right=c0_r, bottom=bottom, top=.46)
+        gspecs[3].update(hspace=.10, wspace=wspc, left=cn_l, right=cn_r, bottom=bottom, top=.46)
         return gspecs
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
