@@ -10,11 +10,11 @@ import sys
 import collections as cx
 import seaborn as sns
 import numpy as np
-import matplotlib as mpl
+# import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import pandas as pd
-from pkggosim.common.plot_results import get_dftbl_boxplot
+#### from pkggosim.common.plot_results import get_dftbl_boxplot
 from pkggosim.common.plot_results import PlotInfo
 from pkggosim.common.plot_results import BarText
 from pkggosim.common.plot_results import fill_axes
@@ -39,7 +39,8 @@ def plt_box_tiled(base_img, key2exps, attrs, genes_goids, **kws):
     # kws -> 'img': 'all'
     # kws -> 'dpi': 600
     runparams = next(iter(key2exps.items()))[1][0].pobj.params  # ExperimentSet's RunParams params
-    _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams)
+    #### _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams)
+    _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams)
     #plt.tight_layout()
     base_img = "{BASE}_dpi{DPI}".format(BASE=base_img, DPI=dpi)
     _savefig(base_img, kws['img'], dpi, kws.get('show', False))
@@ -49,36 +50,41 @@ def _get_percnull2expsets(key2exps, genes_goids):
     percnull_expsets = []
     for percnull, experimentsets in key2exps.items():
         for experimentset in experimentsets:
-            for manygoeasims in experimentset.expset:
-                num_items = manygoeasims.params['num_items']
-                nts_tfpn = manygoeasims.nts_tfpn[genes_goids]
-                key_nts = ((percnull, num_items), nts_tfpn)
-                percnull_expsets.append(key_nts)
-                # for nt_tfpn in nts_tfpn:
-                #     print("(percnull, ngenes) = ({}, {}) nt_tfpn({})".format(
-                #         percnull, manygoeasims.params['num_items'], nt_tfpn))
+            num_items = experimentset.params['num_items']
+            # mgs => ManyGoeaSims
+            nts_tfpn_list = [mgs.nts_tfpn[genes_goids] for mgs in experimentset.expset]
+            key_nts = ((percnull, num_items), nts_tfpn_list)
+            percnull_expsets.append(key_nts)
     return cx.OrderedDict(percnull_expsets)
 
-def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
+#### def _plt_box_tiled(fig, key2exps, pltobjs, genes_goids, runparams):
+def _plt_box_tiled(fig, percnull2expsets, pltobjs, genes_goids, runparams):
     """Plot all detailed boxplots for all experiments. X->(maxsigval, #pvals), Y->%sig"""
     num_rows = len(runparams['perc_nulls'])  # 100% Null, 75% Null, 50% Null, 25% Null, 0% Null
     num_cols = len(pltobjs)     # FDR Sensitivity Specificity
-    rot_xtick = runparams['num_genes_list'] > 8
+    num_genes_list = runparams['num_genes_list']
+    rot_xtick = num_genes_list > 8
     # axes returned in 'reading order': left-to-right and top-to-bottom
-    # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2 
+    # R0/C0 R0/C1 R0/C2 R1/C0 R1/C1 R1/C2 R2/C0 R2/C1 R2/C2 R3/C0 R3/C1 R3/C2 R4/C0 R4/C1 R4/C2
     axes_all = _get_tiled_axes(fig, get_gridspecs(num_rows, num_cols, rot_xtick), num_rows, num_cols)
-    sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
-    print("SSSSS", sorted_dat)
-    for row_idx in range(num_rows):
-        perc_null, exps = sorted_dat[row_idx]
+    #### sorted_dat = sorted(key2exps.items(), key=lambda t: -1*t[0]) # sort by perc_null
+    #### print("SSSSS", sorted_dat)
+    #### for row_idx in range(num_rows):
+    for row_idx, perc_null in enumerate(sorted(runparams['perc_nulls'], reverse=True)):
+        #### perc_null, exps = sorted_dat[row_idx]
         for col_idx, pltobj in enumerate(pltobjs):
+            #### exps = [percnull2expsets[(perc_null, ng)] for ng in num_genes_list]
             _plt_tile_barorboxplot(pltobj, {
                 'axes':axes_all[row_idx*num_cols + col_idx],
+                'alpha':runparams['alpha'],
                 'perc_null':perc_null,
-                'exps':exps,
+                'num_genes_list':num_genes_list,
+                #### 'exps':exps,
+                'percnull2expsets':percnull2expsets,
                 'letter':"{C}{R}".format(R=row_idx+1, C=chr(65+col_idx)),
                 'is_bottom_row':row_idx == num_rows-1,
-                'is_left_column':col_idx%num_cols == 0}, genes_goids)
+                'is_left_column':col_idx%num_cols == 0,
+                'genes_goids':genes_goids})
             plt.subplots_adjust(hspace=.10, wspace=.15, left=.18, bottom=.19, top=.92)
     _tiled_xyticklabels_off(axes_all, num_cols, rot_xtick)
     _set_tiled_txt(fig, pltobjs[0], genes_goids)
@@ -155,44 +161,80 @@ def _tiled_xyticklabels_off(axes, num_cols, rot_xtick):
             for label in yaxis.get_yticklabels():
                 label.set_visible(False)
 
-def _plt_tile_barorboxplot(pltobj, pvars, genes_goids):
+def _plt_tile_barorboxplot(pltobj, pvars):
     """Plot one tile of a multi-tiled plot."""
     axes = pvars['axes']
-    exps = pvars['exps']
+    #### exps = pvars['exps']
+    perc_null = pvars['perc_null']
+    num_genes_list = pvars['num_genes_list']
+    percnull2expsets = pvars['percnull2expsets']
+    genes_goids = pvars['genes_goids']
     # qty = len(exps) # Number of gene sets in each tile. Ex: [4, 8, 16, 64] -> 4 sets
     kws = pltobj.kws
-    dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname, genes_goids))
-    alpha = 0.05  # exps[0].pobj.objbase.alpha if kws['alphaline'] else None
+    #### dfrm = pd.DataFrame(get_dftbl_boxplot(exps, pltobj.attrname, pltobj.grpname, genes_goids))
+    dfrm = pd.DataFrame(_get_dftbl_boxplot(percnull2expsets, perc_null, num_genes_list, pltobj.attrname, pltobj.grpname))
+    # alpha = 0.05  # exps[0].pobj.objbase.alpha if kws['alphaline'] else None
     fill_axes_data(axes, dfrm, dotsize=kws['dotsize'], plottype=kws['plottype'])
-    fill_axes(axes, alpha, letter=pvars['letter'], ylim=kws['ylim'])
-    axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
+    #### fill_axes(axes, alpha, letter=pvars['letter'], ylim=kws['ylim'])
+    fill_axes(axes, pvars['alpha'], letter=pvars['letter'], ylim=kws['ylim'])
+    #### axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
+    axes.set_xticklabels(num_genes_list, size=kws['txtsz_ticks'])
     axes.set_yticks(kws['yticks'])
     axes.set_yticklabels(kws['yticklabels'])
     axes.set_ylim(kws['ylim'])
     axes.tick_params('both', length=3, width=1) # Shorten both x and y axes tick length
-    _add_text(axes, exps, kws['plottype'], (pltobj.attrname, genes_goids))
+    mean_2d = _get_mean_2d(percnull2expsets, perc_null, num_genes_list, pltobj.attrname)
+    _add_text(axes, mean_2d, kws['plottype'], (pltobj.attrname, genes_goids))
     if pvars['is_bottom_row']:
         axes.set_xlabel("{COLHDR}".format(COLHDR=pltobj.grpname), size=17)
     if pvars['is_left_column']:
-        axes.set_ylabel("{PERCNULL}% Null".format(
-            PERCNULL=pvars['perc_null']), size=kws['txtsz_tile'])
+        axes.set_ylabel("{PERCNULL}% Null".format(PERCNULL=perc_null), size=kws['txtsz_tile'])
 
-def _add_text(axes, exps, plottype, attrs):
+def _get_dftbl_boxplot(percnull2expsets, perc_null, num_genes_list, attr='fdr_actual', label='FDR'):
+    """Get plotting data suitable for a single plot of boxplots."""
+    # attr        |label
+    # ------------|------------
+    # fdr_actual  |FDR
+    # sensitivity |Sensitivity
+    # specificity |Specificity
+    tbl = []
+    for num_genes in num_genes_list:
+        nts_tfpn_list = percnull2expsets[(perc_null, num_genes)]
+        for nts_tfpn in nts_tfpn_list:
+            mean = np.mean([getattr(nt, attr) for nt in nts_tfpn])
+            tbl.append({'xval':num_genes, 'yval':mean, 'group':label})
+    return tbl
+
+def _add_text(axes, mean_2d, plottype, attrs):
     """Add value text above plot bars and in failing boxplots to make plot easier to read."""
     siz = 12   # BAR HEIGHT TEXT.  if qty<=4 else 12.0*4.0/qty
     # exps: ManyHypothesesSims or ManyGoeaSims
     # attrs: [attrname(sensitivity|specificity), genes_goids]
     if plottype == 'barplot':
-        means = [np.mean(exp.get_means(*attrs)) for exp in exps]
+        #### means = [np.mean(exp.get_means(*attrs)) for exp in exps]
+        means = [np.mean(means) for means in mean_2d]
         for ntval in BarText(means).get_bar_text():
             axes.text(ntval.x, ntval.y, ntval.valstr, ha='center', va='bottom', size=siz)
     # Print BOXPLOT MEDIAN VALUES for failing FDRs
     elif plottype == 'boxplot':
-        medians = [np.median(exp.get_medians(*attrs)) for exp in exps]
+        #### medians = [np.median(exp.get_medians(*attrs)) for exp in exps]
+        medians = [np.median(means) for means in mean_2d]
         for xval, fdr_median in enumerate(medians):
             if fdr_median > 0.080:
                 axes.text(xval, 0.037, "{V:5.03f}".format(V=fdr_median),
                           ha='center', va='center', size=siz, rotation=90, color='red')
+
+#### def _get_mean_or_median(mean_or_median, percnull2expsets, perc_null, num_genes_list, attr):
+def _get_mean_2d(percnull2expsets, perc_null, num_genes_list, attr):
+    """Get plotting data suitable for a single plot of boxplots."""
+    vals = []
+    for num_genes in num_genes_list:
+        mean_2d = []
+        for nts_tfpn in percnull2expsets[(perc_null, num_genes)]:
+            mean_vals = np.mean([getattr(nt, attr) for nt in nts_tfpn])
+            mean_2d.append(mean_vals)
+        vals.append(mean_2d)
+    return vals
 
 def get_gridspecs(num_rows, num_cols, rot_xticklabels):
     """Get gridspecs, adjusted to fit well into figure."""

@@ -39,31 +39,30 @@ class FigTiled(object):
         axes_top = plt.subplot(gspec[0])
         axes_bot = plt.subplot(gspec[1])
         savefig(fout_img, dpi, show)
-        sys.stdout.write("      WROTE: {IMG}\n".format(IMG=fout_img))
+        sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
 
     def plt_one(self, fout_img, mod_idx, dpi, show, **kws):
         """Plot two simulation images in one figure."""
         plt.close('all')
         fig = plt.figure(dpi=dpi)
         mod = self.mods[mod_idx]
-        key2exps = self.get_key2exps(mod)
+        #### key2exps = self.get_key2exps(mod)
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
-        runparams = mod.key2val
-        _plt_box_tiled(fig, key2exps, pltobjs, 'goids', runparams)
+        _plt_box_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
         savefig(fout_img, dpi, show)
-        sys.stdout.write("      WROTE: {IMG}\n".format(IMG=fout_img))
+        sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
         # plt_box_tiled(os.path.basename(fout_img), key2exps, attrs, genes_goids, **kws):
 
-    def get_key2exps(self, mod):
-        """Get key2exps for plotting."""
-        key2exps = {}
-        for perc_null in mod.key2val['perc_nulls']:
-            experimentset = []
-            for num_genes in mod.key2val['num_genes_list']:
-               print "perc_null({}) num_genes({})".format(perc_null, num_genes)
-               manygoeasims = mod.percnull2expsets[(perc_null, num_genes)]
-               experimentset.append(manygoeasims)
-            key2exps[perc_null] = experimentset
-        return key2exps
+    #### def get_key2exps(self, mod):
+    ####     """Get key2exps for plotting."""
+    ####     key2exps = {}
+    ####     for perc_null in mod.key2val['perc_nulls']:
+    ####         experimentset = []
+    ####         for num_genes in mod.key2val['num_genes_list']:
+    ####            print "perc_null({}) num_genes({})".format(perc_null, num_genes)
+    ####            manygoeasims = mod.percnull2expsets[(perc_null, num_genes)]
+    ####            experimentset.append(manygoeasims)
+    ####         key2exps[perc_null] = experimentset
+    ####     return key2exps
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
