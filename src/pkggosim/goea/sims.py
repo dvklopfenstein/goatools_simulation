@@ -48,9 +48,9 @@ class ManyGoeaSims(object):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
         return np.mean([getattr(nt, key) for nt in self.nts_tfpn[genes_goids]])
 
-    def get_median(self, key, genes_goids='genes'):
-        """Returns the actual median value for the set of P-Value simulations run in this class."""
-        return np.median([getattr(nt, key) for nt in self.nts_tfpn[genes_goids]])
+    #### def get_median(self, key, genes_goids='genes'):
+    ####     """Returns the actual median value for the set of P-Value simulations run in this class."""
+    ####     return np.median([getattr(nt, key) for nt in self.nts_tfpn[genes_goids]])
 
     def get_summary_str(self):
         """Print summary. Ex: ManyGoeaSims: 10 sims,  16 pvals/sim SET( 50% null)."""
