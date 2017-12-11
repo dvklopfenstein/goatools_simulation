@@ -46,9 +46,8 @@ class FigTiled(object):
         plt.close('all')
         fig = plt.figure(dpi=dpi)
         mod = self.mods[mod_idx]
-        outergrid = gridspec.GridSpec(1, 1)
         pltobjs = [PlotInfo(a, kws) for a in self.attrs]
-        _plt_box_tiled(fig, outergrid[0], mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
+        _plt_box_tiled(fig, mod.percnull2expsets, pltobjs, 'goids', runparams=mod.key2val)
         print("FFFIIIGGG", fig.get_size_inches())
         savefig(fout_img, dpi, show)
         sys.stdout.write("  WROTE: {IMG}\n".format(IMG=fout_img))
