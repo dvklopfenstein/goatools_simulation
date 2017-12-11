@@ -22,8 +22,8 @@ def main(show):
         'xlabel': 'Number of Genes in a Study Group',
         'ylabel': 'Percentage of General Population Genes',
         'dotsize': {'sensitivity': 2.0, 'specificity': 2.0, 'fdr_actual': 2.0}}
-    figobj = FigTiled(data)
-    figobj.plt_twotiled("fig3.all", dpi, show, **kws_plt)
+    figobj = FigTiled(data, kws_plt)
+    figobj.plt_twotiled("fig3.all", dpi, show)
     kws_plt['title'] = "GOEAs recovering Humoral Response (HR) genes"
     figobj.plt_one("fig3a.all", 0, dpi, show, **kws_plt)
     kws_plt['title'] = "GOEAs recovering HR genes; propagate_counts=True"
