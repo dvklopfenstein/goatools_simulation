@@ -1,5 +1,8 @@
 # Simulation Figures
 
+  * [**Published** (genes)](#published)    
+  * [**Future Work** (goids)](#future-work)    
+
 # Published
 ![genes](../../log/plt_goea_fig3ab/fig3_genes.png)
 
