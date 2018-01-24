@@ -101,7 +101,7 @@ class DataAssc(object):
         #### assert num_was-num_now == len(gos_rm)
         #### prt.write("{N} GO IDs removed assc. w/>{G} genes = {A} - {B}\n".format(
         ####     N=num_was-num_now, G=max_genecnt, A=num_was, B=num_now))
-        assc_geneid2gos_pruned, goids_rm = get_assc_pruned(assc_geneid2gos, max_genecnt, prt)
+        assc_geneid2gos_pruned, goids_rm = get_assc_pruned(assc_geneid2gos, max_genecnt, prt=prt)
         go2genes_orig = get_b2aset(assc_geneid2gos)
 
         for desc in self.get_go2desc(goids_rm, godag, go2genes_orig).values():
