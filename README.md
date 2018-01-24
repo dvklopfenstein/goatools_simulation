@@ -1,5 +1,6 @@
 # Stochastic GOEA Simulations
-[GOATOOLS manuscript simulation figures](doc/md/README_ms2017.md)
+  * [GOATOOLS manuscript simulation figures](doc/md/README_fig3_sim.md)      
+  * [GOATOOLS manuscript simulation figures (details)](doc/md/README_ms2017.md)    
 
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
