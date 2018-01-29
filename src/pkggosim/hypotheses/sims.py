@@ -13,7 +13,7 @@ class ManyHypothesesSims(object):
 
     expected_params = set(['num_sims', 'num_items', 'perc_null',
                            'multi_params', 'num_null',
-                           'max_sigpval', 'max_sigpval_super', 'perc_super'])
+                           'max_sigpval', 'pval_surge'])
 
     def __init__(self, params):
         self.params = params
@@ -22,7 +22,7 @@ class ManyHypothesesSims(object):
         hypothsimobjs = self._init_hypothsimobjs() # List of N=num_sims HypothesesSim objects
         self.nts_tfpn = [o.nt_tfpn for o in hypothsimobjs]
         # Print header for each set of simulations
-        #self.prt_summary(prt=sys.stdout)
+        self.prt_summary(prt=sys.stdout)
         #print "LLLLLLLLLL", self.params
 
     def get_mean(self, key):
@@ -42,9 +42,10 @@ class ManyHypothesesSims(object):
             "SET({P:3.0f}% null)".format(P=self.params['perc_null']),
             "{M:5.2f} max sig;".format(M=self.params['max_sigpval']),
         ]
-        if self.params['max_sigpval_super'] is not None and self.params['perc_super'] is not None:
-            msg.append('{{M:5.2f} surge sig'.format(M=self.params['max_sigpval_super']))
-            msg.append('{{M:4.2f}% Non-nulls'.format(M=self.params['perc_super']))
+        if self.params['pval_surge'] is not None:
+            k2v = self.params['pval_surge']
+            msg.append('pval_surge({M:8.2e} surge sig'.format(M=k2v['max_sigpval']))
+            msg.append('{M} Non-nulls'.format(M=k2v['qty']))
         prt.write("{TXT}\n".format(TXT=" ".join(msg)))
 
     def get_percentile_vals(self, attr, percentiles):
@@ -78,7 +79,8 @@ class ManyHypothesesSims(object):
         num_null = self.params['num_null']
         multi = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
-        kws = {}
-        return [HypothesesSim(num_items, num_null, multi, max_sigpval) for _ in range(num_sims)]
+        pval_surge = self.params['pval_surge']
+        return [HypothesesSim(num_items, num_null, multi, max_sigpval, pval_surge) for _ in range(num_sims)]
+
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

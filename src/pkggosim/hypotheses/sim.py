@@ -29,9 +29,9 @@ class HypothesesSim(object):
         "num_correct num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
-    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge):
         self.alpha = multi_params['alpha']
-        iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval)
+        iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval, pval_surge)
         # List of info for each pval: pval pval_corr reject expsig tfpn
         self.nts_pvalmt = iniobj.get_nts_pvals()
         self.pvals = np.array(iniobj.pvals)
@@ -149,7 +149,7 @@ class _Init(object):
                 tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
-    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge):
         self.multi_params = multi_params
         # I. UNCORRECTED P-VALUES:
         self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 0.03 or 0.01
@@ -157,7 +157,8 @@ class _Init(object):
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
         self.expsig = None # List of bool/P-value. True->Pval intended to be signif. (Non-true null)
-        self._init_pvals(hypoth_qty, num_null)
+        num_null_not = hypoth_qty - num_null
+        self._init_pvals(num_null_not, num_null)
         assert len(self.pvals) == hypoth_qty
         assert hypoth_qty - sum(self.expsig) == num_null
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
@@ -165,9 +166,8 @@ class _Init(object):
         self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
         #self._chk_reject()
 
-    def _init_pvals(self, hypoth_qty, num_null):
+    def _init_pvals(self, num_ntnull, num_null):
         """Generate 2 sets of P-values: Not intended significant & intended to be significant."""
-        num_ntnull = hypoth_qty - num_null # Calculate the number of "Non-true null hypotheses"
         # 1. Generate random P-values: Significant and Random
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance

@@ -61,10 +61,15 @@ class ExperimentSet(object):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
             experiment_params['max_sigpval'] = self.max_sigpval
-            experiment_params['max_sigpval_super'] = self.params['max_sigpval_super']
-            experiment_params['perc_super'] = self.params['perc_super']
+            experiment_params['pval_surge'] = self._init_pval_surge()
             # One ManyHypothesesSims is one experiment which can return one simulated FDR value
             expset.append(ManyHypothesesSims(experiment_params))
         return expset
+
+    def _init_pval_surge(self):
+        """Investigate if a small group of ultra-low pvals disrupts finding other true enrichments."""
+        if self.params['max_sigpval_super'] is not None and self.params['perc_super'] is not None:
+            qty = float(self.params['num_items'] - self.num_null)*self.params['perc_super']/100.00
+            return {'qty': int(round(qty)), 'max_sigpval': self.params['max_sigpval_super']}
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
