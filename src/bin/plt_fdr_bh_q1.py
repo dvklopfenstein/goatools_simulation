@@ -20,8 +20,8 @@ def run(args, ntd, max_sigpvals_super, perc_super):
         'max_sigpvals_super' : max_sigpvals_super, # Magnitudes smaller than max_sigpvals
         'perc_super': perc_super,
         'perc_nulls' : [100, 75, 50, 25],
-        #'num_hypoths_list' : [8, 16, 32, 64, 128, 256],
-        'num_hypoths_list' : [8, 16, 128],
+        'num_hypoths_list' : [8, 16, 32, 64, 128, 256],
+        #'num_hypoths_list' : [8, 16, 128],
         'num_experiments' : ntd.num_experiments, # Num. of simulated FDR ratios in an experiment set
         'num_sims' : ntd.num_sims}   # Number of sims per experiment; used to create one FDR ratio
     obj = ExperimentsAll(sim_params)

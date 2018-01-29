@@ -20,6 +20,7 @@ import numpy as np
 from statsmodels.sandbox.stats.multicomp import multipletests
 from pkggosim.common.true_positive import get_tfpn, calc_ratio
 
+#pylint: disable=too-many-arguments,too-many-function-args
 class HypothesesSim(object):
     """Simulate a multiple-test correction on one set of randomly generated P-values."""
 
@@ -158,7 +159,7 @@ class _Init(object):
         self.pvals = None  # List of randomly-generated uncorrected P-values
         self.expsig = None # List of bool/P-value. True->Pval intended to be signif. (Non-true null)
         num_null_not = hypoth_qty - num_null
-        self._init_pvals(num_null_not, num_null)
+        self._init_pvals(num_null_not, num_null, pval_surge)
         assert len(self.pvals) == hypoth_qty
         assert hypoth_qty - sum(self.expsig) == num_null
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
@@ -166,16 +167,27 @@ class _Init(object):
         self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
         #self._chk_reject()
 
-    def _init_pvals(self, num_ntnull, num_null):
+    def _init_pvals(self, num_ntnull, num_null, pval_surge):
         """Generate 2 sets of P-values: Not intended significant & intended to be significant."""
         # 1. Generate random P-values: Significant and Random
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance
-        pos = [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)]
+        pos = self._get_notnulls(num_ntnull, pval_surge)
         neg = [(p, False) for p in np.random.uniform(0, 1, size=num_null)]
         pvals_expsig = pos + neg
         # 2. Extract "P-values" and "intended significance" by transposing data
         self.pvals, self.expsig = zip(*pvals_expsig)
+
+    def _get_notnulls(self, num_ntnull, pval_surge):
+        """Generate Not-Null P-values: intended to be significant."""
+        if pval_surge is None:
+            return [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)]
+        bg_num = num_ntnull - pval_surge['qty']
+        # print "PVAL_SURGE", pval_surge
+        lo_num = pval_surge['qty']
+        lo_max = pval_surge['max_sigpval']
+        return [(p, True) for p in np.random.uniform(0, self.max_sigval, size=bg_num)] + \
+               [(p, True) for p in np.random.uniform(0, lo_max, size=lo_num)]
 
     def _chk_reject(self):
         """Check that all values marked with reject==True, have pval_corr < alpha."""

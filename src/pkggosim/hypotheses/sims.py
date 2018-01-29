@@ -22,8 +22,8 @@ class ManyHypothesesSims(object):
         hypothsimobjs = self._init_hypothsimobjs() # List of N=num_sims HypothesesSim objects
         self.nts_tfpn = [o.nt_tfpn for o in hypothsimobjs]
         # Print header for each set of simulations
-        self.prt_summary(prt=sys.stdout)
-        #print "LLLLLLLLLL", self.params
+        # self.prt_summary(prt=sys.stdout)
+        # print "LLLLLLLLLL", self.params
 
     def get_mean(self, key):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
