@@ -12,7 +12,8 @@ class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
     expected_params = set(['multi_params', 'perc_null', 'num_items', 'num_experiments',
-                           'num_sims', 'max_sigpval'])
+                           'max_sigpval', 'max_sigpval_super', 'max_super',
+                           'num_sims'])
 
     def __init__(self, params, tic):
         self.params = params
@@ -22,13 +23,9 @@ class ExperimentSet(object):
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
 
-    def get_means(self, key, desc=None):
+    def get_means(self, key):
         """Return list of means for a item like fdr_actual, frr_actual."""
         return [e.get_mean(key) for e in self.expset]
-
-####    def get_stddevs(self, key):
-####        """Return list of stddevs for a item like fdr_actual, frr_actual."""
-####        return [e.get_stddev(key) for e in self.expset]
 
     def get_desc(self, fmt="{SIGMAX:4.2f}=MaxSigPval "
                            "{PERCNULL:>3.0f}% True Null({TOTNULL:3} of {PVALQTY:4} P-Values)"):

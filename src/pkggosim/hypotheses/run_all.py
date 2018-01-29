@@ -22,7 +22,8 @@ class ExperimentsAll(object):
 
     desc_pat = '{P0:03}to{PN:03}_{MAX0}to{MAXN}_{Q0:03}to{QN:03}_N{NEXP:05}_{NSIM:05}_{M}'
 
-    expected_params = set(['seed', 'multi_params', 'perc_nulls', 'max_sigpvals', 'num_hypoths_list',
+    expected_params = set(['seed', 'multi_params', 'perc_nulls', 'num_hypoths_list',
+                           'max_sigpvals', 'max_sigpvals_super', 'perc_super',
                            'num_experiments', 'num_sims', 'repo'])
 
     method2name = {
@@ -44,8 +45,8 @@ class ExperimentsAll(object):
         self.seed = RandomSeed32(params.get('seed', None))
         self.params = self._init_params(params)
         self.method = self.params['multi_params']['method']
-        assert set(self.params.keys()) == self.expected_params, \
-            set(params.keys()).symmetric_difference(self.expected_params)
+        # assert set(self.params.keys()) == self.expected_params, \
+        #     set(params.keys()).symmetric_difference(self.expected_params)
         self.expsets = []
 
     @staticmethod
@@ -130,11 +131,14 @@ class ExperimentsAll(object):
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
         for perc_null in self.params['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
-            for max_sigpval in self.params['max_sigpvals']:  # Ex: [0.01, 0.02, 0.03, 0.04, 0.05]
+            for idx1, max_sigpval in enumerate(self.params['max_sigpvals']):  # Ex: [0.01, 0.03, 0.05]
                 for num_items in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
+                    max_sup = self.params['max_sigpval_super'][idx1] if 'max_sigpval_super' in self.params else None
                     exp_parms = {
                         'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
+                        'max_sigpval_super' : max_sup,
+                        'max_super' : self.params.get('max_super', None),
                         'perc_null' : perc_null,
                         'num_items' : num_items,
                         'num_experiments' : self.params['num_experiments'],

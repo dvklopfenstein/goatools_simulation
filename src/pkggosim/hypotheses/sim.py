@@ -171,9 +171,9 @@ class _Init(object):
         # 1. Generate random P-values: Significant and Random
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance
-        pvals_expsig = \
-            [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)] + \
-            [(p, False) for p in np.random.uniform(0, 1, size=num_null)]
+        pos = [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)]
+        neg = [(p, False) for p in np.random.uniform(0, 1, size=num_null)]
+        pvals_expsig = pos + neg
         # 2. Extract "P-values" and "intended significance" by transposing data
         self.pvals, self.expsig = zip(*pvals_expsig)
 
