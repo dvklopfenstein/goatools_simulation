@@ -13,7 +13,7 @@ from pkggosim.common.plot_results import PlotInfo
 from pkggosim.common.plot_results import BarText
 from pkggosim.common.plot_results import get_dftbl_boxplot
 from pkggosim.common.plot_results import get_num_rows_cols
-from pkggosim.common.plot_results import fill_axes
+from pkggosim.common.plot_results import fill_axes_data
 
 
 def plt_box_tiled(fout_img, key2exps, attrname, **args_kws):
@@ -88,7 +88,7 @@ def _plt_tile(idx, num_rows, num_cols, tile_items, objplt):
     letter = "{C}{R}".format(R=idx/num_cols+1, C=chr(65+idx%num_cols))
     dfrm = pd.DataFrame(get_dftbl_boxplot(exps, objplt.attrname, objplt.grpname))
     alpha = exps[0].alpha if kws['alphaline'] else None
-    fill_axes(axes, dfrm, alpha, dotsize=kws['dotsize'],
+    fill_axes_data(axes, dfrm, alpha=alpha, dotsize=kws['dotsize'],
               plottype=kws['plottype'], letter=letter, ylim=kws['ylim'])
     axes.set_xticklabels([e.params['num_items'] for e in exps], size=kws['txtsz_ticks'])
     axes.set_yticks(kws['yticks'])
