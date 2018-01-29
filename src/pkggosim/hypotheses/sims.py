@@ -12,7 +12,8 @@ class ManyHypothesesSims(object):
     """Run many simulations of a multiple-test correction run on a set of P-values."""
 
     expected_params = set(['num_sims', 'num_items', 'perc_null',
-                           'multi_params', 'num_null', 'max_sigpval'])
+                           'multi_params', 'num_null',
+                           'max_sigpval', 'max_sigpval_super', 'perc_super'])
 
     def __init__(self, params):
         self.params = params
@@ -22,6 +23,7 @@ class ManyHypothesesSims(object):
         self.nts_tfpn = [o.nt_tfpn for o in hypothsimobjs]
         # Print header for each set of simulations
         #self.prt_summary(prt=sys.stdout)
+        #print "LLLLLLLLLL", self.params
 
     def get_mean(self, key):
         """Returns the actual mean value for the set of P-Value simulations run in this class."""
@@ -37,10 +39,13 @@ class ManyHypothesesSims(object):
             "    ManyHypothesesSims:",
             "{SIMS} sims,".format(SIMS=self.params['num_sims']),
             "{HYPOTHS:3} pvals/sim".format(HYPOTHS=self.params['num_items']),
-            "SET({P:3.0f}% null)\n".format(P=self.params['perc_null']),
-            "{M:5.2f} max sig)\n".format(M=self.params['max_sigpval']),
+            "SET({P:3.0f}% null)".format(P=self.params['perc_null']),
+            "{M:5.2f} max sig;".format(M=self.params['max_sigpval']),
         ]
-        prt.write(" ".join(msg))
+        if self.params['max_sigpval_super'] is not None and self.params['perc_super'] is not None:
+            msg.append('{{M:5.2f} surge sig'.format(M=self.params['max_sigpval_super']))
+            msg.append('{{M:4.2f}% Non-nulls'.format(M=self.params['perc_super']))
+        prt.write("{TXT}\n".format(TXT=" ".join(msg)))
 
     def get_percentile_vals(self, attr, percentiles):
         """Return percentile values for 'attr' list."""
@@ -73,6 +78,7 @@ class ManyHypothesesSims(object):
         num_null = self.params['num_null']
         multi = self.params['multi_params']
         max_sigpval = self.params['max_sigpval']
+        kws = {}
         return [HypothesesSim(num_items, num_null, multi, max_sigpval) for _ in range(num_sims)]
 
 # Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.

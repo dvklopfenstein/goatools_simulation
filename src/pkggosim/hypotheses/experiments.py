@@ -12,7 +12,7 @@ class ExperimentSet(object):
     """Run a set of experiments to obtain experimentally obtained frequencies of ratios."""
 
     expected_params = set(['multi_params', 'perc_null', 'num_items', 'num_experiments',
-                           'max_sigpval', 'max_sigpval_super', 'max_super',
+                           'max_sigpval', 'max_sigpval_super', 'perc_super',
                            'num_sims'])
 
     def __init__(self, params, tic):
@@ -22,6 +22,7 @@ class ExperimentSet(object):
         self.max_sigpval = params['max_sigpval']
         self.num_null = int(round(float(params['perc_null'])*params['num_items']/100.0))
         self.expset = self._init_experiments(tic) # returns list of ManyHypothesesSims objects
+        # print "JJJJJJJJJJJJJJJJ ExperimentSet", self.params
 
     def get_means(self, key):
         """Return list of means for a item like fdr_actual, frr_actual."""
@@ -60,6 +61,8 @@ class ExperimentSet(object):
             experiment_params = {k:self.params[k] for k in shared_param_keys}
             experiment_params['num_null'] = self.num_null
             experiment_params['max_sigpval'] = self.max_sigpval
+            experiment_params['max_sigpval_super'] = self.params['max_sigpval_super']
+            experiment_params['perc_super'] = self.params['perc_super']
             # One ManyHypothesesSims is one experiment which can return one simulated FDR value
             expset.append(ManyHypothesesSims(experiment_params))
         return expset

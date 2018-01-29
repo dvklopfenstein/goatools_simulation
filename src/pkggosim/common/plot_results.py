@@ -159,7 +159,7 @@ def get_dftbl_boxplot(experimentsets, attr='fdr_actual', grp='FDR', desc='genes'
         # print("# HYPO", exps.params['num_items'], attr, grp, desc)
         tot_h = exps.params['num_items'] # Number of genes in study set
         # Make one dictionary line for each value of fdr_actual
-        dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr, desc)]
+        dcts = [{'xval':tot_h, 'yval':y, 'group':grp} for y in exps.get_means(attr)]
         tbl.extend(dcts)
     return tbl
 

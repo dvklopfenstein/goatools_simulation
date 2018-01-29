@@ -48,6 +48,7 @@ class ExperimentsAll(object):
         # assert set(self.params.keys()) == self.expected_params, \
         #     set(params.keys()).symmetric_difference(self.expected_params)
         self.expsets = []
+        # print "IIIIIIIIIIIIIIII ExperimentsAll", self.params
 
     @staticmethod
     def _init_params(params):
@@ -97,7 +98,7 @@ class ExperimentsAll(object):
         """Get the name of the png file for the tiled plot."""
         if img_pat is None:
             img_pat = self.desc_pat
-        print "PPPPPPPPPPP", self.params
+        # print "PPPPPPPPPPP", self.params
         return img_pat.format(
             P0=self.params['perc_nulls'][0],   # True Null %
             PN=self.params['perc_nulls'][-1],  # True Null %
@@ -130,15 +131,18 @@ class ExperimentsAll(object):
         assert not self.expsets
         sys.stdout.write("{TITLE}\n".format(TITLE=self.get_desc()))
         # Run all experiment sets
+        # print "iiiiiiiiiiiiiiii ExperimentsAll::_run_experiments", self.params
         for perc_null in self.params['perc_nulls']:   # Ex: [0, 5, 10, 20, 60, 80, 90, 95, 98, 100]
             for idx1, max_sigpval in enumerate(self.params['max_sigpvals']):  # Ex: [0.01, 0.03, 0.05]
                 for num_items in self.params['num_hypoths_list']:   # Ex: [20, 100, 500]
-                    max_sup = self.params['max_sigpval_super'][idx1] if 'max_sigpval_super' in self.params else None
+                    max_sup = self.params['max_sigpvals_super'][idx1] if 'max_sigpvals_super' in self.params else None
+                    # print "iiiiiiiiiiiiiiii ExperimentsAll::_run_experiments max_sup", max_sup
+                    # print "iiiiiiiiiiiiiiii ExperimentsAll::_run_experiments perc_super", self.params.get('perc_super', None)
                     exp_parms = {
                         'multi_params' : self.params['multi_params'],
                         'max_sigpval' : max_sigpval,
                         'max_sigpval_super' : max_sup,
-                        'max_super' : self.params.get('max_super', None),
+                        'perc_super' : self.params.get('perc_super', None),
                         'perc_null' : perc_null,
                         'num_items' : num_items,
                         'num_experiments' : self.params['num_experiments'],
