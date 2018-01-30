@@ -53,11 +53,11 @@ def main():
         ##holm',           #  3) Holm step-down method using Bonferroni adjustments  2:29:59
         #'simes-hochberg', #  4) Simes-Hochberg step-up method  (independent)        0:00:11
         'hommel',         #  5) Hommel closed method based on Simes tests (non-negative)
-        'fdr_bh',         #  6) FDR Benjamini/Hochberg  (non-negative)
         'fdr_by',         #  7) FDR Benjamini/Yekutieli (negative)
         'fdr_tsbh',       #  8) FDR 2-stage Benjamini-Hochberg (non-negative)
         'fdr_tsbky',      #  9) FDR 2-stage Benjamini-Krieger-Yekutieli (non-negative)
         'fdr_gbs',        # 10) FDR adaptive Gavrilov-Benjamini-Sarkar
+        'fdr_bh',         #  6) FDR Benjamini/Hochberg  (non-negative)
     ]
     #main(args, ntd.num_experiments, ntd.num_sims, ntd.dotsize)
     for method in methods:

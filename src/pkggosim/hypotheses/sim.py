@@ -26,7 +26,8 @@ class HypothesesSim(object):
 
     ntobj_pvaltype = cx.namedtuple(
         "NtMtAll", "num_pvals num_sig_actual ctr fdr_actual frr_actual "
-        "sensitivity specificity pos_pred_val neg_pred_val "
+        "sensitivity sensitivity_tgt "
+        "specificity pos_pred_val neg_pred_val "
         "num_correct num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
@@ -34,7 +35,7 @@ class HypothesesSim(object):
         self.alpha = multi_params['alpha']
         iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval, pval_surge)
         # List of info for each pval: pval pval_corr reject expsig tfpn
-        self.nts_pvalmt = iniobj.get_nts_pvals()
+        self.nts_pvalnt = iniobj.get_nts_pvals()
         self.pvals = np.array(iniobj.pvals)
         self.pvals_corr = np.array(iniobj.ntmult.pvals_corr)
         # One namedtuple summarizing results of this P-Value simulation
@@ -46,7 +47,7 @@ class HypothesesSim(object):
         """Print P-Values."""
         pat = "{I:3} {PVAL:6.4f}=pval {PVAL_CORR:6.4f}=corr {R:5}=reject {S:5}=sig {TF}\n"
         prt.write("{}\n".format(self.nt_tfpn))
-        for idx, ntpval in enumerate(self.nts_pvalmt):
+        for idx, ntpval in enumerate(self.nts_pvalnt):
             prt.write(pat.format(
                 I=idx, PVAL=ntpval.pval, PVAL_CORR=ntpval.pval_corr,
                 R=ntpval.reject, S=ntpval.expsig, TF=ntpval.tfpn))
@@ -89,21 +90,21 @@ class HypothesesSim(object):
         To obtain an actual FDR which can be compared to the expected FDR, multiple sets
         of P-Values must be generated with each set of P-Values corrected for multiple testing.
         """
-        ctr = cx.Counter([nt.tfpn for nt in self.nts_pvalmt]) # Counts of TP TN FP FN
+        ctr = cx.Counter([nt.tfpn for nt in self.nts_pvalnt]) # Counts of TP TN FP FN
         #pylint: disable=invalid-name
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         tot_errors = FP + FN # Count of Type I errors and Type II errors
         # tot_correct = TP + TN
         # Significant(Correct) or Type I Error (Not significant)
-        tot_sig_y = sum(nt.reject for nt in self.nts_pvalmt)
+        tot_sig_y = sum(nt.reject for nt in self.nts_pvalnt)
         assert tot_sig_y == TP + FP
         # Not Significant(Correct) or Type II Error (significant)
-        tot_sig_n = sum(not nt.reject for nt in self.nts_pvalmt)
+        tot_sig_n = sum(not nt.reject for nt in self.nts_pvalnt)
         assert tot_sig_n == TN + FN
-        num_pvals = len(self.nts_pvalmt)
+        num_pvals = len(self.nts_pvalnt)
         assert tot_sig_y + tot_sig_n == num_pvals
         return self.ntobj_pvaltype(
-            num_pvals      = len(self.nts_pvalmt),
+            num_pvals      = len(self.nts_pvalnt),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
@@ -112,6 +113,7 @@ class HypothesesSim(object):
             # SENSITIVITY & SPECIFICITY are not affected by prevalence
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
             sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
+            sensitivity_tgt= calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             # SPECIFICITY: "true negative rate"
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
@@ -135,18 +137,19 @@ class _Init(object):
     #   1. statsmodels multiple test results for each P-value
     _ntobj_mtsm = cx.namedtuple("NtMtStatmod", "reject pvals_corr alpha_sidak alpha_bonf")
     #   2. summarized results for each P-value
-    ntobj_mt = cx.namedtuple("NtMtPvals", "pval pval_corr reject expsig tfpn")
+    ntobj_mt = cx.namedtuple("NtMtPvals", "pval pval_corr reject expsig desc tfpn")
 
     def get_nts_pvals(self):
         """Combine data to return nts w/fields: pvals, pvals_corr, reject, expsig."""
         pvalsim_results = []
-        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig)
-        for pval_orig, pval_corr, reject, expsig in items:
+        items = zip(self.pvals, self.ntmult.pvals_corr, self.ntmult.reject, self.expsig, self.descs)
+        for pval_orig, pval_corr, reject, expsig, desc in items:
             pvalsim_results.append(self.ntobj_mt(
                 pval      = pval_orig,
                 pval_corr = pval_corr,
                 reject    = reject,
                 expsig    = expsig, # False->True Null; True->Non-true null
+                desc      = desc,   # bg tgt surge
                 tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
@@ -158,8 +161,8 @@ class _Init(object):
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
         self.expsig = None # List of bool/P-value. True->Pval intended to be signif. (Non-true null)
-        num_null_not = hypoth_qty - num_null
-        self._init_pvals(num_null_not, num_null, pval_surge)
+        self.descs = None  # bg (True Null), tgt (not true Null), surge (unusually low pvals)
+        self._init_pvals(num_null, hypoth_qty-num_null, pval_surge)
         assert len(self.pvals) == hypoth_qty
         assert hypoth_qty - sum(self.expsig) == num_null
         # II. P-VALUES CORRECTED BY MULTIPLE-TEST CORRECTION:
@@ -167,27 +170,27 @@ class _Init(object):
         self.ntmult = self._ntobj_mtsm._make(multipletests(self.pvals, **self.multi_params))
         #self._chk_reject()
 
-    def _init_pvals(self, num_ntnull, num_null, pval_surge):
+    def _init_pvals(self, num_null, num_ntnull, pval_surge):
         """Generate 2 sets of P-values: Not intended significant & intended to be significant."""
         # 1. Generate random P-values: Significant and Random
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance
         pos = self._get_notnulls(num_ntnull, pval_surge)
-        neg = [(p, False) for p in np.random.uniform(0, 1, size=num_null)]
+        neg = [(p, False, "bg") for p in np.random.uniform(0, 1, size=num_null)]
         pvals_expsig = pos + neg
         # 2. Extract "P-values" and "intended significance" by transposing data
-        self.pvals, self.expsig = zip(*pvals_expsig)
+        self.pvals, self.expsig, self.descs = zip(*pvals_expsig)
 
     def _get_notnulls(self, num_ntnull, pval_surge):
         """Generate Not-Null P-values: intended to be significant."""
         if pval_surge is None:
-            return [(p, True) for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)]
+            return [(p, True, 'tgt') for p in np.random.uniform(0, self.max_sigval, size=num_ntnull)]
         bg_num = num_ntnull - pval_surge['qty']
         # print "PVAL_SURGE", pval_surge
         lo_num = pval_surge['qty']
         lo_max = pval_surge['max_sigpval']
-        return [(p, True) for p in np.random.uniform(0, self.max_sigval, size=bg_num)] + \
-               [(p, True) for p in np.random.uniform(0, lo_max, size=lo_num)]
+        return [(p, True, 'tgt') for p in np.random.uniform(0, self.max_sigval, size=bg_num)] + \
+               [(p, True, 'surge') for p in np.random.uniform(0, lo_max, size=lo_num)]
 
     def _chk_reject(self):
         """Check that all values marked with reject==True, have pval_corr < alpha."""
