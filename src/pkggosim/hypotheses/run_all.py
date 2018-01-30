@@ -57,7 +57,7 @@ class ExperimentsAll(object):
             params['repo'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../..")
         return params
 
-    def run_all(self, rpt_items, dotsize=None):
+    def run_all(self, rpt_items, plts, dotsize=None):
         """Run Hypotheses Simulation using Benjamini/Hochberg FDR."""
         self._run_experiments()
         desc_str = self._get_fout_img()
@@ -74,7 +74,7 @@ class ExperimentsAll(object):
             self.prt_hms(prt, "Simulations Completed\n")
             #title = "{M} Hypotheses Simulations".format(M=self.method2name[self.method])
             title = "{M}".format(M=self.method2name[self.method])
-            for attrname in ['fdr_actual', 'sensitivity', 'specificity']:
+            for attrname in plts:  # ['fdr_actual', 'sensitivity', 'specificity']:
                 base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
                 fout_img = os.path.join(self.params['repo'], dir_loc, base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)

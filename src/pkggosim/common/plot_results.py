@@ -16,6 +16,7 @@ class PlotInfo(object):
     attr2grp = {
         'fdr_actual':'FDR',
         'sensitivity':'Sensitivity',
+        'sensitivity_tgt':'Sensitivity of Target',
         'specificity':'Specificity',
     }
 
@@ -47,6 +48,12 @@ class PlotInfo(object):
             'ylim':[-0.005, 0.09],
             'alphaline':True},
         'sensitivity':{
+            'plottype':'barplot',
+            'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
+            'yticklabels':["0.00", "0.25", "0.50", "0.75", "1.00"],
+            'ylim':[-0.05, 1.05],
+            'alphaline':False},
+        'sensitivity_tgt':{
             'plottype':'barplot',
             'yticks':[0.0, 0.25, 0.5, 0.75, 1.00],
             'yticklabels':["0.00", "0.25", "0.50", "0.75", "1.00"],

@@ -23,7 +23,8 @@ def run(args, ntd, method, max_sigpvals):
     rpt_items = ['fdr_actual', 'sensitivity', 'specificity', 'pos_pred_val', 'neg_pred_val']
     #obj.prt_params(sys.stdout)
     #obj.prt_num_sims(sys.stdout)
-    obj.run_all(rpt_items, ntd.dotsize)
+    plts = ['fdr_actual', 'sensitivity', 'specificity']
+    obj.run_all(rpt_items, plts, ntd.dotsize)
 
 
 def main():
