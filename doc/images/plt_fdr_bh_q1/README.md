@@ -1,4 +1,11 @@
 # Sensitivity of a target group given a highly enriched subset
+$ src/bin/plt_fdr_bh_q1.py e=-3
+```
+          72 Total sets
+       7,200 Total FDRs;     100 FDRs/set
+   7,200,000 Total sims;   1,000 sims/FDR
+```
+
 
 # Target is 100%
 No highly enriched subset    
