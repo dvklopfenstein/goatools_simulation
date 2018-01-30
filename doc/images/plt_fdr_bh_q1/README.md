@@ -1,5 +1,9 @@
 # Sensitivity of a target group given a highly enriched subset
 $ src/bin/plt_fdr_bh_q1.py e=-3
+                      0.01     0.03     0.05
+max_sigpvals_super = [0.00001, 0.00001, 0.00001]
+
+
 ```
           72 Total sets
        7,200 Total FDRs;     100 FDRs/set
