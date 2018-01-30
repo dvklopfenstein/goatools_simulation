@@ -46,11 +46,11 @@ def main():
     ]
     ntd = lst_experiment_cnts[args['idx_experiment_cnts']]
 
-    #                     0.01,  0.03,  0.05
-    max_sigpvals_super = [0.001, 0.003, 0.005]
-    perc_super = 50
+    #                     0.01,   0.03,   0.05
+    max_sigpvals_super = [0.00001, 0.00001, 0.00001]
 
-    run(args, ntd, max_sigpvals_super, perc_super)
+    for perc_super in [0, 25, 50, 75]:
+        run(args, ntd, max_sigpvals_super, perc_super)
 
 
 if __name__ == '__main__':

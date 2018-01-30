@@ -75,12 +75,19 @@ class ExperimentsAll(object):
             #title = "{M} Hypotheses Simulations".format(M=self.method2name[self.method])
             title = "{M}".format(M=self.method2name[self.method])
             for attrname in plts:  # ['fdr_actual', 'sensitivity', 'specificity']:
-                base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrname, DESC=desc_str)
+                attrdesc = self._get_attrdesc(attrname)
+                base_img = 'fig_hypoth_{DESC}_{ATTR}.png'.format(ATTR=attrdesc, DESC=desc_str)
                 fout_img = os.path.join(self.params['repo'], dir_loc, base_img)
                 self.plt_box_tiled(fout_img, attrname, dotsize=dotsize, title=title)
             self.prt_num_sims(sys.stdout)
             self.prt_hms(prt, "Reports and Plots Completed")
             sys.stdout.write("  WROTE: {LOG}\n".format(LOG=fout_log))
+
+    def _get_attrdesc(self, attrname):
+        """Get attribute name plus description (currently for sensitivity)."""
+        if attrname == 'sensitivity_tgt' and self.params['perc_super'] is not None:
+            return "{A}_p{P:03}".format(A=attrname, P=100-self.params['perc_super'])
+        return attrname
 
     def prt_num_sims(self, prt):
         """Returns the number of simulations run."""

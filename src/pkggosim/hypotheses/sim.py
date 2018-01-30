@@ -91,6 +91,7 @@ class HypothesesSim(object):
         of P-Values must be generated with each set of P-Values corrected for multiple testing.
         """
         ctr = cx.Counter([nt.tfpn for nt in self.nts_pvalnt]) # Counts of TP TN FP FN
+        ctr2 = cx.Counter([(nt.tfpn, nt.desc) for nt in self.nts_pvalnt])
         #pylint: disable=invalid-name
         TP, TN, FP, FN = [ctr[name] for name in ["TP", "TN", "FP", "FN"]]
         tot_errors = FP + FN # Count of Type I errors and Type II errors
@@ -103,6 +104,7 @@ class HypothesesSim(object):
         assert tot_sig_n == TN + FN
         num_pvals = len(self.nts_pvalnt)
         assert tot_sig_y + tot_sig_n == num_pvals
+        #print "FFFFFFFF", sens_tgt_tp
         return self.ntobj_pvaltype(
             num_pvals      = len(self.nts_pvalnt),
             num_sig_actual = tot_sig_y,
@@ -113,7 +115,7 @@ class HypothesesSim(object):
             # SENSITIVITY & SPECIFICITY are not affected by prevalence
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
             sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
-            sensitivity_tgt= calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
+            sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
             # SPECIFICITY: "true negative rate"
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
@@ -128,6 +130,13 @@ class HypothesesSim(object):
             perc_Type_I    = 100.0*ctr[1]/num_pvals,
             perc_Type_II   = 100.0*ctr[2]/num_pvals,
             perc_Type_I_II = 100.0*tot_errors/num_pvals)
+
+    @staticmethod
+    def _get_sensitivity_tgt(ctr):
+        """Get the senstivity for the target genes."""
+        tgt_tp = ctr[('TP', 'tgt')]
+        tgt_fn = ctr[('FN', 'tgt')]
+        return calc_ratio(tgt_tp, (tgt_tp, tgt_fn))
 
 class _Init(object):
     """Create random hypotheses test results(pvals), run multipletest correction."""
