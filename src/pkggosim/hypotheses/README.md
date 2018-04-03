@@ -29,4 +29,4 @@
   * [**utils.py**](utils.py)    
   * [**hypotheses_plot_results.py**](hypotheses_plot_results.py)    
 
-Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved
+Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved

@@ -42,4 +42,4 @@ The content ranged in percentage of targeted genes versus background genes (“T
 **Supplemental Figure 3**. GOATOOLS GOEAs stress tests with randomly shuffled associations pass for all cases if only 30 out of over 17k+ GO terms associated with more than 1000 genes are removed. The median number of genes per GO term in the mouse associations is 3 genes/GO. Genes per GO term range from 1 gene to ~7k genes per GO term. (mean=16 genes/GO, SD=128)
 ![rand pruner](images/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp.png)
 
-Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

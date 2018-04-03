@@ -199,4 +199,4 @@ drops.
   * [Stomp on Step One](http://www.stomponstep1.com/) for Sensitivity, Specificity, and more    
 
 
-Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

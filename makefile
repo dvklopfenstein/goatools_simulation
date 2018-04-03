@@ -222,12 +222,6 @@ vim_sim_hypotheses:
 	src/pkggosim/common/true_positive.py \
 	src/pkggosim/common/randseed.py
 
-vim_md:
-	vim -p \
-	README.md \
-	doc/md/README_prep.md \
-	doc/md/README_main.md
-
 getdata:
 	../goatools_suppl/src/bin/get_goids_by_section.py ../goatools_simulation/src/pkggosim
 
@@ -235,4 +229,4 @@ clean:
 	find src -name \*.pyc | xargs rm -f
 	rm -f python*.st*
 
-# Copyright (C) 2017, DV Klopfenstein. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein. All rights reserved.
