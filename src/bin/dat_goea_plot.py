@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Simulate Gene Ontology Enrichment Analyses."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 # import os
@@ -70,4 +70,4 @@ if __name__:
     main()
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -1,6 +1,6 @@
 """Holds the function which randomly shuffles a gene-to-ontolgies association."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -68,4 +68,4 @@ class RandAssc(object):
             if idx == self.num_goids:
                 idx = 0
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

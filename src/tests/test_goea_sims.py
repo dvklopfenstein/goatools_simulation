@@ -2,7 +2,7 @@
 """Simulate a Gene Ontology Enrichment Analysis (GOEA) on one set of study genes."""
 # TBD: REMOVE THIS TEST?
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -39,4 +39,4 @@ def main(prt=sys.stdout):
 if __name__ == '__main__':
     main()
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

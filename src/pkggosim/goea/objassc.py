@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -189,4 +189,4 @@ class DataAssc(object):
         gos_active = set([go for go, o in godag.items() if not o.is_obsolete]) # ~2,000 obsolete GOs
         return {g:gos.intersection(gos_active) for g, gos in assc.items()}
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

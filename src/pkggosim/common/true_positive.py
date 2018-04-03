@@ -1,6 +1,6 @@
 """Assigns: true positive, true negative, false positive, or false negative."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 
@@ -41,4 +41,4 @@ def calc_ratio(top, bot_ab):
     return float(top)/bottom
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

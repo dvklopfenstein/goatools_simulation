@@ -1,6 +1,6 @@
 """Runs all experiments for all sets of experiments."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -232,4 +232,4 @@ def get_floatstr(val):
         return mtch.group(1)
     raise RuntimeError("COULD NOT CONVERT float({F:f}) TO str".format(F=val))
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

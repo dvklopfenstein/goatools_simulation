@@ -1,6 +1,6 @@
 """Holds population genes and associations."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -104,4 +104,4 @@ class RunPrelim(object):
         return {'goea_results':goea_results, 'genes_sig':genes_rnd, 'genes_study':genes_study,
                 'assc_desc':assc_desc}
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

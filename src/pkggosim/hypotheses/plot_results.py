@@ -1,6 +1,6 @@
 """Simulate False discovery rate multiple test correction with Benjamini and Hochberg."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -117,4 +117,4 @@ def _set_xlabels(axes, maxsig, alpha):
     axes.set_xlabel(xlabel, size=15)
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.154
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.154

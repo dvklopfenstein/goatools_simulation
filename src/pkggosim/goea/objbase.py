@@ -1,6 +1,6 @@
 """Runs GOEA Simulations. Holds background data/params, like GO-DAG & alpha."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 from goatools.base import get_godag
@@ -42,4 +42,4 @@ class DataBase(object):
         prt.write("    Multitest Params: {INFO}\n".format(INFO=self.get_str_mcorr()))
         prt.write("    GO-DAG version:   {INFO}\n".format(INFO=self.go_dag.version))
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -1,6 +1,6 @@
 """Utilities for the GOEA Simulations."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import collections as cx
@@ -61,4 +61,4 @@ def import_mod(modulestr, log=None):
         log.write("  None   {MOD}\n".format(MOD=modulestr))
     return None
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

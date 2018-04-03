@@ -1,6 +1,6 @@
 """Runs a set of experiments to obtain a set of simulated FDR values."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -72,4 +72,4 @@ class ExperimentSet(object):
             qty = float(self.params['num_items'] - self.num_null)*self.params['perc_super']/100.00
             return {'qty': int(round(qty)), 'max_sigpval': self.params['max_sigpval_super']}
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

@@ -1,6 +1,6 @@
 """Runs all experiments for all sets of experiments."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -204,4 +204,4 @@ class ExperimentsAll(object):
         for experiment_set in self.expsets:
             experiment_set.prt_num_sims_w_errs(prt)
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

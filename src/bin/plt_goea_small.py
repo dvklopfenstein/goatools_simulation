@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Simulate small set of GOEAs to see full TP/FP/FN/TN gene GO counts."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -79,4 +79,4 @@ if __name__:
     RUN_ALL = False if len(sys.argv) != 1 and sys.argv[1] == 'False' else True
     main(RUN_ALL)
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

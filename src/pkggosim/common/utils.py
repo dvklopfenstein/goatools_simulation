@@ -1,6 +1,6 @@
 """Holds parameters used to create one set of experiments."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import timeit
@@ -12,4 +12,4 @@ def get_hms(tic):
     return str(datetime.timedelta(seconds=(timeit.default_timer()-tic)))
 
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

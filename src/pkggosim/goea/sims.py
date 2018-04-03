@@ -1,6 +1,6 @@
 """Objain one simulated FDR value by running many P-Value sims w/multiple-test correction."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -111,4 +111,4 @@ class ManyGoeaSims(object):
                         I=sim_num, MSG=self.get_summary_str(), HMS=get_hms(self.pobj.tic)))
         return sims
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.

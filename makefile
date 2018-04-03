@@ -17,6 +17,16 @@ run:
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,124
 
+# Reproduce all 5 simulation plots featured in the
+# GOATOOLS manuscript and supplemental material.
+# ETA: 100,000 GOEA simulations total take about ~37 hours, depending on your machine.
+run_ms:
+	make prop0
+	make prop1
+	make s0
+	make s1
+	make s2
+
 plt:
 	src/bin/dat_goea_plot.py \
 		title="GOEAs recovering Humoral Response (HR) genes" \

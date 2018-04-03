@@ -1,6 +1,6 @@
 """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
 
-__copyright__ = "Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -312,4 +312,4 @@ class _Init(object):
         log = self.pobj.params['log']
         log.write(txt.format(STU=num_study_genes, SIG=num_sig, EXP=num_exp, NULL=num_null, MRK=mrk))
 
-# Copyright (C) 2016-2017, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
