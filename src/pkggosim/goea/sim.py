@@ -5,10 +5,11 @@ __author__ = "DV Klopfenstein"
 
 import sys
 from collections import namedtuple, Counter
-from numpy.random import shuffle
 from goatools.go_enrichment import get_study_items
 from goatools.associations import get_b2aset
-from pkggosim.common.true_positive import get_tfpn, calc_ratio
+from pkggosim.common.true_positive import get_tfpn
+from pkggosim.common.true_positive import calc_ratio
+from pkggosim.common.true_positive import mk_stochastic_goeasim_source
 
 class GoeaSim(object):
     """Simulate a Gene Ontology Enrichment Analysis (GOEA) on a set of random study genes."""
@@ -153,7 +154,11 @@ class _Init(object):
     def __init__(self, num_study_genes, num_null, pobj):
         self.pobj = pobj # RunParams object
         # I. Genes in two groups: Different than population AND no different than population
-        self.gene_expsig_list = self._init_study_genes(num_study_genes, num_null) # [(gene, expsig),
+        self.gene_expsig_list = mk_stochastic_goeasim_source(
+            num_study_genes,
+            num_null,
+            pobj.gene_lists['study_bg'],
+            pobj.gene_lists['null_bg']) # [(gene, expsig),
         self.assc_geneid2gos = self._init_assc()
         self.goea_results = self._init_goea_results()
         # for g in self.goea_results:
@@ -282,24 +287,6 @@ class _Init(object):
                 assc_bg[gene] = assc_all_orig[gene].intersection(goids_study_bg)
             return assc_bg
         raise RuntimeError("UNEXPECTED ntn({})".format(ntn_num))
-
-    def _init_study_genes(self, num_study_genes, num_null):
-        """Generate 2 sets of genes: Not intended significant & intended to be significant."""
-        # Calculate the number of "Non-true null hypotheses":
-        #   Study genes found to be different than the population genes likely not by chance
-        num_ntnull = num_study_genes - num_null
-        # 1. Generate random genes: Significant and Random
-        #   True  -> gene is intended to be significant(different from the population)
-        #   False -> If gene is determined significant, it occured by chance
-        genes_pop_bg = self.pobj.gene_lists['null_bg']
-        genes_study_bg = self.pobj.gene_lists['study_bg']
-        shuffle(genes_pop_bg)
-        shuffle(genes_study_bg)
-        genes_ntn = [(g, True) for g in genes_study_bg[:num_ntnull]]
-        genes_tn = [(g, False) for g in genes_pop_bg[:num_null]]
-        assert len(genes_ntn) == num_ntnull
-        assert len(genes_tn) == num_null
-        return genes_ntn + genes_tn # gene_expsig_list
 
     def _wrlog_summary(self, num_study_genes, num_null):
         """Write GOEA summary."""
