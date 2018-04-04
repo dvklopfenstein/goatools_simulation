@@ -9,9 +9,9 @@ import os
 import sys
 import timeit
 import datetime
+from pkggosim.common.randseed import RandomSeed32
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
-from pkggosim.common.randseed import RandomSeed32
 from goatools.go_enrichment import get_study_items
 from goatools_alpha.gosubdag.gosubdag import GoSubDag
 

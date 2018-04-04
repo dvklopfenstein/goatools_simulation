@@ -4,6 +4,7 @@
 NTN = 2
 E = -3           # 20 x 20
 P = False        # Propagate Counts
+BIN = src/bin/plt_goea.py
 RUNALL = False
 
 # Max Sig P-values index for hypotheses simulations
@@ -32,6 +33,13 @@ plt:
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,124
 
+wr_stim:
+	make prop0 E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
+	make prop1 E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
+	make s0    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
+	make s1    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
+	make s2    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
+
 # make run E=-1
 # RUNALL False: Only 4 simulations will be run to create one P-value
 # RUNALL True  
@@ -46,31 +54,31 @@ run_small:
 #  of stochasticly chosen gene groups with gene group sizes ranging from 4 genes to 124 genes
 #  5:30 HMS
 prop0:
-	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # 13 hours
 prop1:
-	src/bin/plt_goea.py e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering HR genes; propagate_counts=True" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # Supplemental Figures: Compare Humoral Response gene recovery over a wide range
 # 5 hours FAIL
 s0:
-	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_ntn$(NTN) \
+	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_ntn$(NTN) \
 		title="Viewing both over/under-represented enrichments" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # 7 hours
 s1:
-	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN) \
 		title="Stress Tests: Random Annotations; View Enriched" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 s2:
-	src/bin/plt_goea.py e=$(E) propcnts=False randomize_truenull_assc=rand_pruned_ntn$(NTN) \
+	$src/bin/wr_goeasim_stimulus.py(BIN) e=$(E) propcnts=False randomize_truenull_assc=rand_pruned_ntn$(NTN) \
 		title="Stress Tests: Random Annotations; Pruned" \
 		genes=4,8,16,20,48,64,80,96,112,124
 

@@ -9,9 +9,7 @@ import sys
 import collections as cx
 import timeit
 import numpy as np
-from pkggosim.common.randseed import RandomSeed32
 from pkggosim.hypotheses.experiments import ExperimentSet
-#### from pkggosim.hypotheses.plot_results import plt_box_all
 from pkggosim.hypotheses.plot_results import plt_box_tiled
 from pkggosim.common.utils import get_hms
 from goatools.statsdescribe import StatsDescribe
@@ -42,7 +40,6 @@ class ExperimentsAll(object):
 
     def __init__(self, params):
         self.tic = timeit.default_timer()
-        self.seed = RandomSeed32(params.get('seed', None))
         self.params = self._init_params(params)
         self.method = self.params['multi_params']['method']
         # assert set(self.params.keys()) == self.expected_params, \
@@ -68,7 +65,7 @@ class ExperimentsAll(object):
             self.prt_hms(prt, "Simulations Completed\n")
             self.prt_params(prt)
             self.prt_num_sims(prt)
-            self.seed.prt(prt)
+            self.params.objrnd.prt(prt)
             self.prt_experiments_means(prt, rpt_items)
             self.prt_experiments_stats(prt, rpt_items)
             self.prt_hms(prt, "Simulations Completed\n")
