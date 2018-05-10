@@ -50,8 +50,9 @@ class GoeaSim(object):
         #pylint: disable=invalid-name, bad-whitespace
         #              reject ->| False         | True
         #
-        #                       |Declared       | Declared      |
-        #                       |non-significant| significant   | Total
+        #                       |Failed         |               |
+        #                       |to declare     | Declared      |
+        #                       |significant    | significant   | Total
         # ----------------------+---------------+---------------+--------
         # True  null hypotheses | U TN          | V FP (Type I) |   m(0)
         # False null hypotheses | T FN (Type II)| S TP          | m - m(0)
@@ -77,7 +78,7 @@ class GoeaSim(object):
             # SPECIFICITY: "true negative rate"
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
-            pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
+            pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP) precision
             neg_pred_val   = calc_ratio(TN, (TN, FN))) # TN/(TN+FN)
 
     def rpt_details(self, prt=sys.stdout):
