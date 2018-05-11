@@ -163,7 +163,7 @@ class _Init(object):
         return pvalsim_results
 
     def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge):
-        self.multi_params = multi_params
+        self.multi_params = multi_params  # {'alpha': 0.05, 'method': 'fdr_bh'}
         # I. UNCORRECTED P-VALUES:
         self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 0.03 or 0.01
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(

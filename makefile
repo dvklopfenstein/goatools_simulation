@@ -226,7 +226,6 @@ vim_presim_geneontology:
 vim_sim_hypotheses:
 	vim -p \
 	src/bin/plt_benjamini_hochberg.py \
-	src/bin/sim_fdr_benjamini_hochberg.py \
 	src/pkggosim/hypotheses/sim.py \
 	src/pkggosim/hypotheses/sims.py \
 	src/pkggosim/hypotheses/experiments.py \
