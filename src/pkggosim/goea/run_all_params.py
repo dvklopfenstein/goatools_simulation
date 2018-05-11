@@ -10,6 +10,7 @@ import sys
 import timeit
 import datetime
 from pkggosim.common.randseed import RandomSeed32
+from pkggosim.goea.basename import Basename
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from goatools.go_enrichment import get_study_items
@@ -45,6 +46,7 @@ class RunParams(object):
         self.params = self._init_params(params)
         print("TITLE({T})".format(T=self.params['title']))
         self.objrnd = RandomSeed32(params['seed'])
+        self.bname = Basename()
         # PROPAGATE_COUNTS HANDLED IN objassc, NOT REDONE FOR EACH AND EVERY SIMULATION
         # self.objbase = DataBase(params['alpha'], params['method'], params['propagate_counts'])
         self.objbase = DataBase(params['alpha'], params['method'], False)
@@ -68,6 +70,21 @@ class RunParams(object):
         # Targeted GOs: Sig. GO IDs minus the GO IDs used to choose our background genes
         _gos_targeted = self._init_get_goids_tgtd()
         self.objassc.set_targeted(_gos_targeted)
+
+    def get_fouts(self, simname):
+        """Return output filenames for the logfile and plot file(s)."""
+        # fout_log, base_img_genes, base_img_goids = self.bname.get_fouts(simname, self.pobj.params)
+        ret = self.bname.get_fouts(simname, self.params)
+        for fout in ret:
+            print("BBBBBBBBBBBBBBBBBB get_fouts", fout)
+        return ret  # fout_log, base_img_genes, base_img_goids
+
+    def get_desc_str(self):
+        """Get the name of the plot file for the tiled plot."""
+        #### B=self.bname.get_desc_str(self.pobj.params),
+        ret = self.bname.get_desc_str(self.params)
+        print("BBBBBBBBBBBBBBBBBB get_desc_str", ret)
+        return ret
 
     def _init_ntn(self):
         """Initialize param ntn with a digit or None."""

@@ -7,8 +7,9 @@ __author__ = "DV Klopfenstein"
 
 import os
 import re
-#### import importlib
-#### from pkggosim.goea.plot_results import plt_box_tiled
+import importlib
+from pkggosim.goea.plot_results import plt1_fig_tiled
+# from pkggosim.goea.run_all import plt_box_tiled
 # import sys
 
 class Basename(object):
@@ -32,17 +33,18 @@ class Basename(object):
     def __init__(self):
         pass
 
-    #### def plt_mod(self, dirloc, modulestr, plt_items, pltargs):
-    ####     """Plot one set of experiments."""
-    ####     genes_goids = modulestr[-5:]
-    ####     assert genes_goids in set(['genes', 'goids'])
-    ####     assert modulestr[:14] == 'pkggosim.data.'
-    ####     base_img_rel = "{DIRLOC}/{BASE}.img".format(DIRLOC=dirloc, BASE=modulestr[14:])
-    ####     base_img_abs = os.path.join(self.repo, base_img_rel)
-    ####     kws = pltargs.copy()
-    ####     kws['dotsize'] = self._get_dotsize(modulestr)
-    ####     key2exps = importlib.import_module(modulestr).percnull2expsets
-    ####     plt_box_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
+    def plt_mod(self, dirloc, modulestr, plt_items, pltargs):
+        """Plot one set of experiments."""
+        genes_goids = modulestr[-5:]
+        assert genes_goids in set(['genes', 'goids'])
+        assert modulestr[:14] == 'pkggosim.data.'
+        base_img_rel = "{DIRLOC}/{BASE}.img".format(DIRLOC=dirloc, BASE=modulestr[14:])
+        base_img_abs = os.path.join(self.repo, base_img_rel)
+        kws = pltargs.copy()
+        kws['dotsize'] = self._get_dotsize(modulestr)
+        key2exps = importlib.import_module(modulestr).percnull2expsets
+        #plt_box_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
+        plt1_fig_tiled(base_img_abs, key2exps, plt_items, genes_goids, **kws)
 
     def _get_dotsize(self, modulestr):
         """Return tuple containing NEXP and NSIM."""

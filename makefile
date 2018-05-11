@@ -1,11 +1,16 @@
 # Gene Ontology Enrichment Analyses Simulations
 
-# Method index for Hypotheses Simulations
-NTN = 2
-E = -3           # 20 x 20
+# SIM_IDX is an index for choosing sim params which control
+# how long the simulation runs and how much data is simulated.
+#   * SIM_IDX=-3: Used to create GOATOOLS Manuscript figures 
+#   * SIM_IDX=-1: Used to test operations using short versions of the simulation
+SIM_IDX = -3           # 20 x 20
 P = False        # Propagate Counts
 BIN = src/bin/plt_goea.py
 RUNALL = False
+
+# Method index for Hypotheses Simulations
+NTN = 2
 
 # Max Sig P-values index for hypotheses simulations
 P = 0
@@ -33,14 +38,7 @@ plt:
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,124
 
-wr_stim:
-	make prop0 E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
-	make prop1 E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
-	make s0    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
-	make s1    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
-	make s2    E=$(E) BIN=src/bin/wr_goeasim_stimulus.py
-
-# make run E=-1
+# make run SIM_IDX=-1
 # RUNALL False: Only 4 simulations will be run to create one P-value
 # RUNALL True  
 run_small:
@@ -54,31 +52,31 @@ run_small:
 #  of stochasticly chosen gene groups with gene group sizes ranging from 4 genes to 124 genes
 #  5:30 HMS
 prop0:
-	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(SIM_IDX) propcnts=False randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering Humoral Response (HR) genes" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # 13 hours
 prop1:
-	$(BIN) e=$(E) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(SIM_IDX) propcnts=True randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN) \
 		title="GOEAs recovering HR genes; propagate_counts=True" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # Supplemental Figures: Compare Humoral Response gene recovery over a wide range
 # 5 hours FAIL
 s0:
-	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=orig_noprune_ntn$(NTN) \
+	$(BIN) e=$(SIM_IDX) propcnts=False randomize_truenull_assc=orig_noprune_ntn$(NTN) \
 		title="Viewing both over/under-represented enrichments" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 # 7 hours
 s1:
-	$(BIN) e=$(E) propcnts=False randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN) \
+	$(BIN) e=$(SIM_IDX) propcnts=False randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN) \
 		title="Stress Tests: Random Annotations; View Enriched" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
 s2:
-	$src/bin/wr_goeasim_stimulus.py(BIN) e=$(E) propcnts=False randomize_truenull_assc=rand_pruned_ntn$(NTN) \
+	$src/bin/wr_goeasim_stimulus.py(BIN) e=$(SIM_IDX) propcnts=False randomize_truenull_assc=rand_pruned_ntn$(NTN) \
 		title="Stress Tests: Random Annotations; Pruned" \
 		genes=4,8,16,20,48,64,80,96,112,124
 
@@ -89,56 +87,56 @@ run_smalls:
 	src/bin/plt_goea_small.py propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2 0xdeadbeef
 
 run_hypo:
-	src/bin/plt_benjamini_hochberg.py e=$(E) p=$(P)
+	src/bin/plt_benjamini_hochberg.py e=$(SIM_IDX) p=$(P)
 
-# make run_goeas_ntn P=True E=-1    # Fast sim
+# make run_goeas_ntn P=True SIM_IDX=-1    # Fast sim
 # make run_goeas_ntn P=True         # Full sim
 run_goeas_ntn:
-	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn$(NTN)
-	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn$(NTN)
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN)
-	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN)
-	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn$(NTN)
-	#src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn$(NTN)
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn$(NTN)
+	#src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn$(NTN)
 
 
 run_goeas_orig_enriched:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_enriched_ntn1
 
 run_goeas_rand_enriched:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_ntn1
 
 
 run_goeas_orig_pruned:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_pruned_ntn1
 
 run_goeas_rand_pruned:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_pruned_ntn1
 
 
 run_goeas_orig_noprune:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=orig_noprune_ntn1
 
 run_goeas_rand_noprune:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn3
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn2
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn1
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn3
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn2
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_ntn1
 
 
 run_rand_all:
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_all
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_pruned_all
-	src/bin/plt_goea.py e=$(E) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_all
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_all
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_pruned_all
+	src/bin/plt_goea.py e=$(SIM_IDX) propcnts=$(P) randomize_truenull_assc=rand_noprune_enriched_all
 
 
 cp_goea:
@@ -198,6 +196,14 @@ vim_fig:
 	src/pkggosim/goea/assc_shuffle.py \
 	src/pkggosim/goea/objbase.py \
 	src/pkggosim/common/true_positive.py
+
+# TBD: Update and run
+vim_dat_goea_plot:
+	vim -p \
+	src/bin/dat_goea_plot.py \
+	./src/pkggosim/goea/basename.py \
+	./src/pkggosim/goea/run_all.py \
+	./src/pkggosim/goea/plot_results.py
 
 vim_presim_geneontology:
 	vim -p \
