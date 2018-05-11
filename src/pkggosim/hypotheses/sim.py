@@ -31,9 +31,9 @@ class HypothesesSim(object):
         "num_correct num_Type_I num_Type_II num_Type_I_II "
         "perc_correct perc_Type_I perc_Type_II perc_Type_I_II")
 
-    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge, **kws):
         self.alpha = multi_params['alpha']
-        iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval, pval_surge)
+        iniobj = _Init(hypoth_qty, num_null, multi_params, max_sigval, pval_surge, **kws)
         # List of info for each pval: pval pval_corr reject expsig tfpn
         self.nts_pvalnt = iniobj.get_nts_pvals()
         self.pvals = np.array(iniobj.pvals)
@@ -162,10 +162,11 @@ class _Init(object):
                 tfpn      = get_tfpn(reject, expsig))) # Ex: TP, TN, FP, or FN
         return pvalsim_results
 
-    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge):
+    def __init__(self, hypoth_qty, num_null, multi_params, max_sigval, pval_surge, **kws):
         self.multi_params = multi_params  # {'alpha': 0.05, 'method': 'fdr_bh'}
         # I. UNCORRECTED P-VALUES:
         self.max_sigval = max_sigval # Max P-Val for non-true null hypotheses. Ex: 0.05 0.03 or 0.01
+        self.max_nullval = kws.get('max_nullval', 1.0)
         assert isinstance(self.max_sigval, float), "INVALID MAX P-VALUE({V})".format(
             V=self.max_sigval)
         self.pvals = None  # List of randomly-generated uncorrected P-values
@@ -185,7 +186,7 @@ class _Init(object):
         #   True  -> P-value is intended to be significant
         #   False -> If P-value is significant, it occured by chance
         pos = self._get_notnulls(num_ntnull, pval_surge)
-        neg = [(p, False, "bg") for p in np.random.uniform(0, 1, size=num_null)]
+        neg = [(p, False, "bg") for p in np.random.uniform(0, self.max_nullval, size=num_null)]
         pvals_expsig = pos + neg
         # 2. Extract "P-values" and "intended significance" by transposing data
         self.pvals, self.expsig, self.descs = zip(*pvals_expsig)

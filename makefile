@@ -178,6 +178,11 @@ cp_figs_goea:
 pylint:
 	find src -name \*.py | grep -v pkggosim.data | xargs pylint -r no
 
+vim_sim_one_hypothesis:
+	vim -p \
+	src/bin/sim_one_hypothesis.py \
+	src/pkggosim/hypotheses/sim.py
+
 # src/bin/plt_goea_small.py 
 vim_fig:
 	vim -p \
