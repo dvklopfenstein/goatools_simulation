@@ -17,7 +17,8 @@ class ManyHypothesesSims(object):
 
     def __init__(self, params):
         self.params = params
-        assert set(params.keys()) == self.expected_params
+        assert set(params.keys()) == self.expected_params, \
+            set(params.keys()).symmetric_difference(self.expected_params)
         # Data members
         hypothsimobjs = self._init_hypothsimobjs() # List of N=num_sims HypothesesSim objects
         self.nts_tfpn = [o.nt_tfpn for o in hypothsimobjs]
