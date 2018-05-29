@@ -178,6 +178,11 @@ cp_figs_goea:
 pylint:
 	find src -name \*.py | grep -v pkggosim.data | xargs pylint -r no
 
+lint:
+	git status -uno | perl -ne 'if (/(\S+.py)/) {printf "echo $$1\npylint -r no %s\n", $$1}' | tee tmp_pylint
+	chmod 755 tmp_pylint
+	tmp_pylint
+
 vim_sim_one_hypothesis:
 	vim -p \
 	src/bin/sim_one_hypothesis.py \

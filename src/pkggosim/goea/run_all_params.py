@@ -13,7 +13,7 @@ from pkggosim.common.randseed import RandomSeed32
 from pkggosim.goea.basename import Basename
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
-from goatools.go_enrichment import get_study_items
+from goatools.goea.goea_nt_xfrm import get_study_items
 from goatools_alpha.gosubdag.gosubdag import GoSubDag
 
 class RunParams(object):

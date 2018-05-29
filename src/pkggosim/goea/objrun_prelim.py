@@ -7,7 +7,7 @@ import sys
 import collections as cx
 import datetime
 from numpy.random import shuffle
-from goatools.go_enrichment import get_study_items
+from goatools.goea.goea_nt_xfrm import get_study_items
 from pkggosim.goea.assc_shuffle import RandAssc
 
 
