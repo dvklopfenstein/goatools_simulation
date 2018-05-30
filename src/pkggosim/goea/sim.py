@@ -5,7 +5,7 @@ __author__ = "DV Klopfenstein"
 
 import sys
 from collections import namedtuple, Counter
-from goatools.goea.goea_nt_xfrm import get_study_items
+from goatools.rpt.goea_nt_xfrm import get_study_items
 from goatools.associations import get_b2aset
 from pkggosim.common.true_positive import get_tfpn
 from pkggosim.common.true_positive import calc_ratio
