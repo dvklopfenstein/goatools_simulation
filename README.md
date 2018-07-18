@@ -6,11 +6,12 @@ for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
   * [Re-Creating the stochastic simulations](#re-creating-the-stochastic-simulations)
   * **Figures** in manuscript:
-    * [**Initial failing simulations**](initial-failing-simulations)
-    * [**Typical simulations**](#typical-simulations)
-    * **Exploratory simulations**: Stress tests with stochastically associations shuffled stochastically:
-       * [**Enriched-only viewed**](#enriched-only-viewed)
-       * [**30 Broad GO terms removed**](#30-broad-go-terms-removed)
+    * [**Manuscript Figures**](#manuscript-figures)
+    * [**Supplemental Figures**](#supplemental-figures)
+      * [**Initial failing simulations**](initial-failing-simulations)
+      * **Exploratory simulations**: Stress tests with stochastically associations shuffled stochastically:
+         * [**Enriched-only viewed**](#enriched-only-viewed)
+         * [**30 Broad GO terms removed**](#30-broad-go-terms-removed)
 
 ## Details
 
@@ -25,7 +26,16 @@ and run this make target from the command line:
   $ make run\_ms
 ```
 
-### Figures
+### Manuscript Figures
+
+**Results for 40,000 GOATOOLS GOEA stochastic simulations with
+varying sensitivity and consistently high specificity.**
+GOEAs performed well on study groups of 8+ genes if the
+GOATOOLS GOEA option propagate\_counts set to True.
+
+![fig3](/doc/images/ms/fig3_genes.png)
+
+### Supplemental Figures
 
 #### Initial failing simulations
 **The first GOATOOLS GOEA simulations fail in panels A3 and A4
@@ -36,12 +46,7 @@ GO terms annotated with large numbers of gene products.
 For mouse annotations in the _biological_process_ branch,
 GO terms annotated with 1,000 or more genes were the source of failures.
 
-#### Typical simulations
-**Results for 40,000 GOATOOLS GOEA stochastic simulations with
-varying sensitivity and consistently high specificity.**
-GOEAs performed well on study groups of 8+ genes if the
-GOATOOLS GOEA option propagate\_counts set to True.
-![fig3](/doc/images/ms/fig3_genes.png)
+![suppfig1](/doc/images/ms/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
 
 #### Enriched-only viewed
 **GOATOOLS GOEAs stress tests with randomly shuffled associations
@@ -49,6 +54,8 @@ nearly pass if only enriched GO terms are viewed.**
 The associations are randomly shuffled while still maintaining the distribution
 number of GO terms per gene. The failing FDRs (above 0.05) are seen in panels A2
 and A3 for gene groups having 96, 112, or 124 genes.
+
+![suppfig2](/doc/images/ms/fig_goea_rand_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
 
 #### 30 Broad GO terms removed
 **GOATOOLS GOEAs stress tests with randomly shuffled associations pass for all
@@ -58,9 +65,7 @@ The median number of genes per GO term in the mouse associations is 3 genes/GO.
 Genes per GO term ranges from 1 gene to ~7k genes per GO term. (mean=16
 genes/GO, SD=128).
 
-![suppfig1](/doc/logs/fig_goea_orig_noprune_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
-![suppfig2](/doc/logs/fig_goea_rand_noprune_enriched_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
-![suppfig3](/doc/logs/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
+![suppfig3](/doc/images/ms/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
 
 
 Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
