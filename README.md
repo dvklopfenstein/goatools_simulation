@@ -14,7 +14,7 @@ _Please cite the preceeding paper if you mention the stochastic GOEA simulations
 
 ## Table of Contents
 
-  * [Re-Creating the stochastic simulations](#re-creating-the-stochastic-simulations)
+  * [**Re-Creating the stochastic simulations**](#re-creating-the-stochastic-simulations)
   * **Figures** in manuscript:
     * [**Manuscript Figures**](#manuscript-figures)
     * [**Supplemental Figures**](#supplemental-figures)
