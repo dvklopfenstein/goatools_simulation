@@ -58,4 +58,12 @@ The median number of genes per GO term in the mouse associations is 3 genes/GO.
 Genes per GO term ranges from 1 gene to ~7k genes per GO term. (mean=16
 genes/GO, SD=128).
 
+![fig1](/doc/md/images/fig1b_FAIL_goea_orig_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1](/doc/md/images/fig1Rb_FAIL_goea_rand_noprune_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1](/doc/md/images/fig2b_PASS_goea_orig_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1](/doc/md/images/fig3b_PASS_goea_orig_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1](/doc/md/images/fig4b_FAIL_goea_rand_noprune_enriched_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+![fig1](/doc/md/images/fig5b_PASS_goea_rand_pruned_ntn2_100to000_004to124_N00020_00020_humoral_rsp.png)
+
+
 Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
