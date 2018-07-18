@@ -14,7 +14,7 @@ _Please cite the preceeding paper if you mention the stochastic simulations in t
 
 ## Table of Contents
 
-  * [**Re-Creating the stochastic simulations**](#re-creating-the-stochastic-simulations)
+  * [**Recreating the stochastic simulations**](#recreating-the-stochastic-simulations)
   * **Figures** in manuscript:
     * [**Manuscript Figures**](#manuscript-figures)
     * [**Supplemental Figures**](#supplemental-figures)
@@ -25,7 +25,7 @@ _Please cite the preceeding paper if you mention the stochastic simulations in t
 
 ## Details
 
-### Re-Creating the stochastic simulations
+### Recreating the stochastic simulations
 To recreate all five of our stochastic GOEA simulation plots
 (for a total of 100,000 total stochastic simulations) 
 featured in the GOATOOLS manuscript and supplemental data, clone the repository, 
