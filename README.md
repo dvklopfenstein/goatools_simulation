@@ -4,6 +4,10 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (G
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
+These simulations are described in the research paper.
+
+## Table of Contents
+
   * [Re-Creating the stochastic simulations](#re-creating-the-stochastic-simulations)
   * **Figures** in manuscript:
     * [**Manuscript Figures**](#manuscript-figures)
