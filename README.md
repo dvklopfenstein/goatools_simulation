@@ -17,8 +17,7 @@ _Scientific reports_ | (2018) 8:10872 | DOI:10.1038/s41598-018-28948-z
   4. As study size increases, sensitivity improves (e.g., better sensitivity, fewer False Negatives)
   5. As the percentage of 'actually significant genes' rises in the study set, so does sensitivity
   6. Using a version of propagate counts greatly improves sensitivity    
-  7. Remove selected highly annotated GO terms _prior_ to running a GOEA
-  8. Select highly annotated GO terms using:
+  7. Remove selected highly annotated GO terms _prior_ to running a GOEA using these criteria:
      * **Highly annotated GO terms** (e.g., top 1%). Example in human: remove GOs assc. w/thousands of genes
      * **low depth** (near the top)
      * **high descendant count**
