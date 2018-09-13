@@ -1,16 +1,28 @@
 # Stochastic GOEA Simulations
 
-Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)
+Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)    
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
 ## Further Description
-These simulations are described in detail in the research paper:
+_Please cite the following paper if you mention the stochastic simulations in this repo in your research_
 
 Klopfenstein, D.V. et al. [GOATOOLS: A Python library for Gene Ontology analyses](https://www.nature.com/articles/s41598-018-28948-z)    
 _Scientific reports_ | (2018) 8:10872 | DOI:10.1038/s41598-018-28948-z
 
-_Please cite the preceeding paper if you mention the stochastic simulations in this repo in your research_
+### Conclusions from simulations
+  1. GO terms associated with huge numbers (thousands, in human) of genes cause FDR failures
+  2. Removing even just 30 of the 17,000+ (human) GOs which are highly annotated causes good passing FDRs
+  3. A study size of 4 genes in a GOEA will likely return an unacceptable amount of misses (False Negative)
+  4. As study size increases, sensitivity improves (e.g., better sensitivity, fewer False Negatives)
+  5. As the percentage of 'actually significant genes' rises in the study set, so does sensitivity
+  6. Using a version of propagate counts greatly improves sensitivity greatly
+  7. Remove selected highly annotated GO terms _prior_ to running a GOEA
+  8. Select highly annotated GO terms using:
+     * Large (top 1%) of highly annotated GO terms. Example: thousands of genes, in human
+     * low depth
+     * high descendant count
+
 
 ## Table of Contents
 
