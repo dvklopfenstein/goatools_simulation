@@ -4,24 +4,24 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (G
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
-## Further Description
+## To Cite
 _Please cite the following paper if you mention the stochastic simulations in this repo in your research_
 
-Klopfenstein, D.V. et al. [GOATOOLS: A Python library for Gene Ontology analyses](https://www.nature.com/articles/s41598-018-28948-z)    
+Klopfenstein DV, Zhang L, Pedersen BS, ... Tang H [GOATOOLS: A Python library for Gene Ontology analyses](https://www.nature.com/articles/s41598-018-28948-z)    
 _Scientific reports_ | (2018) 8:10872 | DOI:10.1038/s41598-018-28948-z
 
-### Conclusions from simulations
+### Conclusions from Stochastic GOEA Simulations
   1. GO terms associated with huge numbers (thousands, in human) of genes cause FDR failures
   2. Removing even just 30 of the 17,000+ (human) GOs which are highly annotated causes good passing FDRs
   3. A study size of 4 genes in a GOEA will likely return an unacceptable amount of misses (False Negative)
   4. As study size increases, sensitivity improves (e.g., better sensitivity, fewer False Negatives)
   5. As the percentage of 'actually significant genes' rises in the study set, so does sensitivity
-  6. Using a version of propagate counts greatly improves sensitivity greatly
+  6. Using a version of propagate counts greatly improves sensitivity    
   7. Remove selected highly annotated GO terms _prior_ to running a GOEA
   8. Select highly annotated GO terms using:
-     * Large (top 1%) of highly annotated GO terms. Example: thousands of genes, in human
-     * low depth
-     * high descendant count
+     * **Highly annotated GO terms** (e.g., top 1%). Example in human: remove GOs assc. w/thousands of genes
+     * **low depth** (near the top)
+     * **high descendant count**
 
 
 ## Table of Contents
