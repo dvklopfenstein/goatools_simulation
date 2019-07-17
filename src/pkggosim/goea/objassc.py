@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 
-__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2019, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import sys
@@ -15,8 +15,8 @@ from goatools.associations import get_gaf_hdr
 from goatools.associations import get_b2aset
 from goatools.associations import get_assc_pruned
 from PyBiocode.Utils.stats import prt_percentiles
-from goatools_alpha.gosubdag.gosubdag import GoSubDag
-from goatools_alpha.gosubdag.go_tasks import update_association
+from goatools.gosubdag.gosubdag import GoSubDag
+from goatools.gosubdag.go_tasks import update_association
 
 #pylint: disable=too-many-instance-attributes
 class DataAssc(object):
@@ -189,4 +189,4 @@ class DataAssc(object):
         gos_active = set([go for go, o in godag.items() if not o.is_obsolete]) # ~2,000 obsolete GOs
         return {g:gos.intersection(gos_active) for g, gos in assc.items()}
 
-# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2019, DV Klopfenstein, Haibao Tang. All rights reserved.

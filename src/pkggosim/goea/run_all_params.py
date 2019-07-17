@@ -2,7 +2,7 @@
 
 from __future__ import print_function
 
-__copyright__ = "Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved."
+__copyright__ = "Copyright (C) 2016-2019, DV Klopfenstein, Haibao Tang. All rights reserved."
 __author__ = "DV Klopfenstein"
 
 import os
@@ -14,7 +14,7 @@ from pkggosim.goea.basename import Basename
 from pkggosim.goea.objbase import DataBase
 from pkggosim.goea.objassc import DataAssc
 from goatools.rpt.goea_nt_xfrm import get_study_items
-from goatools_alpha.gosubdag.gosubdag import GoSubDag
+from goatools.gosubdag.gosubdag import GoSubDag
 
 class RunParams(object):
     """Runs all experiments for all sets of experiments."""
@@ -263,4 +263,4 @@ class RunParams(object):
         assert params_sim['goids_study_bg']
         return params_sim
 
-# Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
+# Copyright (C) 2016-2019, DV Klopfenstein, Haibao Tang. All rights reserved.
