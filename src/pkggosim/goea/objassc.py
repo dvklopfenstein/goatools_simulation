@@ -16,7 +16,7 @@ from goatools.associations import get_b2aset
 from goatools.associations import get_assc_pruned
 from PyBiocode.Utils.stats import prt_percentiles
 from goatools.gosubdag.gosubdag import GoSubDag
-from goatools.gosubdag.go_tasks import update_association
+from goatools.anno.update_association import update_association
 
 #pylint: disable=too-many-instance-attributes
 class DataAssc(object):
