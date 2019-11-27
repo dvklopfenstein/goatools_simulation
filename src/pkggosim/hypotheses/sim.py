@@ -116,7 +116,7 @@ class HypothesesSim(object):
             # SENSITIVITY: "true positive rate", recall, "probability of detection"
             sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
-            # SPECIFICITY: "true negative rate"
+            # SPECIFICITY: "true negative rate", precision
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "Positive predictive value" and "Negative predictive value" are affected by prevalence
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
