@@ -105,10 +105,13 @@ class HypothesesSim(object):
         num_pvals = len(self.nts_pvalnt)
         assert tot_sig_y + tot_sig_n == num_pvals
         #print "FFFFFFFF", sens_tgt_tp
+        # https://www.thecalculator.co/health/False-Positive-Rate-Calculator-1084.html
+        # https://academic.oup.com/bjaed/article/8/6/221/406440
         return self.ntobj_pvaltype(
             num_pvals      = len(self.nts_pvalnt),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
+            # Prevalence  = 100*(TP+FN)/(TP+TN+TP+FN) 
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
             fdr_actual     = calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
             frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
@@ -118,10 +121,25 @@ class HypothesesSim(object):
             sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
             # SPECIFICITY: "true negative rate", precision
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
-            # "Positive predictive value" and "Negative predictive value" are affected by prevalence
+            # "positive predictive value" and "negative predictive value" are affected by prevalence
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
             neg_pred_val   = calc_ratio(TN, (TN, FN)), # TN/(TN+FN)
+            # "false positive rate"
+            false_pos_rate = calc_ratio(FP, (TN, FP)),
+            # "false negative rate"
+            false_neg_rate = calc_ratio(FN, (TP, FN)),
 
+            # TABLE 1) Number of errors committed when testing m null hypotheses
+            # 1995; Yoav Benjamini and Yosef Hochberg:
+            #
+            #                           reject ->| False         | True
+            #
+            #                                    |Declared       | Declared      |
+            #                                    |non-significant| significant   | Total
+            #          --------------------------+---------------+---------------+--------
+            # actually True  null hypotheses (N) | U TN          | V FP (Type I) |   m(0)
+            # actually False null hypotheses (P) | T FN (Type II)| S TP          | m - m(0)
+            #                                    |      m - R    |       R       |   m
             num_correct    = TP + TN,
             num_Type_I     = FP,
             num_Type_II    = FN,

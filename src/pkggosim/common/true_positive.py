@@ -12,14 +12,14 @@ def get_tfpn(reject, expsig):
     # TABLE 1) Number of errors committed when testing m null hypotheses
     # 1995; Yoav Benjamini and Yosef Hochberg:
     #
-    #              reject ->| False         | True
+    #                           reject ->| False         | True
     #
-    #                       |Declared       | Declared      |
-    #                       |non-significant| significant   | Total
-    # ----------------------+---------------+---------------+--------
-    # True  null hypotheses | U TN          | V FP (Type I) |   m(0)
-    # False null hypotheses | T FN (Type II)| S TP          | m - m(0)
-    #                       |      m - R    |       R       |   m
+    #                                    |Declared       | Declared      |
+    #                                    |non-significant| significant   | Total
+    #          --------------------------+---------------+---------------+--------
+    # actually True  null hypotheses (N) | U TN          | V FP (Type I) |   m(0)
+    # actually False null hypotheses (P) | T FN (Type II)| S TP          | m - m(0)
+    #                                    |      m - R    |       R       |   m
     if     expsig and     reject: return "TP" # Correct:     Significant
     if not expsig and not reject: return "TN" # Correct: Not Significant
     if not expsig and     reject: return "FP" # Type  I Error (False Positive)
