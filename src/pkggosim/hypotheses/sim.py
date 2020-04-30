@@ -116,7 +116,7 @@ class HypothesesSim(object):
             fdr_actual     = calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
             frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
             # SENSITIVITY & SPECIFICITY are not affected by prevalence
-            # SENSITIVITY: "true positive rate", recall, "probability of detection"
+            # SENSITIVITY: "true positive rate", recall, "probability of detection" "didja gettem all?"
             sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
             # SPECIFICITY: "true negative rate", precision
