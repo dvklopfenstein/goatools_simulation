@@ -111,7 +111,7 @@ class HypothesesSim(object):
             num_pvals      = len(self.nts_pvalnt),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
-            # Prevalence  = 100*(TP+FN)/(TP+TN+TP+FN) 
+            # prevalence  = 100*(TP+FN)/(TP+TN+TP+FN) 
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
             fdr_actual     = calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
             frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
