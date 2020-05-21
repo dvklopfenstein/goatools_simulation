@@ -111,15 +111,15 @@ class HypothesesSim(object):
             num_pvals      = len(self.nts_pvalnt),
             num_sig_actual = tot_sig_y,
             ctr            = ctr,
-            # prevalence  = 100*(TP+FN)/(TP+TN+TP+FN) 
+            # PREVALENCE  = 100*(TP+FN)/(TP+TN+TP+FN) 
             # FDR: expected proportion of false discoveries (FP or Type I errors) among discoveries
             fdr_actual     = calc_ratio(FP, (TP, FP)), # typI(FP)/sig_y(FP+TP)
             frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
-            # SENSITIVITY & SPECIFICITY are not affected by prevalence
+            # SENSITIVITY & SPECIFICITY are not affected by PREVALENCE
             # SENSITIVITY: "true positive rate", recall, "probability of detection" "didja gettem all?"
             sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
             sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
-            # SPECIFICITY: "true negative rate", precision
+            # SPECIFICITY: "true negative rate", PRECISION
             specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
             # "positive predictive value" and "negative predictive value" are affected by prevalence
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
