@@ -24,5 +24,5 @@ No highly enriched subset
 # Target is 25%
 ![tgt025](fig_hypoth_100to025_01to05_008to256_N00100_01000_fdr_bh_sensitivity_tgt_p025.png)
 
-Copyright (C) 2014-2018,DV Klopfenstein. All rights reserved
+Copyright (C) 2014-present,DV Klopfenstein. All rights reserved
 N00100_01000

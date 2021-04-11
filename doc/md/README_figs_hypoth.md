@@ -76,4 +76,4 @@ The x-axis and y-axis parameters are the same as in Figure 3. The values shown i
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_sensitivity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_sensitivity.png)    
 ![fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_specificity.png](../logs/fig_hypoth_100to025_01to05_004to128_N00100_01000_simes-hochberg_specificity.png)    
 
-Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved
+Copyright (C) 2016-present, DV Klopfenstein, Haibao Tang. All rights reserved

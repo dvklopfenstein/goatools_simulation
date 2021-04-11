@@ -4,12 +4,6 @@ Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (G
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
 
-## To Cite
-_Please cite the following paper if you mention the stochastic simulations in this repo in your research_
-
-Klopfenstein DV, Zhang L, Pedersen BS, ... Tang H [GOATOOLS: A Python library for Gene Ontology analyses](https://www.nature.com/articles/s41598-018-28948-z)    
-_Scientific reports_ | (2018) 8:10872 | DOI:10.1038/s41598-018-28948-z
-
 ### Conclusions from Stochastic GOEA Simulations
   1. GO terms associated with huge numbers (thousands, in human) of genes cause FDR failures
   2. Removing even just 30 of the 17,000+ (human) GOs which are highly annotated causes good passing FDRs
@@ -33,6 +27,14 @@ _Scientific reports_ | (2018) 8:10872 | DOI:10.1038/s41598-018-28948-z
       * **Exploratory simulations**: Stress tests with associations shuffled stochastically:
          * [**Enriched-only viewed**](#supplemental-figure-2-enriched-only-viewed)
          * [**30 Broad GO terms removed**](#supplemental-figure-3-30-broad-go-terms-removed)
+
+## To Cite
+_Please cite the following paper if you mention the stochastic simulations in this repo in your research_
+
+[GOATOOLS: A Python library for Gene Ontology analyses](https://www.nature.com/articles/s41598-018-28948-z)      
+Klopfenstein DV, Zhang L, Pedersen BS, ... Tang H    
+2018 | _Scientific reports_ | [PMID:30022098](https://pubmed.ncbi.nlm.nih.gov/30022098/) | DOI:10.1038/s41598-018-28948-z
+
 
 ## Details
 
@@ -89,4 +91,4 @@ genes/GO, SD=128).
 ![suppfig3](/doc/images/ms/fig_goea_rand_pruned_ntn2_p0_100to000_004to124_N00020_00020_humoral_rsp_dpi600.png)
 
 
-Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
+Copyright (C) 2016-present, DV Klopfenstein, Haibao Tang. All rights reserved.

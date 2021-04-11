@@ -133,4 +133,4 @@ The observations are:
     their uncorrected P-Value rises and becomes close to the alpha (0.50)    
 
 
-Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
+Copyright (C) 2016-present, DV Klopfenstein, Haibao Tang. All rights reserved.

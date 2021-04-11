@@ -232,4 +232,4 @@ either **True nulls** and **Non-True nulls**:
 * Minimal non-true null P-values (C2-C4) are discovered even less frequently than moderate P-values (B2-B4).
 * Smaller groups of tested hypotheses (B3, blue bar) have more discoveries than larger groups (B3, red bar).
 
-Copyright (C) 2016-2018, DV Klopfenstein, Haibao Tang. All rights reserved.
+Copyright (C) 2016-present, DV Klopfenstein, Haibao Tang. All rights reserved.
