@@ -1,8 +1,21 @@
 # Stochastic GOEA Simulations
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5500663.svg)](https://doi.org/10.5281/zenodo.5500663)
 
 Stochastic simulations of multitudes of **Gene Ontology Enrichment Analyses** (GOEAs)    
 are used to generate simulated values of **FDR**, **sensitivity**, and **specificity**
 for **GOEAs** run using [GOATOOLS](https://github.com/tanghaibao/goatools).
+
+This repo also contains stochastic simulations showing the FDR, sensitivity, and specificity of
+multipletest correction methods including
+FDR Benjamini/Hochberg (non-negative) and
+Bonferroni one-step correction.
+These simulations were used to architect the overall simulation strategy and 
+investigate an effective figure to display multiple sets of information including:
+  * Study size
+  * Percentage of the study that was background (noise).
+  * FDR
+  * Sensitivity
+  * Specificty
 
 ### Conclusions from Stochastic GOEA Simulations
   1. GO terms associated with huge numbers (thousands, in human) of genes cause FDR failures

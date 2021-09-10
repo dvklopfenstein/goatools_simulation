@@ -1,3 +1,8 @@
+# Project
+/icite
+url*
+tmp*
+
 # Project files
 tmp
 gene_association.mgi
