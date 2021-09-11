@@ -9,14 +9,14 @@ pubs:
 
 git_add_hili:
 	#git add log/pmids/*.*
-	#git add log/icite/*.*
+	git add log/icite/*.*
 	#git add log/exports/*.html
 	#git add log/references/*.txt
 	#git add src/papers/highlights/*.py
 	#git add ms/*.*
 	#git add ab/*.*
 	# git add src/papers/flashcards/*.py
-	#git add doc/papers/\*.pdf
+	git add doc/papers/\*.pdf
 	find log/pubmed -type f | perl -ne 'if ($$_ !~ /p\d+\.txt/) {print}' | xargs git add -f
 
 .PHONY: pap

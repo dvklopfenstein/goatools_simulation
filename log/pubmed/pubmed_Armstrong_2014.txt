@@ -1,0 +1,74 @@
+
+PMID- 24697967
+OWN - NLM
+STAT- MEDLINE
+DCOM- 20150330
+LR  - 20140827
+IS  - 1475-1313 (Electronic)
+IS  - 0275-5408 (Linking)
+VI  - 34
+IP  - 5
+DP  - 2014 Sep
+TI  - When to use the Bonferroni correction.
+PG  - 502-8
+LID - 10.1111/opo.12131 [doi]
+AB  - PURPOSE: The Bonferroni correction adjusts probability (p) values because of the 
+      increased risk of a type I error when making multiple statistical tests. The
+      routine use of this test has been criticised as deleterious to sound statistical 
+      judgment, testing the wrong hypothesis, and reducing the chance of a type I error
+      but at the expense of a type II error; yet it remains popular in ophthalmic
+      research. The purpose of this article was to survey the use of the Bonferroni
+      correction in research articles published in three optometric journals, viz.
+      Ophthalmic & Physiological Optics, Optometry & Vision Science, and Clinical &
+      Experimental Optometry, and to provide advice to authors contemplating multiple
+      testing. RECENT FINDINGS: Some authors ignored the problem of multiple testing
+      while others used the method uncritically with no rationale or discussion. A
+      variety of methods of correcting p values were employed, the Bonferroni method
+      being the single most popular. Bonferroni was used in a variety of circumstances,
+      most commonly to correct the experiment-wise error rate when using multiple 't'
+      tests or as a post-hoc procedure to correct the family-wise error rate following 
+      analysis of variance (anova). Some studies quoted adjusted p values incorrectly
+      or gave an erroneous rationale. SUMMARY: Whether or not to use the Bonferroni
+      correction depends on the circumstances of the study. It should not be used
+      routinely and should be considered if: (1) a single test of the 'universal null
+      hypothesis' (Ho ) that all tests are not significant is required, (2) it is
+      imperative to avoid a type I error, and (3) a large number of tests are carried
+      out without preplanned hypotheses.
+CI  - (c) 2014 The Authors Ophthalmic & Physiological Optics (c) 2014 The College of
+      Optometrists.
+FAU - Armstrong, Richard A
+AU  - Armstrong RA
+AD  - School of Life and Health Sciences, Aston University, Birmingham, UK.
+LA  - eng
+PT  - Journal Article
+PT  - Review
+DEP - 20140402
+PL  - England
+TA  - Ophthalmic Physiol Opt
+JT  - Ophthalmic & physiological optics : the journal of the British College of
+      Ophthalmic Opticians (Optometrists)
+JID - 8208839
+SB  - IM
+MH  - *Biomedical Research
+MH  - *Data Interpretation, Statistical
+MH  - Humans
+MH  - *Ophthalmology
+MH  - *Optometry
+OTO - NOTNLM
+OT  - Bonferroni correction
+OT  - Clinical & Experimental Optometry
+OT  - Ophthalmic & Physiological Optics
+OT  - Optometry & Vision Science
+OT  - statistical guidelines
+EDAT- 2014/04/05 06:00
+MHDA- 2015/03/31 06:00
+CRDT- 2014/04/05 06:00
+PHST- 2014/01/06 00:00 [received]
+PHST- 2014/03/13 00:00 [accepted]
+PHST- 2014/04/05 06:00 [entrez]
+PHST- 2014/04/05 06:00 [pubmed]
+PHST- 2015/03/31 06:00 [medline]
+AID - 10.1111/opo.12131 [doi]
+PST - ppublish
+SO  - Ophthalmic Physiol Opt. 2014 Sep;34(5):502-8. doi: 10.1111/opo.12131. Epub 2014
+      Apr 2.

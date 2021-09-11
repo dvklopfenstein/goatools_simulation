@@ -1,0 +1,60 @@
+
+PMID- 28740688
+OWN - NLM
+STAT- PubMed-not-MEDLINE
+LR  - 20200930
+IS  - 2072-1439 (Print)
+IS  - 2072-1439 (Linking)
+VI  - 9
+IP  - 6
+DP  - 2017 Jun
+TI  - A general introduction to adjustment for multiple comparisons.
+PG  - 1725-1729
+LID - 10.21037/jtd.2017.05.34 [doi]
+AB  - In experimental research a scientific conclusion is always drawn from the
+      statistical testing of hypothesis, in which an acceptable cutoff of probability, 
+      such as 0.05 or 0.01, is used for decision-making. However, the probability of
+      committing false statistical inferences would considerably increase when more
+      than one hypothesis is simultaneously tested (namely the multiple comparisons),
+      which therefore requires proper adjustment. Although the adjustment for multiple 
+      comparisons is proposed to be mandatory in some journals, it still remains
+      difficult to select a proper method suitable for the various experimental
+      properties and study purposes, especially for researchers without good background
+      in statistics. In the present paper, we provide a brief review on mathematical
+      framework, general concepts and common methods of adjustment for multiple
+      comparisons, which is expected to facilitate the understanding and selection of
+      adjustment methods.
+FAU - Chen, Shi-Yi
+AU  - Chen SY
+AD  - Farm Animal Genetic Resources Exploration and Innovation Key Laboratory of
+      Sichuan Province, Sichuan Agricultural University, Chengdu 611130, China.
+FAU - Feng, Zhe
+AU  - Feng Z
+AD  - Department of Gastroenterology, West China Hospital, Sichuan University, Chengdu 
+      610041, China.
+FAU - Yi, Xiaolian
+AU  - Yi X
+AD  - College of Applied Mathematics, Chengdu University of Information Technology,
+      Chengdu 610225, China.
+LA  - eng
+PT  - Editorial
+PL  - China
+TA  - J Thorac Dis
+JT  - Journal of thoracic disease
+JID - 101533916
+PMC - PMC5506159
+OTO - NOTNLM
+OT  - Multiple comparisons
+OT  - adjustment
+OT  - statistical inference
+COIS- Conflicts of Interest: The authors have no conflicts of interest to declare.
+EDAT- 2017/07/26 06:00
+MHDA- 2017/07/26 06:01
+CRDT- 2017/07/26 06:00
+PHST- 2017/07/26 06:00 [entrez]
+PHST- 2017/07/26 06:00 [pubmed]
+PHST- 2017/07/26 06:01 [medline]
+AID - 10.21037/jtd.2017.05.34 [doi]
+AID - jtd-09-06-1725 [pii]
+PST - ppublish
+SO  - J Thorac Dis. 2017 Jun;9(6):1725-1729. doi: 10.21037/jtd.2017.05.34.
