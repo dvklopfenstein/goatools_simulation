@@ -1,1 +1,0 @@
-doc/papers/y2014_n100_rev_When_use_Bonferroni_Armstrong.pdf

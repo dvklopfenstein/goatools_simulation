@@ -1,43 +1,6 @@
 # Gene Ontology Enrichment Analyses Simulations
 
 # ---------------------------------------------------------------------------
-.PHONY: pubs
-pubs:
-	git add pubs/\*.*
-	make git_add_hili
-	git status
-
-git_add_hili:
-	#git add log/pmids/*.*
-	git add log/icite/*.*
-	#git add log/exports/*.html
-	#git add log/references/*.txt
-	#git add src/papers/highlights/*.py
-	#git add ms/*.*
-	#git add ab/*.*
-	# git add src/papers/flashcards/*.py
-	git add doc/papers/\*.pdf
-	find log/pubmed -type f | perl -ne 'if ($$_ !~ /p\d+\.txt/) {print}' | xargs git add -f
-
-.PHONY: pap
-pap:
-	find src/papers/highlights -name \*.py
-
-.PHONY: url
-url:
-	url.py; cp url url.bib_bac; cp ~/url.bib.today url; vim url
-
-biblog:
-	gitlog --re=pubs/bib
-
-bibnot:
-	gitlog --re=pubs/notes
-
-
-title:
-	git diff --name-only --diff-filter=AM --cached pubs/bib | xargs grep title
-
-# ---------------------------------------------------------------------------
 # SIM_IDX is an index for choosing sim params which control
 # how long the simulation runs and how much data is simulated.
 #   * SIM_IDX=-3: Used to create GOATOOLS Manuscript figures 
