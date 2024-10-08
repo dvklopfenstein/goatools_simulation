@@ -117,10 +117,10 @@ class HypothesesSim(object):
             frr_actual     = calc_ratio(FN, (TN, FN)), # typII(FN)/sig_n(TN+FN)
             # SENSITIVITY & SPECIFICITY are not affected by PREVALENCE
             # SENSITIVITY: "true positive rate", recall, "probability of detection" "didja gettem all?"
-            sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening
+            sensitivity    = calc_ratio(TP, (TP, FN)), # TP/(TP+FN) screening;    DID YOU FIND IT ALL?
             sensitivity_tgt= self._get_sensitivity_tgt(ctr2),
             # SPECIFICITY: "true negative rate", PRECISION
-            specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation
+            specificity    = calc_ratio(TN, (TN, FP)), # TN/(TN+FP) confirmation; CORRECTLY CALL ABSENCE OF DISEASE?
             # "positive predictive value" and "negative predictive value" are affected by prevalence
             pos_pred_val   = calc_ratio(TP, (TP, FP)), # TP/(TP+FP)
             neg_pred_val   = calc_ratio(TN, (TN, FN)), # TN/(TN+FN)
